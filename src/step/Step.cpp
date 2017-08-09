@@ -22,7 +22,7 @@ Step::Step(Step* pNextStep)
 	m_uiCmd = 0;
 }
 
-Step::Step(const tagMsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, const MsgBody& oReqMsgBody, Step* pNextStep)
+Step::Step(const MsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, const MsgBody& oReqMsgBody, Step* pNextStep)
     : m_stReqMsgShell(stReqMsgShell), m_oReqMsgHead(oReqMsgHead), m_oReqMsgBody(oReqMsgBody),
       m_bRegistered(false), m_ulSequence(0), m_dActiveTime(0.0), m_dTimeout(0.5),
       m_pLabor(0), m_pLogger(0), m_pTimeoutWatcher(0), m_pNextStep(pNextStep)
@@ -32,7 +32,7 @@ Step::Step(const tagMsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, const M
 	m_uiCmd = 0;
 }
 
-Step::Step(const tagMsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, Step* pNextStep)
+Step::Step(const MsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, Step* pNextStep)
     : m_stReqMsgShell(stReqMsgShell), m_oReqMsgHead(oReqMsgHead),
       m_bRegistered(false), m_ulSequence(0), m_dActiveTime(0.0), m_dTimeout(0.5),
       m_pLabor(0), m_pLogger(0), m_pTimeoutWatcher(0), m_pNextStep(pNextStep)
@@ -149,12 +149,12 @@ Session* Step::GetSession(const std::string& strSessionId, const std::string& st
     return(m_pLabor->GetSession(strSessionId, strSessionClass));
 }
 
-bool Step::SendTo(const tagMsgShell& stMsgShell)
+bool Step::SendTo(const MsgShell& stMsgShell)
 {
     return(m_pLabor->SendTo(stMsgShell));
 }
 
-bool Step::SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+bool Step::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
     return(m_pLabor->SendTo(stMsgShell, oMsgHead, oMsgBody));
 }
@@ -188,7 +188,7 @@ bool Step::AsyncStep(Step* pStep,ev_tstamp dTimeout)
         pStep = NULL;
         return(false);
     }
-    if (oss::STATUS_CMD_RUNNING != pStep->Emit(ERR_OK))
+    if (thunder::STATUS_CMD_RUNNING != pStep->Emit(ERR_OK))
     {
         DeleteCallback(pStep);
         return(false);
@@ -223,7 +223,7 @@ bool Step::NextStep(Step* pNextStep, int iErrno, const std::string& strErrMsg, c
         }
         if (pNextStep->IsRegistered())
         {
-            if (oss::STATUS_CMD_RUNNING != pNextStep->Emit(iErrno, strErrMsg, strErrClientShow))
+            if (thunder::STATUS_CMD_RUNNING != pNextStep->Emit(iErrno, strErrMsg, strErrClientShow))
             {
                 DeleteCallback(pNextStep);
             }
@@ -260,7 +260,7 @@ bool Step::NextStep(int iErrno, const std::string& strErrMsg, const std::string&
         }
         if (m_pNextStep->IsRegistered())
         {
-            if (oss::STATUS_CMD_RUNNING != m_pNextStep->Emit(iErrno, strErrMsg, strErrClientShow))
+            if (thunder::STATUS_CMD_RUNNING != m_pNextStep->Emit(iErrno, strErrMsg, strErrClientShow))
             {
                 DeleteCallback(m_pNextStep);
                 m_pNextStep = NULL;
@@ -310,12 +310,12 @@ void Step::DelayTimeout()
     }
 }
 
-bool Step::AddMsgShell(const std::string& strIdentify, const tagMsgShell& stMsgShell)
+bool Step::AddMsgShell(const std::string& strIdentify, const MsgShell& stMsgShell)
 {
 	return(m_pLabor->AddMsgShell(strIdentify, stMsgShell));
 }
 
-void Step::DelMsgShell(const std::string& strIdentify, const tagMsgShell& stMsgShell)
+void Step::DelMsgShell(const std::string& strIdentify, const MsgShell& stMsgShell)
 {
     m_pLabor->DelMsgShell(strIdentify,stMsgShell);
 }

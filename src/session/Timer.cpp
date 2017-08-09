@@ -13,12 +13,12 @@ namespace thunder
 {
 
 Timer::Timer(uint32 ulTimerId, ev_tstamp dTimeout, const std::string& strTimerName)
-    : oss::Session(ulTimerId, dTimeout, strTimerName)
+    : thunder::Session(ulTimerId, dTimeout, strTimerName)
 {
 }
 
 Timer::Timer(const std::string& strTimerId, ev_tstamp dTimeout, const std::string& strTimerName)
-    : oss::Session(strTimerId, dTimeout, strTimerName)
+    : thunder::Session(strTimerId, dTimeout, strTimerName)
 {
 }
 

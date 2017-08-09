@@ -23,14 +23,14 @@ namespace thunder
  * 再将自己的StepT作为new StepLog时的一个参数传入，登记并执行StepLog，StepLog的
  * 成功回调后会自定调用StepT。
  */
-class StepLog: public oss::Step
+class StepLog: public thunder::Step
 {
 public:
     /**
      * @brief 发送日志步骤
      * @param pNextStep 成功加载用户信息后需执行的下一个状态机
      */
-    StepLog(const ::google::protobuf::Message &behaviourLog, oss::uint32 logType,oss::Step* pNextStep = NULL,const std::string &nodeType = "ESAGENT_W");
+    StepLog(const ::google::protobuf::Message &behaviourLog, thunder::uint32 logType,thunder::Step* pNextStep = NULL,const std::string &nodeType = "ESAGENT_W");
     virtual ~StepLog();
 
     /**
@@ -42,8 +42,8 @@ public:
      * @param data 附加数据
      * @return 运行结果
      */
-    virtual oss::E_CMD_STATUS Callback(
-        const oss::tagMsgShell& stMsgShell,
+    virtual thunder::E_CMD_STATUS Callback(
+        const thunder::MsgShell& stMsgShell,
         const MsgHead& oInMsgHead,
         const MsgBody& oInMsgBody,
         void* data = NULL);
@@ -52,7 +52,7 @@ public:
      * @brief 加载用户信息超时回调
      * @return 运行结果
      */
-    virtual oss::E_CMD_STATUS Timeout();
+    virtual thunder::E_CMD_STATUS Timeout();
 
     /**
      * @brief 发起加载用户信息
@@ -60,7 +60,7 @@ public:
      * 建议用Emit()替代Emit()
      * @return 运行结果
      */
-    virtual oss::E_CMD_STATUS Emit(int iErrno, const std::string& strErrMsg = "", const std::string& strErrShow = "");
+    virtual thunder::E_CMD_STATUS Emit(int iErrno, const std::string& strErrMsg = "", const std::string& strErrShow = "");
 
 private:
     BehaviourLog::behaviour_log_req m_behaviour_log;

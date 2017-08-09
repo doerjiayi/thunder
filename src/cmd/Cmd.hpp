@@ -54,7 +54,7 @@ public:
      * @return 命令是否处理成功
      */
     virtual bool AnyMessage(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody) = 0;
 public:
@@ -180,11 +180,11 @@ protected:
      * @param uiSessionId 会话ID
      * @return 会话实例（返回NULL表示不存在uiSessionId对应的会话实例）
      */
-    Session* GetSession(uint64 uiSessionId, const std::string& strSessionClass = "oss::Session");
-    Session* GetSession(const std::string& strSessionId, const std::string& strSessionClass = "oss::Session");
+    Session* GetSession(uint64 uiSessionId, const std::string& strSessionClass = "thunder::Session");
+    Session* GetSession(const std::string& strSessionId, const std::string& strSessionClass = "thunder::Session");
 
     //接入服务器使用的对外接口
-    bool SendToClient(const tagMsgShell& stMsgShell,MsgHead& oMsgHead,const google::protobuf::Message &message,
+    bool SendToClient(const MsgShell& stMsgShell,MsgHead& oMsgHead,const google::protobuf::Message &message,
                     const std::string& additional = "",uint64 sessionid = 0,const std::string& stressionid = "")
     {
         return GetLabor()->SendToClient(stMsgShell,oMsgHead,message,additional,sessionid,stressionid);
@@ -232,7 +232,7 @@ private:
 
 protected:
     char* m_pErrBuff;
-	oss::uint32 m_uiCmd;
+	thunder::uint32 m_uiCmd;
 private:
     NodeLabor* m_pLabor;
     log4cplus::Logger* m_pLogger;

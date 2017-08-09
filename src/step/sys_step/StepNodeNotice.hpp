@@ -18,7 +18,7 @@ namespace thunder
 class StepNodeNotice : public Step
 {
 public:
-    StepNodeNotice(const tagMsgShell& stMsgShell,
+    StepNodeNotice(const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody);
     virtual ~StepNodeNotice();
@@ -28,7 +28,7 @@ public:
                     const std::string& strErrMsg = "",
                     const std::string& strErrShow = "");
     virtual E_CMD_STATUS Callback(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody,
                     void* data = NULL);
@@ -39,7 +39,7 @@ public:
     thunder::CJsonObject m_jsonData;
 private:
     int m_iTimeoutNum;          ///< 超时次数
-    tagMsgShell m_stMsgShell;
+    MsgShell m_stMsgShell;
 };
 
 } /* namespace thunder */

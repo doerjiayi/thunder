@@ -18,8 +18,8 @@ namespace thunder
 class Timer: public Session
 {
 public:
-    Timer(uint32 ulTimerId, ev_tstamp dTimeout = 60.0, const std::string& strTimerName = "oss::Timer");
-    Timer(const std::string& strTimerId, ev_tstamp dTimeout = 60.0, const std::string& strTimerName = "oss::Timer");
+    Timer(uint32 ulTimerId, ev_tstamp dTimeout = 60.0, const std::string& strTimerName = "thunder::Timer");
+    Timer(const std::string& strTimerId, ev_tstamp dTimeout = 60.0, const std::string& strTimerName = "thunder::Timer");
     virtual ~Timer();
 
 protected:

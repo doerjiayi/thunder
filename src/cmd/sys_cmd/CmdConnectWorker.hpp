@@ -25,10 +25,10 @@ public:
     CmdConnectWorker();
     virtual ~CmdConnectWorker();
     virtual bool AnyMessage(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody);
-    bool Start(const tagMsgShell& stMsgShell, int iWorkerIndex);
+    bool Start(const MsgShell& stMsgShell, int iWorkerIndex);
 
 public:
     StepConnectWorker* pStepConnectWorker;        ///< 仅为了生成可读性高的类图，构造函数中不分配空间，析构函数中也不回收空间

@@ -14,7 +14,7 @@ using namespace std;
 
 namespace thunder
 {
-StepNodeNotice::StepNodeNotice(const tagMsgShell& stMsgShell,
+StepNodeNotice::StepNodeNotice(const MsgShell& stMsgShell,
                 const MsgHead& oInMsgHead,
                 const MsgBody& oInMsgBody)
     : m_iTimeoutNum(0), m_stMsgShell(stMsgShell)
@@ -82,7 +82,7 @@ E_CMD_STATUS StepNodeNotice::Emit(
 }
 
 E_CMD_STATUS StepNodeNotice::Callback(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody,
                     void* data)

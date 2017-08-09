@@ -44,9 +44,9 @@ class Step
 {
 public:
     Step(Step* pNextStep = NULL);
-    Step(const tagMsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, const MsgBody& oReqMsgBody,
+    Step(const MsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, const MsgBody& oReqMsgBody,
                     Step* pNextStep = NULL);
-    Step(const tagMsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, Step* pNextStep = NULL);
+    Step(const MsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, Step* pNextStep = NULL);
     virtual ~Step();
 
     /**
@@ -73,7 +73,7 @@ public:
      * @param data 数据指针，基本网络IO时为空，有专用数据时使用，比如redis的reply。
      */
     virtual E_CMD_STATUS Callback(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody,
                     void* data = NULL) = 0;
@@ -154,9 +154,9 @@ protected:
     /**
      * @brief 登记回调步骤
      * @note  登记回调步骤。如果StepA.Callback()调用之后仍有后续步骤，则需在StepA.Callback()
-     * 中new一个 新的具体步骤oss::Step子类实例StepB，调用oss::Step基类的RegisterCallback()
+     * 中new一个 新的具体步骤thunder::Step子类实例StepB，调用thunder::Step基类的RegisterCallback()
      * 方法将该新实例登记并执行该新实例的StepB.Start()方法，若StepB.Start()执行成功则后续
-     * StepB.Callback()会被调用，若StepB.Start()执行失败，则调用oss::Step基类的
+     * StepB.Callback()会被调用，若StepB.Start()执行失败，则调用thunder::Step基类的
      * DeleteCallback()将刚登记的StepB删除掉并执行对应的错误处理。
      * 若RegisterCallback()登记失败（失败可能性微乎其微）则应将StepB销毁,重新new StepB实例并登记，
      * 若多次（可自定义）登记失败则应放弃登记，并将StepB销毁；若RegisterCallback()登记成功则一定不可以
@@ -263,8 +263,8 @@ protected:
      * @param uiSessionId 会话ID
      * @return 会话实例（返回NULL表示不存在uiSessionId对应的会话实例）
      */
-    Session* GetSession(uint64 uiSessionId, const std::string& strSessionClass = "oss::Session");
-    Session* GetSession(const std::string& strSessionId, const std::string& strSessionClass = "oss::Session");
+    Session* GetSession(uint64 uiSessionId, const std::string& strSessionClass = "thunder::Session");
+    Session* GetSession(const std::string& strSessionId, const std::string& strSessionClass = "thunder::Session");
 
     /**
      * @brief 连接成功后发送
@@ -275,7 +275,7 @@ protected:
      * @param stMsgShell 消息外壳
      * @return 是否发送成功
      */
-    bool SendTo(const tagMsgShell& stMsgShell);
+    bool SendTo(const MsgShell& stMsgShell);
 
     /**
      * @brief 发送数据
@@ -286,12 +286,12 @@ protected:
      * @param oMsgBody 数据包体
      * @return 是否发送成功
      */
-    bool SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
+    bool SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
 
     /**
      * @brief 发送数据
      * @note 指定连接标识符将数据发送。此函数先查找与strIdentify匹配的stMsgShell，如果找到就调用
-     * SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+     * SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
      * 发送，如果未找到则调用SendToWithAutoConnect(const std::string& strIdentify,
      * const MsgHead& oMsgHead, const MsgBody& oMsgBody)连接后再发送。
      * @param strIdentify 连接标识符(IP:port.worker_index, e.g 192.168.11.12:3001.1)
@@ -324,7 +324,7 @@ protected:
 
 
     //接入服务器使用的对外接口
-    bool SendToClient(const tagMsgShell& stMsgShell,MsgHead& oMsgHead,const google::protobuf::Message &message,
+    bool SendToClient(const MsgShell& stMsgShell,MsgHead& oMsgHead,const google::protobuf::Message &message,
                     const std::string& additional = "",uint64 sessionid = 0,const std::string& stressionid = "")
     {
         return GetLabor()->SendToClient(stMsgShell,oMsgHead,message,additional,sessionid,stressionid);
@@ -339,7 +339,7 @@ protected:
         return GetLabor()->ParseFromMsg(oInMsgBody,message);
     }
     //发送异步step，step对象内存由worker管理
-    bool AsyncStep(oss::Step* pStep,ev_tstamp dTimeout = 0.0);
+    bool AsyncStep(thunder::Step* pStep,ev_tstamp dTimeout = 0.0);
     /**
      * @brief 延迟下一个步骤的超时时间
      */
@@ -353,7 +353,7 @@ protected:
     bool NextStep(Step* pNextStep, int iErrno = 0, const std::string& strErrMsg = "", const std::string& strErrClientShow = "");
     bool NextStep(int iErrno = 0, const std::string& strErrMsg = "", const std::string& strErrClientShow = "");
 
-    oss::Step* GetNextStep()
+    thunder::Step* GetNextStep()
     {
         return(m_pNextStep);
     }
@@ -376,14 +376,14 @@ public:
      * @param stMsgShell  消息外壳
      * @return 是否添加成功
      */
-    bool AddMsgShell(const std::string& strIdentify, const tagMsgShell& stMsgShell);
+    bool AddMsgShell(const std::string& strIdentify, const MsgShell& stMsgShell);
 
     /**
      * @brief 删除指定标识的消息外壳
      * @note 删除指定标识的消息外壳由Worker类实例调用，在IoError或IoTimeout时调
      * 用。
      */
-    void DelMsgShell(const std::string& strIdentify, const tagMsgShell& stMsgShell);
+    void DelMsgShell(const std::string& strIdentify, const MsgShell& stMsgShell);
 
     /**
      * @brief 注册redis回调
@@ -501,7 +501,7 @@ private:
     void AddNextStepSeq(Step* pStep);
 
 protected:  // 请求端的上下文信息，通过Step构造函数初始化，若调用的是不带参数的构造函数Step()，则这几个成员不会被初始化
-    tagMsgShell m_stReqMsgShell;
+    MsgShell m_stReqMsgShell;
     MsgHead m_oReqMsgHead;
     MsgBody m_oReqMsgBody;
 
@@ -520,8 +520,8 @@ private:
     std::set<uint32> m_setPreStepSeq;
 
     friend class ThunderWorker;
-	oss::uint32 m_uiUserId;
-	oss::uint32 m_uiCmd;
+	thunder::uint32 m_uiUserId;
+	thunder::uint32 m_uiCmd;
 };
 
 } /* namespace thunder */

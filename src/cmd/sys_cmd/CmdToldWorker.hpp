@@ -31,7 +31,7 @@ public:
     CmdToldWorker();
     virtual ~CmdToldWorker();
     virtual bool AnyMessage(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody);
 };

@@ -21,7 +21,7 @@ class Step;
 class StepConnectWorker : public Step
 {
 public:
-    StepConnectWorker(const tagMsgShell& stMsgShell,
+    StepConnectWorker(const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody);
     virtual ~StepConnectWorker();
@@ -31,7 +31,7 @@ public:
                     const std::string& strErrMsg = "",
                     const std::string& strErrShow = "");
     virtual E_CMD_STATUS Callback(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody,
                     void* data = NULL);
@@ -39,7 +39,7 @@ public:
 
 private:
     int m_iTimeoutNum;          ///< 超时次数
-    tagMsgShell m_stMsgShell;
+    MsgShell m_stMsgShell;
     MsgHead m_oConnectMsgHead;
     MsgBody m_oConnectMsgBody;
 

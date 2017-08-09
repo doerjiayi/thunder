@@ -24,7 +24,7 @@ class RedisStep: public Step
 {
 public:
     RedisStep(Step* pNextStep = NULL);
-    RedisStep(const tagMsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, const MsgBody& oReqMsgBody, Step* pNextStep = NULL);
+    RedisStep(const MsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, const MsgBody& oReqMsgBody, Step* pNextStep = NULL);
     virtual ~RedisStep();
 
     /**
@@ -45,7 +45,7 @@ public:
      * @note 从Step派生的回调函数在reids回调中不需要，所以直接返回
      */
     virtual E_CMD_STATUS Callback(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody,
                     void* data = NULL)

@@ -8,8 +8,8 @@
 * Modify history:
 ******************************************************************************/
 
+#include "labor/process/NodeManager.hpp"
 #include "unix_utility/proctitle_helper.h"
-#include "labor/duty/NodeManager.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
         exit(-1);
     }
 	ngx_init_setproctitle(argc, argv);
-    oss::NodeManager oManager(argv[1]);
+    thunder::NodeManager oManager(argv[1]);
     oManager.Run();
 	return(0);
 }

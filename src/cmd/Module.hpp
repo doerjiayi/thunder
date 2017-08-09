@@ -36,7 +36,7 @@ public:
      * @return 是否处理成功
      */
     virtual bool AnyMessage(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const HttpMsg& oInHttpMsg) = 0;
 
     /**
@@ -44,7 +44,7 @@ public:
      * @note 在Module类中不需要实现此版本AnyMessage
      */
     virtual bool AnyMessage(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody)
     {

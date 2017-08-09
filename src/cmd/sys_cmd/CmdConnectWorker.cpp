@@ -22,14 +22,14 @@ CmdConnectWorker::~CmdConnectWorker()
 }
 
 bool CmdConnectWorker::AnyMessage(
-                const tagMsgShell& stMsgShell,
+                const MsgShell& stMsgShell,
                 const MsgHead& oInMsgHead,
                 const MsgBody& oInMsgBody)
 {
     return(true);
 }
 
-bool CmdConnectWorker::Start(const tagMsgShell& stMsgShell, int iWorkerIndex)
+bool CmdConnectWorker::Start(const MsgShell& stMsgShell, int iWorkerIndex)
 {
     MsgHead oMsgHead;
     MsgBody oMsgBody;

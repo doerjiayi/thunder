@@ -20,7 +20,7 @@ namespace thunder
 class StepTellWorker : public Step
 {
 public:
-    StepTellWorker(const tagMsgShell& stMsgShell);
+    StepTellWorker(const MsgShell& stMsgShell);
     virtual ~StepTellWorker();
 
     virtual E_CMD_STATUS Emit(
@@ -28,7 +28,7 @@ public:
                     const std::string& strErrMsg = "",
                     const std::string& strErrShow = "");
     virtual E_CMD_STATUS Callback(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody,
                     void* data = NULL);
@@ -36,7 +36,7 @@ public:
 
 private:
     int m_iTimeoutNum;          ///< 超时次数
-    tagMsgShell m_stMsgShell;
+    MsgShell m_stMsgShell;
 };
 
 } /* namespace thunder */

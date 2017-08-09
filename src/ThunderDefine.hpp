@@ -61,24 +61,24 @@ enum E_CMD_STATUS
 /**
  * @brief 消息外壳
  * @note 当外部请求到达时，因Server所有操作均为异步操作，无法立刻对请求作出响应，在完成若干个
- * 异步调用之后再响应，响应时需要有请求通道信息tagMsgShell。接收请求时在原消息前面加上
- * tagMsgShell，响应消息从通过tagMsgShell里的信息原路返回给请求方。若通过tagMsgShell
+ * 异步调用之后再响应，响应时需要有请求通道信息MsgShell。接收请求时在原消息前面加上
+ * MsgShell，响应消息从通过MsgShell里的信息原路返回给请求方。若通过MsgShell
  * 里的信息无法找到请求路径，则表明请求方已发生故障或已超时被清理，消息直接丢弃。
  */
-struct tagMsgShell
+struct MsgShell
 {
     int32 iFd;          ///< 请求消息来源文件描述符
     uint32 ulSeq;      ///< 文件描述符创建时对应的序列号
 
-    tagMsgShell() : iFd(0), ulSeq(0)
+    MsgShell() : iFd(0), ulSeq(0)
     {
     }
 
-    tagMsgShell(const tagMsgShell& stMsgShell) : iFd(stMsgShell.iFd), ulSeq(stMsgShell.ulSeq)
+    MsgShell(const MsgShell& stMsgShell) : iFd(stMsgShell.iFd), ulSeq(stMsgShell.ulSeq)
     {
     }
 
-    tagMsgShell& operator=(const tagMsgShell& stMsgShell)
+    MsgShell& operator=(const MsgShell& stMsgShell)
     {
         iFd = stMsgShell.iFd;
         ulSeq = stMsgShell.ulSeq;

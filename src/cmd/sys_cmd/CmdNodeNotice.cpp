@@ -25,7 +25,7 @@ CmdNodeNotice::~CmdNodeNotice()
 }
 
 bool CmdNodeNotice::AnyMessage(
-                const tagMsgShell& stMsgShell,
+                const MsgShell& stMsgShell,
                 const MsgHead& oInMsgHead,
                 const MsgBody& oInMsgBody)
 {

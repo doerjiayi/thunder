@@ -12,7 +12,7 @@
 namespace thunder
 {
 
-StepTellWorker::StepTellWorker(const tagMsgShell& stMsgShell)
+StepTellWorker::StepTellWorker(const MsgShell& stMsgShell)
     : m_iTimeoutNum(0), m_stMsgShell(stMsgShell)
 {
 }
@@ -42,7 +42,7 @@ E_CMD_STATUS StepTellWorker::Emit(
 }
 
 E_CMD_STATUS StepTellWorker::Callback(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody,
                     void* data)

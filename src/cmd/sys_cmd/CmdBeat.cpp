@@ -21,7 +21,7 @@ CmdBeat::~CmdBeat()
 }
 
 bool CmdBeat::AnyMessage(
-                const tagMsgShell& stMsgShell,
+                const MsgShell& stMsgShell,
                 const MsgHead& oInMsgHead,
                 const MsgBody& oInMsgBody)
 {

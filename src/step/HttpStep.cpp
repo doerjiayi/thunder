@@ -13,7 +13,7 @@ namespace thunder
 {
 
 HttpStep::HttpStep(Step* pNextStep)
-    : oss::Step(pNextStep)
+    : thunder::Step(pNextStep)
 {
 }
 
@@ -100,7 +100,7 @@ bool HttpStep::HttpRequest(const HttpMsg& oHttpMsg)
     }
 }
 
-bool HttpStep::SendTo(const tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg)
+bool HttpStep::SendTo(const MsgShell& stMsgShell, const HttpMsg& oHttpMsg)
 {
     return(GetLabor()->SendTo(stMsgShell, oHttpMsg));
 }

@@ -61,7 +61,7 @@ public:     // Labor相关设置（由Cmd类或Step类调用这些方法完成La
      * @param stMsgShell 消息外壳
      * @return 是否发送成功
      */
-    virtual bool SendTo(const tagMsgShell& stMsgShell) = 0;
+    virtual bool SendTo(const MsgShell& stMsgShell) = 0;
 
     /**
      * @brief 发送数据
@@ -72,7 +72,7 @@ public:     // Labor相关设置（由Cmd类或Step类调用这些方法完成La
      * @param oMsgBody 数据包体
      * @return 是否发送成功
      */
-    virtual bool SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody) = 0;
+    virtual bool SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody) = 0;
 
     /**
      * @brief 设置连接的标识符信息
@@ -82,7 +82,7 @@ public:     // Labor相关设置（由Cmd类或Step类调用这些方法完成La
      * @param strIdentify 连接标识符
      * @return 是否设置成功
      */
-    virtual bool SetConnectIdentify(const tagMsgShell& stMsgShell, const std::string& strIdentify) = 0;
+    virtual bool SetConnectIdentify(const MsgShell& stMsgShell, const std::string& strIdentify) = 0;
 
     /**
      * @brief 自动连接并发送
@@ -123,7 +123,7 @@ public:     // Labor相关设置（由Cmd类或Step类调用这些方法完成La
      * @brief 添加内部通信连接信息
      * @param stMsgShell 消息外壳
      */
-    virtual void AddInnerFd(const tagMsgShell& stMsgShell) = 0;
+    virtual void AddInnerFd(const MsgShell& stMsgShell) = 0;
 
     virtual uint32 GetNodeId() const = 0;
 
@@ -353,11 +353,11 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
      * @param uiSessionId 会话ID
      * @return 会话实例（返回NULL表示不存在uiSessionId对应的会话实例）
      */
-    virtual Session* GetSession(uint64 uiSessionId, const std::string& strSessionClass = "oss::Session")
+    virtual Session* GetSession(uint64 uiSessionId, const std::string& strSessionClass = "thunder::Session")
     {
         return(NULL);
     }
-    virtual Session* GetSession(const std::string& strSessionId, const std::string& strSessionClass = "oss::Session")
+    virtual Session* GetSession(const std::string& strSessionId, const std::string& strSessionClass = "thunder::Session")
     {
         return(NULL);
     }
@@ -370,7 +370,7 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
      * @param stMsgShell  消息外壳
      * @return 是否添加成功
      */
-    virtual bool AddMsgShell(const std::string& strIdentify, const tagMsgShell& stMsgShell)
+    virtual bool AddMsgShell(const std::string& strIdentify, const MsgShell& stMsgShell)
     {
         return(false);
     }
@@ -380,7 +380,7 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
      * @note 删除指定标识的消息外壳由Worker类实例调用，在IoError或IoTimeout时调
      * 用。
      */
-    virtual void DelMsgShell(const std::string& strIdentify, const tagMsgShell& stMsgShell)
+    virtual void DelMsgShell(const std::string& strIdentify, const MsgShell& stMsgShell)
     {
     }
 
@@ -483,7 +483,7 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
      * @param stMsgShell 连接通道
      * @return 连接通道
      */
-    virtual bool GetMsgShell(const std::string& strIdentify, tagMsgShell& stMsgShell)
+    virtual bool GetMsgShell(const std::string& strIdentify, MsgShell& stMsgShell)
     {
         return(false);
     }
@@ -493,7 +493,7 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
      * @param oBuff 客户端连接相关数据
      * @return 是否设置成功
      */
-    virtual bool SetClientData(const tagMsgShell& stMsgShell, thunder::CBuffer* pBuff)
+    virtual bool SetClientData(const MsgShell& stMsgShell, thunder::CBuffer* pBuff)
     {
         return(false);
     }
@@ -503,22 +503,22 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
      * @param stMsgShell 客户端连接通道
      * @return 是否存在客户端数据
      */
-    virtual bool HadClientData(const tagMsgShell& stMsgShell)
+    virtual bool HadClientData(const MsgShell& stMsgShell)
     {
         return(false);
     }
 
-	virtual bool GetClientData(const tagMsgShell& stMsgShell, thunder::CBuffer* pBuff)
+	virtual bool GetClientData(const MsgShell& stMsgShell, thunder::CBuffer* pBuff)
 	{
 		return(false);
 	}
 
-    virtual std::string GetClientAddr(const tagMsgShell& stMsgShell)
+    virtual std::string GetClientAddr(const MsgShell& stMsgShell)
     {
         return("");
     }
 
-    virtual std::string GetConnectIdentify(const tagMsgShell& stMsgShell)
+    virtual std::string GetConnectIdentify(const MsgShell& stMsgShell)
     {
         return("");
     }
@@ -526,7 +526,7 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
     /**
      * @brief 发送数据
      * @note 指定连接标识符将数据发送。此函数先查找与strIdentify匹配的stMsgShell，如果找到就调用
-     * SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+     * SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
      * 发送，如果未找到则调用SendToWithAutoConnect(const std::string& strIdentify,
      * const MsgHead& oMsgHead, const MsgBody& oMsgBody)连接后再发送。
      * @param strIdentify 连接标识符(IP:port.worker_index, e.g 192.168.11.12:3001.1)
@@ -545,7 +545,7 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
     }
 
     //服务器使用的发送到客户端接口
-    virtual bool SendToClient(const tagMsgShell& stMsgShell,MsgHead& oMsgHead,const google::protobuf::Message &message,
+    virtual bool SendToClient(const MsgShell& stMsgShell,MsgHead& oMsgHead,const google::protobuf::Message &message,
                         const std::string& additional = "",uint64 sessionid = 0,const std::string& strSession = "")
     {
         return(false);
@@ -570,7 +570,7 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
      * @param oHttpMsg Http数据包
      * @return 是否发送成功
      */
-    virtual bool SendTo(const tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL)
+    virtual bool SendTo(const MsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL)
     {
         return(false);
     }
@@ -626,7 +626,7 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
      * @param stMsgShell 消息外壳
      * @return 断开连接结果
      */
-    virtual bool Disconnect(const tagMsgShell& stMsgShell, bool bMsgShellNotice = true)
+    virtual bool Disconnect(const MsgShell& stMsgShell, bool bMsgShellNotice = true)
     {
         return(false);
     }

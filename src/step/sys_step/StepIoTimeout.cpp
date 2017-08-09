@@ -12,7 +12,7 @@
 namespace thunder
 {
 
-StepIoTimeout::StepIoTimeout(const tagMsgShell& stMsgShell, struct ev_timer* pWatcher)
+StepIoTimeout::StepIoTimeout(const MsgShell& stMsgShell, struct ev_timer* pWatcher)
     : m_stMsgShell(stMsgShell), watcher(pWatcher)
 {
 }
@@ -45,7 +45,7 @@ E_CMD_STATUS StepIoTimeout::Emit(
 }
 
 E_CMD_STATUS StepIoTimeout::Callback(
-                const tagMsgShell& stMsgShell,
+                const MsgShell& stMsgShell,
                 const MsgHead& oInMsgHead,
                 const MsgBody& oInMsgBody,
                 void* data)

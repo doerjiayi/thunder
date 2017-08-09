@@ -28,7 +28,7 @@ namespace thunder
 {
 
 /**
- * @brief Json瀵硅薄
+ * @brief Json管理类
  */
 class CJsonObject
 {

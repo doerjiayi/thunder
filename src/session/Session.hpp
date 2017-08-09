@@ -33,8 +33,8 @@ class ThunderWorker;
 class Session
 {
 public:
-    Session(uint64 ulSessionId, ev_tstamp dSessionTimeout = 60.0, const std::string& strSessionClass = "oss::Session");
-    Session(const std::string& strSessionId, ev_tstamp dSessionTimeout = 60.0, const std::string& strSessionClass = "oss::Session");
+    Session(uint64 ulSessionId, ev_tstamp dSessionTimeout = 60.0, const std::string& strSessionClass = "thunder::Session");
+    Session(const std::string& strSessionId, ev_tstamp dSessionTimeout = 60.0, const std::string& strSessionClass = "thunder::Session");
     virtual ~Session();
 
     /**

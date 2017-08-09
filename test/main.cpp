@@ -56,7 +56,7 @@ unsigned int g_uiSeq = 0;
 struct ev_loop *m_loop = EV_DEFAULT;
 log4cplus::Logger m_oLogger;
 std::map<int, tagConnectionAttr*> g_mapFdAttr;
-std::map<std::string, tagMsgShell> g_mapMsgShell;            // key为Identify
+std::map<std::string, MsgShell> g_mapMsgShell;            // key为Identify
 ThunderCodec* g_pCodec;
 
 bool InitLogger(const std::string& strLogFile);
@@ -67,17 +67,17 @@ bool AddIoReadEvent(int iFd);
 bool AddIoWriteEvent(int iFd);
 bool RemoveIoWriteEvent(int iFd);
 bool DelEvents(ev_io** io_watcher_attr);
-bool AddMsgShell(const std::string& strIdentify, const tagMsgShell& stMsgShell);
+bool AddMsgShell(const std::string& strIdentify, const MsgShell& stMsgShell);
 void DelMsgShell(const std::string& strIdentify);
-bool SetConnectIdentify(const tagMsgShell& stMsgShell, const std::string& strIdentify);
+bool SetConnectIdentify(const MsgShell& stMsgShell, const std::string& strIdentify);
 static void IoCallback(struct ev_loop* loop, struct ev_io* watcher, int revents);
 void IoRead(struct ev_loop* loop, struct ev_io* watcher, int revents);
 void IoWrite(struct ev_loop* loop, struct ev_io* watcher, int revents);
 void IoError(struct ev_loop* loop, struct ev_io* watcher, int revents);
-bool SendTo(const tagMsgShell& stMsgShell);
-bool SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
+bool SendTo(const MsgShell& stMsgShell);
+bool SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
 bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
-bool Dispose(const std::string& strFromIp, const tagMsgShell& stMsgShell,
+bool Dispose(const std::string& strFromIp, const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead, const MsgBody& oInMsgBody,
                     MsgHead& oOutMsgHead, MsgBody& oOutMsgBody);
 
@@ -234,7 +234,7 @@ bool DestroyConnect(std::map<int, tagConnectionAttr*>::iterator iter)
     {
         return(false);
     }
-    tagMsgShell stMsgShell;
+    MsgShell stMsgShell;
     stMsgShell.iFd = iter->first;
     stMsgShell.ulSeq = iter->second->ulSeq;
     DelMsgShell(iter->second->strIdentify);
@@ -389,12 +389,12 @@ bool DelEvents(ev_io** io_watcher_addr)
     return(true);
 }
 
-bool AddMsgShell(const std::string& strIdentify, const tagMsgShell& stMsgShell)
+bool AddMsgShell(const std::string& strIdentify, const MsgShell& stMsgShell)
 {
-    std::map<std::string, tagMsgShell>::iterator iter = g_mapMsgShell.find(strIdentify);
+    std::map<std::string, MsgShell>::iterator iter = g_mapMsgShell.find(strIdentify);
     if (iter == g_mapMsgShell.end())
     {
-        g_mapMsgShell.insert(std::pair<std::string, tagMsgShell>(strIdentify, stMsgShell));
+        g_mapMsgShell.insert(std::pair<std::string, MsgShell>(strIdentify, stMsgShell));
     }
     else
     {
@@ -406,7 +406,7 @@ bool AddMsgShell(const std::string& strIdentify, const tagMsgShell& stMsgShell)
 
 void DelMsgShell(const std::string& strIdentify)
 {
-    std::map<std::string, tagMsgShell>::iterator shell_iter = g_mapMsgShell.find(strIdentify);
+    std::map<std::string, MsgShell>::iterator shell_iter = g_mapMsgShell.find(strIdentify);
     if (shell_iter == g_mapMsgShell.end())
     {
         ;
@@ -417,7 +417,7 @@ void DelMsgShell(const std::string& strIdentify)
     }
 }
 
-bool SetConnectIdentify(const tagMsgShell& stMsgShell, const std::string& strIdentify)
+bool SetConnectIdentify(const MsgShell& stMsgShell, const std::string& strIdentify)
 {
     LOG4CPLUS_DEBUG_FMT(m_oLogger, "%s()", __FUNCTION__);
     std::map<int, tagConnectionAttr*>::iterator iter = g_mapFdAttr.find(stMsgShell.iFd);
@@ -510,7 +510,7 @@ void IoRead(struct ev_loop* loop, struct ev_io* watcher, int revents)
                 {
                     conn_iter->second->dActiveTime = ev_now(m_loop);
                     bool bDisposeResult = false;
-                    tagMsgShell stMsgShell;
+                    MsgShell stMsgShell;
                     stMsgShell.iFd = pData->iFd;
                     stMsgShell.ulSeq = conn_iter->second->ulSeq;
                     if (oInMsgHead.cmd() > 0 && oInMsgHead.seq() > 0)  // 基于TCP的自定义协议请求或带cmd、seq自定义头域的http请求
@@ -651,7 +651,7 @@ void IoWrite(struct ev_loop* loop, struct ev_io* watcher, int revents)
 //                            pData->iFd, watcher->fd, attr_iter->second->pWaitForSendBuff->ReadableBytes());
             if (attr_iter->second->pWaitForSendBuff->ReadableBytes() > 0)    // 存在等待发送的数据，说明本次写事件是connect之后的第一个写事件
             {
-                tagMsgShell stMsgShell;
+                MsgShell stMsgShell;
                 stMsgShell.iFd = pData->iFd;
                 stMsgShell.ulSeq = attr_iter->second->ulSeq;
                 SendTo(stMsgShell);
@@ -669,7 +669,7 @@ void IoError(struct ev_loop* loop, struct ev_io* watcher, int revents)
     }
 }
 
-bool SendTo(const tagMsgShell& stMsgShell)
+bool SendTo(const MsgShell& stMsgShell)
 {
     LOG4CPLUS_DEBUG_FMT(m_oLogger, "%s(fd %d, seq %lu) pWaitForSendBuff", __FUNCTION__, stMsgShell.iFd, stMsgShell.ulSeq);
     std::map<int, tagConnectionAttr*>::iterator iter = g_mapFdAttr.find(stMsgShell.iFd);
@@ -730,7 +730,7 @@ bool SendTo(const tagMsgShell& stMsgShell)
     return(false);
 }
 
-bool SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+bool SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
     LOG4CPLUS_DEBUG_FMT(m_oLogger, "%s(fd %d, seq %lu)", __FUNCTION__, stMsgShell.iFd, stMsgShell.ulSeq);
     std::map<int, tagConnectionAttr*>::iterator conn_iter = g_mapFdAttr.find(stMsgShell.iFd);
@@ -807,7 +807,7 @@ bool SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBod
 bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
     LOG4CPLUS_DEBUG_FMT(m_oLogger, "%s(identify: %s)", __FUNCTION__, strIdentify.c_str());
-    std::map<std::string, tagMsgShell>::iterator shell_iter = g_mapMsgShell.find(strIdentify);
+    std::map<std::string, MsgShell>::iterator shell_iter = g_mapMsgShell.find(strIdentify);
     if (shell_iter == g_mapMsgShell.end())
     {
         LOG4CPLUS_DEBUG_FMT(m_oLogger, "no MsgShell match %s.", strIdentify.c_str());
@@ -819,7 +819,7 @@ bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBo
     }
 }
 
-bool Dispose(const std::string& strFromIp, const tagMsgShell& stMsgShell,
+bool Dispose(const std::string& strFromIp, const MsgShell& stMsgShell,
                 const MsgHead& oInMsgHead, const MsgBody& oInMsgBody,
                 MsgHead& oOutMsgHead, MsgBody& oOutMsgBody)
 {

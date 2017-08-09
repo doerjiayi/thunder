@@ -24,7 +24,7 @@ public:
     virtual ~HttpStep();
 
     virtual E_CMD_STATUS Callback(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const HttpMsg& oHttpMsg,
                     void* data = NULL) = 0;
 
@@ -40,14 +40,14 @@ public:
 protected:
     bool HttpRequest(const HttpMsg& oHttpMsg);
 
-    bool SendTo(const tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg);
+    bool SendTo(const MsgShell& stMsgShell, const HttpMsg& oHttpMsg);
 
 public:  // Step基类的方法，HttpStep中无需关注
     /**
      * @note Step基类的方法，HttpStep中无须关注
      */
     virtual E_CMD_STATUS Callback(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody,
                     void* data = NULL)

@@ -21,7 +21,7 @@ public:
     CmdUpdateConfig();
     virtual ~CmdUpdateConfig();
     virtual bool AnyMessage(
-                    const tagMsgShell& stMsgShell,
+                    const MsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody);
 private:
