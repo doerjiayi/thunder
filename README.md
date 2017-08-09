@@ -2,6 +2,7 @@
 异步响应式服务器
 # conf说明 #
 {
+
     "node_type":"节点类型：ACCESS，LOGIC，PROXY，CENTER等，由业务层定义",
     "node_type":"ACCESS",
     "access_host":"对系统外提供服务绑定的IP（Client to Server），若不提供对外服务，则无需配置",
@@ -57,4 +58,5 @@
     ],
     "custom":"自定义配置，用于通过框架层带给业务",
     "custom":{}
+
 }

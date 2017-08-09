@@ -25,9 +25,9 @@ endif
 LIB3RD_PATH = ../../l3oss
 LOSS_PATH = ../../loss
 
-Thunder_PATH = ..
+THUNDER_PATH = ..
 
-VPATH = $(Thunder_PATH)/src
+VPATH = $(THUNDER_PATH)/src
 SUB_DIRS := $(foreach dir, $(VPATH), $(shell find $(dir) -maxdepth 5 -type d))
 DIRS := $(SUB_DIRS)
 
@@ -36,7 +36,7 @@ INC := $(INC) \
        -I $(LIB3RD_PATH)/include \
        -I $(LIB3RD_PATH)/include/libev \
        -I $(LOSS_PATH)/src \
-       -I $(Thunder_PATH)/src 
+       -I $(THUNDER_PATH)/src 
 
 
 LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
@@ -51,12 +51,12 @@ LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
            -L$(SYSTEM_LIB_PATH) -lz -lc -ldl -lrt -lssl
 
 SUB_INCLUDE = cmd step session labor codec protocol storage
-COMM_PATH = $(Thunder_PATH)/src/cmd \
-            $(Thunder_PATH)/src/step \
-            $(Thunder_PATH)/src/session \
-            $(Thunder_PATH)/src/labor \
-            $(Thunder_PATH)/src/protocol \
-            $(Thunder_PATH)/src/storage
+COMM_PATH = $(THUNDER_PATH)/src/cmd \
+            $(THUNDER_PATH)/src/step \
+            $(THUNDER_PATH)/src/session \
+            $(THUNDER_PATH)/src/labor \
+            $(THUNDER_PATH)/src/protocol \
+            $(THUNDER_PATH)/src/storage
 CPP_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
 CC_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cc))
 C_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.c))
@@ -112,9 +112,9 @@ ESAgentS: $(OBJS)
 
 libThunder.so: $(COMM_OBJS)
 	$(CXX) $(UNITTEST) -fPIE -rdynamic -shared -g -o $@ $^ $(LDFLAGS)
-	@for dir in $(SUB_INCLUDE); do mkdir -p $(Thunder_PATH)/include/$$dir; cp $(Thunder_PATH)/src/$$dir/*.hpp $(Thunder_PATH)/include/$$dir/ >> /dev/null 2>&1; cp $(Thunder_PATH)/src/$$dir/*.h $(Thunder_PATH)/include/$$dir/ >> /dev/null 2>&1; done
-	cp -f $(Thunder_PATH)/src/*.hpp $(Thunder_PATH)/include/
-	cp -f $@ $(Thunder_PATH)/lib/
+	@for dir in $(SUB_INCLUDE); do mkdir -p $(THUNDER_PATH)/include/$$dir; cp $(THUNDER_PATH)/src/$$dir/*.hpp $(THUNDER_PATH)/include/$$dir/ >> /dev/null 2>&1; cp $(THUNDER_PATH)/src/$$dir/*.h $(THUNDER_PATH)/include/$$dir/ >> /dev/null 2>&1; done
+	cp -f $(THUNDER_PATH)/src/*.hpp $(THUNDER_PATH)/include/
+	cp -f $@ $(THUNDER_PATH)/lib/
 	test  -d ../../../deploy/lib/ && install -v $@ ../../../deploy/lib/
 
 %.o:%.cpp
