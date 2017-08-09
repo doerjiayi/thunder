@@ -22,8 +22,6 @@ SYSTEM_LIB_PATH:=/usr/lib64
 else
 SYSTEM_LIB_PATH:=/usr/lib
 endif
-LIB3RD_PATH = ../../l3oss
-LOSS_PATH = ../../loss
 
 THUNDER_PATH = ..
 
@@ -35,18 +33,21 @@ DIRS := $(SUB_DIRS)
 INC := $(INC) \
        -I $(LIB3RD_PATH)/include \
        -I $(LIB3RD_PATH)/include/libev \
-       -I $(LOSS_PATH)/src \
-       -I $(THUNDER_PATH)/src 
+       -I $(THUNDER_PATH)/src \
+       -I $(THUNDER_PATH)/src/utility \
+       -I $(THUNDER_PATH)/3lib/include \
+       -I $(THUNDER_PATH)/3lib/include/mysql \
+       -I $(THUNDER_PATH)/3lib/include/libev \
+       -I $(THUNDER_PATH)
 
 
 LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
-           -L$(LOSS_PATH)/lib -lloss \
-           -L$(LIB3RD_PATH)/lib -lmysqlclient_r \
-           -L$(LIB3RD_PATH)/lib -lhiredis \
-           -L$(LIB3RD_PATH)/lib -lcryptopp \
-           -L$(LIB3RD_PATH)/lib -lprotobuf \
-           -L$(LIB3RD_PATH)/lib -llog4cplus \
-           -L$(LIB3RD_PATH)/lib -lev \
+           -L$(THUNDER_PATH)/3lib/lib -lmysqlclient_r \
+           -L$(THUNDER_PATH)/3lib/lib -lhiredis \
+           -L$(THUNDER_PATH)/3lib/lib -lcryptopp \
+           -L$(THUNDER_PATH)/3lib/lib -lprotobuf \
+           -L$(THUNDER_PATH)/3lib/lib -llog4cplus \
+           -L$(THUNDER_PATH)/3lib/lib -lev \
            -L$(SYSTEM_LIB_PATH) -lpthread \
            -L$(SYSTEM_LIB_PATH) -lz -lc -ldl -lrt -lssl
 

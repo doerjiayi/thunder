@@ -26,9 +26,9 @@
 #include <map>
 #include <set>
 
-#include "../src/CustomMsgHead.hpp"
-#include "../src/ThunderDefine.hpp"
-#include "../src/ThunderError.hpp"
+#include "CustomMsgHead.hpp"
+#include "ThunderDefine.hpp"
+#include "ThunderError.hpp"
 #include "ev.h"
 #include "log4cplus/logger.h"
 #include "log4cplus/fileappender.h"
@@ -36,7 +36,7 @@
 
 #include "utility/json/CJsonObject.hpp"
 #include "utility/CBuffer.hpp"
-#include "unix_utility/process_helper.h"
+#include "unix_util/process_helper.h"
 #include "protocol/msg.pb.h"
 #include "codec/CustomMsgCodec.hpp"
 

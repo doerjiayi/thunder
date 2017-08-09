@@ -1,6 +1,6 @@
 #ifndef SRC_CODEC_CODEC_COMMON_HPP_
 #define SRC_CODEC_CODEC_COMMON_HPP_
-#include "google/protobuf/utility/json_util.h"
+#include "google/protobuf/util/json_util.h"
 
 namespace thunder
 {

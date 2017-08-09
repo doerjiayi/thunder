@@ -13,8 +13,8 @@ extern "C" {
 #endif
 #include "hiredis/async.h"
 #include "hiredis/adapters/libev.h"
-#include "unix_utility/process_helper.h"
-#include "unix_utility/proctitle_helper.h"
+#include "unix_util/process_helper.h"
+#include "unix_util/proctitle_helper.h"
 #ifdef __cplusplus
 }
 #endif

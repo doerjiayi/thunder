@@ -164,8 +164,8 @@ class LIBPROTOBUF_EXPORT MessageLite {
   // format, matching the encoding output by MessageLite::SerializeToString().
   // If you'd like to convert a human-readable string into a protocol buffer
   // object, see google::protobuf::TextFormat::ParseFromString().
-  // Like ParseFromString(), but accepts messages that are missing
   bool ParseFromString(const string& data);
+  // Like ParseFromString(), but accepts messages that are missing
   // required fields.
   bool ParsePartialFromString(const string& data);
   // Parse a protocol buffer contained in an array of bytes.

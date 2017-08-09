@@ -9,7 +9,7 @@
 ******************************************************************************/
 #ifndef THUNDERDEFINE_HPP_
 #define THUNDERDEFINE_HPP_
-
+#include <time.h>
 
 #ifndef NODE_BEAT
 #define NODE_BEAT 1.0

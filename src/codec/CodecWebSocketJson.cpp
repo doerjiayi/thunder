@@ -8,7 +8,7 @@
  * Modify history:
  ******************************************************************************/
 #include <netinet/in.h>
-#include "google/protobuf/utility/json_util.h"
+#include "google/protobuf/util/json_util.h"
 #include "CodecWebSocketJson.hpp"
 
 namespace thunder

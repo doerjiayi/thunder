@@ -7,8 +7,8 @@
  * @note
  * Modify history:
  ******************************************************************************/
-#include "unix_utility/proctitle_helper.h"
-#include "unix_utility/process_helper.h"
+#include "unix_util/proctitle_helper.h"
+#include "unix_util/process_helper.h"
 #include "cmd/sys_cmd/CmdConnectWorker.hpp"
 #include "NodeManager.hpp"
 

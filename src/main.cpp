@@ -9,7 +9,7 @@
 ******************************************************************************/
 
 #include "labor/process/NodeManager.hpp"
-#include "unix_utility/proctitle_helper.h"
+#include "unix_util/proctitle_helper.h"
 
 int main(int argc, char* argv[])
 {
