@@ -4527,7 +4527,7 @@ bool ThunderWorker::Dispose(const MsgShell& stMsgShell,
         module_iter = m_mapModule.find(oInHttpMsg.path());
         if (module_iter == m_mapModule.end())
         {
-            module_iter = m_mapModule.find("/im/switch");
+            module_iter = m_mapModule.find("/util/switch");
             if (module_iter == m_mapModule.end())
             {
                 snprintf(m_pErrBuff, gc_iErrBuffLen, "no module to dispose %s!", oInHttpMsg.path().c_str());

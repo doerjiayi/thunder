@@ -31,7 +31,6 @@
     "max_log_file_num":5,
     "max_log_file_size":"单个日志文件大小限制",
     "max_log_file_size":20480000,
-    
     "permission":"限制。addr_permit为连接限制，限制每个IP在统计时间内连接次数；uin_permit为消息数量限制，限制每个用户在单位统计时间内发送消息数量。",
     "permission":{
         "addr_permit":{"stat_interval":60.0, "permit_num":10},
@@ -46,12 +45,12 @@
     "refresh_interval":"刷新Server配置，检查、加载插件动态库时间周期（周期时间长短视服务器忙闲而定）",
     "refresh_interval":60,
     "so":[
-        {"cmd":10001, "so_path":"plugins/CmdSingleMsg.so", "entrance_symbol":"create", "load":false, "version":1},
-        {"cmd":10002, "so_path":"plugins/CmdMultiMsg.so", "entrance_symbol":"create", "load":false, "version":1}
+        {"cmd":10001, "so_path":"plugins/Cmd1.so", "entrance_symbol":"create", "load":false, "version":1},
+        {"cmd":10002, "so_path":"plugins/Cmd2.so", "entrance_symbol":"create", "load":false, "version":1}
     ],
     "module":[
-        {"url_path":"im/user/attention/mobile-lists", "so_path":"plugins/ModuleMobileList.so", "entrance_symbol":"create", "load":false, "version":1},
-        {"url_path":"im/user/attention/unlogin/mobile-friends", "so_path":"plugins/ModuleFriends.so", "entrance_symbol":"create", "load":false, "version":1}
+        {"url_path":"util/module1", "so_path":"plugins/module1.so", "entrance_symbol":"create", "load":false, "version":1},
+        {"url_path":"util/module2", "so_path":"plugins/module2.so", "entrance_symbol":"create", "load":false, "version":1}
     ],
     "custom":"自定义配置，用于通过框架层带给业务",
     "custom":{}
