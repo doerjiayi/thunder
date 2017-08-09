@@ -31,8 +31,6 @@ DIRS := $(SUB_DIRS)
 
 
 INC := $(INC) \
-       -I $(LIB3RD_PATH)/include \
-       -I $(LIB3RD_PATH)/include/libev \
        -I $(THUNDER_PATH)/src \
        -I $(THUNDER_PATH)/src/utility \
        -I $(THUNDER_PATH)/3lib/include \
@@ -40,16 +38,15 @@ INC := $(INC) \
        -I $(THUNDER_PATH)/3lib/include/libev \
        -I $(THUNDER_PATH)
 
-
 LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
+           -L$(SYSTEM_LIB_PATH) -lpthread \
+           -L$(SYSTEM_LIB_PATH) -lz -lc -ldl -lrt -lssl \
            -L$(THUNDER_PATH)/3lib/lib -lmysqlclient_r \
            -L$(THUNDER_PATH)/3lib/lib -lhiredis \
            -L$(THUNDER_PATH)/3lib/lib -lcryptopp \
            -L$(THUNDER_PATH)/3lib/lib -lprotobuf \
            -L$(THUNDER_PATH)/3lib/lib -llog4cplus \
-           -L$(THUNDER_PATH)/3lib/lib -lev \
-           -L$(SYSTEM_LIB_PATH) -lpthread \
-           -L$(SYSTEM_LIB_PATH) -lz -lc -ldl -lrt -lssl
+           -L$(THUNDER_PATH)/3lib/lib -lev 
 
 SUB_INCLUDE = cmd step session labor protocol
 COMM_PATH = $(THUNDER_PATH)/src/cmd \
@@ -61,11 +58,7 @@ COMM_PATH = $(THUNDER_PATH)/src/cmd \
 CPP_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
 CC_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cc))
 C_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.c))
-COMM_CPP_SRCS = $(foreach dir, $(COMM_PATH), $(wildcard $(dir)/*.cpp))
-COMM_CC_SRCS = $(foreach dir, $(COMM_PATH), $(wildcard $(dir)/*.cc))
-COMM_C_SRCS = $(foreach dir, $(COMM_PATH), $(wildcard $(dir)/*.c))
 OBJS = $(patsubst %.cpp,%.o,$(CPP_SRCS)) $(patsubst %.c,%.o,$(C_SRCS)) $(patsubst %.cc,%.o,$(CC_SRCS))
-COMM_OBJS = $(patsubst %.cpp,%.o,$(COMM_CPP_SRCS)) $(patsubst %.c,%.o,$(COMM_C_SRCS)) $(patsubst %.cc,%.o,$(COMM_CC_SRCS))
 
 TARGET = CenterServer 
 
@@ -74,7 +67,6 @@ all: $(TARGET)
 CenterServer: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
 	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
-	
 
 %.o:%.cpp
 	$(CXX) $(INC) $(CPPFLAGS) $(CFLAGS) $(DEFINE_SERVER) $(UNITTEST) -c -o $@ $< $(LDFLAGS)

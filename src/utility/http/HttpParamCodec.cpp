@@ -60,7 +60,6 @@ bool HttpParamCodec::decode(const std::string &strParam)
         }
         m_map.insert(std::pair<std::string,std::string>(str.substr(0,iIndex),str.substr(iIndex + 1,str.size() - 1)));
     }
-
     return true;
 }
 

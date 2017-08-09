@@ -31,8 +31,6 @@ DIRS := $(SUB_DIRS)
 
 
 INC := $(INC) \
-       -I $(LIB3RD_PATH)/include \
-       -I $(LIB3RD_PATH)/include/libev \
        -I $(THUNDER_PATH)/src \
        -I $(THUNDER_PATH)/src/utility \
        -I $(THUNDER_PATH)/3lib/include \
@@ -42,14 +40,15 @@ INC := $(INC) \
 
 
 LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
+           -L$(SYSTEM_LIB_PATH) -lpthread \
+           -L$(SYSTEM_LIB_PATH) -lz -lc -ldl -lrt -lssl \
            -L$(THUNDER_PATH)/3lib/lib -lmysqlclient_r \
            -L$(THUNDER_PATH)/3lib/lib -lhiredis \
            -L$(THUNDER_PATH)/3lib/lib -lcryptopp \
            -L$(THUNDER_PATH)/3lib/lib -lprotobuf \
            -L$(THUNDER_PATH)/3lib/lib -llog4cplus \
-           -L$(THUNDER_PATH)/3lib/lib -lev \
-           -L$(SYSTEM_LIB_PATH) -lpthread \
-           -L$(SYSTEM_LIB_PATH) -lz -lc -ldl -lrt -lssl
+           -L$(THUNDER_PATH)/3lib/lib -lev 
+
 
 SUB_INCLUDE = cmd step session labor codec protocol storage
 COMM_PATH = $(THUNDER_PATH)/src/cmd \
@@ -58,6 +57,7 @@ COMM_PATH = $(THUNDER_PATH)/src/cmd \
             $(THUNDER_PATH)/src/labor \
             $(THUNDER_PATH)/src/protocol \
             $(THUNDER_PATH)/src/storage
+
 CPP_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
 CC_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cc))
 C_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.c))
@@ -74,7 +74,7 @@ all: $(TARGET)
 LogicServer: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
 	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
-    
+
 DataProxyServer: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
 	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
@@ -127,5 +127,5 @@ libThunder.so: $(COMM_OBJS)
 clean:
 	rm -f $(OBJS)
 	rm -f $(TARGET)
-        
-        
+
+

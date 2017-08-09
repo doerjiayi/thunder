@@ -83,6 +83,6 @@ inline uint64 TimeToUniqueId(unsigned long long ullTime)
     return ullUniqueId;
 }
 
-}//namespace thunder
+}//namespace loss
 
 #endif /* CODE_LOSS_SRC_UTIL_COMMONUTILS_HPP_ */
