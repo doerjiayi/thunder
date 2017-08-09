@@ -9,12 +9,12 @@
  ******************************************************************************/
 #ifndef CMD_HPP_
 #define CMD_HPP_
+#include "../ThunderDefine.hpp"
+#include "../ThunderError.hpp"
 #include "log4cplus/loggingmacros.h"
 #include "CW.hpp"
 #include "protocol/msg.pb.h"
 //#include "protocol/oss_sys.pb.h"
-#include "OssError.hpp"
-#include "OssDefine.hpp"
 #include "labor/NodeLabor.hpp"
 #include "step/Step.hpp"
 

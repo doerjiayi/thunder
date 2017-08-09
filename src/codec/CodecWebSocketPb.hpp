@@ -11,10 +11,11 @@
 #define SRC_CODEC_CODECWSEXTENTPB_HPP_
 #include <string>
 #include <map>
+
+#include "../CustomMsgHead.hpp"
 #include "utility/http/http_parser.h"
 #include "protocol/http.pb.h"
 #include "ThunderCodec.hpp"
-#include "ClientMsgHead.hpp"
 #include "CodecCommon.hpp"
 
 namespace thunder

@@ -225,7 +225,7 @@ E_CODEC_STATUS CodecWebSocketJson::Encode(const MsgHead& oMsgHead,
     {
         ucFirstByte |= WEBSOCKET_FIN;   //目前没有分帧发送
         ucFirstByte |= WEBSOCKET_FRAME_BINARY;
-        tagClientMsgHead stOutMsgHead;
+        tagCustomMsgHead stOutMsgHead;
         std::string strCompressData;//压缩数据
         std::string strEncryptData;//加密数据
         std::string strJsonMsg;
@@ -353,11 +353,11 @@ E_CODEC_STATUS CodecWebSocketJson::Encode(const MsgHead& oMsgHead,
         iNeedWriteLen = sizeof(stOutMsgHead);
         iWriteLen = pBuff->Write(&stOutMsgHead, iNeedWriteLen);
         iHadWriteLen += iWriteLen;
-        LOG4_TRACE("sizeof(stClientMsgHead) = %d, iWriteLen = %d",
+        LOG4_TRACE("sizeof(sttagCustomMsgHead) = %d, iWriteLen = %d",
                         sizeof(stOutMsgHead), iWriteLen);
         if (iWriteLen != iNeedWriteLen)
         {
-            LOG4_ERROR("buff write head iWriteLen != sizeof(stClientMsgHead)");
+            LOG4_ERROR("buff write head iWriteLen != sizeof(sttagCustomMsgHead)");
             pBuff->SetWriteIndex(pBuff->GetWriteIndex() - iHadWriteLen);
             return (CODEC_STATUS_ERR);
         }
@@ -1383,7 +1383,7 @@ E_CODEC_STATUS CodecWebSocketJson::Decode(thunder::CBuffer* pBuff,
             }
         }
         //处理自定义数据包头（如果有包头的则需要处理）
-        size_t uiHeadSize = sizeof(tagClientMsgHead);
+        size_t uiHeadSize = sizeof(tagCustomMsgHead);
         if(pBuff->ReadableBytes() < uiHeadSize)
         {
             std::string strPayload;
@@ -1394,7 +1394,7 @@ E_CODEC_STATUS CodecWebSocketJson::Decode(thunder::CBuffer* pBuff,
             pBuff->SetReadIndex(iReadIdx);
             return (CODEC_STATUS_PAUSE);
         }
-        tagClientMsgHead stMsgHead;
+        tagCustomMsgHead stMsgHead;
         pBuff->Read(&stMsgHead, uiHeadSize);
         LOG4_TRACE("before tranfer:cmd %u, seq %u, len %u, encript %u,pBuff->ReadableBytes() %u",
                         stMsgHead.cmd, stMsgHead.seq, stMsgHead.body_len,stMsgHead.encript,

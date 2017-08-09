@@ -365,7 +365,7 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
                 }
                 return(false);
             }
-            while (conn_iter->second->pRecvBuff->ReadableBytes() >= gc_uiClientMsgHeadSize)
+            while (conn_iter->second->pRecvBuff->ReadableBytes() >= gc_uitagCustomMsgHeadSize)
             {
                 oInMsgHead.Clear();
                 oInMsgBody.Clear();

@@ -28,6 +28,9 @@
 #include <sstream>
 #include <map>
 #include <set>
+
+#include "../../ThunderDefine.hpp"
+#include "../../ThunderError.hpp"
 #include "libev/ev.h"
 #include "log4cplus/logger.h"
 #include "log4cplus/fileappender.h"
@@ -38,8 +41,6 @@
 #include "utility/CBuffer.hpp"
 #include "protocol/msg.pb.h"
 #include "protocol/oss_sys.pb.h"
-#include "OssError.hpp"
-#include "OssDefine.hpp"
 #include "Attribution.hpp"
 #include "labor/NodeLabor.hpp"
 #include "cmd/Cmd.hpp"

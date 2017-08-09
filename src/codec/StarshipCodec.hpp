@@ -14,12 +14,12 @@
 #include <zlib.h>
 #include <zconf.h>
 
+#include "../ThunderDefine.hpp"
 #include "log4cplus/loggingmacros.h"
 #include "utility/StreamCodec.hpp"
 #include "utility/CBuffer.hpp"
 #include "protocol/msg.pb.h"
 #include "labor/duty/Attribution.hpp"
-#include "OssDefine.hpp"
 #include "cmd/CW.hpp"
 
 namespace thunder

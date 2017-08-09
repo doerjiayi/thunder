@@ -12,6 +12,9 @@
 
 #include <map>
 #include <set>
+
+#include "../ThunderDefine.hpp"
+#include "../ThunderError.hpp"
 #include "log4cplus/logger.h"
 #include "log4cplus/fileappender.h"
 #include "log4cplus/loggingmacros.h"
@@ -19,8 +22,6 @@
 #include "hiredis/async.h"
 #include "libev/ev.h"         // need ev_tstamp
 
-#include "OssError.hpp"
-#include "OssDefine.hpp"
 #include "labor/NodeLabor.hpp"
 #include "cmd/CW.hpp"
 #include "protocol/msg.pb.h"

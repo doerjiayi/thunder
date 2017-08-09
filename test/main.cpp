@@ -25,6 +25,10 @@
 #include <sstream>
 #include <map>
 #include <set>
+
+#include "../src/CustomMsgHead.hpp"
+#include "../src/ThunderDefine.hpp"
+#include "../src/ThunderError.hpp"
 #include "ev.h"
 #include "log4cplus/logger.h"
 #include "log4cplus/fileappender.h"
@@ -34,9 +38,6 @@
 #include "utility/CBuffer.hpp"
 #include "unix_utility/process_helper.h"
 #include "protocol/msg.pb.h"
-#include "OssError.hpp"
-#include "OssDefine.hpp"
-#include "ClientMsgHead.hpp"
 #include "codec/CustomMsgCodec.hpp"
 
 using namespace thunder;

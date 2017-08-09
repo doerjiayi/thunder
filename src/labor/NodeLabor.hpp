@@ -10,11 +10,12 @@
 #ifndef SRC_NodeLabor_HPP_
 #define SRC_NodeLabor_HPP_
 #include <string>
+
+#include "../ThunderDefine.hpp"
 #include "libev/ev.h"
 #include "log4cplus/loggingmacros.h"
 #include "utility/json/CJsonObject.hpp"
 #include "utility/CBuffer.hpp"
-#include "OssDefine.hpp"
 #include "protocol/msg.pb.h"
 #include "protocol/http.pb.h"
 

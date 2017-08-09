@@ -1,14 +1,14 @@
 /*******************************************************************************
 * Project:  AsyncServer
-* @file     OssDefine.hpp
+* @file     ThunderDefine.hpp
 * @brief 
 * @author   cjy
 * @date:    2015年7月27日
 * @note
 * Modify history:
 ******************************************************************************/
-#ifndef OSSDEFINE_HPP_
-#define OSSDEFINE_HPP_
+#ifndef THUNDERDEFINE_HPP_
+#define THUNDERDEFINE_HPP_
 
 
 #ifndef NODE_BEAT
@@ -47,7 +47,7 @@ const int gc_iMaxBuffLen = 65535;
 const int gc_iErrBuffLen = 256;
 
 const uint32 gc_uiMsgHeadSize = 15;
-const uint32 gc_uiClientMsgHeadSize = 14;
+const uint32 gc_uitagCustomMsgHeadSize = 14;
 
 enum E_CMD_STATUS
 {
@@ -125,4 +125,4 @@ struct tagSequence
 
 }
 
-#endif /* OSSDEFINE_HPP_ */
+#endif /* THUNDERDEFINE_HPP_ */

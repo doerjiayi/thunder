@@ -8,8 +8,9 @@
  * Modify history:
  ******************************************************************************/
 #include <netinet/in.h>
+
+#include "../CustomMsgHead.hpp"
 #include "CustomMsgCodec.hpp"
-#include "ClientMsgHead.hpp"
 
 namespace thunder
 {
@@ -26,13 +27,13 @@ CustomMsgCodec::~CustomMsgCodec()
 E_CODEC_STATUS CustomMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, thunder::CBuffer* pBuff)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
-    tagClientMsgHead stClientMsgHead;
-    stClientMsgHead.version = 1;        // version暂时无用
-    stClientMsgHead.encript = (unsigned char)(oMsgHead.cmd() >> 24);
-    stClientMsgHead.cmd = htons((unsigned short)(gc_uiCmdBit & oMsgHead.cmd()));
-    stClientMsgHead.body_len = htonl((unsigned int)oMsgHead.msgbody_len());
-    stClientMsgHead.seq = htonl(oMsgHead.seq());
-    stClientMsgHead.checksum = 0;//发送出去的消息不需要校验 htons((unsigned short)stClientMsgHead.checksum);
+    tagCustomMsgHead sttagCustomMsgHead;
+    sttagCustomMsgHead.version = 1;        // version暂时无用
+    sttagCustomMsgHead.encript = (unsigned char)(oMsgHead.cmd() >> 24);
+    sttagCustomMsgHead.cmd = htons((unsigned short)(gc_uiCmdBit & oMsgHead.cmd()));
+    sttagCustomMsgHead.body_len = htonl((unsigned int)oMsgHead.msgbody_len());
+    sttagCustomMsgHead.seq = htonl(oMsgHead.seq());
+    sttagCustomMsgHead.checksum = 0;//发送出去的消息不需要校验 htons((unsigned short)sttagCustomMsgHead.checksum);
     if (oMsgBody.ByteSize() > 64000000) // pb 最大限制
     {
         LOG4_ERROR("oMsgBody.ByteSize() > 64000000");
@@ -41,15 +42,15 @@ E_CODEC_STATUS CustomMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oM
     int iErrno = 0;
     int iHadWriteLen = 0;
     int iWriteLen = 0;
-    int iNeedWriteLen = sizeof(stClientMsgHead);
+    int iNeedWriteLen = sizeof(sttagCustomMsgHead);
     LOG4_TRACE("cmd %u, seq %u, len %u", oMsgHead.cmd(), oMsgHead.seq(), oMsgHead.msgbody_len());
     if (oMsgHead.msgbody_len() == 0)    // 无包体（心跳包等）
     {
-        iWriteLen = pBuff->Write(&stClientMsgHead, iNeedWriteLen);
-        LOG4_TRACE("sizeof(stClientMsgHead) = %d, iWriteLen = %d", sizeof(stClientMsgHead), iWriteLen);
+        iWriteLen = pBuff->Write(&sttagCustomMsgHead, iNeedWriteLen);
+        LOG4_TRACE("sizeof(sttagCustomMsgHead) = %d, iWriteLen = %d", sizeof(sttagCustomMsgHead), iWriteLen);
         if (iWriteLen != iNeedWriteLen)
         {
-            LOG4_ERROR("buff write head iWriteLen != sizeof(stClientMsgHead)");
+            LOG4_ERROR("buff write head iWriteLen != sizeof(sttagCustomMsgHead)");
             pBuff->SetWriteIndex(pBuff->GetWriteIndex() - iHadWriteLen);
             return(CODEC_STATUS_ERR);
         }
@@ -57,13 +58,13 @@ E_CODEC_STATUS CustomMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oM
         return(CODEC_STATUS_OK);
     }
     iHadWriteLen += iWriteLen;
-    if (stClientMsgHead.encript == 0)       // 不压缩也不加密
+    if (sttagCustomMsgHead.encript == 0)       // 不压缩也不加密
     {
-        iWriteLen = pBuff->Write(&stClientMsgHead, iNeedWriteLen);
-        LOG4_TRACE("sizeof(stClientMsgHead) = %d, iWriteLen = %d", sizeof(stClientMsgHead), iWriteLen);
+        iWriteLen = pBuff->Write(&sttagCustomMsgHead, iNeedWriteLen);
+        LOG4_TRACE("sizeof(sttagCustomMsgHead) = %d, iWriteLen = %d", sizeof(sttagCustomMsgHead), iWriteLen);
         if (iWriteLen != iNeedWriteLen)
         {
-            LOG4_ERROR("buff write head iWriteLen != sizeof(stClientMsgHead)");
+            LOG4_ERROR("buff write head iWriteLen != sizeof(sttagCustomMsgHead)");
             pBuff->SetWriteIndex(pBuff->GetWriteIndex() - iHadWriteLen);
             return(CODEC_STATUS_ERR);
         }
@@ -71,7 +72,7 @@ E_CODEC_STATUS CustomMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oM
         iWriteLen = pBuff->Write(oMsgBody.SerializeAsString().c_str(), oMsgBody.ByteSize());
         if (iWriteLen != iNeedWriteLen)
         {
-            LOG4_ERROR("buff write head iWriteLen != sizeof(stClientMsgHead)");
+            LOG4_ERROR("buff write head iWriteLen != sizeof(sttagCustomMsgHead)");
             pBuff->SetWriteIndex(pBuff->GetWriteIndex() - iHadWriteLen);
             return(CODEC_STATUS_ERR);
         }
@@ -119,12 +120,12 @@ E_CODEC_STATUS CustomMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oM
 
         if (strEncryptData.size() > 0)              // 加密后的数据包
         {
-            stClientMsgHead.body_len = htonl((unsigned int)strEncryptData.size());
-            iWriteLen = pBuff->Write(&stClientMsgHead, iNeedWriteLen);
-            LOG4_TRACE("sizeof(stClientMsgHead) = %d, iWriteLen = %d", sizeof(stClientMsgHead), iWriteLen);
+            sttagCustomMsgHead.body_len = htonl((unsigned int)strEncryptData.size());
+            iWriteLen = pBuff->Write(&sttagCustomMsgHead, iNeedWriteLen);
+            LOG4_TRACE("sizeof(sttagCustomMsgHead) = %d, iWriteLen = %d", sizeof(sttagCustomMsgHead), iWriteLen);
             if (iWriteLen != iNeedWriteLen)
             {
-                LOG4_ERROR("buff write head iWriteLen != sizeof(stClientMsgHead)");
+                LOG4_ERROR("buff write head iWriteLen != sizeof(sttagCustomMsgHead)");
                 pBuff->SetWriteIndex(pBuff->GetWriteIndex() - iHadWriteLen);
                 return(CODEC_STATUS_ERR);
             }
@@ -140,12 +141,12 @@ E_CODEC_STATUS CustomMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oM
         }
         else if (strCompressData.size() > 0)        // 压缩后的数据包
         {
-            stClientMsgHead.body_len = htonl((unsigned int)strCompressData.size());
-            iWriteLen = pBuff->Write(&stClientMsgHead, iNeedWriteLen);
-            LOG4_TRACE("sizeof(stClientMsgHead) = %d, iWriteLen = %d", sizeof(stClientMsgHead), iWriteLen);
+            sttagCustomMsgHead.body_len = htonl((unsigned int)strCompressData.size());
+            iWriteLen = pBuff->Write(&sttagCustomMsgHead, iNeedWriteLen);
+            LOG4_TRACE("sizeof(sttagCustomMsgHead) = %d, iWriteLen = %d", sizeof(sttagCustomMsgHead), iWriteLen);
             if (iWriteLen != iNeedWriteLen)
             {
-                LOG4_ERROR("buff write head iWriteLen != sizeof(stClientMsgHead)");
+                LOG4_ERROR("buff write head iWriteLen != sizeof(sttagCustomMsgHead)");
                 pBuff->SetWriteIndex(pBuff->GetWriteIndex() - iHadWriteLen);
                 return(CODEC_STATUS_ERR);
             }
@@ -161,11 +162,11 @@ E_CODEC_STATUS CustomMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oM
         }
         else    // 无效的压缩或加密算法，打包原数据
         {
-            iWriteLen = pBuff->Write(&stClientMsgHead, iNeedWriteLen);
-            LOG4_TRACE("sizeof(stClientMsgHead) = %d, iWriteLen = %d", sizeof(stClientMsgHead), iWriteLen);
+            iWriteLen = pBuff->Write(&sttagCustomMsgHead, iNeedWriteLen);
+            LOG4_TRACE("sizeof(sttagCustomMsgHead) = %d, iWriteLen = %d", sizeof(sttagCustomMsgHead), iWriteLen);
             if (iWriteLen != iNeedWriteLen)
             {
-                LOG4_ERROR("buff write head iWriteLen != sizeof(stClientMsgHead)");
+                LOG4_ERROR("buff write head iWriteLen != sizeof(sttagCustomMsgHead)");
                 pBuff->SetWriteIndex(pBuff->GetWriteIndex() - iHadWriteLen);
                 return(CODEC_STATUS_ERR);
             }
@@ -188,34 +189,34 @@ E_CODEC_STATUS CustomMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oM
 E_CODEC_STATUS CustomMsgCodec::Decode(thunder::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s() pBuff->ReadableBytes() = %u", __FUNCTION__, pBuff->ReadableBytes());
-    size_t uiHeadSize = sizeof(tagClientMsgHead);
+    size_t uiHeadSize = sizeof(tagCustomMsgHead);
     if (pBuff->ReadableBytes() >= uiHeadSize)
     {
-        tagClientMsgHead stClientMsgHead;
+        tagCustomMsgHead sttagCustomMsgHead;
         int iReadIdx = pBuff->GetReadIndex();
-        pBuff->Read(&stClientMsgHead, uiHeadSize);
-        stClientMsgHead.cmd = ntohs(stClientMsgHead.cmd);
-        stClientMsgHead.body_len = ntohl(stClientMsgHead.body_len);
-        stClientMsgHead.seq = ntohl(stClientMsgHead.seq);
-        stClientMsgHead.checksum = ntohs(stClientMsgHead.checksum);
+        pBuff->Read(&sttagCustomMsgHead, uiHeadSize);
+        sttagCustomMsgHead.cmd = ntohs(sttagCustomMsgHead.cmd);
+        sttagCustomMsgHead.body_len = ntohl(sttagCustomMsgHead.body_len);
+        sttagCustomMsgHead.seq = ntohl(sttagCustomMsgHead.seq);
+        sttagCustomMsgHead.checksum = ntohs(sttagCustomMsgHead.checksum);
         LOG4_TRACE("cmd %u, seq %u, len %u, pBuff->ReadableBytes() %u",
-                        stClientMsgHead.cmd, stClientMsgHead.seq, stClientMsgHead.body_len,
+                        sttagCustomMsgHead.cmd, sttagCustomMsgHead.seq, sttagCustomMsgHead.body_len,
                         pBuff->ReadableBytes());
-        oMsgHead.set_cmd(((unsigned int)stClientMsgHead.encript << 24) | stClientMsgHead.cmd);
-        oMsgHead.set_msgbody_len(stClientMsgHead.body_len);
-        oMsgHead.set_seq(stClientMsgHead.seq);
-        oMsgHead.set_checksum(stClientMsgHead.checksum);
-        if (0 == stClientMsgHead.body_len)      // 心跳包无包体
+        oMsgHead.set_cmd(((unsigned int)sttagCustomMsgHead.encript << 24) | sttagCustomMsgHead.cmd);
+        oMsgHead.set_msgbody_len(sttagCustomMsgHead.body_len);
+        oMsgHead.set_seq(sttagCustomMsgHead.seq);
+        oMsgHead.set_checksum(sttagCustomMsgHead.checksum);
+        if (0 == sttagCustomMsgHead.body_len)      // 心跳包无包体
         {
 //            pBuff->Compact(8192);
             return(CODEC_STATUS_OK);
         }
-        if (pBuff->ReadableBytes() >= stClientMsgHead.body_len)
+        if (pBuff->ReadableBytes() >= sttagCustomMsgHead.body_len)
         {
             bool bResult = false;
-            if (stClientMsgHead.encript == 0)       // 未压缩也未加密
+            if (sttagCustomMsgHead.encript == 0)       // 未压缩也未加密
             {
-                bResult = oMsgBody.ParseFromArray(pBuff->GetRawReadBuffer(), stClientMsgHead.body_len);
+                bResult = oMsgBody.ParseFromArray(pBuff->GetRawReadBuffer(), sttagCustomMsgHead.body_len);
             }
             else    // 有压缩或加密，先解密再解压，然后用MsgBody反序列化
             {
@@ -224,7 +225,7 @@ E_CODEC_STATUS CustomMsgCodec::Decode(thunder::CBuffer* pBuff, MsgHead& oMsgHead
                 if (gc_uiRc5Bit & oMsgHead.cmd())
                 {
                     std::string strRawData;
-                    strRawData.assign((const char*)pBuff->GetRawReadBuffer(), stClientMsgHead.body_len);
+                    strRawData.assign((const char*)pBuff->GetRawReadBuffer(), sttagCustomMsgHead.body_len);
                     if (!Rc5Decrypt(strRawData, strDecryptData))
                     {
                         LOG4_WARN("Rc5Decrypt error!");
@@ -244,7 +245,7 @@ E_CODEC_STATUS CustomMsgCodec::Decode(thunder::CBuffer* pBuff, MsgHead& oMsgHead
                     else
                     {
                         std::string strRawData;
-                        strRawData.assign((const char*)pBuff->GetRawReadBuffer(), stClientMsgHead.body_len);
+                        strRawData.assign((const char*)pBuff->GetRawReadBuffer(), sttagCustomMsgHead.body_len);
                         if (!Unzip(strRawData, strUncompressData))
                         {
                             LOG4_WARN("uncompress error!");
@@ -265,7 +266,7 @@ E_CODEC_STATUS CustomMsgCodec::Decode(thunder::CBuffer* pBuff, MsgHead& oMsgHead
                     else
                     {
                         std::string strRawData;
-                        strRawData.assign((const char*)pBuff->GetRawReadBuffer(), stClientMsgHead.body_len);
+                        strRawData.assign((const char*)pBuff->GetRawReadBuffer(), sttagCustomMsgHead.body_len);
                         if (!Gunzip(strRawData, strUncompressData))
                         {
                             LOG4_WARN("uncompress error!");
@@ -286,7 +287,7 @@ E_CODEC_STATUS CustomMsgCodec::Decode(thunder::CBuffer* pBuff, MsgHead& oMsgHead
                 }
                 else    // 无效的压缩或解密算法，仍然解析原数据
                 {
-                    bResult = oMsgBody.ParseFromArray(pBuff->GetRawReadBuffer(), stClientMsgHead.body_len);
+                    bResult = oMsgBody.ParseFromArray(pBuff->GetRawReadBuffer(), sttagCustomMsgHead.body_len);
                 }
             }
             if (bResult)

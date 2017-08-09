@@ -10,12 +10,12 @@
 #ifndef SESSION_HPP_
 #define SESSION_HPP_
 
+#include "../ThunderDefine.hpp"
+#include "../ThunderError.hpp"
 #include "log4cplus/logger.h"
 #include "log4cplus/fileappender.h"
 #include "log4cplus/loggingmacros.h"
 #include "libev/ev.h"         // need ev_tstamp
-#include "OssDefine.hpp"
-#include "OssError.hpp"
 #include "labor/NodeLabor.hpp"
 
 namespace thunder
