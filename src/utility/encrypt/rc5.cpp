@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  loss
+ * Project:  thunder
  * @file     rc5.cpp
  * @brief
  * @author   cjy
@@ -8,7 +8,7 @@
  * Modify history:
  ******************************************************************************/
 
-#include "../encrypt/rc5.h"
+#include "rc5.h"
 
 rc5UserKey *RC5_Key_Create()
 {

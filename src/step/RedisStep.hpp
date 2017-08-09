@@ -11,7 +11,7 @@
 #define SRC_STEP_REDISSTEP_HPP_
 #include <set>
 #include <list>
-#include "dbi/redis/RedisCmd.hpp"
+#include "dbi/RedisCmd.hpp"
 #include "Step.hpp"
 
 namespace thunder
