@@ -14,7 +14,7 @@
 #include "dbi/redis/RedisCmd.hpp"
 #include "Step.hpp"
 
-namespace oss
+namespace thunder
 {
 
 /**
@@ -61,19 +61,19 @@ public:
     virtual E_CMD_STATUS Timeout(){return(STATUS_CMD_FAULT);}
 
 public:
-    loss::RedisCmd* RedisCmd()
+    thunder::RedisCmd* RedisCmd()
     {
         return(m_pRedisCmd);
     }
 
 public:
-    const loss::RedisCmd* GetRedisCmd()
+    const thunder::RedisCmd* GetRedisCmd()
     {
         return(m_pRedisCmd);
     }
 
 private:
-    loss::RedisCmd* m_pRedisCmd;
+    thunder::RedisCmd* m_pRedisCmd;
 };
 
 
@@ -121,6 +121,6 @@ struct tagRedisAttr
     }
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* SRC_STEP_REDISSTEP_HPP_ */

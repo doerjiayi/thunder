@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "StorageOperator.hpp"
 
-namespace oss
+namespace thunder
 {
 
 StorageOperator::StorageOperator()
@@ -20,4 +20,4 @@ StorageOperator::~StorageOperator()
 {
 }
 
-} /* namespace oss */
+} /* namespace thunder */

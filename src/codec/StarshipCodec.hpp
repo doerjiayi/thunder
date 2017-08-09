@@ -1,28 +1,28 @@
 /*******************************************************************************
- * Project:  Starship
- * @file     StarshipCodec.hpp
- * @brief    Starship编解码器
+ * Project:  Thunder
+ * @file     ThunderCodec.hpp
+ * @brief    Thunder编解码器
  * @author   cjy
  * @date:    2015年10月6日
  * @note
  * Modify history:
  ******************************************************************************/
-#ifndef SRC_CODEC_STARSHIPCODEC_HPP_
-#define SRC_CODEC_STARSHIPCODEC_HPP_
+#ifndef SRC_CODEC_ThunderCODEC_HPP_
+#define SRC_CODEC_ThunderCODEC_HPP_
 
 #include <arpa/inet.h>
 #include <zlib.h>
 #include <zconf.h>
 
 #include "log4cplus/loggingmacros.h"
-#include "util/StreamCodec.hpp"
-#include "util/CBuffer.hpp"
+#include "utility/StreamCodec.hpp"
+#include "utility/CBuffer.hpp"
 #include "protocol/msg.pb.h"
 #include "labor/duty/Attribution.hpp"
 #include "OssDefine.hpp"
 #include "cmd/CW.hpp"
 
-namespace oss
+namespace thunder
 {
 
 const unsigned int gc_uiGzipBit = 0x10000000;          ///< 采用zip压缩
@@ -43,11 +43,11 @@ enum E_CODEC_STATUS
     CODEC_STATUS_PAUSE      = 2,    ///< 编解码暂停（数据不完整，等待数据完整之后再解码）
 };
 
-class StarshipCodec: public loss::CStreamCodec
+class ThunderCodec: public thunder::CStreamCodec
 {
 public:
-    StarshipCodec(loss::E_CODEC_TYPE eCodecType, const std::string& strKey = "That's a lizard.");
-    virtual ~StarshipCodec();
+    ThunderCodec(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey = "That's a lizard.");
+    virtual ~ThunderCodec();
     /**
      * @brief 字节流编码
      * @param[in] oMsgHead  消息包头
@@ -55,7 +55,7 @@ public:
      * @param[out] pBuff  数据缓冲区
      * @return 编解码状态
      */
-    virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead,const MsgBody& oMsgBody, loss::CBuffer* pBuff) = 0;
+    virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead,const MsgBody& oMsgBody, thunder::CBuffer* pBuff) = 0;
 
     /**
      * @brief 字节流解码
@@ -64,7 +64,7 @@ public:
      * @param[out] oMsgBody 消息包体
      * @return 编解码状态
      */
-    virtual E_CODEC_STATUS Decode(loss::CBuffer* pBuff,MsgHead& oMsgHead, MsgBody& oMsgBody) = 0;
+    virtual E_CODEC_STATUS Decode(thunder::CBuffer* pBuff,MsgHead& oMsgHead, MsgBody& oMsgBody) = 0;
 
     /**
      * @brief 连接的字节流解码,需要处理连接初始化状态
@@ -103,9 +103,9 @@ public:
 private:
     log4cplus::Logger m_oLogger;
     std::string m_strKey;       // 密钥
-//    loss::Aes m_oAes;
+//    thunder::Aes m_oAes;
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
-#endif /* SRC_CODEC_STARSHIPCODEC_HPP_ */
+#endif /* SRC_CODEC_ThunderCODEC_HPP_ */

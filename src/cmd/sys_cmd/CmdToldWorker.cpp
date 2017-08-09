@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include <cmd/sys_cmd/CmdToldWorker.hpp>
 
-namespace oss
+namespace thunder
 {
 
 CmdToldWorker::CmdToldWorker()
@@ -75,4 +75,4 @@ bool CmdToldWorker::AnyMessage(
     return(bResult);
 }
 
-} /* namespace oss */
+} /* namespace thunder */

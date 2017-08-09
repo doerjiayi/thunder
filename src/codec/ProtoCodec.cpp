@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  Starship
+ * Project:  Thunder
  * @file     ProtoCodec.cpp
  * @brief 
  * @author   cjy
@@ -9,11 +9,11 @@
  ******************************************************************************/
 #include "ProtoCodec.hpp"
 
-namespace oss
+namespace thunder
 {
 
-ProtoCodec::ProtoCodec(loss::E_CODEC_TYPE eCodecType, const std::string& strKey)
-    : StarshipCodec(eCodecType, strKey)
+ProtoCodec::ProtoCodec(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey)
+    : ThunderCodec(eCodecType, strKey)
 {
 }
 
@@ -21,7 +21,7 @@ ProtoCodec::~ProtoCodec()
 {
 }
 
-E_CODEC_STATUS ProtoCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, loss::CBuffer* pBuff)
+E_CODEC_STATUS ProtoCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, thunder::CBuffer* pBuff)
 {
     LOG4_TRACE("%s() pBuff->ReadableBytes()=%u", __FUNCTION__, pBuff->ReadableBytes());
     if (oMsgBody.ByteSize() > 64000000) // pb 最大限制
@@ -93,7 +93,7 @@ E_CODEC_STATUS ProtoCodec::Decode(tagConnectionAttr* pConn,MsgHead& oMsgHead, Ms
     return eCodecStatus;
 }
 
-E_CODEC_STATUS ProtoCodec::Decode(loss::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody)
+E_CODEC_STATUS ProtoCodec::Decode(thunder::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s() pBuff->ReadableBytes()=%d, pBuff->GetReadIndex()=%d",
                     __FUNCTION__, pBuff->ReadableBytes(), pBuff->GetReadIndex());
@@ -155,4 +155,4 @@ E_CODEC_STATUS ProtoCodec::Decode(loss::CBuffer* pBuff, MsgHead& oMsgHead, MsgBo
     }
 }
 
-} /* namespace oss */
+} /* namespace thunder */

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  starship
+ * Project:  Thunder
  * @file     StepLog.cpp
  * @brief
  * @author   cjy
@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "StepLog.hpp"
 
-namespace oss
+namespace thunder
 {
 
 StepLog::StepLog(const ::google::protobuf::Message &behaviourLog,oss::uint32 logType,oss::Step* pNextStep,const std::string &nodeType)

@@ -14,7 +14,7 @@
 #include "protocol/oss_sys.pb.h"
 #include "step/Step.hpp"
 
-namespace oss
+namespace thunder
 {
 
 class StepTellWorker : public Step
@@ -39,6 +39,6 @@ private:
     tagMsgShell m_stMsgShell;
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* SRC_STEP_SYS_STEP_STEPTELLWORKER_HPP_ */

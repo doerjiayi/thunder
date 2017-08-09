@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Project:  Starship
- * @file     StarshipCodec.cpp
+ * Project:  Thunder
+ * @file     ThunderCodec.cpp
  * @brief 
  * @author   cjy
  * @date:    2015年10月6日
@@ -12,23 +12,23 @@
 #include "cryptopp562/cryptlib.h"
 #include "cryptopp562/aes.h"
 #include "cryptopp562/gzip.h"
-#include "util/encrypt/hconv.h"
-#include "util/encrypt/rc5.h"
-#include "StarshipCodec.hpp"
+#include "utility/encrypt/hconv.h"
+#include "utility/encrypt/rc5.h"
+#include "ThunderCodec.hpp"
 
-namespace oss
+namespace thunder
 {
 
-StarshipCodec::StarshipCodec(loss::E_CODEC_TYPE eCodecType, const std::string& strKey)
-    : loss::CStreamCodec(eCodecType), m_strKey(strKey)//, m_oAes(strKey)
-{
-}
-
-StarshipCodec::~StarshipCodec()
+ThunderCodec::ThunderCodec(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey)
+    : thunder::CStreamCodec(eCodecType), m_strKey(strKey)//, m_oAes(strKey)
 {
 }
 
-bool StarshipCodec::Zip(const std::string& strSrc, std::string& strDest)
+ThunderCodec::~ThunderCodec()
+{
+}
+
+bool ThunderCodec::Zip(const std::string& strSrc, std::string& strDest)
 {
     int iErr = Z_OK;
     uLongf ulInLen = strSrc.size();
@@ -87,7 +87,7 @@ bool StarshipCodec::Zip(const std::string& strSrc, std::string& strDest)
     return (true);
 }
 
-bool StarshipCodec::Unzip(const std::string& strSrc, std::string& strDest)
+bool ThunderCodec::Unzip(const std::string& strSrc, std::string& strDest)
 {
     int iErr = Z_OK;
     uLongf ulInLen = strSrc.size();
@@ -141,7 +141,7 @@ bool StarshipCodec::Unzip(const std::string& strSrc, std::string& strDest)
     return (true);
 }
 
-bool StarshipCodec::Gzip(const std::string& strSrc, std::string& strDest)
+bool ThunderCodec::Gzip(const std::string& strSrc, std::string& strDest)
 {
     try
     {
@@ -164,7 +164,7 @@ bool StarshipCodec::Gzip(const std::string& strSrc, std::string& strDest)
     return (true);
 }
 
-bool StarshipCodec::Gunzip(const std::string& strSrc, std::string& strDest)
+bool ThunderCodec::Gunzip(const std::string& strSrc, std::string& strDest)
 {
     try
     {
@@ -186,7 +186,7 @@ bool StarshipCodec::Gunzip(const std::string& strSrc, std::string& strDest)
     return (true);
 }
 
-bool StarshipCodec::Rc5Encrypt(const std::string& strSrc, std::string& strDest)
+bool ThunderCodec::Rc5Encrypt(const std::string& strSrc, std::string& strDest)
 {
     rc5UserKey *pKey;
     rc5CBCAlg *pAlg;
@@ -219,7 +219,7 @@ bool StarshipCodec::Rc5Encrypt(const std::string& strSrc, std::string& strDest)
     return(true);
 }
 
-bool StarshipCodec::Rc5Decrypt(const std::string& strSrc, std::string& strDest)
+bool ThunderCodec::Rc5Decrypt(const std::string& strSrc, std::string& strDest)
 {
     rc5UserKey *pKey;
     rc5CBCAlg *pAlg;
@@ -251,7 +251,7 @@ bool StarshipCodec::Rc5Decrypt(const std::string& strSrc, std::string& strDest)
     return(true);
 }
 
-bool StarshipCodec::AesEncrypt(const std::string& strSrc, std::string& strDest)
+bool ThunderCodec::AesEncrypt(const std::string& strSrc, std::string& strDest)
 {
     try
     {
@@ -276,7 +276,7 @@ bool StarshipCodec::AesEncrypt(const std::string& strSrc, std::string& strDest)
     return(true);
 }
 
-bool StarshipCodec::AesDecrypt(const std::string& strSrc, std::string& strDest)
+bool ThunderCodec::AesDecrypt(const std::string& strSrc, std::string& strDest)
 {
     try
     {
@@ -301,4 +301,4 @@ bool StarshipCodec::AesDecrypt(const std::string& strSrc, std::string& strDest)
     return(true);
 }
 
-} /* namespace oss */
+} /* namespace thunder */

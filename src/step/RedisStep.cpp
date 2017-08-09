@@ -9,19 +9,19 @@
  ******************************************************************************/
 #include "RedisStep.hpp"
 
-namespace oss
+namespace thunder
 {
 
 RedisStep::RedisStep(Step* pNextStep)
     : Step(pNextStep), m_pRedisCmd(NULL)
 {
-    m_pRedisCmd = new loss::RedisCmd();
+    m_pRedisCmd = new thunder::RedisCmd();
 }
 
 RedisStep::RedisStep(const tagMsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, const MsgBody& oReqMsgBody, Step* pNextStep)
     : Step(stReqMsgShell, oReqMsgHead, oReqMsgBody, pNextStep), m_pRedisCmd(NULL)
 {
-    m_pRedisCmd = new loss::RedisCmd();
+    m_pRedisCmd = new thunder::RedisCmd();
 }
 
 RedisStep::~RedisStep()
@@ -33,4 +33,4 @@ RedisStep::~RedisStep()
     }
 }
 
-} /* namespace oss */
+} /* namespace thunder */

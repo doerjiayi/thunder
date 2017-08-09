@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "StepTellWorker.hpp"
 
-namespace oss
+namespace thunder
 {
 
 StepTellWorker::StepTellWorker(const tagMsgShell& stMsgShell)
@@ -88,4 +88,4 @@ E_CMD_STATUS StepTellWorker::Timeout()
     }
 }
 
-} /* namespace oss */
+} /* namespace thunder */

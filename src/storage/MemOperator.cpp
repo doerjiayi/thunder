@@ -10,7 +10,7 @@
 #include "MemOperator.hpp"
 #include <iostream>
 
-namespace oss
+namespace thunder
 {
 
 MemOperator::MemOperator(
@@ -161,4 +161,4 @@ bool MemOperator::AddField(const std::string& strFieldName, double dFieldValue,
     return(true);
 }
 
-} /* namespace oss */
+} /* namespace thunder */

@@ -1,8 +1,8 @@
 #ifndef SRC_CODEC_CODEC_COMMON_HPP_
 #define SRC_CODEC_CODEC_COMMON_HPP_
-#include "google/protobuf/util/json_util.h"
+#include "google/protobuf/utility/json_util.h"
 
-namespace oss
+namespace thunder
 {
 
 /*
@@ -163,6 +163,6 @@ inline const char * status_string(int code)
     return 0;
 }
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* SRC_CODEC_CodecWebSocketJsonJSON_HPP_ */

@@ -1,5 +1,5 @@
 /*******************************************************************************
-* * Project:  Starship
+* * Project:  Thunder
  * @file     CmdBeat.hpp
  * @brief    心跳包响应
  * @author   cjy
@@ -12,7 +12,7 @@
 
 #include "cmd/Cmd.hpp"
 
-namespace oss
+namespace thunder
 {
 
 class CmdBeat : public Cmd
@@ -26,6 +26,6 @@ public:
                     const MsgBody& oInMsgBody);
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* SRC_CMD_SYS_CMD_CMDBEAT_HPP_ */

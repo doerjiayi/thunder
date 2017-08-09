@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  Starship
+ * Project:  Thunder
  * @file     Timer.hpp
  * @brief 
  * @author   cjy
@@ -12,7 +12,7 @@
 
 #include "session/Session.hpp"
 
-namespace oss
+namespace thunder
 {
 
 class Timer: public Session
@@ -29,9 +29,9 @@ protected:
     }
 
 private:
-    friend class OssWorker;
+    friend class ThunderWorker;
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* SRC_SESSION_TIMER_HPP_ */

@@ -12,7 +12,7 @@
 
 #include "cmd/Cmd.hpp"
 
-namespace oss
+namespace thunder
 {
 
 class CmdUpdateConfig : public Cmd
@@ -27,7 +27,7 @@ public:
 private:
     bool ReadConfig();
     std::string m_ReqConfigFileName;
-    loss::CJsonObject m_ReqConfigContent;
+    thunder::CJsonObject m_ReqConfigContent;
     int m_ReqConfigType;
 };
 

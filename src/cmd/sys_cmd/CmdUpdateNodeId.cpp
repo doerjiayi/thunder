@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "CmdUpdateNodeId.hpp"
 
-namespace oss
+namespace thunder
 {
 
 CmdUpdateNodeId::CmdUpdateNodeId()
@@ -25,7 +25,7 @@ bool CmdUpdateNodeId::AnyMessage(
                 const MsgHead& oInMsgHead,
                 const MsgBody& oInMsgBody)
 {
-    loss::CJsonObject oNode;
+    thunder::CJsonObject oNode;
     if (oNode.Parse(oInMsgBody.body()))
     {
         int iNodeId = 0;
@@ -36,4 +36,4 @@ bool CmdUpdateNodeId::AnyMessage(
     return(false);
 }
 
-} /* namespace oss */
+} /* namespace thunder */

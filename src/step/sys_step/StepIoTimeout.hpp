@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  Starship
+ * Project:  Thunder
  * @file     StepIoTimeout.hpp
  * @brief    IO超时回调步骤
  * @author   cjy
@@ -12,7 +12,7 @@
 
 #include "step/Step.hpp"
 
-namespace oss
+namespace thunder
 {
 
 struct tagIoWatcherData;
@@ -44,6 +44,6 @@ private:
     struct ev_timer* watcher;       ///< 指向IO定时器，分配和析构均不在类体里
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* SRC_STEP_SYS_STEP_STEPIOTIMEOUT_HPP_ */

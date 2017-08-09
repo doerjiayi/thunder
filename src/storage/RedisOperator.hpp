@@ -12,7 +12,7 @@
 
 #include "StorageOperator.hpp"
 
-namespace oss
+namespace thunder
 {
 
 /**
@@ -74,6 +74,6 @@ private:
     uint64 m_uiSectionFactor;
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* CLIENT_REDISOPERATOR_HPP_ */

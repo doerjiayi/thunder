@@ -13,7 +13,7 @@
 #include "protocol/oss_sys.pb.h"
 #include "cmd/Cmd.hpp"
 
-namespace oss
+namespace thunder
 {
 /**
  * @brief   节点注册
@@ -32,6 +32,6 @@ public:
                     const MsgBody& oInMsgBody);
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* CMD_NODE_NOTICE_HPP_ */

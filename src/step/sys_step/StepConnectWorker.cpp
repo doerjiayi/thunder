@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "StepConnectWorker.hpp"
 
-namespace oss
+namespace thunder
 {
 
 StepConnectWorker::StepConnectWorker(const tagMsgShell& stMsgShell,
@@ -94,4 +94,4 @@ E_CMD_STATUS StepConnectWorker::Timeout()
     }
 }
 
-} /* namespace oss */
+} /* namespace thunder */

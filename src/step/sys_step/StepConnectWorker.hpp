@@ -13,7 +13,7 @@
 #include "step/Step.hpp"
 #include "StepTellWorker.hpp"
 
-namespace oss
+namespace thunder
 {
 
 class Step;
@@ -47,6 +47,6 @@ public:
     StepTellWorker* pStepTellWorker;        ///< 仅为了生成可读性高的类图，构造函数中不分配空间，析构函数中也不回收空间
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* SRC_STEP_SYS_STEP_STEPCONNECTWORKER_HPP_ */

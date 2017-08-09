@@ -12,7 +12,7 @@
 
 #include "cmd/Cmd.hpp"
 
-namespace oss
+namespace thunder
 {
 
 class CmdUpdateNodeId: public Cmd
@@ -26,6 +26,6 @@ public:
                     const MsgBody& oInMsgBody);
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* SRC_CMD_SYS_CMD_CMDUPDATENODEID_HPP_ */

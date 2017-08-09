@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  Starship
+ * Project:  Thunder
  * @file     CodecWsExtent.hpp
  * @brief    与手机客户端通信协议编解码器
  * @author   cjy
@@ -11,37 +11,37 @@
 #define SRC_CODEC_CODECWSEXTENTPB_HPP_
 #include <string>
 #include <map>
-#include "util/http/http_parser.h"
+#include "utility/http/http_parser.h"
 #include "protocol/http.pb.h"
-#include "StarshipCodec.hpp"
+#include "ThunderCodec.hpp"
 #include "ClientMsgHead.hpp"
 #include "CodecCommon.hpp"
 
-namespace oss
+namespace thunder
 {
 
 //CodecWsExtent可以解析 http请求以及websocket请求
-class CodecWebSocketPb: public StarshipCodec
+class CodecWebSocketPb: public ThunderCodec
 {
 public:
-    CodecWebSocketPb(loss::E_CODEC_TYPE eCodecType, const std::string& strKey = "That's a lizard.");
+    CodecWebSocketPb(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey = "That's a lizard.");
     virtual ~CodecWebSocketPb();
     //解码编码websocket请求
     //Decode解码时判别是http请求还是websocket请求来处理,因为是框架固定调用该函数
-    virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, loss::CBuffer* pBuff);
-    virtual E_CODEC_STATUS Decode(loss::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody);
+    virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, thunder::CBuffer* pBuff);
+    virtual E_CODEC_STATUS Decode(thunder::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody);
     /**
      * @brief 连接的字节流解码
      * @return 编解码状态
      */
     virtual E_CODEC_STATUS Decode(tagConnectionAttr* pConn,MsgHead& oMsgHead, MsgBody& oMsgBody);
     //解码编码http请求
-    virtual E_CODEC_STATUS Encode(const HttpMsg& oHttpMsg, loss::CBuffer* pBuff);
-    virtual E_CODEC_STATUS Decode(loss::CBuffer* pBuff, HttpMsg& oHttpMsg);
+    virtual E_CODEC_STATUS Encode(const HttpMsg& oHttpMsg, thunder::CBuffer* pBuff);
+    virtual E_CODEC_STATUS Decode(thunder::CBuffer* pBuff, HttpMsg& oHttpMsg);
 private:
     E_CODEC_STATUS EncodeHandShake(const HttpMsg& oHttpMsg,
-                    loss::CBuffer* pBuff);
-    E_CODEC_STATUS EncodeHttp(const HttpMsg& oHttpMsg, loss::CBuffer* pBuff);
+                    thunder::CBuffer* pBuff);
+    E_CODEC_STATUS EncodeHttp(const HttpMsg& oHttpMsg, thunder::CBuffer* pBuff);
 private:
     //http parse
     static int OnMessageBegin(http_parser *parser);

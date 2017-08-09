@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  starship
+ * Project:  Thunder
  * @file     StepLog.hpp
  * @brief    发送日志
  * @author   cjy
@@ -14,7 +14,7 @@
 #include "step/Step.hpp"
 #include "storage/behaviourlog.pb.h"
 
-namespace oss
+namespace thunder
 {
 
 /**

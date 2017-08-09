@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Project:  Starship
+* Project:  Thunder
 * @file     Attribute.hpp
 * @brief 
 * @author   cjy
@@ -13,9 +13,9 @@
 
 #include <stdlib.h>
 #include "libev/ev.h"
-#include "util/CBuffer.hpp"
-#include "util/StreamCodec.hpp"
-#include "util/json/CJsonObject.hpp"
+#include "utility/CBuffer.hpp"
+#include "utility/StreamCodec.hpp"
+#include "utility/json/CJsonObject.hpp"
 
 
 /**
@@ -103,12 +103,12 @@ struct tagConnectionAttr
      *  CMD_RSP_TELL_WORKER 收到对方worker响应，连接已就绪）
      */
     unsigned char ucConnectStatus;
-    loss::CBuffer* pRecvBuff;           ///< 在结构体析构时回收
-    loss::CBuffer* pSendBuff;           ///< 在结构体析构时回收
-    loss::CBuffer* pWaitForSendBuff;    ///< 等待发送的数据缓冲区（数据到达时，连接并未建立，等连接建立并且pSendBuff发送完毕后立即发送）
-    loss::CBuffer* pClientData;         ///< 客户端相关数据（例如IM里的用户昵称、头像等，登录或连接时保存起来，后续发消息或其他操作无须客户端再带上来）
+    thunder::CBuffer* pRecvBuff;           ///< 在结构体析构时回收
+    thunder::CBuffer* pSendBuff;           ///< 在结构体析构时回收
+    thunder::CBuffer* pWaitForSendBuff;    ///< 等待发送的数据缓冲区（数据到达时，连接并未建立，等连接建立并且pSendBuff发送完毕后立即发送）
+    thunder::CBuffer* pClientData;         ///< 客户端相关数据（例如IM里的用户昵称、头像等，登录或连接时保存起来，后续发消息或其他操作无须客户端再带上来）
     char* pRemoteAddr;                  ///< 对端IP地址（不是客户端地址，但可能跟客户端地址相同）
-    loss::E_CODEC_TYPE eCodecType;      ///< 协议（编解码）类型
+    thunder::E_CODEC_TYPE eCodecType;      ///< 协议（编解码）类型
     ev_tstamp dActiveTime;              ///< 最后一次访问时间
     ev_tstamp dKeepAlive;               ///< 连接保持时间，默认值0为用心跳保持的长连接，大于0的值不做心跳检查，时间到即断连接,小于0为收完数据立即断开连接（主要用于http连接）
     uint32 ulSeq;                       ///< 文件描述符创建时对应的序列号
@@ -121,7 +121,7 @@ struct tagConnectionAttr
 
     tagConnectionAttr()
         : ucConnectStatus(0), pRecvBuff(NULL), pSendBuff(NULL), pWaitForSendBuff(NULL), pClientData(NULL),
-          pRemoteAddr(NULL), eCodecType(loss::CODEC_PROTOBUF),
+          pRemoteAddr(NULL), eCodecType(thunder::CODEC_PROTOBUF),
           dActiveTime(0), dKeepAlive(0), ulSeq(0), ulForeignSeq(0), ulMsgNumUnitTime(0), ulMsgNum(0),
           pIoWatcher(NULL), pTimeWatcher(NULL)
     {

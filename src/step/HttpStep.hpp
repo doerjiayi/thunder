@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  Starship
+ * Project:  Thunder
  * @file     HttpStep.hpp
  * @brief    Http服务的异步步骤基类
  * @author   cjy
@@ -14,7 +14,7 @@
 #include "protocol/http.pb.h"
 #include "codec/HttpCodec.hpp"
 
-namespace oss
+namespace thunder
 {
 
 class HttpStep: public Step
@@ -56,6 +56,6 @@ public:  // Step基类的方法，HttpStep中无需关注
     }
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* SRC_STEP_HTTPSTEP_HPP_ */

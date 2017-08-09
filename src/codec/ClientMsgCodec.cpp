@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Project:  Starship
- * @file     ClientMsgCodec.cpp
+ * Project:  Thunder
+ * @file     CustomMsgCodec.cpp
  * @brief 
  * @author   cjy
  * @date:    2015年10月9日
@@ -8,22 +8,22 @@
  * Modify history:
  ******************************************************************************/
 #include <netinet/in.h>
-#include "ClientMsgCodec.hpp"
+#include "CustomMsgCodec.hpp"
 #include "ClientMsgHead.hpp"
 
-namespace oss
+namespace thunder
 {
 
-ClientMsgCodec::ClientMsgCodec(loss::E_CODEC_TYPE eCodecType, const std::string& strKey)
-    : StarshipCodec(eCodecType, strKey)
-{
-}
-
-ClientMsgCodec::~ClientMsgCodec()
+CustomMsgCodec::CustomMsgCodec(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey)
+    : ThunderCodec(eCodecType, strKey)
 {
 }
 
-E_CODEC_STATUS ClientMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, loss::CBuffer* pBuff)
+CustomMsgCodec::~CustomMsgCodec()
+{
+}
+
+E_CODEC_STATUS CustomMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, thunder::CBuffer* pBuff)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     tagClientMsgHead stClientMsgHead;
@@ -185,7 +185,7 @@ E_CODEC_STATUS ClientMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oM
     return(CODEC_STATUS_OK);
 }
 
-E_CODEC_STATUS ClientMsgCodec::Decode(loss::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody)
+E_CODEC_STATUS CustomMsgCodec::Decode(thunder::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s() pBuff->ReadableBytes() = %u", __FUNCTION__, pBuff->ReadableBytes());
     size_t uiHeadSize = sizeof(tagClientMsgHead);
@@ -313,7 +313,7 @@ E_CODEC_STATUS ClientMsgCodec::Decode(loss::CBuffer* pBuff, MsgHead& oMsgHead, M
     }
 }
 
-E_CODEC_STATUS ClientMsgCodec::Decode(tagConnectionAttr* pConn,MsgHead& oMsgHead, MsgBody& oMsgBody)
+E_CODEC_STATUS CustomMsgCodec::Decode(tagConnectionAttr* pConn,MsgHead& oMsgHead, MsgBody& oMsgBody)
 {
     E_CODEC_STATUS status = Decode(pConn->pRecvBuff,oMsgHead,oMsgBody);
     if (eConnectStatus_init == pConn->ucConnectStatus)//连接状态处理为解码一个消息成功，则连接状态完成
@@ -324,10 +324,10 @@ E_CODEC_STATUS ClientMsgCodec::Decode(tagConnectionAttr* pConn,MsgHead& oMsgHead
         }
         else if (CODEC_STATUS_ERR == status)
         {
-            LOG4_DEBUG("%s()　ClientMsgCodec　need to init connect status with private pb request",__FUNCTION__);
+            LOG4_DEBUG("%s()　CustomMsgCodec　need to init connect status with private pb request",__FUNCTION__);
         }
     }
     return status;
 }
 
-} /* namespace oss */
+} /* namespace thunder */

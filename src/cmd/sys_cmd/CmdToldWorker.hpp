@@ -14,7 +14,7 @@
 #include "protocol/oss_sys.pb.h"
 #include "cmd/Cmd.hpp"
 
-namespace oss
+namespace thunder
 {
 
 /**
@@ -36,6 +36,6 @@ public:
                     const MsgBody& oInMsgBody);
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* CMDTOLDWORKER_HPP_ */

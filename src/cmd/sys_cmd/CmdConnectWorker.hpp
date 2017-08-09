@@ -16,7 +16,7 @@
 #include "cmd/Cmd.hpp"
 #include "step/sys_step/StepConnectWorker.hpp"
 
-namespace oss
+namespace thunder
 {
 
 class CmdConnectWorker : public Cmd
@@ -34,6 +34,6 @@ public:
     StepConnectWorker* pStepConnectWorker;        ///< 仅为了生成可读性高的类图，构造函数中不分配空间，析构函数中也不回收空间
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* CMDCONNECTWORKER_HPP_ */

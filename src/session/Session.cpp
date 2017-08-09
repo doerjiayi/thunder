@@ -10,7 +10,7 @@
 #include "step/Step.hpp"
 #include "Session.hpp"
 
-namespace oss
+namespace thunder
 {
 
 Session::Session(uint64 ulSessionId, ev_tstamp dSessionTimeout, const std::string& strSessionClass)
@@ -72,7 +72,7 @@ const std::string& Session::GetNodeType() const
     return(m_pLabor->GetNodeType());
 }
 
-const loss::CJsonObject& Session::GetCustomConf() const
+const thunder::CJsonObject& Session::GetCustomConf() const
 {
     return(m_pLabor->GetCustomConf());
 }
@@ -109,4 +109,4 @@ bool Session::AsyncStep(Step* pStep,ev_tstamp dTimeout)
     return true;
 }
 
-} /* namespace oss */
+} /* namespace thunder */

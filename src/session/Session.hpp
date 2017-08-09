@@ -16,9 +16,9 @@
 #include "libev/ev.h"         // need ev_tstamp
 #include "OssDefine.hpp"
 #include "OssError.hpp"
-#include "labor/OssLabor.hpp"
+#include "labor/NodeLabor.hpp"
 
-namespace oss
+namespace thunder
 {
 
 enum SESSION_LOAD_STATUS
@@ -28,7 +28,7 @@ enum SESSION_LOAD_STATUS
     SESSION_LOADED      = 2,
 };
 
-class OssWorker;
+class ThunderWorker;
 
 class Session
 {
@@ -84,7 +84,7 @@ protected:
      * @brief 获取Server自定义配置
      * @return Server自定义配置
      */
-    const loss::CJsonObject& GetCustomConf() const;
+    const thunder::CJsonObject& GetCustomConf() const;
 
     /**
      * @brief 获取当前时间
@@ -109,7 +109,7 @@ protected:
         return (*m_pLogger);
     }
 
-    OssLabor* GetLabor()
+    NodeLabor* GetLabor()
     {
         return(m_pLabor);
     }
@@ -145,7 +145,7 @@ protected:
     }
 
 private:
-    void SetLabor(OssLabor* pLabor)
+    void SetLabor(NodeLabor* pLabor)
     {
         m_pLabor = pLabor;
     }
@@ -169,13 +169,13 @@ private:
     ev_tstamp m_activeTime;
     std::string m_strSessionId;
     std::string m_strSessionClassName;
-    OssLabor* m_pLabor;
+    NodeLabor* m_pLabor;
     log4cplus::Logger* m_pLogger;
     ev_timer* m_pTimeoutWatcher;
 
-    friend class OssWorker;
+    friend class ThunderWorker;
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* SESSION_HPP_ */

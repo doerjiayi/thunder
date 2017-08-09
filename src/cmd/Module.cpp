@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  Starship
+ * Project:  Thunder
  * @file     Module.cpp
  * @brief 
  * @author   cjy
@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "Module.hpp"
 
-namespace oss
+namespace thunder
 {
 
 Module::Module()
@@ -20,4 +20,4 @@ Module::~Module()
 {
 }
 
-} /* namespace oss */
+} /* namespace thunder */

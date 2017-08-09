@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "RedisOperator.hpp"
 
-namespace oss
+namespace thunder
 {
 
 RedisOperator::RedisOperator(
@@ -128,4 +128,4 @@ bool RedisOperator::AddRedisField(const std::string& strFieldName, double dField
     return(AddRedisField(strFieldName, szFieldValue));
 }
 
-} /* namespace oss */
+} /* namespace thunder */

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  Starship
+ * Project:  Thunder
  * @file     StepIoTimeout.cpp
  * @brief 
  * @author   cjy
@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "StepIoTimeout.hpp"
 
-namespace oss
+namespace thunder
 {
 
 StepIoTimeout::StepIoTimeout(const tagMsgShell& stMsgShell, struct ev_timer* pWatcher)
@@ -66,4 +66,4 @@ E_CMD_STATUS StepIoTimeout::Timeout()
     return(STATUS_CMD_FAULT);
 }
 
-} /* namespace oss */
+} /* namespace thunder */

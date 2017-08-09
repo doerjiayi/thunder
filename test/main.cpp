@@ -30,16 +30,16 @@
 #include "log4cplus/fileappender.h"
 #include "log4cplus/loggingmacros.h"
 
-#include "util/json/CJsonObject.hpp"
-#include "util/CBuffer.hpp"
-#include "unix_util/process_helper.h"
+#include "utility/json/CJsonObject.hpp"
+#include "utility/CBuffer.hpp"
+#include "unix_utility/process_helper.h"
 #include "protocol/msg.pb.h"
 #include "OssError.hpp"
 #include "OssDefine.hpp"
 #include "ClientMsgHead.hpp"
-#include "codec/ClientMsgCodec.hpp"
+#include "codec/CustomMsgCodec.hpp"
 
-using namespace oss;
+using namespace thunder;
 
 struct tagIoWatcherData
 {
@@ -56,10 +56,10 @@ struct ev_loop *m_loop = EV_DEFAULT;
 log4cplus::Logger m_oLogger;
 std::map<int, tagConnectionAttr*> g_mapFdAttr;
 std::map<std::string, tagMsgShell> g_mapMsgShell;            // key为Identify
-StarshipCodec* g_pCodec;
+ThunderCodec* g_pCodec;
 
 bool InitLogger(const std::string& strLogFile);
-tagConnectionAttr* CreateFdAttr(int iFd, uint32 ulSeq, loss::E_CODEC_TYPE eCodecType);
+tagConnectionAttr* CreateFdAttr(int iFd, uint32 ulSeq, thunder::E_CODEC_TYPE eCodecType);
 bool DestroyConnect(std::map<int, tagConnectionAttr*>::iterator iter);
 bool AutoSend(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
 bool AddIoReadEvent(int iFd);
@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
     char szIdentify[32] = {0};
     MsgHead oMsgHead;
     MsgBody oMsgBody;
-    g_pCodec = new ClientMsgCodec(loss::CODEC_PRIVATE);
+    g_pCodec = new CustomMsgCodec(thunder::CODEC_PRIVATE);
     g_pCodec->SetLogger(m_oLogger);
     snprintf(szIdentify, sizeof(szIdentify), "%s:%s", argv[1], argv[2]);
     for (int i = iUidFrom; i <= iUidTo; ++i)
@@ -157,7 +157,7 @@ bool AutoSend(const std::string& strIdentify, const MsgHead& oMsgHead, const Msg
     }
     x_sock_set_block(iFd, 0);
     g_uiSeq++;
-    if (CreateFdAttr(iFd, g_uiSeq, loss::CODEC_PRIVATE))
+    if (CreateFdAttr(iFd, g_uiSeq, thunder::CODEC_PRIVATE))
     {
         std::map<int, tagConnectionAttr*>::iterator conn_iter =  g_mapFdAttr.find(iFd);
         if (!AddIoReadEvent(iFd))
@@ -179,7 +179,7 @@ bool AutoSend(const std::string& strIdentify, const MsgHead& oMsgHead, const Msg
     }
 }
 
-tagConnectionAttr* CreateFdAttr(int iFd, uint32 ulSeq, loss::E_CODEC_TYPE eCodecType)
+tagConnectionAttr* CreateFdAttr(int iFd, uint32 ulSeq, thunder::E_CODEC_TYPE eCodecType)
 {
     LOG4CPLUS_DEBUG_FMT(m_oLogger, "%s(iFd %d, seq %lu, codec %d)", __FUNCTION__, iFd, ulSeq, eCodecType);
     std::map<int, tagConnectionAttr*>::iterator fd_attr_iter;
@@ -192,21 +192,21 @@ tagConnectionAttr* CreateFdAttr(int iFd, uint32 ulSeq, loss::E_CODEC_TYPE eCodec
             LOG4CPLUS_ERROR_FMT(m_oLogger, "new pConnAttr for fd %d error!", iFd);
             return(NULL);
         }
-        pConnAttr->pRecvBuff = new loss::CBuffer();
+        pConnAttr->pRecvBuff = new thunder::CBuffer();
         if (pConnAttr->pRecvBuff == NULL)
         {
             delete pConnAttr;
             LOG4CPLUS_ERROR_FMT(m_oLogger, "new pConnAttr->pRecvBuff for fd %d error!", iFd);
             return(NULL);
         }
-        pConnAttr->pSendBuff = new loss::CBuffer();
+        pConnAttr->pSendBuff = new thunder::CBuffer();
         if (pConnAttr->pSendBuff == NULL)
         {
             delete pConnAttr;
             LOG4CPLUS_ERROR_FMT(m_oLogger, "new pConnAttr->pSendBuff for fd %d error!", iFd);
             return(NULL);
         }
-        pConnAttr->pWaitForSendBuff = new loss::CBuffer();
+        pConnAttr->pWaitForSendBuff = new thunder::CBuffer();
         if (pConnAttr->pWaitForSendBuff == NULL)
         {
             delete pConnAttr;

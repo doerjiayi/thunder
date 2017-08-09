@@ -13,7 +13,7 @@
 #include "DbOperator.hpp"
 #include "RedisOperator.hpp"
 
-namespace oss
+namespace thunder
 {
 
 enum E_MEM_FIELD_OPERATOR
@@ -97,6 +97,6 @@ private:
     uint64 m_uiSectionFactor;
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* CLIENT_MEMOPERATOR_HPP_ */

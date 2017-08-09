@@ -15,9 +15,9 @@ endif
 LIB3RD_PATH = ../../l3oss
 LOSS_PATH = ../../loss
 
-STARSHIP_PATH = ..
+Thunder_PATH = ..
 
-VPATH = $(STARSHIP_PATH)/test $(STARSHIP_PATH)/src/codec $(STARSHIP_PATH)/src/protocol
+VPATH = $(Thunder_PATH)/test $(Thunder_PATH)/src/codec $(Thunder_PATH)/src/protocol
 SUB_DIRS := $(foreach dir, $(VPATH), $(shell find $(dir) -maxdepth 5 -type d))
 DIRS := $(SUB_DIRS)
 
@@ -25,7 +25,7 @@ DIRS := $(SUB_DIRS)
 INC := $(INC) \
        -I $(LIB3RD_PATH)/include \
        -I $(LOSS_PATH)/src \
-       -I $(STARSHIP_PATH)/src 
+       -I $(Thunder_PATH)/src 
 
 
 LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \

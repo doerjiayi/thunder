@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  Starship
+ * Project:  Thunder
  * @file     HttpStep.cpp
  * @brief 
  * @author   cjy
@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "HttpStep.hpp"
 
-namespace oss
+namespace thunder
 {
 
 HttpStep::HttpStep(Step* pNextStep)
@@ -105,4 +105,4 @@ bool HttpStep::SendTo(const tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg)
     return(GetLabor()->SendTo(stMsgShell, oHttpMsg));
 }
 
-} /* namespace oss */
+} /* namespace thunder */

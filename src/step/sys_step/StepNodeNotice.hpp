@@ -13,7 +13,7 @@
 #include "protocol/oss_sys.pb.h"
 #include "step/Step.hpp"
 
-namespace oss
+namespace thunder
 {
 class StepNodeNotice : public Step
 {
@@ -36,12 +36,12 @@ public:
 
 public:
     //json数据信息
-    loss::CJsonObject m_jsonData;
+    thunder::CJsonObject m_jsonData;
 private:
     int m_iTimeoutNum;          ///< 超时次数
     tagMsgShell m_stMsgShell;
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* SRC_STEP_SYS_STEP_STEPTELLWORKER_HPP_ */

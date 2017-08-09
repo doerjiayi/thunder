@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  Starship
+ * Project:  Thunder
  * @file     CmdBeat.cpp
  * @brief 
  * @author   cjy
@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "CmdBeat.hpp"
 
-namespace oss
+namespace thunder
 {
 
 CmdBeat::CmdBeat()
@@ -33,4 +33,4 @@ bool CmdBeat::AnyMessage(
     return(bResult);
 }
 
-} /* namespace oss */
+} /* namespace thunder */

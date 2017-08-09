@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  Starship
+ * Project:  Thunder
  * @file     Timer.cpp
  * @brief 
  * @author   cjy
@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "session/Timer.hpp"
 
-namespace oss
+namespace thunder
 {
 
 Timer::Timer(uint32 ulTimerId, ev_tstamp dTimeout, const std::string& strTimerName)
@@ -26,4 +26,4 @@ Timer::~Timer()
 {
 }
 
-} /* namespace oss */
+} /* namespace thunder */

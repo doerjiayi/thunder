@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "CmdConnectWorker.hpp"
 
-namespace oss
+namespace thunder
 {
 
 CmdConnectWorker::CmdConnectWorker()
@@ -62,4 +62,4 @@ bool CmdConnectWorker::Start(const tagMsgShell& stMsgShell, int iWorkerIndex)
     return(false);
 }
 
-} /* namespace oss */
+} /* namespace thunder */

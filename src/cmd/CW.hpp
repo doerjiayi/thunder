@@ -11,7 +11,7 @@
 #define CW_HPP_
 
 
-namespace oss
+namespace thunder
 {
 
 const unsigned int gc_uiCmdReq = 0x00000001;          ///< 请求（奇数为请求，偶数为应答，通过 gc_iCmdReq & iCmd 来判断，比%运算快）
@@ -87,6 +87,6 @@ enum E_CMD
     CMD_RSP_SYS_ERROR                   = 1000,    ///< 系统错误响应
 };
 
-}   // namespace oss
+}   // namespace thunder
 
 #endif /* CW_HPP_ */

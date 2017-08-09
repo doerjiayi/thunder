@@ -8,11 +8,11 @@
  * Modify history:
  ******************************************************************************/
 #include <cmd/sys_cmd/CmdNodeNotice.hpp>
-#include "util/json/CJsonObject.hpp"
+#include "utility/json/CJsonObject.hpp"
 #include <step/sys_step/StepNodeNotice.hpp>
 #include <iostream>
 using namespace std;
-namespace oss
+namespace thunder
 {
 
 CmdNodeNotice::CmdNodeNotice()
@@ -30,11 +30,11 @@ bool CmdNodeNotice::AnyMessage(
                 const MsgBody& oInMsgBody)
 {
     bool bResult = false;
-    loss::CBuffer oBuff;
+    thunder::CBuffer oBuff;
     MsgHead oOutMsgHead;
     MsgBody oOutMsgBody;
 
-    loss::CJsonObject jObj;
+    thunder::CJsonObject jObj;
     int iRet = 0;
     if (GetCmd() == (int)oInMsgHead.cmd())
     {
@@ -77,4 +77,4 @@ bool CmdNodeNotice::AnyMessage(
     return(bResult);
 }
 
-} /* namespace oss */
+} /* namespace thunder */

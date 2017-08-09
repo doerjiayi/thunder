@@ -21,16 +21,16 @@
 
 #include "OssError.hpp"
 #include "OssDefine.hpp"
-#include "labor/OssLabor.hpp"
+#include "labor/NodeLabor.hpp"
 #include "cmd/CW.hpp"
 #include "protocol/msg.pb.h"
 #include "session/Session.hpp"
 
 
-namespace oss
+namespace thunder
 {
 
-class OssWorker;
+class ThunderWorker;
 class Cmd;
 class RedisStep;
 
@@ -236,7 +236,7 @@ protected:
      * @brief 获取Server自定义配置
      * @return Server自定义配置
      */
-    const loss::CJsonObject& GetCustomConf() const;
+    const thunder::CJsonObject& GetCustomConf() const;
 
     /**
      * @brief 获取当前时间
@@ -252,7 +252,7 @@ protected:
      * 可替代的方法，能不获取框架层操作者实例则尽量不要获取。
      * @return 框架层操作者实例
      */
-    OssLabor* GetLabor()
+    NodeLabor* GetLabor()
     {
         return(m_pLabor);
     }
@@ -463,9 +463,9 @@ private:
     /**
      * @brief 设置框架层操作者
      * @note 设置框架层操作者，由框架层调用，业务层派生类可直接忽略此函数
-     * @param pLabor 框架层操作者，一般为OssWorker的实例
+     * @param pLabor 框架层操作者，一般为ThunderWorker的实例
      */
-    void SetLabor(OssLabor* pLabor)
+    void SetLabor(NodeLabor* pLabor)
     {
         m_pLabor = pLabor;
     }
@@ -510,7 +510,7 @@ private:
     ev_tstamp m_dActiveTime;
     ev_tstamp m_dTimeout;
     std::string m_strWorkerIdentify;
-    OssLabor* m_pLabor;
+    NodeLabor* m_pLabor;
     log4cplus::Logger* m_pLogger;
     ev_timer* m_pTimeoutWatcher;
     std::string m_strClassName;
@@ -518,11 +518,11 @@ private:
     std::set<uint32> m_setNextStepSeq;
     std::set<uint32> m_setPreStepSeq;
 
-    friend class OssWorker;
+    friend class ThunderWorker;
 	oss::uint32 m_uiUserId;
 	oss::uint32 m_uiCmd;
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* STEP_HPP_ */

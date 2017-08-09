@@ -1,31 +1,31 @@
 /*******************************************************************************
- * Project:  Starship
- * @file     ClientMsgCodec.hpp
+ * Project:  Thunder
+ * @file     CustomMsgCodec.hpp
  * @brief    与手机客户端通信协议编解码器
  * @author   cjy
  * @date:    2015年10月9日
  * @note
  * Modify history:
  ******************************************************************************/
-#ifndef SRC_CODEC_CLIENTMSGCODEC_HPP_
-#define SRC_CODEC_CLIENTMSGCODEC_HPP_
+#ifndef SRC_CODEC_CustomMsgCodec_HPP_
+#define SRC_CODEC_CustomMsgCodec_HPP_
 
-#include "StarshipCodec.hpp"
+#include "ThunderCodec.hpp"
 
-namespace oss
+namespace thunder
 {
 
-class ClientMsgCodec: public StarshipCodec
+class CustomMsgCodec: public ThunderCodec
 {
 public:
-    ClientMsgCodec(loss::E_CODEC_TYPE eCodecType, const std::string& strKey = "That's a lizard.");
-    virtual ~ClientMsgCodec();
+    CustomMsgCodec(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey = "That's a lizard.");
+    virtual ~CustomMsgCodec();
 
-    virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, loss::CBuffer* pBuff);
-    virtual E_CODEC_STATUS Decode(loss::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody);
+    virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, thunder::CBuffer* pBuff);
+    virtual E_CODEC_STATUS Decode(thunder::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody);
     virtual E_CODEC_STATUS Decode(tagConnectionAttr* pConn,MsgHead& oMsgHead, MsgBody& oMsgBody);
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
-#endif /* SRC_CODEC_CLIENTMSGCODEC_HPP_ */
+#endif /* SRC_CODEC_CustomMsgCodec_HPP_ */

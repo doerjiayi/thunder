@@ -10,7 +10,7 @@
 #include "step/Step.hpp"
 #include "Cmd.hpp"
 
-namespace oss
+namespace thunder
 {
 
 Cmd::Cmd()
@@ -61,7 +61,7 @@ const std::string& Cmd::GetNodeType() const
     return(m_pLabor->GetNodeType());
 }
 
-const loss::CJsonObject& Cmd::GetCustomConf() const
+const thunder::CJsonObject& Cmd::GetCustomConf() const
 {
     return(m_pLabor->GetCustomConf());
 }
@@ -138,4 +138,4 @@ bool Cmd::AsyncStep(Step* pStep,ev_tstamp dTimeout)
     return true;
 }
 
-} /* namespace oss */
+} /* namespace thunder */

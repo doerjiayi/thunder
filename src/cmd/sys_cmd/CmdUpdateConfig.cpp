@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  Starship
+ * Project:  Thunder
  * @file     CmdBeat.cpp
  * @brief 
  * @author   chenjiayi
@@ -12,7 +12,7 @@
 #include <fstream>
 #include "CmdUpdateConfig.hpp"
 
-namespace oss
+namespace thunder
 {
 
 CmdUpdateConfig::CmdUpdateConfig()
@@ -32,7 +32,7 @@ bool CmdUpdateConfig::AnyMessage(
     const std::string& oInMsgBodyStr = oInMsgBody.body();
     LOG4_DEBUG("CmdUpdateConfig body(%s)",oInMsgBodyStr.c_str());
     //更新服务器配置文件
-    loss::CJsonObject reqConfigObj;
+    thunder::CJsonObject reqConfigObj;
 	if (!reqConfigObj.Parse(oInMsgBodyStr))
 	{
 		LOG4_WARN("oInMsgBodyStr is not json obj.oInMsgBodyStr: %s",oInMsgBodyStr.c_str());
@@ -63,7 +63,7 @@ bool CmdUpdateConfig::ReadConfig()
                     + m_ReqConfigFileName;
     LOG4_DEBUG("ReqConfigType(%d).CONF FILE = %s.ReqConfigContent(%s).",
                     m_ReqConfigType,strConfFile.c_str(),m_ReqConfigContent.ToString().c_str());
-    loss::CJsonObject oLocalConfJson;
+    thunder::CJsonObject oLocalConfJson;
     {//读取配置文件
     	std::ifstream fin(strConfFile.c_str());
 		//配置信息输入流
@@ -98,8 +98,8 @@ bool CmdUpdateConfig::ReadConfig()
         //需要更新的字段的内容
     	LOG4_DEBUG("before update CONF FILE CONTENT= %s.",oLocalConfJson.ToFormattedString().c_str());
     	{//检查so
-    	    loss::CJsonObject configUpdateContentSo;//更新so
-            loss::CJsonObject configLocalContentSo;//本地so
+    	    thunder::CJsonObject configUpdateContentSo;//更新so
+            thunder::CJsonObject configLocalContentSo;//本地so
             if(!m_ReqConfigContent.Get("so",configUpdateContentSo))
             {
                 LOG4_DEBUG("so don't exist.");
@@ -140,8 +140,8 @@ bool CmdUpdateConfig::ReadConfig()
             }
     	}
     	{//检查module
-    	    loss::CJsonObject configUpdateContentModule;//更新module
-            loss::CJsonObject configLocalContentModule;//本地module
+    	    thunder::CJsonObject configUpdateContentModule;//更新module
+            thunder::CJsonObject configLocalContentModule;//本地module
             if(!m_ReqConfigContent.Get("module",configUpdateContentModule))
             {
                 LOG4_DEBUG("module don't exist.");

@@ -10,7 +10,7 @@
 #include "hiredis/adapters/libev.h"
 #include "Step.hpp"
 
-namespace oss
+namespace thunder
 {
 
 Step::Step(Step* pNextStep)
@@ -129,7 +129,7 @@ const std::string& Step::GetNodeType() const
     return(m_pLabor->GetNodeType());
 }
 
-const loss::CJsonObject& Step::GetCustomConf() const
+const thunder::CJsonObject& Step::GetCustomConf() const
 {
     return(m_pLabor->GetCustomConf());
 }
@@ -382,4 +382,4 @@ void Step::AddPreStepSeq(Step* pStep)
     }
 }
 
-} /* namespace oss */
+} /* namespace thunder */

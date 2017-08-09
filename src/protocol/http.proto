@@ -12,7 +12,6 @@ message HttpMsg
 	string url						= 8;		///< 地址
 	repeated Header headers			= 9;		///< http头域
 	bytes body						= 10;		///< 消息体（当 Transfer-Encoding: chunked 时，只存储一个chunk）
-//	repeated Param get_params		= 11;		///< GET方法参数，POST方法不需要
 	string path				        = 14;		///< Http Decode时从url中解析出来，不需要人为填充（encode时不需要填）
 	bool is_decoding				= 15;		///< 是否正在解码（true 正在解码， false 未解码或已完成解码）
 
@@ -23,8 +22,3 @@ message HttpMsg
 	}
 }
 
-//  message Param
-//  {
-//      string name             = 1;
-//      string value                = 2;
-//  }

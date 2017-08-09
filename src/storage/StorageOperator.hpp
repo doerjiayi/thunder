@@ -14,7 +14,7 @@
 #include <string>
 #include "dataproxy.pb.h"
 
-namespace oss
+namespace thunder
 {
 
 typedef char int8;
@@ -35,6 +35,6 @@ public:
     virtual DataMem::MemOperate* MakeMemOperate() = 0;
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* CLIENT_STORAGEOPERATOR_HPP_ */

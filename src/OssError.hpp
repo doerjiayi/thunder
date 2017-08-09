@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Project:  Starship
+* Project:  Thunder
 * @file     OssError.hpp
 * @brief    系统错误定义
 * @author   cjy
@@ -10,7 +10,7 @@
 #ifndef OSSERROR_HPP_
 #define OSSERROR_HPP_
 
-namespace oss
+namespace thunder
 {
 
 /**
@@ -80,7 +80,7 @@ enum E_ERROR_NO
 
 };
 
-}   // namespace oss
+}   // namespace thunder
 
 
 #endif /* OSSERROR_HPP_ */

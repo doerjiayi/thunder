@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "DbOperator.hpp"
 
-namespace oss
+namespace thunder
 {
 
 DbOperator::DbOperator(
@@ -439,4 +439,4 @@ void DbOperator::AddLimit(unsigned int uiLimit, unsigned int uiLimitFrom)
     }
 }
 
-} /* namespace oss */
+} /* namespace thunder */

@@ -25,9 +25,9 @@ endif
 LIB3RD_PATH = ../../l3oss
 LOSS_PATH = ../../loss
 
-STARSHIP_PATH = ..
+Thunder_PATH = ..
 
-VPATH = $(STARSHIP_PATH)/src
+VPATH = $(Thunder_PATH)/src
 SUB_DIRS := $(foreach dir, $(VPATH), $(shell find $(dir) -maxdepth 5 -type d))
 DIRS := $(SUB_DIRS)
 
@@ -36,7 +36,7 @@ INC := $(INC) \
        -I $(LIB3RD_PATH)/include \
        -I $(LIB3RD_PATH)/include/libev \
        -I $(LOSS_PATH)/src \
-       -I $(STARSHIP_PATH)/src 
+       -I $(Thunder_PATH)/src 
 
 
 LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
@@ -51,11 +51,12 @@ LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
            -L$(SYSTEM_LIB_PATH) -lz -lc -ldl -lrt -lssl
 
 SUB_INCLUDE = cmd step session labor protocol
-COMM_PATH = $(STARSHIP_PATH)/src/cmd \
-            $(STARSHIP_PATH)/src/step \
-            $(STARSHIP_PATH)/src/session \
-            $(STARSHIP_PATH)/src/labor \
-            $(STARSHIP_PATH)/src/protocol
+COMM_PATH = $(Thunder_PATH)/src/cmd \
+            $(Thunder_PATH)/src/step \
+            $(Thunder_PATH)/src/session \
+            $(Thunder_PATH)/src/labor \
+            $(Thunder_PATH)/src/protocol
+            
 CPP_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
 CC_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cc))
 C_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.c))

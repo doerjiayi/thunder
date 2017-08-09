@@ -22,7 +22,7 @@
 #define LOG4_DEBUG(args...) LOG4CPLUS_DEBUG_FMT(GetLogger(), ##args)
 #define LOG4_TRACE(args...) LOG4CPLUS_TRACE_FMT(GetLogger(), ##args)
 
-namespace oss
+namespace thunder
 {
 
 typedef char int8;

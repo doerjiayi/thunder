@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  Starship
+ * Project:  Thunder
  * @file     HttpCodec.cpp
  * @brief 
  * @author   cjy
@@ -73,11 +73,11 @@ static const char * status_string(int code)
     return 0;
 }
 
-namespace oss
+namespace thunder
 {
 
-HttpCodec::HttpCodec(loss::E_CODEC_TYPE eCodecType, const std::string& strKey)
-    : StarshipCodec(eCodecType, strKey)
+HttpCodec::HttpCodec(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey)
+    : ThunderCodec(eCodecType, strKey)
 {
 }
 
@@ -85,7 +85,7 @@ HttpCodec::~HttpCodec()
 {
 }
 
-E_CODEC_STATUS HttpCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, loss::CBuffer* pBuff)
+E_CODEC_STATUS HttpCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, thunder::CBuffer* pBuff)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     HttpMsg oHttpMsg;
@@ -130,7 +130,7 @@ E_CODEC_STATUS HttpCodec::Decode(tagConnectionAttr* pConn,MsgHead& oMsgHead, Msg
     return Decode(pConn->pRecvBuff,oMsgHead,oMsgBody);
 }
 
-E_CODEC_STATUS HttpCodec::Decode(loss::CBuffer* pBuff,MsgHead& oMsgHead, MsgBody& oMsgBody)
+E_CODEC_STATUS HttpCodec::Decode(thunder::CBuffer* pBuff,MsgHead& oMsgHead, MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     if (pBuff->ReadableBytes() == 0)
@@ -163,7 +163,7 @@ E_CODEC_STATUS HttpCodec::Decode(loss::CBuffer* pBuff,MsgHead& oMsgHead, MsgBody
     return(eCodecStatus);
 }
 
-E_CODEC_STATUS HttpCodec::Encode(const HttpMsg& oHttpMsg, loss::CBuffer* pBuff)
+E_CODEC_STATUS HttpCodec::Encode(const HttpMsg& oHttpMsg, thunder::CBuffer* pBuff)
 {
     LOG4_TRACE("%s() pBuff->ReadableBytes() = %u, ReadIndex = %u, WriteIndex = %u",
                     __FUNCTION__, pBuff->ReadableBytes(), pBuff->GetReadIndex(), pBuff->GetWriteIndex());
@@ -664,7 +664,7 @@ E_CODEC_STATUS HttpCodec::Encode(const HttpMsg& oHttpMsg, loss::CBuffer* pBuff)
     return(CODEC_STATUS_OK);
 }
 
-E_CODEC_STATUS HttpCodec::Decode(loss::CBuffer* pBuff, HttpMsg& oHttpMsg)
+E_CODEC_STATUS HttpCodec::Decode(thunder::CBuffer* pBuff, HttpMsg& oHttpMsg)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     if (pBuff->ReadableBytes() == 0)
@@ -919,4 +919,4 @@ int HttpCodec::OnChunkComplete(http_parser *parser)
     return(0);
 }
 
-} /* namespace oss */
+} /* namespace thunder */

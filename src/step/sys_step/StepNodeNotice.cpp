@@ -12,7 +12,7 @@
 using namespace std;
 
 
-namespace oss
+namespace thunder
 {
 StepNodeNotice::StepNodeNotice(const tagMsgShell& stMsgShell,
                 const MsgHead& oInMsgHead,
@@ -95,4 +95,4 @@ E_CMD_STATUS StepNodeNotice::Timeout()
     return(STATUS_CMD_FAULT);
 }
 
-} /* namespace oss */
+} /* namespace thunder */

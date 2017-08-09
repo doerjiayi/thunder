@@ -15,10 +15,10 @@
 //#include "protocol/oss_sys.pb.h"
 #include "OssError.hpp"
 #include "OssDefine.hpp"
-#include "labor/OssLabor.hpp"
+#include "labor/NodeLabor.hpp"
 #include "step/Step.hpp"
 
-namespace oss
+namespace thunder
 {
 
 class Step;
@@ -86,7 +86,7 @@ protected:
         return(m_strConfigPath);
     }
 
-    OssLabor* GetLabor()
+    NodeLabor* GetLabor()
     {
         return m_pLabor;
     }
@@ -112,7 +112,7 @@ protected:
      * @brief 获取Server自定义配置
      * @return Server自定义配置
      */
-    const loss::CJsonObject& GetCustomConf() const;
+    const thunder::CJsonObject& GetCustomConf() const;
 
     /**
      * @brief 获取当前时间
@@ -207,7 +207,7 @@ public:
     }
 
 private:
-    void SetLabor(OssLabor* pLabor)
+    void SetLabor(NodeLabor* pLabor)
     {
         m_pLabor = pLabor;
     }
@@ -234,16 +234,16 @@ protected:
     char* m_pErrBuff;
 	oss::uint32 m_uiCmd;
 private:
-    OssLabor* m_pLabor;
+    NodeLabor* m_pLabor;
     log4cplus::Logger* m_pLogger;
     std::string m_strConfigPath;
     std::string m_strWorkerIdentify;
     int m_iCmd;
     std::string m_strClassName;
 
-    friend class OssWorker;
+    friend class ThunderWorker;
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* CMD_HPP_ */

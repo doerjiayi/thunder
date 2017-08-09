@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Project:  Starship
+ * Project:  Thunder
  * @file     Module.hpp
  * @brief    Http服务模块基类
  * @author   cjy
@@ -10,12 +10,12 @@
 #ifndef SRC_CMD_MODULE_HPP_
 #define SRC_CMD_MODULE_HPP_
 
-#include "util/http/http_parser.h"
+#include "utility/http/http_parser.h"
 #include "protocol/http.pb.h"
 #include "Cmd.hpp"
 #include "step/HttpStep.hpp"
 
-namespace oss
+namespace thunder
 {
 
 class Module: public Cmd
@@ -66,6 +66,6 @@ private:
     std::string m_strModulePath;
 };
 
-} /* namespace oss */
+} /* namespace thunder */
 
 #endif /* SRC_CMD_MODULE_HPP_ */
