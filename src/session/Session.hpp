@@ -17,6 +17,8 @@
 #include "log4cplus/loggingmacros.h"
 #include "libev/ev.h"         // need ev_tstamp
 #include "labor/NodeLabor.hpp"
+#include "storage/DbOperator.hpp"
+#include "storage/MemOperator.hpp"
 
 namespace thunder
 {
@@ -29,6 +31,9 @@ enum SESSION_LOAD_STATUS
 };
 
 class ThunderWorker;
+
+typedef int (*CallbackSession)(const DataMem::MemRsp &oRsp,thunder::Session*pSession);
+typedef int (*CallbackStep)(const DataMem::MemRsp &oRsp,thunder::Step*pStep);
 
 class Session
 {
@@ -116,6 +121,8 @@ protected:
     bool Pretreat(Step* pStep);
     //发送异步step，step对象内存由worker管理
     bool AsyncStep(Step* pStep,ev_tstamp dTimeout = 0.0);
+    bool EmitStepStorageAccess(const std::string &strMsgSerial,
+    		CallbackSession callback,const std::string &nodeType,bool boPermanentSession=false);
     /**
      * @brief 获取会话刷新时间
      */

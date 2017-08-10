@@ -17,7 +17,9 @@ StepStorageAccess::StepStorageAccess(const std::string &strMsgSerial,const std::
     m_strMsgSerial = strMsgSerial;
     m_uiTimeOut = 0;
     m_callbackSession = NULL;
+    m_callbackStep = NULL;
     m_pSession = NULL;
+    m_pStep = NULL;
     m_uiUpperStepSeq = 0;
 }
 
@@ -110,9 +112,21 @@ thunder::E_CMD_STATUS StepStorageAccess::Callback(
             return thunder::STATUS_CMD_FAULT;
         }
     }
+    else if (m_callbackStep)
+	{
+    	if (m_pStep)
+    	{
+    		m_callbackStep(oRsp,m_pStep);
+    	}
+    	else
+    	{
+    		LOG4CPLUS_ERROR_FMT(GetLogger(), "m_pStep null");
+			return thunder::STATUS_CMD_FAULT;
+    	}
+	}
     else
     {
-        LOG4CPLUS_ERROR_FMT(GetLogger(), "m_callbackSession null!");
+        LOG4CPLUS_ERROR_FMT(GetLogger(), "m_callbackSession and m_callbackStep null!");
         return thunder::STATUS_CMD_FAULT;
     }
     return thunder::STATUS_CMD_COMPLETED;

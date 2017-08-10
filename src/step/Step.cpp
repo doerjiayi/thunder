@@ -9,6 +9,7 @@
  ******************************************************************************/
 #include "hiredis/adapters/libev.h"
 #include "Step.hpp"
+#include "step/StepStorageAccess.hpp"
 
 namespace thunder
 {
@@ -193,6 +194,57 @@ bool Step::AsyncStep(Step* pStep,ev_tstamp dTimeout)
         DeleteCallback(pStep);
         return(false);
     }
+    return true;
+}
+
+bool Step::AsyncNextStep(Step* pStep,ev_tstamp dTimeout)
+{
+    if (pStep == NULL)
+    {
+        LOG4CPLUS_ERROR_FMT(GetLogger(),"pStep == NULL!");
+        return(false);
+    }
+    if (!RegisterCallback(pStep,dTimeout))
+    {
+        LOG4CPLUS_ERROR_FMT(GetLogger(),"RegisterCallback(pStep) error!");
+        delete pStep;
+        pStep = NULL;
+        return(false);
+    }
+    if (thunder::STATUS_CMD_RUNNING != pStep->Emit(ERR_OK))
+    {
+        DeleteCallback(pStep);
+        return(false);
+    }
+    AddNextStepSeq(pStep);
+    return true;
+}
+
+bool Step::EmitStepStorageAccess(const std::string &strMsgSerial,
+		CallbackStep callback,const std::string &nodeType,bool boPermanentSession)
+{
+    StepStorageAccess* pStep = new StepStorageAccess(strMsgSerial,nodeType);
+    if (pStep == NULL)
+    {
+        LOG4CPLUS_ERROR_FMT(GetLogger(),"new StepStorageAccess() error!");
+        delete pStep;
+        pStep = NULL;
+        return(false);
+    }
+    if (!RegisterCallback(pStep))
+    {
+        LOG4CPLUS_ERROR_FMT(GetLogger(),"RegisterCallback(pStep) error!");
+        delete pStep;
+        pStep = NULL;
+        return(false);
+    }
+    if (thunder::STATUS_CMD_RUNNING != pStep->Emit(ERR_OK))
+    {
+        DeleteCallback(pStep);
+        return(false);
+    }
+    pStep->SetCallBack(callback,this);
+    AddNextStepSeq(pStep);
     return true;
 }
 

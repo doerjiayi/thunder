@@ -11,8 +11,6 @@
 namespace thunder
 {
 
-typedef int (*CallbackSession)(const DataMem::MemRsp &oRsp,thunder::Session*pSession);
-
 class StepStorageAccess: public thunder::Step
 {
 public:
@@ -38,15 +36,22 @@ public:
             m_strUpperSessionClassName = pSession->GetSessionClass();
         }
     }
+    void SetCallBack(CallbackStep callbackStep,thunder::Step* pStep)
+	{
+    	m_callbackStep = callbackStep;
+    	m_pStep = pStep;
+	}
 private:
     uint32 m_uiTimeOut;
     std::string m_strMsgSerial;
     std::string m_nodeType;
     CallbackSession m_callbackSession;
+    CallbackStep m_callbackStep;
 
     std::string m_strUpperSessionId;
     std::string m_strUpperSessionClassName;
     thunder::Session* m_pSession;
+    thunder::Step* m_pStep;
 
     uint32 m_uiUpperStepSeq;
 };

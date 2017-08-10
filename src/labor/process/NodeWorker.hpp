@@ -269,8 +269,10 @@ public:     // 发送数据或从Worker获取数据
     virtual bool BuildClientMsg(MsgHead& oMsgHead,MsgBody &oMsgBody,const google::protobuf::Message &message,
                             const std::string& additional = "",uint64 sessionid = 0,const std::string& strSession = "");
     virtual bool ParseFromMsg(const MsgBody& oInMsgBody,google::protobuf::Message &message);
-    bool EmitSessionStep(thunder::Session* pSession,const std::string &strMsgSerial,
-    		CallbackSession callback,const std::string &nodeType,bool boPermanentSession=false);
+    bool EmitStepStorageAccess(thunder::Session* pSession,const std::string &strMsgSerial,
+    		CallbackSession callback,bool boPermanentSession=false,const std::string &nodeType="PROXY");
+    bool EmitStepStorageAccess(thunder::Step* pUpperStep,const std::string &strMsgSerial,
+    		CallbackStep callback,const std::string &nodeType="PROXY");
 protected:
     bool Init(thunder::CJsonObject& oJsonConf);
     bool InitLogger(const thunder::CJsonObject& oJsonConf);

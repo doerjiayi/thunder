@@ -339,7 +339,11 @@ protected:
         return GetLabor()->ParseFromMsg(oInMsgBody,message);
     }
     //发送异步step，step对象内存由worker管理
-    bool AsyncStep(thunder::Step* pStep,ev_tstamp dTimeout = 0.0);
+    bool AsyncStep(Step* pStep,ev_tstamp dTimeout = 0.0);
+    bool AsyncNextStep(Step* pStep,ev_tstamp dTimeout = 0.0);
+
+    bool EmitStepStorageAccess(const std::string &strMsgSerial,
+    		CallbackStep callback,const std::string &nodeType,bool boPermanentSession=false);
     /**
      * @brief 延迟下一个步骤的超时时间
      */

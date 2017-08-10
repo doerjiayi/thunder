@@ -110,4 +110,31 @@ bool Session::AsyncStep(Step* pStep,ev_tstamp dTimeout)
     return true;
 }
 
+bool Session::EmitStepStorageAccess(const std::string &strMsgSerial,
+		CallbackSession callback,const std::string &nodeType,bool boPermanentSession)
+{
+    StepStorageAccess* pStep = new StepStorageAccess(strMsgSerial,nodeType);
+    if (pStep == NULL)
+    {
+        LOG4CPLUS_ERROR_FMT(GetLogger(),"new StepStorageAccess() error!");
+        delete pStep;
+        pStep = NULL;
+        return(false);
+    }
+    if (!RegisterCallback(pStep))
+    {
+        LOG4CPLUS_ERROR_FMT(GetLogger(),"RegisterCallback(pStep) error!");
+        delete pStep;
+        pStep = NULL;
+        return(false);
+    }
+    if (thunder::STATUS_CMD_RUNNING != pStep->Emit(ERR_OK))
+    {
+        DeleteCallback(pStep);
+        return(false);
+    }
+    pStep->SetCallBack(callback,this,boPermanentSession);
+    return true;
+}
+
 } /* namespace thunder */
