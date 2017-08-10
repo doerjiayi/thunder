@@ -42,8 +42,7 @@ namespace thunder
 {
 
 tagSo::tagSo() : pSoHandle(NULL), pCmd(NULL), iVersion(0)
-{
-}
+{}
 
 tagSo::~tagSo()
 {
@@ -2470,6 +2469,33 @@ bool ThunderWorker::BuildClientMsg(MsgHead& oMsgHead,MsgBody &oMsgBody,const goo
         oMsgBody.set_session(strSession);
     }
     oMsgHead.set_msgbody_len(oMsgBody.ByteSize());
+    return true;
+}
+
+bool ThunderWorker::EmitSessionStep(thunder::Session* pSession,const std::string &strMsgSerial,
+		CallbackSession callback,const std::string &nodeType,bool boPermanentSession)
+{
+    StepStorageAccess* pStep = new StepStorageAccess(strMsgSerial,nodeType);
+    if (pStep == NULL)
+    {
+        LOG4CPLUS_ERROR_FMT(GetLogger(),"new StepStorageAccess() error!");
+        delete pStep;
+        pStep = NULL;
+        return(false);
+    }
+    if (!RegisterCallback(pStep))
+    {
+        LOG4CPLUS_ERROR_FMT(GetLogger(),"RegisterCallback(pStep) error!");
+        delete pStep;
+        pStep = NULL;
+        return(false);
+    }
+    if (thunder::STATUS_CMD_RUNNING != pStep->Emit(ERR_OK))
+    {
+        DeleteCallback(pStep);
+        return(false);
+    }
+    pStep->SetCallBack(callback,pSession,boPermanentSession);
     return true;
 }
 

@@ -24,6 +24,7 @@
 #include <arpa/inet.h>
 
 #include "../../step/StepLog.hpp"
+#include "../../step/StepStorageAccess.hpp"
 #include "../process/Attribution.hpp"
 #include "libev/ev.h"
 #include "log4cplus/logger.h"
@@ -268,6 +269,8 @@ public:     // 发送数据或从Worker获取数据
     virtual bool BuildClientMsg(MsgHead& oMsgHead,MsgBody &oMsgBody,const google::protobuf::Message &message,
                             const std::string& additional = "",uint64 sessionid = 0,const std::string& strSession = "");
     virtual bool ParseFromMsg(const MsgBody& oInMsgBody,google::protobuf::Message &message);
+    bool EmitSessionStep(thunder::Session* pSession,const std::string &strMsgSerial,
+    		CallbackSession callback,const std::string &nodeType,bool boPermanentSession=false);
 protected:
     bool Init(thunder::CJsonObject& oJsonConf);
     bool InitLogger(const thunder::CJsonObject& oJsonConf);

@@ -8,6 +8,7 @@
  * Modify history:
  ******************************************************************************/
 #include "step/Step.hpp"
+#include "step/StepStorageAccess.hpp"
 #include "Session.hpp"
 
 namespace thunder

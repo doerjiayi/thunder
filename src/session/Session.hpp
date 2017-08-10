@@ -46,6 +46,19 @@ public:
     {
         return(m_strSessionId);
     }
+    log4cplus::Logger GetLogger()
+    {
+        return (*m_pLogger);
+    }
+    NodeLabor* GetLabor()
+    {
+        return(m_pLabor);
+    }
+
+    const std::string& GetSessionClass() const
+    {
+        return(m_strSessionClassName);
+    }
 protected:
     /**
      * @brief 设置会话最近刷新时间
@@ -103,22 +116,6 @@ protected:
     bool Pretreat(Step* pStep);
     //发送异步step，step对象内存由worker管理
     bool AsyncStep(Step* pStep,ev_tstamp dTimeout = 0.0);
-
-    log4cplus::Logger GetLogger()
-    {
-        return (*m_pLogger);
-    }
-
-    NodeLabor* GetLabor()
-    {
-        return(m_pLabor);
-    }
-
-    const std::string& GetSessionClass() const
-    {
-        return(m_strSessionClassName);
-    }
-
     /**
      * @brief 获取会话刷新时间
      */
