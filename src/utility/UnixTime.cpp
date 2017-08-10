@@ -1,13 +1,11 @@
 /*******************************************************************************
-* Project:  DataAnalysis
+* Project:  thunder
 * File:     UnixTime.cpp
-* Description: loss库time_t型时间处理API
-* Author:        bwarliao
-* Created date:  2010-12-14
+* Description: time_t型时间处理API
+* Author:        cjy
+* Created date:  2017-12-14
 * Modify history:
 *******************************************************************************/
-
-
 #include "UnixTime.hpp"
 
 
