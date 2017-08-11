@@ -2,8 +2,8 @@
  * Project:  AsyncServer
  * @file     Session.cpp
  * @brief 
- * @author   bwarliao
- * @date:    2015年7月28日
+ * @author   cjy
+ * @date:    2017年7月28日
  * @note
  * Modify history:
  ******************************************************************************/
