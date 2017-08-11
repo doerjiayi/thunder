@@ -205,10 +205,15 @@ ThunderWorker::ThunderWorker(const std::string& strWorkPath, int iControlFd, int
     PreloadCmd();
     LoadSo(oJsonConf["so"]);
     LoadModule(oJsonConf["module"]);
+    m_pSchedule = coroutine_open();
 }
 
 ThunderWorker::~ThunderWorker()
 {
+	if (m_pSchedule)
+	{
+		coroutine_close(m_pSchedule);
+	}
     Destroy();
 }
 
@@ -1193,6 +1198,43 @@ bool ThunderWorker::Pretreat(Session* pSession)
     pSession->SetLabor(this);
     pSession->SetLogger(&m_oLogger);
     return(true);
+}
+
+int ThunderWorker::NewCoroutine(coroutine_func func,void *ud)
+{
+	int co1 = coroutine_new(m_pSchedule, func, ud);
+	LOG4_TRACE("%s coroutine_new co1:%d", __FUNCTION__,co1);
+	if (co1 == -1)
+	{
+		LOG4_ERROR("%s coroutine invalid co1(%u)", __FUNCTION__, co1);
+	}
+	return co1;
+}
+
+void ThunderWorker::RunCoroutine(int co1)
+{
+	int running_id = coroutine_running(m_pSchedule);
+	if (running_id != -1)//抢占式
+	{
+		LOG4_TRACE("%s coroutine_yield running_id(%d)", __FUNCTION__, running_id);
+		coroutine_yield(m_pSchedule);//放弃执行权
+	}
+	LOG4_TRACE("%s coroutine_resume co1(%d)", __FUNCTION__, co1);
+	coroutine_resume(m_pSchedule,co1);//执行函数
+}
+
+void ThunderWorker::YieldCoroutine()
+{
+	int running_id = coroutine_running(m_pSchedule);
+	if (running_id != -1)
+	{
+		LOG4_TRACE("%s coroutine_yield running_id(%d)", __FUNCTION__, running_id);
+		coroutine_yield(m_pSchedule);//放弃执行权
+	}
+	else
+	{
+		LOG4_ERROR("%s no running coroutine", __FUNCTION__);
+	}
 }
 
 bool ThunderWorker::RegisterCallback(Step* pStep, ev_tstamp dTimeout)

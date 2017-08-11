@@ -10,13 +10,12 @@
 #ifndef SRC_LABOR_PROCESS_ATTRIBUTION_HPP_
 #define SRC_LABOR_PROCESS_ATTRIBUTION_HPP_
 
-
 #include <stdlib.h>
 #include "libev/ev.h"
 #include "utility/CBuffer.hpp"
 #include "utility/StreamCodec.hpp"
 #include "utility/json/CJsonObject.hpp"
-
+#include "coroutine/coroutine.h"
 
 /**
  * @brief 工作进程属性
@@ -156,6 +155,5 @@ struct tagConnectionAttr
         }
     }
 };
-
 
 #endif /* SRC_LABOR_PROCESS_ATTRIBUTION_HPP_ */

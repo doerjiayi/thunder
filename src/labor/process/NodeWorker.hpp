@@ -201,6 +201,11 @@ public:     // Cmd类和Step类只需关注这些方法
     virtual bool Pretreat(Cmd* pCmd);
     virtual bool Pretreat(Step* pStep);
     virtual bool Pretreat(Session* pSession);
+
+    int NewCoroutine(coroutine_func callback,void *ud);
+    void RunCoroutine(int co1);
+    void YieldCoroutine();
+
     virtual bool RegisterCallback(Step* pStep, ev_tstamp dTimeout = 0.0);
     virtual bool RegisterCallback(uint32 uiSelfStepSeq, Step* pStep, ev_tstamp dTimeout = 0.0);
     virtual void DeleteCallback(Step* pStep);
@@ -336,6 +341,7 @@ protected:
     tagModule* LoadSoAndGetModule(const std::string& strModulePath, const std::string& strSoPath, const std::string& strSymbol, int iVersion);
     void UnloadSoAndDeleteModule(const std::string& strModulePath);
 private:
+    struct schedule * m_pSchedule;
     char* m_pErrBuff;
     uint32 m_ulSequence;
     log4cplus::Logger m_oLogger;

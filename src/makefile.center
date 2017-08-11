@@ -48,13 +48,6 @@ LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
            -L$(THUNDER_PATH)/3lib/lib -llog4cplus \
            -L$(THUNDER_PATH)/3lib/lib -lev 
 
-SUB_INCLUDE = cmd step session labor protocol
-COMM_PATH = $(THUNDER_PATH)/src/cmd \
-            $(THUNDER_PATH)/src/step \
-            $(THUNDER_PATH)/src/session \
-            $(THUNDER_PATH)/src/labor \
-            $(THUNDER_PATH)/src/protocol
-            
 CPP_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
 CC_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cc))
 C_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.c))

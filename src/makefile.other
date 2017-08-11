@@ -50,21 +50,23 @@ LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
            -L$(THUNDER_PATH)/3lib/lib -lev 
 
 
-SUB_INCLUDE = cmd step session labor codec protocol storage
+SUB_INCLUDE = cmd step session labor codec protocol storage 
 COMM_PATH = $(THUNDER_PATH)/src/cmd \
             $(THUNDER_PATH)/src/step \
             $(THUNDER_PATH)/src/session \
             $(THUNDER_PATH)/src/labor \
             $(THUNDER_PATH)/src/protocol \
-            $(THUNDER_PATH)/src/storage
+            $(THUNDER_PATH)/src/storage \
+            $(THUNDER_PATH)/src/utility
 
 CPP_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
 CC_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cc))
 C_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.c))
+OBJS = $(patsubst %.cpp,%.o,$(CPP_SRCS)) $(patsubst %.c,%.o,$(C_SRCS)) $(patsubst %.cc,%.o,$(CC_SRCS))
+
 COMM_CPP_SRCS = $(foreach dir, $(COMM_PATH), $(wildcard $(dir)/*.cpp))
 COMM_CC_SRCS = $(foreach dir, $(COMM_PATH), $(wildcard $(dir)/*.cc))
 COMM_C_SRCS = $(foreach dir, $(COMM_PATH), $(wildcard $(dir)/*.c))
-OBJS = $(patsubst %.cpp,%.o,$(CPP_SRCS)) $(patsubst %.c,%.o,$(C_SRCS)) $(patsubst %.cc,%.o,$(CC_SRCS))
 COMM_OBJS = $(patsubst %.cpp,%.o,$(COMM_CPP_SRCS)) $(patsubst %.c,%.o,$(COMM_C_SRCS)) $(patsubst %.cc,%.o,$(COMM_CC_SRCS))
 
 TARGET = LogicServer DataProxyServer DbAgentWrite DbAgentRead LogServer RobotServer CrmServer ESAgentR ESAgentW ESAgentS libThunder.so
@@ -113,7 +115,7 @@ ESAgentS: $(OBJS)
 
 libThunder.so: $(COMM_OBJS)
 	$(CXX) $(UNITTEST) -fPIE -rdynamic -shared -g -o $@ $^ $(LDFLAGS)
-	@for dir in $(SUB_INCLUDE); do mkdir -p $(THUNDER_PATH)/include/$$dir; cp $(THUNDER_PATH)/src/$$dir/*.hpp $(THUNDER_PATH)/include/$$dir/ >> /dev/null 2>&1; cp $(THUNDER_PATH)/src/$$dir/*.h $(THUNDER_PATH)/include/$$dir/ >> /dev/null 2>&1; done
+	@for dir in $(SUB_INCLUDE); do mkdir -p $(THUNDER_PATH)/include/$$dir; 	cp $(THUNDER_PATH)/src/$$dir/*.hpp $(THUNDER_PATH)/include/$$dir/ >> /dev/null 2>&1; cp $(THUNDER_PATH)/src/$$dir/*.h $(THUNDER_PATH)/include/$$dir/ >> /dev/null 2>&1; done
 	cp -f $(THUNDER_PATH)/src/*.hpp $(THUNDER_PATH)/include/
 	cp -f $@ $(THUNDER_PATH)/lib/
 	test  -d ../../../deploy/lib/ && install -v $@ ../../../deploy/lib/
