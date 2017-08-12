@@ -25,11 +25,6 @@ endif
 
 THUNDER_PATH = ..
 
-VPATH = $(THUNDER_PATH)/src
-SUB_DIRS := $(foreach dir, $(VPATH), $(shell find $(dir) -maxdepth 5 -type d))
-DIRS := $(SUB_DIRS)
-
-
 INC := $(INC) \
        -I $(THUNDER_PATH)/src \
        -I $(THUNDER_PATH)/src/utility \
@@ -59,11 +54,17 @@ COMM_PATH = $(THUNDER_PATH)/src/cmd \
             $(THUNDER_PATH)/src/storage \
             $(THUNDER_PATH)/src/utility
 
+#执行文件
+VPATH = $(THUNDER_PATH)/src
+SUB_DIRS := $(foreach dir, $(VPATH), $(shell find $(dir) -maxdepth 5 -type d))
+DIRS := $(SUB_DIRS)
+
 CPP_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
 CC_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cc))
 C_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.c))
 OBJS = $(patsubst %.cpp,%.o,$(CPP_SRCS)) $(patsubst %.c,%.o,$(C_SRCS)) $(patsubst %.cc,%.o,$(CC_SRCS))
 
+#公共库
 COMM_CPP_SRCS = $(foreach dir, $(COMM_PATH), $(wildcard $(dir)/*.cpp))
 COMM_CC_SRCS = $(foreach dir, $(COMM_PATH), $(wildcard $(dir)/*.cc))
 COMM_C_SRCS = $(foreach dir, $(COMM_PATH), $(wildcard $(dir)/*.c))
@@ -75,50 +76,50 @@ all: $(TARGET)
 
 LogicServer: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
 
 DataProxyServer: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
 
 DbAgentWrite: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
 
 DbAgentRead: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
 
 LogServer: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
 
 RobotServer: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
 	
 CrmServer: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
 
 ESAgentR: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
 
 ESAgentW: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
 
 ESAgentS: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
+	#test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
 
 libThunder.so: $(COMM_OBJS)
 	$(CXX) $(UNITTEST) -fPIE -rdynamic -shared -g -o $@ $^ $(LDFLAGS)
+
+install: 
+	#安装执行文件
+	test  -d ../../../deploy/bin/ && @for bin in $(TARGET); do install -v $$dir ../../../deploy/bin/
+	#安装库文件
+	test  -d ../../../deploy/lib/ && install -v libThunder.so ../../../deploy/lib/
+	#安装头文件
 	@for dir in $(SUB_INCLUDE); do mkdir -p $(THUNDER_PATH)/include/$$dir; 	cp $(THUNDER_PATH)/src/$$dir/*.hpp $(THUNDER_PATH)/include/$$dir/ >> /dev/null 2>&1; cp $(THUNDER_PATH)/src/$$dir/*.h $(THUNDER_PATH)/include/$$dir/ >> /dev/null 2>&1; done
 	cp -f $(THUNDER_PATH)/src/*.hpp $(THUNDER_PATH)/include/
 	cp -f $@ $(THUNDER_PATH)/lib/
-	test  -d ../../../deploy/lib/ && install -v $@ ../../../deploy/lib/
+
+test: 
+	cd ../test && make && ./test
 
 %.o:%.cpp
 	$(CXX) $(INC) $(CPPFLAGS) $(CFLAGS) $(DEFINE_SERVER) $(UNITTEST) -c -o $@ $< $(LDFLAGS)
