@@ -12,12 +12,15 @@
 #include <string>
 
 #include "../ThunderDefine.hpp"
+#include "cmd/CW.hpp"
 #include "libev/ev.h"
 #include "log4cplus/loggingmacros.h"
 #include "utility/json/CJsonObject.hpp"
 #include "utility/CBuffer.hpp"
 #include "protocol/msg.pb.h"
 #include "protocol/http.pb.h"
+#include "storage/DbOperator.hpp"
+#include "storage/MemOperator.hpp"
 
 struct redisAsyncContext;
 
@@ -30,6 +33,13 @@ class Step;
 class RedisStep;
 class HttpStep;
 class Session;
+
+//访问存储回调
+typedef int (*StorageCallbackSession)(const DataMem::MemRsp &oRsp,thunder::Session*pSession);
+typedef int (*StorageCallbackStep)(const DataMem::MemRsp &oRsp,thunder::Step*pStep);
+//访问一般节点回调
+typedef int (*StandardCallbackSession)(const MsgHead& oInMsgHead,const MsgBody& oInMsgBody,void* data,thunder::Session*pSession);
+typedef int (*StandardCallbackStep)(const MsgHead& oInMsgHead,const MsgBody& oInMsgBody,void* data,thunder::Step*pStep);
 
 /**
  * @brief 框架层工作者
@@ -564,6 +574,28 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
     {
         return(false);
     }
+    virtual bool EmitStorageAccess(thunder::Session* pSession,const std::string &strMsgSerial,
+			StorageCallbackSession callback,bool boPermanentSession,
+			const std::string &nodeType="PROXY",uint32 uiCmd = thunder::CMD_REQ_STORATE)
+    {
+    	return(false);
+    }
+    virtual bool EmitStorageAccess(thunder::Step* pUpperStep,const std::string &strMsgSerial,
+			StorageCallbackStep callback,const std::string &nodeType="PROXY",uint32 uiCmd = thunder::CMD_REQ_STORATE)
+	{
+		return(false);
+	}
+    virtual bool EmitStandardAccess(thunder::Session* pSession,const std::string &strMsgSerial,
+			StandardCallbackSession callback,bool boPermanentSession,
+			const std::string &nodeType,uint32 uiCmd)
+	{
+		return(false);
+	}
+    virtual bool EmitStandardAccess(thunder::Step* pUpperStep,const std::string &strMsgSerial,
+			StandardCallbackStep callback,const std::string &nodeType,uint32 uiCmd)
+	{
+		return(false);
+	}
     /**
      * @brief 发送数据
      * @param stMsgShell 消息外壳

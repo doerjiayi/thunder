@@ -24,7 +24,7 @@
 #include <arpa/inet.h>
 
 #include "../../step/StepLog.hpp"
-#include "../../step/StepStorageAccess.hpp"
+#include "../../step/StepNodeAccess.hpp"
 #include "../process/Attribution.hpp"
 #include "libev/ev.h"
 #include "log4cplus/logger.h"
@@ -274,10 +274,17 @@ public:     // 发送数据或从Worker获取数据
     virtual bool BuildClientMsg(MsgHead& oMsgHead,MsgBody &oMsgBody,const google::protobuf::Message &message,
                             const std::string& additional = "",uint64 sessionid = 0,const std::string& strSession = "");
     virtual bool ParseFromMsg(const MsgBody& oInMsgBody,google::protobuf::Message &message);
-    bool EmitStepStorageAccess(thunder::Session* pSession,const std::string &strMsgSerial,
-    		CallbackSession callback,bool boPermanentSession=false,const std::string &nodeType="PROXY");
-    bool EmitStepStorageAccess(thunder::Step* pUpperStep,const std::string &strMsgSerial,
-    		CallbackStep callback,const std::string &nodeType="PROXY");
+    bool EmitStorageAccess(thunder::Session* pSession,const std::string &strMsgSerial,
+    		StorageCallbackSession callback,bool boPermanentSession,
+			const std::string &nodeType="PROXY",uint32 uiCmd = thunder::CMD_REQ_STORATE);
+    bool EmitStorageAccess(thunder::Step* pUpperStep,const std::string &strMsgSerial,
+    		StorageCallbackStep callback,const std::string &nodeType="PROXY",uint32 uiCmd = thunder::CMD_REQ_STORATE);
+
+    bool EmitStandardAccess(thunder::Session* pSession,const std::string &strMsgSerial,
+    		StandardCallbackSession callback,bool boPermanentSession,
+			const std::string &nodeType,uint32 uiCmd);
+	bool EmitStandardAccess(thunder::Step* pUpperStep,const std::string &strMsgSerial,
+			StandardCallbackStep callback,const std::string &nodeType,uint32 uiCmd);
 protected:
     bool Init(thunder::CJsonObject& oJsonConf);
     bool InitLogger(const thunder::CJsonObject& oJsonConf);

@@ -32,9 +32,6 @@ enum SESSION_LOAD_STATUS
 
 class ThunderWorker;
 
-typedef int (*CallbackSession)(const DataMem::MemRsp &oRsp,thunder::Session*pSession);
-typedef int (*CallbackStep)(const DataMem::MemRsp &oRsp,thunder::Step*pStep);
-
 class Session
 {
 public:
@@ -121,8 +118,14 @@ protected:
     bool Pretreat(Step* pStep);
     //发送异步step，step对象内存由worker管理
     bool AsyncStep(Step* pStep,ev_tstamp dTimeout = 0.0);
-    bool EmitStepStorageAccess(const std::string &strMsgSerial,
-    		CallbackSession callback,const std::string &nodeType,bool boPermanentSession=false);
+
+    bool EmitStorageAccess(const std::string &strMsgSerial,
+    		StorageCallbackSession callback,bool boPermanentSession,
+			const std::string &nodeType="PROXY",uint32 uiCmd = thunder::CMD_REQ_STORATE);
+
+    bool EmitStandardAccess(const std::string &strMsgSerial,
+    		StandardCallbackSession callback,bool boPermanentSession,
+			const std::string &nodeType,uint32 uiCmd);
     /**
      * @brief 获取会话刷新时间
      */

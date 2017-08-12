@@ -8,8 +8,8 @@
  * Modify history:
  ******************************************************************************/
 #include "step/Step.hpp"
-#include "step/StepStorageAccess.hpp"
 #include "Session.hpp"
+#include "../step/StepNodeAccess.hpp"
 
 namespace thunder
 {
@@ -110,31 +110,18 @@ bool Session::AsyncStep(Step* pStep,ev_tstamp dTimeout)
     return true;
 }
 
-bool Session::EmitStepStorageAccess(const std::string &strMsgSerial,
-		CallbackSession callback,const std::string &nodeType,bool boPermanentSession)
+bool Session::EmitStorageAccess(const std::string &strMsgSerial,
+		StorageCallbackSession callback,bool boPermanentSession,
+		const std::string &nodeType,uint32 uiCmd)
 {
-    StepStorageAccess* pStep = new StepStorageAccess(strMsgSerial,nodeType);
-    if (pStep == NULL)
-    {
-        LOG4CPLUS_ERROR_FMT(GetLogger(),"new StepStorageAccess() error!");
-        delete pStep;
-        pStep = NULL;
-        return(false);
-    }
-    if (!RegisterCallback(pStep))
-    {
-        LOG4CPLUS_ERROR_FMT(GetLogger(),"RegisterCallback(pStep) error!");
-        delete pStep;
-        pStep = NULL;
-        return(false);
-    }
-    if (thunder::STATUS_CMD_RUNNING != pStep->Emit(ERR_OK))
-    {
-        DeleteCallback(pStep);
-        return(false);
-    }
-    pStep->SetCallBack(callback,this,boPermanentSession);
-    return true;
+    return GetLabor()->EmitStorageAccess(this,strMsgSerial,callback,boPermanentSession,nodeType,uiCmd);
+}
+
+bool Session::EmitStandardAccess(const std::string &strMsgSerial,
+		StandardCallbackSession callback,bool boPermanentSession,
+		const std::string &nodeType,uint32 uiCmd)
+{
+    return GetLabor()->EmitStandardAccess(this,strMsgSerial,callback,boPermanentSession,nodeType,uiCmd);
 }
 
 } /* namespace thunder */

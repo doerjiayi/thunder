@@ -2514,13 +2514,13 @@ bool ThunderWorker::BuildClientMsg(MsgHead& oMsgHead,MsgBody &oMsgBody,const goo
     return true;
 }
 
-bool ThunderWorker::EmitStepStorageAccess(thunder::Session* pSession,const std::string &strMsgSerial,
-		CallbackSession callback,bool boPermanentSession,const std::string &nodeType)
+bool ThunderWorker::EmitStorageAccess(thunder::Session* pSession,const std::string &strMsgSerial,
+		StorageCallbackSession callback,bool boPermanentSession,const std::string &nodeType,uint32 uiCmd)
 {
-    StepStorageAccess* pStep = new StepStorageAccess(strMsgSerial,nodeType);
+	StepNodeAccess* pStep = new StepNodeAccess(strMsgSerial);
     if (pStep == NULL)
     {
-        LOG4CPLUS_ERROR_FMT(GetLogger(),"new StepStorageAccess() error!");
+        LOG4CPLUS_ERROR_FMT(GetLogger(),"new StepNodeAccess() error!");
         delete pStep;
         pStep = NULL;
         return(false);
@@ -2537,14 +2537,14 @@ bool ThunderWorker::EmitStepStorageAccess(thunder::Session* pSession,const std::
         DeleteCallback(pStep);
         return(false);
     }
-    pStep->SetCallBack(callback,pSession,boPermanentSession);
+    pStep->SetStorageCallBack(callback,pSession,boPermanentSession,nodeType,uiCmd);
     return true;
 }
 
-bool ThunderWorker::EmitStepStorageAccess(thunder::Step* pUpperStep,const std::string &strMsgSerial,
-		CallbackStep callback,const std::string &nodeType)
+bool ThunderWorker::EmitStorageAccess(thunder::Step* pUpperStep,const std::string &strMsgSerial,
+		StorageCallbackStep callback,const std::string &nodeType,uint32 uiCmd)
 {
-    StepStorageAccess* pStep = new StepStorageAccess(strMsgSerial,nodeType);
+	StepNodeAccess* pStep = new StepNodeAccess(strMsgSerial);
     if (pStep == NULL)
     {
         LOG4CPLUS_ERROR_FMT(GetLogger(),"new StepStorageAccess() error!");
@@ -2564,7 +2564,62 @@ bool ThunderWorker::EmitStepStorageAccess(thunder::Step* pUpperStep,const std::s
         DeleteCallback(pStep);
         return(false);
     }
-    pStep->SetCallBack(callback,pUpperStep);
+    pStep->SetStorageCallBack(callback,pUpperStep,nodeType,uiCmd);
+    pUpperStep->AddNextStepSeq(pStep);
+    return true;
+}
+
+bool ThunderWorker::EmitStandardAccess(thunder::Session* pSession,const std::string &strMsgSerial,
+		StandardCallbackSession callback,bool boPermanentSession,const std::string &nodeType,uint32 uiCmd)
+{
+	StepNodeAccess* pStep = new StepNodeAccess(strMsgSerial);
+    if (pStep == NULL)
+    {
+        LOG4CPLUS_ERROR_FMT(GetLogger(),"new StepNodeAccess() error!");
+        delete pStep;
+        pStep = NULL;
+        return(false);
+    }
+    if (!RegisterCallback(pStep))
+    {
+        LOG4CPLUS_ERROR_FMT(GetLogger(),"RegisterCallback(pStep) error!");
+        delete pStep;
+        pStep = NULL;
+        return(false);
+    }
+    if (thunder::STATUS_CMD_RUNNING != pStep->Emit(ERR_OK))
+    {
+        DeleteCallback(pStep);
+        return(false);
+    }
+    pStep->SetStandardCallBack(callback,pSession,boPermanentSession,nodeType,uiCmd);
+    return true;
+}
+
+bool ThunderWorker::EmitStandardAccess(thunder::Step* pUpperStep,const std::string &strMsgSerial,
+		StandardCallbackStep callback,const std::string &nodeType,uint32 uiCmd)
+{
+	StepNodeAccess* pStep = new StepNodeAccess(strMsgSerial);
+    if (pStep == NULL)
+    {
+        LOG4CPLUS_ERROR_FMT(GetLogger(),"new StepStorageAccess() error!");
+        delete pStep;
+        pStep = NULL;
+        return(false);
+    }
+    if (!RegisterCallback(pStep))
+    {
+        LOG4CPLUS_ERROR_FMT(GetLogger(),"RegisterCallback(pStep) error!");
+        delete pStep;
+        pStep = NULL;
+        return(false);
+    }
+    if (thunder::STATUS_CMD_RUNNING != pStep->Emit(ERR_OK))
+    {
+        DeleteCallback(pStep);
+        return(false);
+    }
+    pStep->SetStandardCallBack(callback,pUpperStep,nodeType,uiCmd);
     pUpperStep->AddNextStepSeq(pStep);
     return true;
 }

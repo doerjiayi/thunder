@@ -123,6 +123,7 @@ struct tagSequence
     uint32 ulSeq;
 };
 
+
 }
 
 #endif /* THUNDERDEFINE_HPP_ */

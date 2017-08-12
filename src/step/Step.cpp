@@ -9,7 +9,8 @@
  ******************************************************************************/
 #include "hiredis/adapters/libev.h"
 #include "Step.hpp"
-#include "step/StepStorageAccess.hpp"
+
+#include "StepNodeAccess.hpp"
 
 namespace thunder
 {
@@ -220,32 +221,17 @@ bool Step::AsyncNextStep(Step* pStep,ev_tstamp dTimeout)
     return true;
 }
 
-bool Step::EmitStepStorageAccess(const std::string &strMsgSerial,
-		CallbackStep callback,const std::string &nodeType,bool boPermanentSession)
+
+bool Step::EmitStorageAccess(const std::string &strMsgSerial,StorageCallbackStep callback,
+		const std::string &nodeType,uint32 uiCmd)
 {
-    StepStorageAccess* pStep = new StepStorageAccess(strMsgSerial,nodeType);
-    if (pStep == NULL)
-    {
-        LOG4CPLUS_ERROR_FMT(GetLogger(),"new StepStorageAccess() error!");
-        delete pStep;
-        pStep = NULL;
-        return(false);
-    }
-    if (!RegisterCallback(pStep))
-    {
-        LOG4CPLUS_ERROR_FMT(GetLogger(),"RegisterCallback(pStep) error!");
-        delete pStep;
-        pStep = NULL;
-        return(false);
-    }
-    if (thunder::STATUS_CMD_RUNNING != pStep->Emit(ERR_OK))
-    {
-        DeleteCallback(pStep);
-        return(false);
-    }
-    pStep->SetCallBack(callback,this);
-    AddNextStepSeq(pStep);
-    return true;
+    return GetLabor()->EmitStorageAccess(this,strMsgSerial,callback,nodeType,uiCmd);
+}
+
+bool Step::EmitStandardAccess(const std::string &strMsgSerial,StandardCallbackStep callback,
+		const std::string &nodeType,uint32 uiCmd)
+{
+    return GetLabor()->EmitStandardAccess(this,strMsgSerial,callback,nodeType,uiCmd);
 }
 
 void Step::DelayNextStep()

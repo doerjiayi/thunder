@@ -342,8 +342,11 @@ protected:
     bool AsyncStep(Step* pStep,ev_tstamp dTimeout = 0.0);
     bool AsyncNextStep(Step* pStep,ev_tstamp dTimeout = 0.0);
 
-    bool EmitStepStorageAccess(const std::string &strMsgSerial,
-    		CallbackStep callback,const std::string &nodeType,bool boPermanentSession=false);
+    bool EmitStorageAccess(const std::string &strMsgSerial,StorageCallbackStep callback,
+			const std::string &nodeType="PROXY",uint32 uiCmd = thunder::CMD_REQ_STORATE);
+
+    bool EmitStandardAccess(const std::string &strMsgSerial,StandardCallbackStep callback,
+			const std::string &nodeType,uint32 uiCmd);
     /**
      * @brief 延迟下一个步骤的超时时间
      */
