@@ -139,10 +139,9 @@ protected:
     bool RestartWorker(int iDeathPid);
     bool AddPeriodicTaskEvent();
     bool AddWaitToExitTaskEvent(const MsgShell& stMsgShell,uint32 cmd,uint32 seq);
-    bool AddIoReadEvent(int iFd);
-    bool AddIoWriteEvent(int iFd);
-    //bool AddIoErrorEvent(int iFd);
-    bool RemoveIoWriteEvent(int iFd);
+    bool AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr,int iFd);
+    bool AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr,int iFd);
+    bool RemoveIoWriteEvent(tagConnectionAttr* pTagConnectionAttr);
     bool DelEvents(ev_io** io_watcher_addr);
     bool AddIoTimeout(int iFd, uint32 ulSeq, ev_tstamp dTimeout = 1.0);
     bool AddClientConnFrequencyTimeout(in_addr_t iAddr, ev_tstamp dTimeout = 60.0);
@@ -159,7 +158,7 @@ protected:
     bool SendToWorkerWithMod(unsigned int uiModFactor,const MsgHead& oMsgHead, const MsgBody& oMsgBody);    // 向Worker发送数据
     bool DisposeDataFromWorker(const MsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody, thunder::CBuffer* pSendBuff);
     bool DisposeDataAndTransferFd(const MsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody, thunder::CBuffer* pSendBuff);
-    bool DisposeDataFromCenter(const MsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody, thunder::CBuffer* pSendBuff, thunder::CBuffer* pWaitForSendBuff);
+    bool DisposeDataFromCenter(const MsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody, tagConnectionAttr* pTagConnectionAttr);
 
     uint32 GetSequence()
     {

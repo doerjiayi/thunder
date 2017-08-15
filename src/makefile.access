@@ -68,11 +68,9 @@ all: $(TARGET)
 
 WebServer: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
 
 LoginServer: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
 
 GateServer: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
@@ -85,6 +83,14 @@ FileServer: $(OBJS)
 ESAgentR: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
 	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
+
+install: 
+	#安装执行文件
+	test  -d ../../../deploy/bin/ && install -v WebServer ../../../deploy/bin/
+	test  -d ../../../deploy/bin/ && install -v LoginServer ../../../deploy/bin/
+	test  -d ../../../deploy/bin/ && install -v GateServer ../../../deploy/bin/
+	test  -d ../../../deploy/bin/ && install -v FileServer ../../../deploy/bin/
+	test  -d ../../../deploy/bin/ && install -v ESAgentR ../../../deploy/bin/
 
 %.o:%.cpp
 	$(CXX) $(INC) $(CPPFLAGS) $(CFLAGS) $(DEFINE_SERVER) $(UNITTEST) -c -o $@ $< $(LDFLAGS)

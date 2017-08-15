@@ -4035,85 +4035,77 @@ bool ThunderWorker::AddPeriodicTaskEvent()
     return(true);
 }
 
-bool ThunderWorker::AddIoReadEvent(int iFd)
+bool ThunderWorker::AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr,int iFd)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     ev_io* io_watcher = NULL;
-    std::map<int, tagConnectionAttr*>::iterator iter =  m_mapFdAttr.find(iFd);
-    if (iter != m_mapFdAttr.end())
-    {
-        if (NULL == iter->second->pIoWatcher)
-        {
-            io_watcher = new ev_io();
-            if (io_watcher == NULL)
-            {
-                LOG4_ERROR("new io_watcher error!");
-                return(false);
-            }
-            tagIoWatcherData* pData = new tagIoWatcherData();
-            if (pData == NULL)
-            {
-                LOG4_ERROR("new tagIoWatcherData error!");
-                delete io_watcher;
-                return(false);
-            }
-            pData->iFd = iFd;
-            pData->ulSeq = iter->second->ulSeq;
-            pData->pWorker = this;
-            ev_io_init (io_watcher, IoCallback, iFd, EV_READ);
-            io_watcher->data = (void*)pData;
-            iter->second->pIoWatcher = io_watcher;
-            ev_io_start (m_loop, io_watcher);
-        }
-        else
-        {
-            io_watcher = iter->second->pIoWatcher;
-            ev_io_stop(m_loop, io_watcher);
-            ev_io_set(io_watcher, io_watcher->fd, io_watcher->events | EV_READ);
-            ev_io_start (m_loop, io_watcher);
-        }
-    }
+	if (NULL == pTagConnectionAttr->pIoWatcher)
+	{
+		io_watcher = new ev_io();
+		if (io_watcher == NULL)
+		{
+			LOG4_ERROR("new io_watcher error!");
+			return(false);
+		}
+		tagIoWatcherData* pData = new tagIoWatcherData();
+		if (pData == NULL)
+		{
+			LOG4_ERROR("new tagIoWatcherData error!");
+			delete io_watcher;
+			return(false);
+		}
+		pData->iFd = iFd;
+		pData->ulSeq = pTagConnectionAttr->ulSeq;
+		pData->pWorker = this;
+		ev_io_init (pTagConnectionAttr->pIoWatcher, IoCallback, iFd, EV_READ);
+		io_watcher->data = (void*)pData;
+		pTagConnectionAttr->pIoWatcher = io_watcher;
+		ev_io_start (m_loop, io_watcher);
+	}
+	else
+	{
+		io_watcher = pTagConnectionAttr->pIoWatcher;
+		ev_io_stop(m_loop, io_watcher);
+		ev_io_set(io_watcher, io_watcher->fd, io_watcher->events | EV_READ);
+		ev_io_start (m_loop, io_watcher);
+	}
     return(true);
 }
 
-bool ThunderWorker::AddIoWriteEvent(int iFd)
+bool ThunderWorker::AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr,int iFd)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     ev_io* io_watcher = NULL;
-    std::map<int, tagConnectionAttr*>::iterator iter =  m_mapFdAttr.find(iFd);
-    if (iter != m_mapFdAttr.end())
-    {
-        if (NULL == iter->second->pIoWatcher)
-        {
-            io_watcher = new ev_io();
-            if (io_watcher == NULL)
-            {
-                LOG4_ERROR("new io_watcher error!");
-                return(false);
-            }
-            tagIoWatcherData* pData = new tagIoWatcherData();
-            if (pData == NULL)
-            {
-                LOG4_ERROR("new tagIoWatcherData error!");
-                delete io_watcher;
-                return(false);
-            }
-            pData->iFd = iFd;
-            pData->ulSeq = iter->second->ulSeq;
-            pData->pWorker = this;
-            ev_io_init (io_watcher, IoCallback, iFd, EV_WRITE);
-            io_watcher->data = (void*)pData;
-            iter->second->pIoWatcher = io_watcher;
-            ev_io_start (m_loop, io_watcher);
-        }
-        else
-        {
-            io_watcher = iter->second->pIoWatcher;
-            ev_io_stop(m_loop, io_watcher);
-            ev_io_set(io_watcher, io_watcher->fd, io_watcher->events | EV_WRITE);
-            ev_io_start (m_loop, io_watcher);
-        }
-    }
+	if (NULL == pTagConnectionAttr->pIoWatcher)
+	{
+		io_watcher = new ev_io();
+		if (io_watcher == NULL)
+		{
+			LOG4_ERROR("new io_watcher error!");
+			return(false);
+		}
+		tagIoWatcherData* pData = new tagIoWatcherData();
+		if (pData == NULL)
+		{
+			LOG4_ERROR("new tagIoWatcherData error!");
+			delete io_watcher;
+			return(false);
+		}
+		pData->iFd = iFd;
+		pData->ulSeq = pTagConnectionAttr->ulSeq;
+		pData->pWorker = this;
+		ev_io_init (io_watcher, IoCallback, iFd, EV_WRITE);
+		io_watcher->data = (void*)pData;
+		pTagConnectionAttr->pIoWatcher = io_watcher;
+		ev_io_start (m_loop, io_watcher);
+	}
+	else
+	{
+		io_watcher = pTagConnectionAttr->pIoWatcher;
+		ev_io_stop(m_loop, io_watcher);
+		ev_io_set(io_watcher, io_watcher->fd, io_watcher->events | EV_WRITE);
+		ev_io_start (m_loop, io_watcher);
+	}
     return(true);
 }
 
@@ -4156,24 +4148,19 @@ bool ThunderWorker::AddIoWriteEvent(int iFd)
 //    return(true);
 //}
 
-bool ThunderWorker::RemoveIoWriteEvent(int iFd)
+bool ThunderWorker::RemoveIoWriteEvent(tagConnectionAttr* pTagConnectionAttr)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
-    ev_io* io_watcher = NULL;
-    std::map<int, tagConnectionAttr*>::iterator iter =  m_mapFdAttr.find(iFd);
-    if (iter != m_mapFdAttr.end())
-    {
-        if (NULL != iter->second->pIoWatcher)
-        {
-            if (iter->second->pIoWatcher->events & EV_WRITE)
-            {
-                io_watcher = iter->second->pIoWatcher;
-                ev_io_stop(m_loop, io_watcher);
-                ev_io_set(io_watcher, io_watcher->fd, io_watcher->events & ~EV_WRITE);
-                ev_io_start (m_loop, iter->second->pIoWatcher);
-            }
-        }
-    }
+	if (NULL != pTagConnectionAttr->pIoWatcher)
+	{
+		if (pTagConnectionAttr->pIoWatcher->events & EV_WRITE)
+		{
+			ev_io* io_watcher = pTagConnectionAttr->pIoWatcher;
+			ev_io_stop(m_loop, io_watcher);
+			ev_io_set(io_watcher, io_watcher->fd, io_watcher->events & ~EV_WRITE);
+			ev_io_start (m_loop, pTagConnectionAttr->pIoWatcher);
+		}
+	}
     return(true);
 }
 

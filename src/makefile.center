@@ -59,7 +59,10 @@ all: $(TARGET)
 
 CenterServer: $(OBJS)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	test  -d ../../../deploy/bin/ && install -v $@ ../../../deploy/bin/
+
+install: 
+	#安装执行文件
+	test  -d ../../../deploy/bin/ && install -v CenterServer ../../../deploy/bin/
 
 %.o:%.cpp
 	$(CXX) $(INC) $(CPPFLAGS) $(CFLAGS) $(DEFINE_SERVER) $(UNITTEST) -c -o $@ $< $(LDFLAGS)

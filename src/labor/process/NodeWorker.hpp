@@ -292,13 +292,15 @@ protected:
     void PreloadCmd();
     void Destroy();
     bool AddPeriodicTaskEvent();
-    bool AddIoReadEvent(int iFd);
-    bool AddIoWriteEvent(int iFd);
-//    bool AddIoErrorEvent(int iFd);
-    bool RemoveIoWriteEvent(int iFd);
+
+    bool AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr,int iFd);
+    bool AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr,int iFd);
+    bool RemoveIoWriteEvent(tagConnectionAttr* pTagConnectionAttr);
+
     bool AddIoReadEvent(std::map<int, tagConnectionAttr*>::iterator iter);
     bool AddIoWriteEvent(std::map<int, tagConnectionAttr*>::iterator iter);
     bool RemoveIoWriteEvent(std::map<int, tagConnectionAttr*>::iterator iter);
+
     bool DelEvents(ev_io** io_watcher_attr);
     bool AddIoTimeout(int iFd, uint32 ulSeq, tagConnectionAttr* pConnAttr, ev_tstamp dTimeout = 1.0);
     tagConnectionAttr* CreateFdAttr(int iFd, uint32 ulSeq, thunder::E_CODEC_TYPE eCodecType = thunder::CODEC_PROTOBUF);

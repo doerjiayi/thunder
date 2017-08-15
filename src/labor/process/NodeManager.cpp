@@ -335,7 +335,7 @@ bool NodeManager::AcceptServerConn(int iFd)
             std::map<int, tagConnectionAttr*>::iterator iter =  m_mapFdAttr.find(iAcceptFd);
             if(AddIoTimeout(iAcceptFd, ulSeq))     // 为了防止大量连接攻击，初始化连接只有一秒即超时，在正常发送第一个数据包之后才采用正常配置的网络IO超时检查
             {
-                if (!AddIoReadEvent(iAcceptFd))
+                if (!AddIoReadEvent(iter->second,iAcceptFd))
                 {
                     DestroyConnect(iter);
                     return(false);
@@ -374,7 +374,8 @@ bool NodeManager::RecvDataAndDispose(tagManagerIoWatcherData* pData, struct ev_i
     }
     else
     {
-        if (pData->ulSeq != conn_iter->second->ulSeq)
+    	tagConnectionAttr* pTagConnectionAttr = conn_iter->second;
+        if (pData->ulSeq != pTagConnectionAttr->ulSeq)
         {
             LOG4_DEBUG("callback seq %llu not match the conn attr seq %llu",
                             pData->ulSeq, conn_iter->second->ulSeq);
@@ -386,23 +387,23 @@ bool NodeManager::RecvDataAndDispose(tagManagerIoWatcherData* pData, struct ev_i
             watcher = NULL;
             return(false);
         }
-        iReadLen = conn_iter->second->pRecvBuff->ReadFD(pData->iFd, iErrno);
+        iReadLen = pTagConnectionAttr->pRecvBuff->ReadFD(pData->iFd, iErrno);
         LOG4_TRACE("recv from fd %d data len %d. "
                         "and conn_iter->second->pRecvBuff->ReadableBytes() = %d", pData->iFd, iReadLen,
                         conn_iter->second->pRecvBuff->ReadableBytes());
         if (iReadLen > 0)
         {
-            while (conn_iter->second->pRecvBuff->ReadableBytes() >= gc_uiMsgHeadSize)
+            while (pTagConnectionAttr->pRecvBuff->ReadableBytes() >= gc_uiMsgHeadSize)
             {
-                LOG4_TRACE("conn_iter->second->pRecvBuff->ReadableBytes() = %d",
-                                conn_iter->second->pRecvBuff->ReadableBytes());
+                LOG4_TRACE("pTagConnectionAttr->pRecvBuff->ReadableBytes() = %d",
+                		pTagConnectionAttr->pRecvBuff->ReadableBytes());
                 //optional fixed32 cmd = 1;
                 //optional fixed32 msgbody_len = 2;
                 //optional fixed32 seq = 3;
                 //optional fixed32 checksum = 4;
                 MsgHead oSwitchMsgHead;
                 bool bResult = oSwitchMsgHead.ParseFromArray(
-                                  conn_iter->second->pRecvBuff->GetRawReadBuffer(), gc_uiMsgHeadSize);
+                		pTagConnectionAttr->pRecvBuff->GetRawReadBuffer(), gc_uiMsgHeadSize);
                 if (bResult)
                 {
                     MsgHead oInMsgHead;
@@ -411,7 +412,7 @@ bool NodeManager::RecvDataAndDispose(tagManagerIoWatcherData* pData, struct ev_i
                     oInMsgHead.set_seq(oSwitchMsgHead.seq() & 0x7FFFFFFF);
                     LOG4_DEBUG("%s() oInMsgHead(%s)",__FUNCTION__,oInMsgHead.DebugString().c_str());
                     MsgBody oInMsgBody;
-                    if (conn_iter->second->pRecvBuff->ReadableBytes() >= gc_uiMsgHeadSize + oInMsgHead.msgbody_len())
+                    if (pTagConnectionAttr->pRecvBuff->ReadableBytes() >= gc_uiMsgHeadSize + oInMsgHead.msgbody_len())
                     {
                         if (0 == oInMsgHead.msgbody_len())  // 无包体的数据包
                         {
@@ -420,41 +421,40 @@ bool NodeManager::RecvDataAndDispose(tagManagerIoWatcherData* pData, struct ev_i
                         else
                         {
                             bResult = oInMsgBody.ParseFromArray(
-                                            conn_iter->second->pRecvBuff->GetRawReadBuffer() + gc_uiMsgHeadSize, oInMsgHead.msgbody_len());
+                            		pTagConnectionAttr->pRecvBuff->GetRawReadBuffer() + gc_uiMsgHeadSize, oInMsgHead.msgbody_len());
                         }
                         if (bResult)
                         {
-                            conn_iter->second->dActiveTime = ev_now(m_loop);
+                        	pTagConnectionAttr->dActiveTime = ev_now(m_loop);
                             bool bContinue = false;     // 是否继续解析下一个数据包
                             MsgShell stMsgShell;
                             stMsgShell.iFd = pData->iFd;
-                            stMsgShell.ulSeq = conn_iter->second->ulSeq;
+                            stMsgShell.ulSeq = pTagConnectionAttr->ulSeq;
 
                             std::map<int, int>::iterator worker_fd_iter = m_mapWorkerFdPid.find(watcher->fd);
                             if (worker_fd_iter == m_mapWorkerFdPid.end())   // 其他Server发过来要将连接传送到某个指定Worker进程信息
                             {
 //                                LOG4_TRACE("strIdentify: %s, m_mapCenterMsgShell.size()=%d",
 //                                                conn_iter->second->strIdentify.c_str(), m_mapCenterMsgShell.size());
-                                std::map<std::string, MsgShell>::iterator center_iter = m_mapCenterMsgShell.find(conn_iter->second->strIdentify);
+                                std::map<std::string, MsgShell>::iterator center_iter = m_mapCenterMsgShell.find(pTagConnectionAttr->strIdentify);
                                 if (center_iter == m_mapCenterMsgShell.end())       // 非与center连接
                                 {
 //                                    LOG4_TRACE("center_iter == m_mapCenterMsgShell.end()");
-                                    bContinue = DisposeDataAndTransferFd(stMsgShell, oInMsgHead, oInMsgBody, conn_iter->second->pSendBuff);
+                                    bContinue = DisposeDataAndTransferFd(stMsgShell, oInMsgHead, oInMsgBody, pTagConnectionAttr->pSendBuff);
                                 }
                                 else
                                 {
 //                                    LOG4_TRACE("center_iter == m_mapCenterMsgShell.end()   else");
-                                    bContinue = DisposeDataFromCenter(stMsgShell, oInMsgHead, oInMsgBody,
-                                                    conn_iter->second->pSendBuff, conn_iter->second->pWaitForSendBuff);
+                                    bContinue = DisposeDataFromCenter(stMsgShell, oInMsgHead, oInMsgBody,pTagConnectionAttr);
                                 }
                             }
                             else    // Worker进程发过来的消息
                             {
-                                bContinue = DisposeDataFromWorker(stMsgShell, oInMsgHead, oInMsgBody, conn_iter->second->pSendBuff);
+                                bContinue = DisposeDataFromWorker(stMsgShell, oInMsgHead, oInMsgBody, pTagConnectionAttr->pSendBuff);
                             }
-                            conn_iter->second->pRecvBuff->SkipBytes(gc_uiMsgHeadSize + oInMsgBody.ByteSize());
-                            conn_iter->second->pRecvBuff->Compact(32784);   // 超过32KB则重新分配内存
-                            conn_iter->second->pSendBuff->Compact(32784);
+                            pTagConnectionAttr->pRecvBuff->SkipBytes(gc_uiMsgHeadSize + oInMsgBody.ByteSize());
+                            pTagConnectionAttr->pRecvBuff->Compact(32784);   // 超过32KB则重新分配内存
+                            pTagConnectionAttr->pSendBuff->Compact(32784);
                             if (!bContinue)
                             {
                                 DestroyConnect(conn_iter);
@@ -511,7 +511,8 @@ bool NodeManager::IoWrite(tagManagerIoWatcherData* pData, struct ev_io* watcher)
     }
     else
     {
-        if (pData->ulSeq != attr_iter->second->ulSeq)
+    	tagConnectionAttr* pTagConnectionAttr = attr_iter->second;
+        if (pData->ulSeq != pTagConnectionAttr->ulSeq)
         {
             LOG4_DEBUG("callback seq %llu not match the conn attr seq %llu",
                             pData->ulSeq, attr_iter->second->ulSeq);
@@ -525,7 +526,7 @@ bool NodeManager::IoWrite(tagManagerIoWatcherData* pData, struct ev_io* watcher)
         }
         int iErrno = 0;
         int iWriteLen = 0;
-        iWriteLen = attr_iter->second->pSendBuff->WriteFD(pData->iFd, iErrno);
+        iWriteLen = pTagConnectionAttr->pSendBuff->WriteFD(pData->iFd, iErrno);
         LOG4_TRACE("iWriteLen = %d, send to fd %d error %d: %s", iWriteLen,
                         pData->iFd, iErrno, strerror_r(iErrno, m_pErrBuff, gc_iErrBuffLen));
         if (iWriteLen < 0)
@@ -538,39 +539,39 @@ bool NodeManager::IoWrite(tagManagerIoWatcherData* pData, struct ev_io* watcher)
             }
             else if (EAGAIN == iErrno)  // 内容未写完，添加或保持监听fd写事件
             {
-                attr_iter->second->dActiveTime = ev_now(m_loop);
-                AddIoWriteEvent(pData->iFd);
+            	pTagConnectionAttr->dActiveTime = ev_now(m_loop);
+                AddIoWriteEvent(pTagConnectionAttr,pData->iFd);
             }
         }
         else if (iWriteLen > 0)
         {
-            attr_iter->second->dActiveTime = ev_now(m_loop);
+        	pTagConnectionAttr->dActiveTime = ev_now(m_loop);
             if (iWriteLen == (int)attr_iter->second->pSendBuff->ReadableBytes())  // 已无内容可写，取消监听fd写事件
             {
-                RemoveIoWriteEvent(pData->iFd);
+                RemoveIoWriteEvent(pTagConnectionAttr);
             }
             else    // 内容未写完，添加或保持监听fd写事件
             {
-                AddIoWriteEvent(pData->iFd);
+                AddIoWriteEvent(pTagConnectionAttr,pData->iFd);
             }
         }
         else    // iWriteLen == 0 写缓冲区为空
         {
 //            LOG4_TRACE("pData->iFd %d, watcher->fd %d, iter->second->pWaitForSendBuff->ReadableBytes()=%d",
 //                            pData->iFd, watcher->fd, attr_iter->second->pWaitForSendBuff->ReadableBytes());
-            if (attr_iter->second->pWaitForSendBuff->ReadableBytes() > 0)    // 存在等待发送的数据，说明本次写事件是connect之后的第一个写事件
+            if (pTagConnectionAttr->pWaitForSendBuff->ReadableBytes() > 0)    // 存在等待发送的数据，说明本次写事件是connect之后的第一个写事件
             {
-                std::map<uint32, int>::iterator index_iter = m_mapSeq2WorkerIndex.find(attr_iter->second->ulSeq);
+                std::map<uint32, int>::iterator index_iter = m_mapSeq2WorkerIndex.find(pTagConnectionAttr->ulSeq);
                 if (index_iter != m_mapSeq2WorkerIndex.end())
                 {
                     MsgShell stMsgShell;
                     stMsgShell.iFd = pData->iFd;
-                    stMsgShell.ulSeq = attr_iter->second->ulSeq;
+                    stMsgShell.ulSeq = pTagConnectionAttr->ulSeq;
                     //AddInnerFd(stMsgShell); 只有Worker需要
-                    std::map<std::string, MsgShell>::iterator center_iter = m_mapCenterMsgShell.find(attr_iter->second->strIdentify);
+                    std::map<std::string, MsgShell>::iterator center_iter = m_mapCenterMsgShell.find(pTagConnectionAttr->strIdentify);
                     if (center_iter == m_mapCenterMsgShell.end())
                     {
-                        m_mapCenterMsgShell.insert(std::pair<std::string, MsgShell>(attr_iter->second->strIdentify, stMsgShell));
+                        m_mapCenterMsgShell.insert(std::pair<std::string, MsgShell>(pTagConnectionAttr->strIdentify, stMsgShell));
                     }
                     else
                     {
@@ -772,16 +773,18 @@ bool NodeManager::SendTo(const MsgShell& stMsgShell)
     }
     else
     {
-        if (iter->second->ulSeq == stMsgShell.ulSeq)
+    	tagConnectionAttr* pTagConnectionAttr = iter->second;
+        if (pTagConnectionAttr->ulSeq == stMsgShell.ulSeq)
         {
             int iErrno = 0;
             int iWriteLen = 0;
-            int iNeedWriteLen = (int)(iter->second->pWaitForSendBuff->ReadableBytes());
-            int iWriteIdx = iter->second->pSendBuff->GetWriteIndex();
-            iWriteLen = iter->second->pSendBuff->Write(iter->second->pWaitForSendBuff, iter->second->pWaitForSendBuff->ReadableBytes());
+            int iNeedWriteLen = (int)(pTagConnectionAttr->pWaitForSendBuff->ReadableBytes());
+            int iWriteIdx = pTagConnectionAttr->pSendBuff->GetWriteIndex();
+            iWriteLen = pTagConnectionAttr->pSendBuff->Write(
+            		pTagConnectionAttr->pWaitForSendBuff, pTagConnectionAttr->pWaitForSendBuff->ReadableBytes());
             if (iWriteLen == iNeedWriteLen)
             {
-                iNeedWriteLen = (int)iter->second->pSendBuff->ReadableBytes();
+                iNeedWriteLen = (int)pTagConnectionAttr->pSendBuff->ReadableBytes();
                 iWriteLen = iter->second->pSendBuff->WriteFD(stMsgShell.iFd, iErrno);
                 if (iWriteLen < 0)
                 {
@@ -795,7 +798,7 @@ bool NodeManager::SendTo(const MsgShell& stMsgShell)
                     else if (EAGAIN == iErrno)  // 内容未写完，添加或保持监听fd写事件
                     {
                         iter->second->dActiveTime = ev_now(m_loop);
-                        AddIoWriteEvent(stMsgShell.iFd);
+                        AddIoWriteEvent(pTagConnectionAttr,stMsgShell.iFd);
                     }
                 }
                 else if (iWriteLen > 0)
@@ -803,11 +806,11 @@ bool NodeManager::SendTo(const MsgShell& stMsgShell)
                     iter->second->dActiveTime = ev_now(m_loop);
                     if (iWriteLen == iNeedWriteLen)  // 已无内容可写，取消监听fd写事件
                     {
-                        RemoveIoWriteEvent(stMsgShell.iFd);
+                        RemoveIoWriteEvent(pTagConnectionAttr);
                     }
                     else    // 内容未写完，添加或保持监听fd写事件
                     {
-                        AddIoWriteEvent(stMsgShell.iFd);
+                        AddIoWriteEvent(pTagConnectionAttr,stMsgShell.iFd);
                     }
                 }
                 return(true);
@@ -815,7 +818,7 @@ bool NodeManager::SendTo(const MsgShell& stMsgShell)
             else
             {
                 LOG4_ERROR("write to send buff error, iWriteLen = %d!", iWriteLen);
-                iter->second->pSendBuff->SetWriteIndex(iWriteIdx);
+                pTagConnectionAttr->pSendBuff->SetWriteIndex(iWriteIdx);
                 return(false);
             }
         }
@@ -834,7 +837,8 @@ bool NodeManager::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, co
     }
     else
     {
-        if (iter->second->ulSeq == stMsgShell.ulSeq)
+    	tagConnectionAttr* pTagConnectionAttr = iter->second;
+        if (pTagConnectionAttr->ulSeq == stMsgShell.ulSeq)
         {
             int iErrno = 0;
             int iWriteLen = 0;
@@ -845,23 +849,23 @@ bool NodeManager::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, co
             oSwitchMsgHead.set_seq(oMsgHead.seq() | 0x80000000);
 
             int iNeedWriteLen = oSwitchMsgHead.ByteSize();
-            int iWriteIdx = iter->second->pSendBuff->GetWriteIndex();
-            iWriteLen = iter->second->pSendBuff->Write(oSwitchMsgHead.SerializeAsString().c_str(), oSwitchMsgHead.ByteSize());
+            int iWriteIdx = pTagConnectionAttr->pSendBuff->GetWriteIndex();
+            iWriteLen = pTagConnectionAttr->pSendBuff->Write(oSwitchMsgHead.SerializeAsString().c_str(), oSwitchMsgHead.ByteSize());
             LOG4_TRACE("iWriteLen = %d,oSwitchMsgHead size(%u),oMsgHead(%s)",
                             iWriteLen,oSwitchMsgHead.ByteSize(),oMsgHead.DebugString().c_str());
             if (iWriteLen != iNeedWriteLen)
             {
                 LOG4_ERROR("write to send buff error, iWriteLen = %d!", iWriteLen);
-                iter->second->pSendBuff->SetWriteIndex(iWriteIdx);
+                pTagConnectionAttr->pSendBuff->SetWriteIndex(iWriteIdx);
                 return(false);
             }
             iNeedWriteLen = oMsgBody.ByteSize();
-            iWriteLen = iter->second->pSendBuff->Write(oMsgBody.SerializeAsString().c_str(), oMsgBody.ByteSize());
+            iWriteLen = pTagConnectionAttr->pSendBuff->Write(oMsgBody.SerializeAsString().c_str(), oMsgBody.ByteSize());
             LOG4_TRACE("iWriteLen = %d,oMsgBody size(%u)", iWriteLen,oMsgBody.ByteSize());
             if (iWriteLen == iNeedWriteLen)
             {
-                iNeedWriteLen = (int)iter->second->pSendBuff->ReadableBytes();
-                iWriteLen = iter->second->pSendBuff->WriteFD(stMsgShell.iFd, iErrno);
+                iNeedWriteLen = (int)pTagConnectionAttr->pSendBuff->ReadableBytes();
+                iWriteLen = pTagConnectionAttr->pSendBuff->WriteFD(stMsgShell.iFd, iErrno);
                 LOG4_TRACE("iWriteLen = %d, send to fd %d error %d: %s", iWriteLen,
                                 stMsgShell.iFd, iErrno, strerror_r(iErrno, m_pErrBuff, gc_iErrBuffLen));
                 if (iWriteLen < 0)
@@ -876,7 +880,7 @@ bool NodeManager::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, co
                     else if (EAGAIN == iErrno)  // 内容未写完，添加或保持监听fd写事件
                     {
                         iter->second->dActiveTime = ev_now(m_loop);
-                        AddIoWriteEvent(stMsgShell.iFd);
+                        AddIoWriteEvent(pTagConnectionAttr,stMsgShell.iFd);
                     }
                 }
                 else if (iWriteLen > 0)
@@ -884,11 +888,11 @@ bool NodeManager::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, co
                     iter->second->dActiveTime = ev_now(m_loop);
                     if (iWriteLen == iNeedWriteLen)  // 已无内容可写，取消监听fd写事件
                     {
-                        RemoveIoWriteEvent(stMsgShell.iFd);
+                        RemoveIoWriteEvent(pTagConnectionAttr);
                     }
                     else    // 内容未写完，添加或保持监听fd写事件
                     {
-                        AddIoWriteEvent(stMsgShell.iFd);
+                        AddIoWriteEvent(pTagConnectionAttr,stMsgShell.iFd);
                     }
                 }
                 return(true);
@@ -896,7 +900,7 @@ bool NodeManager::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, co
             else
             {
                 LOG4_ERROR("write to send buff error!");
-                iter->second->pSendBuff->SetWriteIndex(iWriteIdx);
+                pTagConnectionAttr->pSendBuff->SetWriteIndex(iWriteIdx);
                 return(false);
             }
         }
@@ -962,12 +966,13 @@ bool NodeManager::AutoSend(const std::string& strIdentify, const MsgHead& oMsgHe
     int reuse = 1;
     ::setsockopt(iFd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
     uint32 ulSeq = GetSequence();
-    if (CreateFdAttr(iFd, ulSeq))
+    tagConnectionAttr* pTagConnectionAttr = CreateFdAttr(iFd, ulSeq);
+    if (pTagConnectionAttr)
     {
         std::map<int, tagConnectionAttr*>::iterator iter =  m_mapFdAttr.find(iFd);
         if(AddIoTimeout(iFd, ulSeq, 1.5))
         {
-            if (!AddIoReadEvent(iFd))
+            if (!AddIoReadEvent(pTagConnectionAttr,iFd))
             {
                 DestroyConnect(iter);
                 return(false);
@@ -977,7 +982,7 @@ bool NodeManager::AutoSend(const std::string& strIdentify, const MsgHead& oMsgHe
 //                DestroyConnect(iter);
 //                return(false);
 //            }
-            if (!AddIoWriteEvent(iFd))
+            if (!AddIoWriteEvent(pTagConnectionAttr,iFd))
             {
                 DestroyConnect(iter);
                 return(false);
@@ -1307,12 +1312,24 @@ void NodeManager::CreateWorker()
             m_mapWorker.insert(std::pair<int, tagWorkerAttr>(iPid, stWorkerAttr));
             m_mapWorkerFdPid.insert(std::pair<int, int>(iControlFds[0], iPid));
             m_mapWorkerFdPid.insert(std::pair<int, int>(iDataFds[0], iPid));
-            CreateFdAttr(iControlFds[0], GetSequence());
-            CreateFdAttr(iDataFds[0], GetSequence());
-            AddIoReadEvent(iControlFds[0]);
-//            AddIoErrorEvent(iControlFds[0]);
-            AddIoReadEvent(iDataFds[0]);
-//            AddIoErrorEvent(iDataFds[0]);
+            tagConnectionAttr* pTagConnectionAttrControl = CreateFdAttr(iControlFds[0], GetSequence());
+            tagConnectionAttr* pTagConnectionAttrdata = CreateFdAttr(iDataFds[0], GetSequence());
+            if (pTagConnectionAttrControl)
+            {
+            	AddIoReadEvent(pTagConnectionAttrControl,iControlFds[0]);
+            }
+            else
+            {
+            	LOG4_ERROR("failed to create pTagConnectionAttrControl");
+            }
+            if (pTagConnectionAttrdata)
+            {
+            	AddIoReadEvent(pTagConnectionAttrdata,iDataFds[0]);
+            }
+            else
+            {
+            	LOG4_ERROR("failed to create pTagConnectionAttrdata");
+            }
         }
         else
         {
@@ -1329,8 +1346,16 @@ bool NodeManager::CreateEvents()
     {
         return(false);
     }
-    CreateFdAttr(m_iS2SListenFd, GetSequence());
-    AddIoReadEvent(m_iS2SListenFd);
+    tagConnectionAttr* ptagConnectionAttr = CreateFdAttr(m_iS2SListenFd, GetSequence());
+    if (ptagConnectionAttr)
+    {
+    	AddIoReadEvent(ptagConnectionAttr,m_iS2SListenFd);
+    }
+    else
+    {
+    	LOG4_ERROR("%s() failed to create ptagConnectionAttr for m_iS2SListenFd:%d",
+    			__FUNCTION__,m_iS2SListenFd);
+    }
 //    AddIoErrorEvent(m_iS2SListenFd);
 #ifdef NODE_TYPE_GATE
     CreateFdAttr(m_iC2SListenFd, GetSequence());
@@ -1515,7 +1540,7 @@ bool NodeManager::RestartWorker(int iDeathPid)
             }
             */
         }
-
+        //父子进程使用unixsocket通信
         int iControlFds[2];
         int iDataFds[2];
         if (socketpair(PF_UNIX, SOCK_STREAM, 0, iControlFds) < 0)
@@ -1559,12 +1584,24 @@ bool NodeManager::RestartWorker(int iDeathPid)
             m_mapWorker.insert(std::pair<int, tagWorkerAttr>(iNewPid, stWorkerAttr));
             m_mapWorkerFdPid.insert(std::pair<int, int>(iControlFds[0], iNewPid));
             m_mapWorkerFdPid.insert(std::pair<int, int>(iDataFds[0], iNewPid));
-            CreateFdAttr(iControlFds[0], GetSequence());
-            CreateFdAttr(iDataFds[0], GetSequence());
-            AddIoReadEvent(iControlFds[0]);
-//            AddIoErrorEvent(iControlFds[0]);
-            AddIoReadEvent(iDataFds[0]);
-//            AddIoErrorEvent(iDataFds[0]);
+            tagConnectionAttr* ptagConnectionAttrControl = CreateFdAttr(iControlFds[0], GetSequence());
+            tagConnectionAttr* ptagConnectionAttrData = CreateFdAttr(iDataFds[0], GetSequence());
+            if (ptagConnectionAttrControl)
+            {
+            	AddIoReadEvent(ptagConnectionAttrControl,iControlFds[0]);
+            }
+            else
+            {
+            	LOG4_ERROR("failed to create ptagConnectionAttrControl");
+            }
+            if (ptagConnectionAttrData)
+            {
+            	AddIoReadEvent(ptagConnectionAttrData,iDataFds[0]);
+            }
+            else
+            {
+            	LOG4_ERROR("failed to create ptagConnectionAttrData");
+            }
             restart_num_iter = m_mapWorkerRestartNum.find(iWorkerIndex);
             if (restart_num_iter == m_mapWorkerRestartNum.end())
             {
@@ -1632,86 +1669,78 @@ bool NodeManager::AddWaitToExitTaskEvent(const MsgShell& stMsgShell,uint32 cmd,u
     return(true);
 }
 
-bool NodeManager::AddIoReadEvent(int iFd)
+bool NodeManager::AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr,int iFd)
 {
     LOG4_TRACE("%s(fd %d)", __FUNCTION__, iFd);
     ev_io* io_watcher = NULL;
-    std::map<int, tagConnectionAttr*>::iterator iter =  m_mapFdAttr.find(iFd);
-    if (iter != m_mapFdAttr.end())
-    {
-        if (NULL == iter->second->pIoWatcher)
-        {
-            io_watcher = new ev_io();
-            if (io_watcher == NULL)
-            {
-                LOG4_ERROR("new io_watcher error!");
-                return(false);
-            }
-            tagManagerIoWatcherData* pData = new tagManagerIoWatcherData();
-            if (pData == NULL)
-            {
-                LOG4_ERROR("new tagIoWatcherData error!");
-                delete io_watcher;
-                return(false);
-            }
-            pData->iFd = iFd;
-            pData->ulSeq = iter->second->ulSeq;
-            pData->pManager = this;
-            ev_io_init (io_watcher, IoCallback, iFd, EV_READ);
-            iter->second->pIoWatcher = io_watcher;
-            io_watcher->data = (void*)pData;
-            ev_io_start (m_loop, io_watcher);
-        }
-        else
-        {
-            io_watcher = iter->second->pIoWatcher;
-            ev_io_stop(m_loop, io_watcher);
-            ev_io_set(io_watcher, io_watcher->fd, io_watcher->events | EV_READ);
-            ev_io_start (m_loop, io_watcher);
-        }
-    }
+	if (NULL == pTagConnectionAttr->pIoWatcher)
+	{
+		io_watcher = new ev_io();
+		if (io_watcher == NULL)
+		{
+			LOG4_ERROR("new io_watcher error!");
+			return(false);
+		}
+		tagManagerIoWatcherData* pData = new tagManagerIoWatcherData();
+		if (pData == NULL)
+		{
+			LOG4_ERROR("new tagIoWatcherData error!");
+			delete io_watcher;
+			return(false);
+		}
+		pData->iFd = iFd;
+		pData->ulSeq = pTagConnectionAttr->ulSeq;
+		pData->pManager = this;
+		ev_io_init (io_watcher, IoCallback, iFd, EV_READ);
+		pTagConnectionAttr->pIoWatcher = io_watcher;
+		io_watcher->data = (void*)pData;
+		ev_io_start (m_loop, io_watcher);
+	}
+	else
+	{
+		io_watcher = pTagConnectionAttr->pIoWatcher;
+		ev_io_stop(m_loop, io_watcher);
+		ev_io_set(io_watcher, io_watcher->fd, io_watcher->events | EV_READ);
+		ev_io_start (m_loop, io_watcher);
+	}
     return(true);
 }
 
-bool NodeManager::AddIoWriteEvent(int iFd)
+bool NodeManager::AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr,int iFd)
 {
     LOG4_TRACE("%s(fd %d)", __FUNCTION__, iFd);
     ev_io* io_watcher = NULL;
-    std::map<int, tagConnectionAttr*>::iterator iter =  m_mapFdAttr.find(iFd);
-    if (iter != m_mapFdAttr.end())
-    {
-        if (NULL == iter->second->pIoWatcher)
-        {
-            io_watcher = new ev_io();
-            if (io_watcher == NULL)
-            {
-                LOG4_ERROR("new io_watcher error!");
-                return(false);
-            }
-            tagManagerIoWatcherData* pData = new tagManagerIoWatcherData();
-            if (pData == NULL)
-            {
-                LOG4_ERROR("new tagIoWatcherData error!");
-                delete io_watcher;
-                return(false);
-            }
-            pData->iFd = iFd;
-            pData->ulSeq = iter->second->ulSeq;
-            pData->pManager = this;
+	if (NULL == pTagConnectionAttr->pIoWatcher)
+	{
+		io_watcher = new ev_io();
+		if (io_watcher == NULL)
+		{
+			LOG4_ERROR("new io_watcher error!");
+			return(false);
+		}
+		tagManagerIoWatcherData* pData = new tagManagerIoWatcherData();
+		if (pData == NULL)
+		{
+			LOG4_ERROR("new tagIoWatcherData error!");
+			delete io_watcher;
+			return(false);
+		}
+		pData->iFd = iFd;
+		pData->ulSeq = pTagConnectionAttr->ulSeq;
+		pData->pManager = this;
 
-            ev_io_init (io_watcher, IoCallback, iFd, EV_WRITE);
-            iter->second->pIoWatcher = io_watcher;
-            io_watcher->data = (void*)pData;
-            ev_io_start (m_loop, io_watcher);
-        }
-        else
-        {
-            io_watcher = iter->second->pIoWatcher;
-            ev_io_stop(m_loop, io_watcher);
-            ev_io_set(io_watcher, io_watcher->fd, io_watcher->events | EV_WRITE);
-            ev_io_start (m_loop, io_watcher);
-        }
-    }
+		ev_io_init (io_watcher, IoCallback, iFd, EV_WRITE);
+		pTagConnectionAttr->pIoWatcher = io_watcher;
+		io_watcher->data = (void*)pData;
+		ev_io_start (m_loop, io_watcher);
+	}
+	else
+	{
+		io_watcher = pTagConnectionAttr->pIoWatcher;
+		ev_io_stop(m_loop, io_watcher);
+		ev_io_set(io_watcher, io_watcher->fd, io_watcher->events | EV_WRITE);
+		ev_io_start (m_loop, io_watcher);
+	}
     return(true);
 }
 //
@@ -1754,24 +1783,20 @@ bool NodeManager::AddIoWriteEvent(int iFd)
 //    return(true);
 //}
 
-bool NodeManager::RemoveIoWriteEvent(int iFd)
+bool NodeManager::RemoveIoWriteEvent(tagConnectionAttr* pTagConnectionAttr)
 {
-    LOG4_TRACE("%s(fd %d)", __FUNCTION__, iFd);
+    LOG4_TRACE("%s", __FUNCTION__);
     ev_io* io_watcher = NULL;
-    std::map<int, tagConnectionAttr*>::iterator iter =  m_mapFdAttr.find(iFd);
-    if (iter != m_mapFdAttr.end())
-    {
-        if (NULL != iter->second->pIoWatcher)
-        {
-            if (iter->second->pIoWatcher->events & EV_WRITE)
-            {
-                io_watcher = iter->second->pIoWatcher;
-                ev_io_stop(m_loop, io_watcher);
-                ev_io_set(io_watcher, io_watcher->fd, io_watcher->events & (~EV_WRITE));
-                ev_io_start (m_loop, iter->second->pIoWatcher);
-            }
-        }
-    }
+	if (pTagConnectionAttr->pIoWatcher)
+	{
+		if (pTagConnectionAttr->pIoWatcher->events & EV_WRITE)
+		{
+			io_watcher = pTagConnectionAttr->pIoWatcher;
+			ev_io_stop(m_loop, io_watcher);
+			ev_io_set(io_watcher, io_watcher->fd, io_watcher->events & (~EV_WRITE));
+			ev_io_start (m_loop, pTagConnectionAttr->pIoWatcher);
+		}
+	}
     return(true);
 }
 
@@ -2346,11 +2371,12 @@ bool NodeManager::SendToWorker(const MsgHead& oMsgHead, const MsgBody& oMsgBody)
         worker_conn_iter = m_mapFdAttr.find(worker_iter->second.iControlFd);
         if (worker_conn_iter != m_mapFdAttr.end())
         {
-            worker_conn_iter->second->pSendBuff->Write(oMsgHead.SerializeAsString().c_str(), oMsgHead.ByteSize());
-            worker_conn_iter->second->pSendBuff->Write(oMsgBody.SerializeAsString().c_str(), oMsgBody.ByteSize());
-            iNeedWriteLen = worker_conn_iter->second->pSendBuff->ReadableBytes();
+        	tagConnectionAttr* pTagConnectionAttr = worker_conn_iter->second;
+        	pTagConnectionAttr->pSendBuff->Write(oMsgHead.SerializeAsString().c_str(), oMsgHead.ByteSize());
+        	pTagConnectionAttr->pSendBuff->Write(oMsgBody.SerializeAsString().c_str(), oMsgBody.ByteSize());
+            iNeedWriteLen = pTagConnectionAttr->pSendBuff->ReadableBytes();
             LOG4_DEBUG("send cmd %d seq %llu to worker %d", oMsgHead.cmd(), oMsgHead.seq(), worker_iter->second.iWorkerIndex);
-            iWriteLen = worker_conn_iter->second->pSendBuff->WriteFD(worker_conn_iter->first, iErrno);
+            iWriteLen = pTagConnectionAttr->pSendBuff->WriteFD(worker_conn_iter->first, iErrno);
             if (iWriteLen < 0)
             {
                 if (EAGAIN != iErrno && EINTR != iErrno)    // 对非阻塞socket而言，EAGAIN不是一种错误;EINTR即errno为4，错误描述Interrupted system call，操作也应该继续。
@@ -2361,7 +2387,7 @@ bool NodeManager::SendToWorker(const MsgHead& oMsgHead, const MsgBody& oMsgBody)
                 else if (EAGAIN == iErrno)  // 内容未写完，添加或保持监听fd写事件
                 {
                     worker_conn_iter->second->dActiveTime = ev_now(m_loop);
-                    AddIoWriteEvent(worker_conn_iter->first);
+                    AddIoWriteEvent(pTagConnectionAttr,worker_conn_iter->first);
                 }
             }
             else if (iWriteLen > 0)
@@ -2371,11 +2397,11 @@ bool NodeManager::SendToWorker(const MsgHead& oMsgHead, const MsgBody& oMsgBody)
                 {
                     LOG4_DEBUG("send to worker %d success, data len %d, cmd %d seq %llu",
                                     worker_iter->second.iWorkerIndex, iWriteLen, oMsgHead.cmd(), oMsgHead.seq());
-                    RemoveIoWriteEvent(worker_conn_iter->first);
+                    RemoveIoWriteEvent(pTagConnectionAttr);
                 }
                 else    // 内容未写完，添加或保持监听fd写事件
                 {
-                    AddIoWriteEvent(worker_conn_iter->first);
+                    AddIoWriteEvent(pTagConnectionAttr,worker_conn_iter->first);
                 }
             }
             worker_conn_iter->second->pSendBuff->Compact(32784);
@@ -2399,11 +2425,12 @@ bool NodeManager::SendToWorkerWithMod(unsigned int uiModFactor,const MsgHead& oM
             worker_conn_iter = m_mapFdAttr.find(worker_iter->second.iControlFd);
             if (worker_conn_iter != m_mapFdAttr.end())
             {
-                worker_conn_iter->second->pSendBuff->Write(oMsgHead.SerializeAsString().c_str(), oMsgHead.ByteSize());
-                worker_conn_iter->second->pSendBuff->Write(oMsgBody.SerializeAsString().c_str(), oMsgBody.ByteSize());
-                iNeedWriteLen = worker_conn_iter->second->pSendBuff->ReadableBytes();
+            	tagConnectionAttr* pTagConnectionAttr = worker_conn_iter->second;
+            	pTagConnectionAttr->pSendBuff->Write(oMsgHead.SerializeAsString().c_str(), oMsgHead.ByteSize());
+            	pTagConnectionAttr->pSendBuff->Write(oMsgBody.SerializeAsString().c_str(), oMsgBody.ByteSize());
+                iNeedWriteLen = pTagConnectionAttr->pSendBuff->ReadableBytes();
                 LOG4_DEBUG("send cmd %d seq %llu to worker %d", oMsgHead.cmd(), oMsgHead.seq(), worker_iter->second.iWorkerIndex);
-                iWriteLen = worker_conn_iter->second->pSendBuff->WriteFD(worker_conn_iter->first, iErrno);
+                iWriteLen = pTagConnectionAttr->pSendBuff->WriteFD(worker_conn_iter->first, iErrno);
                 if (iWriteLen < 0)
                 {
                     if (EAGAIN != iErrno && EINTR != iErrno)    // 对非阻塞socket而言，EAGAIN不是一种错误;EINTR即errno为4，错误描述Interrupted system call，操作也应该继续。
@@ -2413,8 +2440,8 @@ bool NodeManager::SendToWorkerWithMod(unsigned int uiModFactor,const MsgHead& oM
                     }
                     else if (EAGAIN == iErrno)  // 内容未写完，添加或保持监听fd写事件
                     {
-                        worker_conn_iter->second->dActiveTime = ev_now(m_loop);
-                        AddIoWriteEvent(worker_conn_iter->first);
+                    	pTagConnectionAttr->dActiveTime = ev_now(m_loop);
+                        AddIoWriteEvent(pTagConnectionAttr,worker_conn_iter->first);
                     }
                 }
                 else if (iWriteLen > 0)
@@ -2424,14 +2451,14 @@ bool NodeManager::SendToWorkerWithMod(unsigned int uiModFactor,const MsgHead& oM
                     {
                         LOG4_DEBUG("send to worker %d success, data len %d, cmd %d seq %llu",
                                         worker_iter->second.iWorkerIndex, iWriteLen, oMsgHead.cmd(), oMsgHead.seq());
-                        RemoveIoWriteEvent(worker_conn_iter->first);
+                        RemoveIoWriteEvent(pTagConnectionAttr);
                     }
                     else    // 内容未写完，添加或保持监听fd写事件
                     {
-                        AddIoWriteEvent(worker_conn_iter->first);
+                        AddIoWriteEvent(pTagConnectionAttr,worker_conn_iter->first);
                     }
                 }
-                worker_conn_iter->second->pSendBuff->Compact(32784);
+                pTagConnectionAttr->pSendBuff->Compact(32784);
             }
             return(true);
         }
@@ -2500,7 +2527,8 @@ bool NodeManager::DisposeDataFromWorker(const MsgShell& stMsgShell, const MsgHea
     return(true);
 }
 
-bool NodeManager::DisposeDataAndTransferFd(const MsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody, thunder::CBuffer* pSendBuff)
+bool NodeManager::DisposeDataAndTransferFd(const MsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody,
+		thunder::CBuffer* pSendBuff)
 {
     LOG4_DEBUG("%s(cmd %u, seq %u)", __FUNCTION__, oInMsgHead.cmd(), oInMsgHead.seq());
     int iErrno = 0;
@@ -2577,10 +2605,11 @@ bool NodeManager::DisposeDataFromCenter(
                 const MsgShell& stMsgShell,
                 const MsgHead& oInMsgHead,
                 const MsgBody& oInMsgBody,
-                thunder::CBuffer* pSendBuff,
-                thunder::CBuffer* pWaitForSendBuff)
+				tagConnectionAttr* pTagConnectionAttr)
 {
     LOG4_DEBUG("%s(cmd %u, seq %u)", __FUNCTION__, oInMsgHead.cmd(), oInMsgHead.seq());
+    thunder::CBuffer* pSendBuff = pTagConnectionAttr->pSendBuff;
+	thunder::CBuffer* pWaitForSendBuff = pTagConnectionAttr->pWaitForSendBuff;
     int iErrno = 0;
     if (gc_uiCmdReq & oInMsgHead.cmd())    // 新请求，直接转发给Worker，并回复Center已收到请求
     {
@@ -2660,7 +2689,7 @@ bool NodeManager::DisposeDataFromCenter(
                 oMsgHead.set_seq(oInMsgHead.seq());
                 oMsgHead.set_msgbody_len(oInMsgHead.msgbody_len());
                 SendToWorker(oMsgHead, oInMsgBody);
-                RemoveIoWriteEvent(stMsgShell.iFd);
+                RemoveIoWriteEvent(pTagConnectionAttr);
             }
             else
             {
@@ -2698,18 +2727,18 @@ bool NodeManager::DisposeDataFromCenter(
                 }
                 else if (EAGAIN == iErrno)  // 内容未写完，添加或保持监听fd写事件
                 {
-                    AddIoWriteEvent(stMsgShell.iFd);
+                    AddIoWriteEvent(pTagConnectionAttr,stMsgShell.iFd);
                 }
             }
             else if (iWriteLen > 0)
             {
                 if (iWriteLen == iNeedWriteLen)  // 已无内容可写，取消监听fd写事件
                 {
-                    RemoveIoWriteEvent(stMsgShell.iFd);
+                    RemoveIoWriteEvent(pTagConnectionAttr);
                 }
                 else    // 内容未写完，添加或保持监听fd写事件
                 {
-                    AddIoWriteEvent(stMsgShell.iFd);
+                    AddIoWriteEvent(pTagConnectionAttr,stMsgShell.iFd);
                 }
             }
         }
