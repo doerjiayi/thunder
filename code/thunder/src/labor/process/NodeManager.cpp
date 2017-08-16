@@ -1362,7 +1362,7 @@ bool NodeManager::CreateEvents()
 //    AddIoErrorEvent(m_iS2SListenFd);
 #ifdef NODE_TYPE_GATE
     tagConnectionAttr* pTagConnectionAttrC2S = CreateFdAttr(m_iC2SListenFd, GetSequence());
-    if (pTagConnectionAttr)
+    if (pTagConnectionAttrC2S)
     {
     	AddIoReadEvent(pTagConnectionAttrC2S,m_iC2SListenFd);
     }

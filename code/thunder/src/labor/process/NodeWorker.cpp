@@ -321,11 +321,12 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
     }
     else
     {
-        conn_iter->second->dActiveTime = ev_now(m_loop);
-        if (pData->ulSeq != conn_iter->second->ulSeq)
+    	tagConnectionAttr* pTagConnectionAttr = conn_iter->second;
+    	pTagConnectionAttr->dActiveTime = ev_now(m_loop);
+        if (pData->ulSeq != pTagConnectionAttr->ulSeq)
         {
             LOG4_DEBUG("callback seq %lu not match the conn attr seq %lu",
-                            pData->ulSeq, conn_iter->second->ulSeq);
+                            pData->ulSeq, pTagConnectionAttr->ulSeq);
             ev_io_stop(m_loop, watcher);
             pData->pWorker = NULL;
             delete pData;
@@ -336,19 +337,19 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
         }
         conn_iter->second->pRecvBuff->Compact(8192);
         read_again:
-        iReadLen = conn_iter->second->pRecvBuff->ReadFD(pData->iFd, iErrno);
-        if (NULL == conn_iter->second->pRemoteAddr)
+        iReadLen = pTagConnectionAttr->pRecvBuff->ReadFD(pData->iFd, iErrno);
+        if (NULL == pTagConnectionAttr->pRemoteAddr)
         {
             LOG4_TRACE("recv from fd %d identify %s, data len %d codec %d",
-                            pData->iFd, conn_iter->second->strIdentify.c_str(),
-                            iReadLen, conn_iter->second->eCodecType);
+                            pData->iFd, pTagConnectionAttr->strIdentify.c_str(),
+                            iReadLen, pTagConnectionAttr->eCodecType);
         }
         else
         {
             LOG4_TRACE("recv from fd %d ip %s identify %s, data len %d codec %d",
-                            pData->iFd, conn_iter->second->pRemoteAddr,
-                            conn_iter->second->strIdentify.c_str(),
-                            iReadLen, conn_iter->second->eCodecType);
+                            pData->iFd, pTagConnectionAttr->pRemoteAddr,
+							pTagConnectionAttr->strIdentify.c_str(),
+                            iReadLen, pTagConnectionAttr->eCodecType);
         }
         if (iReadLen > 0)
         {
@@ -376,19 +377,20 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
                 E_CODEC_STATUS eCodecStatus = codec_iter->second->Decode(conn_iter->second, oInMsgHead, oInMsgBody);
 #ifdef NODE_TYPE_GATE
                 //网关类型节点的连接初始化时支持协议编解码器的替换（支持的是websocket json 或websocket pb与http,private的替换）
-                if (eConnectStatus_init == conn_iter->second->ucConnectStatus)
+                if (eConnectStatus_init == pTagConnectionAttr->ucConnectStatus)
                 {
                     //网关默认配置websocket json(可修改为websocket pb)
                     if (CODEC_STATUS_ERR == eCodecStatus &&
-                        (thunder::CODEC_WEBSOCKET_EX_JS == conn_iter->second->eCodecType || thunder::CODEC_WEBSOCKET_EX_PB == conn_iter->second->eCodecType))
+                        (thunder::CODEC_WEBSOCKET_EX_JS == pTagConnectionAttr->eCodecType
+                        		|| thunder::CODEC_WEBSOCKET_EX_PB == pTagConnectionAttr->eCodecType))
                     {
                         //切换为http协议
-                        LOG4_DEBUG("failed to decode for codec %d,switch to CODEC_HTTP",conn_iter->second->eCodecType);
+                        LOG4_DEBUG("failed to decode for codec %d,switch to CODEC_HTTP",pTagConnectionAttr->eCodecType);
                         conn_iter->second->eCodecType = thunder::CODEC_HTTP;
-                        std::map<thunder::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
+                        std::map<thunder::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(pTagConnectionAttr->eCodecType);
                         if (codec_iter == m_mapCodec.end())
                         {
-                            LOG4_ERROR("no codec found for %d!", conn_iter->second->eCodecType);
+                            LOG4_ERROR("no codec found for %d!", pTagConnectionAttr->eCodecType);
                             if (pData->iFd != m_iManagerControlFd && pData->iFd != m_iManagerDataFd)
                             {
                                 LOG4_DEBUG("if (pData->iFd != m_iManagerControlFd && pData->iFd != m_iManagerDataFd)");
@@ -396,17 +398,17 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
                             }
                             return(false);
                         }
-                        eCodecStatus = codec_iter->second->Decode(conn_iter->second, oInMsgHead, oInMsgBody);
+                        eCodecStatus = codec_iter->second->Decode(pTagConnectionAttr, oInMsgHead, oInMsgBody);
                     }
-                    if (CODEC_STATUS_ERR == eCodecStatus && thunder::CODEC_HTTP == conn_iter->second->eCodecType)
+                    if (CODEC_STATUS_ERR == eCodecStatus && thunder::CODEC_HTTP == pTagConnectionAttr->eCodecType)
                     {
                         //切换为私有协议编解码（与客户端通信协议） private pb
-                        LOG4_DEBUG("failed to decode for codec %d,switch to CODEC_PRIVATE",conn_iter->second->eCodecType);
+                        LOG4_DEBUG("failed to decode for codec %d,switch to CODEC_PRIVATE",pTagConnectionAttr->eCodecType);
                         conn_iter->second->eCodecType = thunder::CODEC_PRIVATE;
-                        std::map<thunder::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
+                        std::map<thunder::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(pTagConnectionAttr->eCodecType);
                         if (codec_iter == m_mapCodec.end())
                         {
-                            LOG4_ERROR("no codec found for %d!", conn_iter->second->eCodecType);
+                            LOG4_ERROR("no codec found for %d!", pTagConnectionAttr->eCodecType);
                             if (pData->iFd != m_iManagerControlFd && pData->iFd != m_iManagerDataFd)
                             {
                                 LOG4_DEBUG("if (pData->iFd != m_iManagerControlFd && pData->iFd != m_iManagerDataFd)");
@@ -414,7 +416,7 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
                             }
                             return(false);
                         }
-                        eCodecStatus = codec_iter->second->Decode(conn_iter->second, oInMsgHead, oInMsgBody);
+                        eCodecStatus = codec_iter->second->Decode(pTagConnectionAttr, oInMsgHead, oInMsgBody);
                     }
                 }
 #endif
@@ -431,17 +433,17 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
                     if (oInMsgHead.cmd() > 0)
                     {
 #ifdef NODE_TYPE_GATE
-                        if (conn_iter->second->pClientData != NULL && conn_iter->second->pClientData->ReadableBytes() > 0)
+                        if (pTagConnectionAttr->pClientData != NULL && pTagConnectionAttr->pClientData->ReadableBytes() > 0)
                         {//长连接并且验证过的，不需要再验证。只填充附带数据。
-                            oInMsgBody.set_additional(conn_iter->second->pClientData->GetRawReadBuffer(),
-                                            conn_iter->second->pClientData->ReadableBytes());
+                            oInMsgBody.set_additional(pTagConnectionAttr->pClientData->GetRawReadBuffer(),
+                            		pTagConnectionAttr->pClientData->ReadableBytes());
                             oInMsgHead.set_msgbody_len(oInMsgBody.ByteSize());
                         }
                         else
                         {
                             // 如果是websocket连接，则需要验证连接
-                            if (thunder::CODEC_WEBSOCKET_EX_PB == conn_iter->second->eCodecType ||
-                                            thunder::CODEC_WEBSOCKET_EX_JS == conn_iter->second->eCodecType)
+                            if (thunder::CODEC_WEBSOCKET_EX_PB == pTagConnectionAttr->eCodecType ||
+                                            thunder::CODEC_WEBSOCKET_EX_JS == pTagConnectionAttr->eCodecType)
                             {
                                 std::map<int32, std::list<uint32> >::iterator http_iter = m_mapHttpAttr.find(stMsgShell.iFd);
                                 if (http_iter == m_mapHttpAttr.end())   // 未经握手的websocket客户端连接发送数据过来，直接断开
@@ -454,7 +456,7 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
                             else//其他类型长连接
                             {
                                 std::map<int, uint32>::iterator inner_iter = m_mapInnerFd.find(stMsgShell.iFd);
-                                if (inner_iter == m_mapInnerFd.end() && conn_iter->second->ulMsgNum > 1)   // 未经账号验证的客户端连接发送数据过来，直接断开
+                                if (inner_iter == m_mapInnerFd.end() && pTagConnectionAttr->ulMsgNum > 1)   // 未经账号验证的客户端连接发送数据过来，直接断开
                                 {
                                     LOG4_DEBUG("invalid request, please login first!");
                                     DestroyConnect(conn_iter);
@@ -482,7 +484,7 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
                         }
                         if (oOutMsgHead.ByteSize() > 0)
                         {
-                            eCodecStatus = codec_iter->second->Encode(oOutMsgHead, oOutMsgBody, conn_iter->second->pSendBuff);
+                            eCodecStatus = codec_iter->second->Encode(oOutMsgHead, oOutMsgBody, pTagConnectionAttr->pSendBuff);
                             if (CODEC_STATUS_OK == eCodecStatus)
                             {
                                 conn_iter->second->pSendBuff->WriteFD(pData->iFd, iErrno);
@@ -509,19 +511,19 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
                                     thunder::CODEC_WEBSOCKET_EX_JS != conn_iter->second->eCodecType)
                             {
                                 conn_iter->second->dKeepAlive = 10;   // 未带KeepAlive参数的http协议，默认10秒钟关闭
-                                LOG4_TRACE("set dKeepAlive(%lf)",conn_iter->second->dKeepAlive);
+                                LOG4_TRACE("set dKeepAlive(%lf)",pTagConnectionAttr->dKeepAlive);
                             }
                             else
                             {
-                                LOG4_TRACE("set dKeepAlive(%lf)",conn_iter->second->dKeepAlive);//websocket保持长连接,dKeepAlive为0
+                                LOG4_TRACE("set dKeepAlive(%lf)",pTagConnectionAttr->dKeepAlive);//websocket保持长连接,dKeepAlive为0
                             }
                             for (int i = 0; i < oInHttpMsg.headers_size(); ++i)
                             {
                                 if (std::string("Keep-Alive") == oInHttpMsg.headers(i).header_name())
                                 {
                                     conn_iter->second->dKeepAlive = strtoul(oInHttpMsg.headers(i).header_value().c_str(), NULL, 10);
-                                    LOG4_TRACE("set dKeepAlive(%lf)",conn_iter->second->dKeepAlive);
-                                    AddIoTimeout(conn_iter->first, conn_iter->second->ulSeq, conn_iter->second, conn_iter->second->dKeepAlive);
+                                    LOG4_TRACE("set dKeepAlive(%lf)",pTagConnectionAttr->dKeepAlive);
+                                    AddIoTimeout(conn_iter->first, pTagConnectionAttr->ulSeq, conn_iter->second, conn_iter->second->dKeepAlive);
                                     break;
                                 }
                                 else if (std::string("Connection") == oInHttpMsg.headers(i).header_name())
@@ -529,8 +531,8 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
                                     if (std::string("keep-alive") == oInHttpMsg.headers(i).header_value())
                                     {
                                         conn_iter->second->dKeepAlive = 65.0;
-                                        LOG4_TRACE("set dKeepAlive(%lf)",conn_iter->second->dKeepAlive);
-                                        AddIoTimeout(conn_iter->first, conn_iter->second->ulSeq, conn_iter->second, 65.0);
+                                        LOG4_TRACE("set dKeepAlive(%lf)",pTagConnectionAttr->dKeepAlive);
+                                        AddIoTimeout(conn_iter->first, pTagConnectionAttr->ulSeq, conn_iter->second, 65.0);
                                         break;
                                     }
                                     else if (std::string("close") == oInHttpMsg.headers(i).header_value()
@@ -543,24 +545,26 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
                                     }
                                     else
                                     {
-                                        AddIoTimeout(conn_iter->first, conn_iter->second->ulSeq, conn_iter->second, conn_iter->second->dKeepAlive);
+                                        AddIoTimeout(conn_iter->first, pTagConnectionAttr->ulSeq, pTagConnectionAttr, pTagConnectionAttr->dKeepAlive);
                                     }
                                 }
                             }
-                            bDisposeResult = Dispose(stMsgShell, oInHttpMsg, oOutHttpMsg);  // 处理过程有可能会断开连接，所以下面要做连接是否存在检查
-                            std::map<int, tagConnectionAttr*>::iterator dispose_conn_iter = m_mapFdAttr.find(pData->iFd);
-                            if (dispose_conn_iter == m_mapFdAttr.end())     // 连接已断开，资源已回收
-                            {
-                                return(true);
+                            bDisposeResult = Dispose(stMsgShell, oInHttpMsg, oOutHttpMsg);
+                            {// 处理过程有可能会断开连接，所以下面要做连接是否存在检查
+                            	std::map<int, tagConnectionAttr*>::iterator dispose_conn_iter = m_mapFdAttr.find(pData->iFd);
+								if (dispose_conn_iter == m_mapFdAttr.end())     // 连接已断开，资源已回收
+								{
+									return(true);
+								}
+								else
+								{
+									if (pData->ulSeq != dispose_conn_iter->second->ulSeq)     // 连接已断开，资源已回收
+									{
+										return(true);
+									}
+								}
                             }
-                            else
-                            {
-                                if (pData->ulSeq != dispose_conn_iter->second->ulSeq)     // 连接已断开，资源已回收
-                                {
-                                    return(true);
-                                }
-                            }
-                            if (conn_iter->second->dKeepAlive < 0)
+                            if (pTagConnectionAttr->dKeepAlive < 0)
                             {
                                 if (HTTP_RESPONSE == oInHttpMsg.type())
                                 {
@@ -636,7 +640,7 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
             {
                 ;
             }
-            else if (EINTR == iErrno)
+            else if (EINTR == iErrno)//中断继续读
             {
                 goto read_again;
             }
