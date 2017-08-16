@@ -93,18 +93,18 @@ ThunderGateServer:$(OBJS)
 
 libthunder.so: $(COMM_OBJS)
 	$(CXX) $(UNITTEST) -fPIE -rdynamic -shared -g -o $@ $^ $(LDFLAGS)
-
-install: 
-	#安装执行文件
-	#@for bin in $(TARGETS); do install -v $$dir ../../../deploy/bin/ ;done
-	#安装库文件
-	#install -v libthunder.so ../../../deploy/lib/
-	#安装头文件
-	mkdir -p $(THUNDER_PATH)/include/
-	@for dir in $(SUB_INCLUDE); do mkdir -p $(THUNDER_PATH)/include/$$dir; 	cp $(THUNDER_PATH)/src/$$dir/*.hpp $(THUNDER_PATH)/include/$$dir/ >> /dev/null 2>&1; cp $(THUNDER_PATH)/src/$$dir/*.h $(THUNDER_PATH)/include/$$dir/ >> /dev/null 2>&1; done
-	cp -f $(THUNDER_PATH)/src/*.hpp $(THUNDER_PATH)/include/
 	mkdir -p $(THUNDER_PATH)/lib/
 	cp -f libthunder.so $(THUNDER_PATH)/lib/
+
+#安装头文件
+#mkdir -p $(THUNDER_PATH)/include/
+#@for dir in $(SUB_INCLUDE); do mkdir -p $(THUNDER_PATH)/include/$$dir; 	cp $(THUNDER_PATH)/src/$$dir/*.hpp $(THUNDER_PATH)/include/$$dir/ >> /dev/null 2>&1; cp $(THUNDER_PATH)/src/$$dir/*.h $(THUNDER_PATH)/include/$$dir/ >> /dev/null 2>&1; done
+#cp -f $(THUNDER_PATH)/src/*.hpp $(THUNDER_PATH)/include/
+install: 
+	#安装执行文件
+	@for bin in $(TARGETS); do install -v $$dir ../../../deploy/bin/ ;done
+	#安装库文件
+	install -v libthunder.so ../../../deploy/lib/
 
 test: 
 	cd ../test && make && ./test

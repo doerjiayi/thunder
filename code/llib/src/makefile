@@ -42,7 +42,7 @@ LIBRARYS: $(OBJS)
 	cp -f libllib.so $(LLIB_PATH)/lib/
 	
 install:
-	test -d ../../deploy/lib/ && install libllib.so ../../deploy/lib/
+	install -v libllib.so ../../../deploy/lib/
 
 %.o:%.cpp
 	$(CXX) $(INC) $(CXXFLAG) -c -o $@ $< 

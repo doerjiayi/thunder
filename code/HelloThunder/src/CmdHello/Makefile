@@ -70,6 +70,9 @@ TARGET = $(SOS)
 
 all: $(TARGET)
 
+install:
+	install -v $(TARGET) ../../../../deploy/HelloThunder/plugins
+
 .SECONDARY: $(PB_OBJS) $(CMD_DEP_OBJS)
 
 Cmd%.so:Cmd%.o $(PB_OBJS) $(CMD_DEP_OBJS)
