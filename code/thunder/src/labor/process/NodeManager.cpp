@@ -1168,6 +1168,8 @@ bool NodeManager::Init()
         int iErrno = errno;
         exit(iErrno);
     }
+    LOG4_INFO("%s() listen on iPortForClient(%d) strHostForClient(%s)",
+            		__FUNCTION__,m_iPortForClient,m_strHostForClient.c_str());
 #endif
 
     struct sockaddr_in stAddrInner;
@@ -1204,7 +1206,8 @@ bool NodeManager::Init()
         int iErrno = errno;
         exit(iErrno);
     }
-
+    LOG4_INFO("%s() listen on iPortForServer(%d) strHostForServer(%s)",
+        		__FUNCTION__,m_iPortForServer,m_strHostForServer.c_str());
 //    m_pCmdConnect = new CmdConnectWorker();
 //    if (m_pCmdConnect == NULL)
 //    {
@@ -1346,20 +1349,28 @@ bool NodeManager::CreateEvents()
     {
         return(false);
     }
-    tagConnectionAttr* ptagConnectionAttr = CreateFdAttr(m_iS2SListenFd, GetSequence());
-    if (ptagConnectionAttr)
+    tagConnectionAttr* ptagConnectionAttrS2S = CreateFdAttr(m_iS2SListenFd, GetSequence());
+    if (ptagConnectionAttrS2S)
     {
-    	AddIoReadEvent(ptagConnectionAttr,m_iS2SListenFd);
+    	AddIoReadEvent(ptagConnectionAttrS2S,m_iS2SListenFd);
     }
     else
     {
-    	LOG4_ERROR("%s() failed to create ptagConnectionAttr for m_iS2SListenFd:%d",
+    	LOG4_ERROR("%s() failed to create ptagConnectionAttrS2S for m_iS2SListenFd:%d",
     			__FUNCTION__,m_iS2SListenFd);
     }
 //    AddIoErrorEvent(m_iS2SListenFd);
 #ifdef NODE_TYPE_GATE
-    CreateFdAttr(m_iC2SListenFd, GetSequence());
-    AddIoReadEvent(m_iC2SListenFd);
+    tagConnectionAttr* pTagConnectionAttrC2S = CreateFdAttr(m_iC2SListenFd, GetSequence());
+    if (pTagConnectionAttr)
+    {
+    	AddIoReadEvent(pTagConnectionAttrC2S,m_iC2SListenFd);
+    }
+    else
+    {
+    	LOG4_ERROR("%s() failed to create pTagConnectionAttrC2S for m_iC2SListenFd:%d",
+					__FUNCTION__,m_iC2SListenFd);
+    }
 //    AddIoErrorEvent(m_iC2SListenFd);
 #endif
 

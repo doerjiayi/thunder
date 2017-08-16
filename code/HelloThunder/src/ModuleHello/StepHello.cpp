@@ -7,18 +7,15 @@
  * @note
  * Modify history:
  ******************************************************************************/
-#include "StepHello.hpp"
+#include "../ModuleHello/StepHello.hpp"
 
 namespace hello
 {
 
-StepHello::StepHello(const thunder::MsgShell& stMsgShell,
-        const MsgHead& oInMsgHead,
-        const MsgBody& oInMsgBody)
+StepHello::StepHello(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
 	m_stReqMsgShell = stMsgShell;
-	m_oReqMsgHead = oInMsgHead;
-	m_oReqMsgBody = oInMsgBody;
+	m_oInHttpMsg = oInHttpMsg;
 }
 
 StepHello::~StepHello()
@@ -55,6 +52,15 @@ thunder::E_CMD_STATUS StepHello::Callback(
                     void* data)
 {
     Step::SendTo(m_stReqMsgShell, oInMsgHead, oInMsgBody);
+    return(thunder::STATUS_CMD_COMPLETED);
+}
+
+thunder::E_CMD_STATUS StepHello::Callback(
+					const thunder::MsgShell& stMsgShell,
+					const HttpMsg& oHttpMsg,
+					void* data)
+{
+	HttpStep::SendTo(m_stReqMsgShell, oHttpMsg);
     return(thunder::STATUS_CMD_COMPLETED);
 }
 

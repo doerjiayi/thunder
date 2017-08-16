@@ -1,6 +1,6 @@
 CXX = g++
 ROOT = .
-SUBDIRS=$(shell find $(ROOT) -name 'Cmd*' -type d)
+SUBDIRS=$(shell find $(ROOT) -name 'Module*' -type d)
 
 .PHONY : subdirs  
   
@@ -12,3 +12,4 @@ clean:
 
 install:  
 	@for dir in $(SUBDIRS); do echo "installing in $$dir"; ( cd $$dir && make install) || exit 1; done
+	install -v ../../thunder/src/ThunderGateServer ../../../deploy/HelloThunder/bin/HelloThunder

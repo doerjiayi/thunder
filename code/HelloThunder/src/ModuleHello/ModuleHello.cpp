@@ -7,14 +7,14 @@
  * @note
  * Modify history:
  ******************************************************************************/
-#include "CmdHello.hpp"
+#include "ModuleHello.hpp"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 thunder::Cmd* create()
 {
-    thunder::Cmd* pCmd = new hello::CmdHello();
+    thunder::Cmd* pCmd = new hello::ModuleHello();
     return(pCmd);
 }
 #ifdef __cplusplus
@@ -24,37 +24,31 @@ thunder::Cmd* create()
 namespace hello
 {
 
-CmdHello::CmdHello()
+ModuleHello::ModuleHello()
     : pStepHello(NULL), pStepGetHelloName(NULL), pStepHttpRequest(NULL)
 {
 }
 
-CmdHello::~CmdHello()
+ModuleHello::~ModuleHello()
 {
 }
 
-bool CmdHello::AnyMessage(
-                    const thunder::MsgShell& stMsgShell,
-                    const MsgHead& oInMsgHead,
-                    const MsgBody& oInMsgBody)
+bool ModuleHello::AnyMessage(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
     LOG4CPLUS_DEBUG_FMT(GetLogger(), "%s()", __FUNCTION__);
-    TestStepHello(stMsgShell,oInMsgHead,oInMsgBody);
+    TestStepHello(stMsgShell,oInHttpMsg);
     return(true);
 }
 
 
-bool CmdHello::TestStepHello(const thunder::MsgShell& stMsgShell,
-        const MsgHead& oInMsgHead,
-        const MsgBody& oInMsgBody)
+bool ModuleHello::TestStepHello(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
-	pStepHello = new StepHello(stMsgShell, oInMsgHead, oInMsgBody);
+	pStepHello = new StepHello(stMsgShell, oInHttpMsg);
 	if (pStepHello == NULL)
 	{
 		LOG4CPLUS_ERROR_FMT(GetLogger(), "error %d: new StepFromClient() error!", thunder::ERR_NEW);
 		return(false);
 	}
-
 	if (RegisterCallback(pStepHello))
 	{
 		if (thunder::STATUS_CMD_RUNNING == pStepHello->Emit())
@@ -73,12 +67,10 @@ bool CmdHello::TestStepHello(const thunder::MsgShell& stMsgShell,
 	return true;
 }
 
-bool CmdHello::TestRedisCmd(const thunder::MsgShell& stMsgShell,
-        const MsgHead& oInMsgHead,
-        const MsgBody& oInMsgBody)
+bool ModuleHello::TestRedisCmd(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
 	 // RedisStep
-	pStepGetHelloName = new StepGetHelloName(stMsgShell, oInMsgHead);
+	pStepGetHelloName = new StepGetHelloName(stMsgShell, oInHttpMsg);
 	pStepGetHelloName->RedisCmd()->SetHashKey("123456");
 	pStepGetHelloName->RedisCmd()->SetCmd("hget");
 	pStepGetHelloName->RedisCmd()->Append("1:2:123456");
@@ -94,12 +86,10 @@ bool CmdHello::TestRedisCmd(const thunder::MsgShell& stMsgShell,
 	return true;
 }
 
-bool CmdHello::TestHttpRequest(const thunder::MsgShell& stMsgShell,
-        const MsgHead& oInMsgHead,
-        const MsgBody& oInMsgBody)
+bool ModuleHello::TestHttpRequest(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
 	 // HttpStep
-	pStepHttpRequest = new StepHttpRequest(stMsgShell,oInMsgHead,oInMsgBody);
+	pStepHttpRequest = new StepHttpRequest(stMsgShell,oInHttpMsg);
 	if (pStepHttpRequest == NULL)
 	{
 		LOG4CPLUS_ERROR_FMT(GetLogger(), "error %d: new StepHttpRequest() error!", thunder::ERR_NEW);

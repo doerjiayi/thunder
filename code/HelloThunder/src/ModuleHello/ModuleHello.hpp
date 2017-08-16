@@ -10,10 +10,11 @@
 #ifndef CMDHELLO_HPP_
 #define CMDHELLO_HPP_
 
+#include "../ModuleHello/StepGetHelloName.hpp"
+#include "../ModuleHello/StepHello.hpp"
+#include "../ModuleHello/StepHttpRequest.hpp"
 #include "cmd/Cmd.hpp"
-#include "StepHello.hpp"
-#include "StepGetHelloName.hpp"
-#include "StepHttpRequest.hpp"
+#include "cmd/Module.hpp"
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,27 +31,16 @@ thunder::Cmd* create();
 
 namespace hello
 {
-
-class CmdHello: public thunder::Cmd
+class ModuleHello: public thunder::Module
 {
 public:
-    CmdHello();
-    virtual ~CmdHello();
-
-    virtual bool AnyMessage(
-                    const thunder::MsgShell& stMsgShell,
-                    const MsgHead& oInMsgHead,
-                    const MsgBody& oInMsgBody);
+	ModuleHello();
+    virtual ~ModuleHello();
+    virtual bool AnyMessage(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
 private:
-    bool TestStepHello(const thunder::MsgShell& stMsgShell,
-            const MsgHead& oInMsgHead,
-            const MsgBody& oInMsgBody);
-    bool TestHttpRequest(const thunder::MsgShell& stMsgShell,
-            const MsgHead& oInMsgHead,
-            const MsgBody& oInMsgBody);
-    bool TestRedisCmd(const thunder::MsgShell& stMsgShell,
-            const MsgHead& oInMsgHead,
-            const MsgBody& oInMsgBody);
+    bool TestStepHello(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
+    bool TestHttpRequest(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
+    bool TestRedisCmd(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
     StepHello* pStepHello;
     StepGetHelloName* pStepGetHelloName;
     StepHttpRequest* pStepHttpRequest;

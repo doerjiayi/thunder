@@ -17,9 +17,7 @@ namespace hello
 class StepHttpRequest: public thunder::HttpStep
 {
 public:
-    StepHttpRequest(const thunder::MsgShell& stMsgShell,
-            const MsgHead& oInMsgHead,
-            const MsgBody& oInMsgBody);
+    StepHttpRequest(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
     virtual ~StepHttpRequest();
 
     virtual thunder::E_CMD_STATUS Emit(
@@ -32,6 +30,7 @@ public:
      * @brief 步骤超时回调
      */
     virtual thunder::E_CMD_STATUS Timeout();
+    HttpMsg m_oInHttpMsg;
 };
 
 } /* namespace hello */

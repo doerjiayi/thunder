@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ################################################################################
-# @file     analysis_script_func.sh
-# @author   liaobaohua
-# @date     2016-04-01
+# @file     server_script_func.sh
+# @author   chenjiayi
+# @date     2017-08-16
 # @brief    bash function for im system maintaine scripts
 ################################################################################
 

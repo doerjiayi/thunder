@@ -5,9 +5,12 @@ CPPFLAGS =  -D_GNU_SOURCE=1 -D_REENTRANT -fPIC -DNODE_BEAT=10.0 -Wno-deprecated-
 #CXXFLAG = -g -O2 -Wall -fdiagnostics-show-caret -Wextra -pedantic -Wstrict-aliasing -Wstrict-overflow -Woverloaded-virtual -Wold-style-cast -Wc++0x-compat -Wc++11-compat -Wundef -Wshadow -Wformat -Wsuggest-attribute=format -Wsuggest-attribute=noreturn -Wno-variadic-macros -fvisibility=hidden
 CXXFLAG = -O0 -Wall -ggdb -m64 -Wl,--export-dynamic # -lrt -std=c++11 -pthread  #-static-libgcc -static-libstdc++
 
-DEFINE_SERVER =
+DEFINE_SERVER = -DNODE_TYPE_NORMAL
 DEFINE_CENTER_SERVER = -DNODE_TYPE_CENTER
 DEFINE_GATE_SERVER = -DNODE_TYPE_GATE
+
+YELLOW = "\e[33;1m"
+WHITE = "\e[37;1m"
 
 ifeq ($(unit_test),y)
 CPPFLAGS += -DUNIT_TEST
@@ -77,18 +80,21 @@ CENTER_TARGETS = CenterServer
 
 
 all: $(COMPILE_TARGETS)
-	@for target in $(SERVER_TARGETS);do cp -f ThunderServer $$target; done
-	@for target in $(CENTER_TARGETS);do cp -f ThunderCenterServer $$target; done
-	@for target in $(GATE_TARGETS);do cp -f ThunderGateServer $$target; done
-	rm -f ThunderServer ThunderCenterServer ThunderGateServer
+	@for target in $(SERVER_TARGETS);do cp -vf ThunderServer $$target; done
+	@for target in $(CENTER_TARGETS);do cp -vf ThunderCenterServer $$target; done
+	@for target in $(GATE_TARGETS);do cp -vf ThunderGateServer $$target; done
 
 ThunderServer:$(OBJS)
+	echo -e $(YELLOW) "$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)"
+	echo -e $(WHITE)
 	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
 	
 ThunderCenterServer:$(OBJS)
+	echo -e $(YELLOW) "$(CXX) $(CXXFLAG) $(DEFINE_CENTER_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)" $(WHITE)
 	$(CXX) $(CXXFLAG) $(DEFINE_CENTER_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
 	
 ThunderGateServer:$(OBJS)
+	echo -e $(YELLOW) "$(CXX) $(CXXFLAG) $(DEFINE_GATE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)" $(WHITE)
 	$(CXX) $(CXXFLAG) $(DEFINE_GATE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
 
 libthunder.so: $(COMM_OBJS)
@@ -102,7 +108,7 @@ libthunder.so: $(COMM_OBJS)
 #cp -f $(THUNDER_PATH)/src/*.hpp $(THUNDER_PATH)/include/
 install: 
 	#安装执行文件
-	@for bin in $(TARGETS); do install -v $$dir ../../../deploy/bin/ ;done
+	@for bin in $(TARGETS); do install -v $$bin ../../../deploy/bin/ ;done
 	#安装库文件
 	install -v libthunder.so ../../../deploy/lib/
 

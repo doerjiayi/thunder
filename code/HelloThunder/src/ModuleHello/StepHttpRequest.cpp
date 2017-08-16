@@ -7,18 +7,15 @@
  * @note
  * Modify history:
  ******************************************************************************/
-#include "StepHttpRequest.hpp"
+#include "../ModuleHello/StepHttpRequest.hpp"
 
 namespace hello
 {
 
-StepHttpRequest::StepHttpRequest(const thunder::MsgShell& stMsgShell,
-        const MsgHead& oInMsgHead,
-        const MsgBody& oInMsgBody)
+StepHttpRequest::StepHttpRequest(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
 	m_stReqMsgShell = stMsgShell;
-	m_oReqMsgHead = oInMsgHead;
-	m_oReqMsgBody = oInMsgBody;
+	m_oInHttpMsg = oInHttpMsg;
 }
 
 StepHttpRequest::~StepHttpRequest()

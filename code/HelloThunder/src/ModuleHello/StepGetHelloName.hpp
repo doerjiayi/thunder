@@ -17,9 +17,7 @@ namespace hello
 class StepGetHelloName: public thunder::RedisStep
 {
 public:
-    StepGetHelloName(
-                    const thunder::MsgShell& stMsgShell,
-                    const MsgHead& oInMsgHead);
+    StepGetHelloName(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
     virtual ~StepGetHelloName();
     virtual thunder::E_CMD_STATUS Callback(
                     const redisAsyncContext *c,

@@ -7,17 +7,14 @@
  * @note
  * Modify history:
  ******************************************************************************/
-#include "StepGetHelloName.hpp"
+#include "../ModuleHello/StepGetHelloName.hpp"
 
 namespace hello
 {
 
-StepGetHelloName::StepGetHelloName(
-                const thunder::MsgShell& stMsgShell,
-                const MsgHead& oInMsgHead)
+StepGetHelloName::StepGetHelloName(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
     m_stMsgShell = stMsgShell;
-    m_oMsgHead = oInMsgHead;
 }
 
 StepGetHelloName::~StepGetHelloName()
