@@ -10,6 +10,3 @@ subdirs:
 clean:  
 	@for dir in $(SUBDIRS); do echo "cleaning in $$dir"; ( cd $$dir && make clean -f Makefile) || exit 1; done
 
-install:  
-	@for dir in $(SUBDIRS); do echo "installing in $$dir"; ( cd $$dir && make install) || exit 1; done
-	install -v ../../thunder/src/ThunderGateServer ../../../deploy/HelloThunder/bin/HelloThunder

@@ -40,8 +40,6 @@ LIBRARYS: $(OBJS)
 	mkdir -p $(LLIB_PATH)/lib/
 	cp -f libllib.a $(LLIB_PATH)/lib/
 	cp -f libllib.so $(LLIB_PATH)/lib/
-	
-install:
 	install -v libllib.so ../../../deploy/lib/
 
 %.o:%.cpp

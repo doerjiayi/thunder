@@ -36,7 +36,7 @@ ModuleHello::~ModuleHello()
 bool ModuleHello::AnyMessage(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
     LOG4CPLUS_DEBUG_FMT(GetLogger(), "%s()", __FUNCTION__);
-    TestStepHello(stMsgShell,oInHttpMsg);
+    TestHttpRequest(stMsgShell,oInHttpMsg);
     return(true);
 }
 

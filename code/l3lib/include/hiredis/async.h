@@ -31,7 +31,7 @@
 
 #ifndef __HIREDIS_ASYNC_H
 #define __HIREDIS_ASYNC_H
-#include "../../../l3lib/include/hiredis/hiredis.h"
+#include "hiredis/hiredis.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -23,14 +23,14 @@ SYSTEM_LIB_PATH:=/usr/lib
 endif
 
 THUNDER_3LIB_PATH = ../../l3lib
-THUNDER_LIB_PATH = ../../llib/src
+THUNDER_LIB_PATH = ../../llib
 THUNDER_PATH = ..
 
 INC := $(INC) \
        -I $(THUNDER_3LIB_PATH)/include \
        -I $(THUNDER_3LIB_PATH)/include/mysql \
        -I $(THUNDER_3LIB_PATH)/include/libev \
-       -I $(THUNDER_LIB_PATH)/ \
+       -I $(THUNDER_LIB_PATH)/src \
        -I $(THUNDER_PATH)/src \
        -I $(THUNDER_PATH)/
 
@@ -42,7 +42,8 @@ LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
            -L$(THUNDER_3LIB_PATH)/lib -lcryptopp \
            -L$(THUNDER_3LIB_PATH)/lib -lprotobuf \
            -L$(THUNDER_3LIB_PATH)/lib -llog4cplus \
-           -L$(THUNDER_3LIB_PATH)/lib -lev 
+           -L$(THUNDER_3LIB_PATH)/lib -lev \
+           -L$(THUNDER_LIB_PATH)/lib -lllib
 
 #执行文件
 VPATH = $(THUNDER_PATH)/src
@@ -55,42 +56,18 @@ C_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.c))
 OBJS = $(patsubst %.cpp,%.o,$(CPP_SRCS)) $(patsubst %.c,%.o,$(C_SRCS)) $(patsubst %.cc,%.o,$(CC_SRCS))
 
 COMPILE_TARGETS = ThunderGateServer  
-SERVER_TARGETS = #LogicServer DataProxyServer DbAgentWrite DbAgentRead LogServer RobotServer CrmServer
-GATE_TARGETS = #WebServer LoginServer GateServer FileServer ESAgentR ESAgentW ESAgentS
-CENTER_TARGETS = #CenterServer
+GATE_TARGETS = WebServer LoginServer GateServer FileServer ESAgentR ESAgentW ESAgentS HelloThunder
 
 all:$(COMPILE_TARGETS)
-	@for target in $(SERVER_TARGETS);do cp -vf ThunderServer $$target; done
-	@for target in $(CENTER_TARGETS);do cp -vf ThunderCenterServer $$target; done
 	@for target in $(GATE_TARGETS);do cp -vf ThunderGateServer $$target; done
+	rm -f ThunderGateServer
+	#安装执行文件
+	mkdir -p ../../../deploy/bin/
+	@for bin in $(GATE_TARGETS); do install -v $$bin ../../../deploy/bin/ ;done
 
-ThunderServer:$(OBJS)
-	$(CXX) $(CXXFLAG) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	
-ThunderCenterServer:$(OBJS)
-	$(CXX) $(CXXFLAG) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
-	
 ThunderGateServer:$(OBJS)
 	$(CXX) $(CXXFLAG) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
 
-libthunder.so: $(COMM_OBJS)
-	$(CXX) $(UNITTEST) -fPIE -rdynamic -shared -g -o $@ $^ $(LDFLAGS)
-	mkdir -p $(THUNDER_PATH)/lib/
-	cp -f libthunder.so $(THUNDER_PATH)/lib/
-
-#安装头文件
-#mkdir -p $(THUNDER_PATH)/include/
-#@for dir in $(SUB_INCLUDE); do mkdir -p $(THUNDER_PATH)/include/$$dir; 	cp $(THUNDER_PATH)/src/$$dir/*.hpp $(THUNDER_PATH)/include/$$dir/ >> /dev/null 2>&1; cp $(THUNDER_PATH)/src/$$dir/*.h $(THUNDER_PATH)/include/$$dir/ >> /dev/null 2>&1; done
-#cp -f $(THUNDER_PATH)/src/*.hpp $(THUNDER_PATH)/include/
-#安装库文件
-#install -v libthunder.so ../../../deploy/lib/
-install: 
-	#安装执行文件
-	@for bin in $(TARGETS); do install -v $$bin ../../../deploy/bin/ ;done
-
-test: 
-	cd ../test && make && ./test
-	
 %.o:%.cpp
 	$(CXX) $(INC) $(CPPFLAGS) $(DEFINE_SERVER) $(CFLAGS) $(UNITTEST) -c -o $@ $< $(LDFLAGS)
 %.o:%.cc
@@ -100,6 +77,5 @@ test:
 clean:
 	rm -f $(OBJS)
 	rm -f $(TARGET)
-	rm -f ./*Server ./DbA* ./*.so ./ESA*
 
 

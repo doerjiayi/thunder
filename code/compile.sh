@@ -5,6 +5,8 @@ SCRIPT_NAME=`basename $0`
 cd ${THUNDER_HOME}
 THUNDER_HOME=`pwd`
 
+test ! -d ${THUNDER_HOME}/../deploy/3lib && ln -s  ${THUNDER_HOME}/l3lib/lib  ${THUNDER_HOME}/../deploy/3lib
+
 if [ $# -ge 1 ];then
 	if [ $1 == "node" ];then
 		echo "compile node..."

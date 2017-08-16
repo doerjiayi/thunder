@@ -1,6 +1,6 @@
 CC = gcc
 CXX = g++
-CXXFLAG = -Wall -Wno-format -g -O0 -fPIC 
+CXXFLAG = -Wall -Wno-format -g -O0 -fPIC -Wno-deprecated-declarations
 
 ARCH:=$(shell uname -m)
 
@@ -26,12 +26,11 @@ DIRS := $(SUB_DIRS)
 
 INC := $(INC) \
        -I .. \
+       -I $(L3LIB_PATH)/include \
        -I $(PROTO_PATH) \
        -I $(PROTO_PATH)/src \
-       -I $(THUNDER_PATH)/include -I $(THUNDER_PATH)/src\
-       -I $(LLIB_PATH)/src \
-       -I $(L3LIB_PATH)/include 
-
+       -I $(THUNDER_PATH)/src\
+       -I $(LLIB_PATH)/src
 
 LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
            -L$(SYSTEM_LIB_PATH) -lpthread \
@@ -69,8 +68,6 @@ SOS = $(patsubst %.o,%.so,$(SO_OBJS))
 TARGET = $(SOS)
 
 all: $(TARGET)
-
-install:
 	install -v $(TARGET) ../../../../deploy/HelloThunder/plugins
 
 .SECONDARY: $(PB_OBJS) $(CMD_DEP_OBJS)

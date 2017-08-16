@@ -9,12 +9,11 @@
  ******************************************************************************/
 #ifndef CMDHELLO_HPP_
 #define CMDHELLO_HPP_
-
-#include "../ModuleHello/StepGetHelloName.hpp"
-#include "../ModuleHello/StepHello.hpp"
-#include "../ModuleHello/StepHttpRequest.hpp"
 #include "cmd/Cmd.hpp"
 #include "cmd/Module.hpp"
+#include "StepGetHelloName.hpp"
+#include "StepHello.hpp"
+#include "StepHttpRequest.hpp"
 
 #ifdef __cplusplus
 extern "C" {
