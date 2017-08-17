@@ -1,6 +1,24 @@
 # 应用场景
 异步响应式服务器
-# conf说明 #
+
+#  引擎使用说明 #
+在文件thunder引擎说明.pptx中
+#  引擎使用说明 #
+目录结构说明：
+引擎核心thunder
+cmd 系统指令
+codec 系统指令
+labor 工作者与管理者
+protocol 服务器内部与客户端通用协议
+session 会话对象
+step 异步访问对象
+storage 存储接口对象
+
+第三方库存放l3lib
+
+自定义库 存放llib
+
+# 服务配置说明 #
 {
 
     "node_type":"节点类型：ACCESS，LOGIC，PROXY，CENTER等，由业务层定义",
