@@ -57,8 +57,9 @@ bool ModuleHello::Init()
 bool ModuleHello::AnyMessage(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
     LOG4CPLUS_DEBUG_FMT(GetLogger(), "%s()", __FUNCTION__);
-    TestHttpRequest(stMsgShell,oInHttpMsg);
-    return(true);
+    return GetLabor()->SendTo(stMsgShell, oInHttpMsg);//空载测试
+//    TestHttpRequest(stMsgShell,oInHttpMsg);
+//    return(true);
 }
 
 

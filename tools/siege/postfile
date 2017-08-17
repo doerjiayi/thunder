@@ -1,0 +1,15 @@
+{
+    "event_id": "event_id4",
+    "user_id": "chenjiayi",
+    "session_id": "20170712171708989",
+    "location": "111",
+    "session_id":"11111111",
+    "channel":"腾讯121212",
+    "device_id": "00-50-56-C0-00-08",
+    "ip": "192.168.11.232",
+    "os": "iOS6",
+    "os_version": "4.0",
+    "model": "iPhone 5s",
+    "app_version": "1.0",
+    "time": "2017-08-14 16:15:10"
+}
