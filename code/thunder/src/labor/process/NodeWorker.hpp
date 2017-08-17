@@ -204,10 +204,12 @@ public:     // Cmd类和Step类只需关注这些方法
     virtual bool Pretreat(Session* pSession);
 
     int CoroutineNew(llib::coroutine_func callback,void *ud);
+    bool CoroutineResume();//自定义调用策略,轮流执行规则
     void CoroutineResume(int co1);
     void CoroutineYield();
     int CoroutineStatus(int coid = -1);
     int CoroutineRunning();
+    uint32 CoroutineTaskSize()const{return m_CoroutineIdList.size();}
 
     virtual bool RegisterCallback(Step* pStep, ev_tstamp dTimeout = 0.0);
     virtual bool RegisterCallback(uint32 uiSelfStepSeq, Step* pStep, ev_tstamp dTimeout = 0.0);
@@ -354,6 +356,8 @@ protected:
     void UnloadSoAndDeleteModule(const std::string& strModulePath);
 private:
     struct llib::schedule * m_pCoroutineSchedule;
+    std::vector<int> m_CoroutineIdList;
+	uint32 m_uiCoroutineRunIndex;
     char* m_pErrBuff;
     uint32 m_ulSequence;
     log4cplus::Logger m_oLogger;

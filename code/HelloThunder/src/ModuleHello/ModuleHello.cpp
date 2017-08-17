@@ -49,7 +49,7 @@ bool ModuleHello::Init()
 	}
 	if (pSession)
 	{
-		TestCoroutinue();
+		TestCoroutinue2();
 	}
 	return(true);
 }
@@ -165,7 +165,7 @@ void ModuleHello::TestCoroutinue()
 	int co2 = ((thunder::NodeWorker*) GetLabor())->CoroutineNew(testCoroutineFunc,&arg2);
 	LOG4CPLUS_TRACE_FMT(GetLogger(), "Coroutine start! tid(%u)",pthread_self());
 	while (((thunder::NodeWorker*) GetLabor())->CoroutineStatus(co1)
-			&& ((thunder::NodeWorker*) GetLabor())->CoroutineStatus(co2))
+			|| ((thunder::NodeWorker*) GetLabor())->CoroutineStatus(co2))
 	{
 		((thunder::NodeWorker*) GetLabor())->CoroutineResume(co1);
 		((thunder::NodeWorker*) GetLabor())->CoroutineResume(co2);
@@ -213,7 +213,7 @@ void ModuleHello::TestCoroutinue()
 	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1242] CoroutineYield coroutine_yield running_id(0) status(2)
 	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(1) status(3)
 	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1275] CoroutineRunning coroutine_status running_id(1)
-	执行1号协程，然后退出1号协程,回到主协程，尝试唤醒0号协程，已执行完毕，尝试唤醒1号协程，已执行完毕，获取0号协程状态，已是dead状态,不再唤醒该协程
+	执行1号协程，然后退出1号协程,回到主协程，尝试唤醒0号协程，已执行完毕，尝试唤醒1号协程，已执行完毕，获取0号协程状态，已是dead状态,不再唤醒该协程，获取1号协程状态，已是dead状态,不再唤醒该协程
 	[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:135] coroutine running(1),arg(102) tid(2330580960)
 	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1242] CoroutineYield coroutine_yield running_id(1) status(2)
 	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(0) status(3)
@@ -221,9 +221,24 @@ void ModuleHello::TestCoroutinue()
 	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(0) status(3)
 	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(1) status(3)
 	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(0) status(0)
+	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(1) status(0)
 	协程结束
 	[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:153] Coroutine end!
 	 * */
 }
 
-} /* namespace oss */
+void ModuleHello::TestCoroutinue2()
+{
+	CoroutineArgs arg1 = { 0 ,(thunder::NodeWorker*) GetLabor(),pSession,"Coroutine1"};
+	CoroutineArgs arg2 = { 100 ,(thunder::NodeWorker*) GetLabor(),pSession,"Coroutine2"};
+	((thunder::NodeWorker*) GetLabor())->CoroutineNew(testCoroutineFunc,&arg1);
+	((thunder::NodeWorker*) GetLabor())->CoroutineNew(testCoroutineFunc,&arg2);
+	LOG4CPLUS_TRACE_FMT(GetLogger(), "Coroutine start! tid(%u)",pthread_self());
+	while (((thunder::NodeWorker*) GetLabor())->CoroutineTaskSize() > 0)
+	{
+		((thunder::NodeWorker*) GetLabor())->CoroutineResume();
+	}
+	LOG4CPLUS_TRACE_FMT(GetLogger(), "Coroutine end!tid(%u)",pthread_self());
+}
+
+} /* namespace hello */

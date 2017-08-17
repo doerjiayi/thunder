@@ -156,4 +156,5 @@ struct tagConnectionAttr
     }
 };
 
+
 #endif /* SRC_LABOR_PROCESS_ATTRIBUTION_HPP_ */
