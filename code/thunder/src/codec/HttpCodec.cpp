@@ -76,7 +76,7 @@ static const char * status_string(int code)
 namespace thunder
 {
 
-HttpCodec::HttpCodec(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey)
+HttpCodec::HttpCodec(llib::E_CODEC_TYPE eCodecType, const std::string& strKey)
     : ThunderCodec(eCodecType, strKey)
 {
 }
@@ -85,7 +85,7 @@ HttpCodec::~HttpCodec()
 {
 }
 
-E_CODEC_STATUS HttpCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, thunder::CBuffer* pBuff)
+E_CODEC_STATUS HttpCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, llib::CBuffer* pBuff)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     HttpMsg oHttpMsg;
@@ -130,7 +130,7 @@ E_CODEC_STATUS HttpCodec::Decode(tagConnectionAttr* pConn,MsgHead& oMsgHead, Msg
     return Decode(pConn->pRecvBuff,oMsgHead,oMsgBody);
 }
 
-E_CODEC_STATUS HttpCodec::Decode(thunder::CBuffer* pBuff,MsgHead& oMsgHead, MsgBody& oMsgBody)
+E_CODEC_STATUS HttpCodec::Decode(llib::CBuffer* pBuff,MsgHead& oMsgHead, MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     if (pBuff->ReadableBytes() == 0)
@@ -163,7 +163,7 @@ E_CODEC_STATUS HttpCodec::Decode(thunder::CBuffer* pBuff,MsgHead& oMsgHead, MsgB
     return(eCodecStatus);
 }
 
-E_CODEC_STATUS HttpCodec::Encode(const HttpMsg& oHttpMsg, thunder::CBuffer* pBuff)
+E_CODEC_STATUS HttpCodec::Encode(const HttpMsg& oHttpMsg, llib::CBuffer* pBuff)
 {
     LOG4_TRACE("%s() pBuff->ReadableBytes() = %u, ReadIndex = %u, WriteIndex = %u",
                     __FUNCTION__, pBuff->ReadableBytes(), pBuff->GetReadIndex(), pBuff->GetWriteIndex());
@@ -664,7 +664,7 @@ E_CODEC_STATUS HttpCodec::Encode(const HttpMsg& oHttpMsg, thunder::CBuffer* pBuf
     return(CODEC_STATUS_OK);
 }
 
-E_CODEC_STATUS HttpCodec::Decode(thunder::CBuffer* pBuff, HttpMsg& oHttpMsg)
+E_CODEC_STATUS HttpCodec::Decode(llib::CBuffer* pBuff, HttpMsg& oHttpMsg)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     if (pBuff->ReadableBytes() == 0)

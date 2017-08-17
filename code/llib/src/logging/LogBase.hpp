@@ -12,7 +12,7 @@
 
 #include "LogLevel.hpp"
 
-namespace thunder
+namespace llib
 {
 
 const unsigned int gc_uiMaxLogFileSize = 2048000;

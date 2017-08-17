@@ -20,16 +20,16 @@ namespace thunder
 class HttpCodec: public ThunderCodec
 {
 public:
-    HttpCodec(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey = "That's a lizard.");
+    HttpCodec(llib::E_CODEC_TYPE eCodecType, const std::string& strKey = "That's a lizard.");
     virtual ~HttpCodec();
 
-    virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, thunder::CBuffer* pBuff);
-    virtual E_CODEC_STATUS Decode(thunder::CBuffer* pBuff,MsgHead& oMsgHead, MsgBody& oMsgBody);
+    virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, llib::CBuffer* pBuff);
+    virtual E_CODEC_STATUS Decode(llib::CBuffer* pBuff,MsgHead& oMsgHead, MsgBody& oMsgBody);
     //连接缓存消息解码
     virtual E_CODEC_STATUS Decode(tagConnectionAttr* pConn,MsgHead& oMsgHead, MsgBody& oMsgBody);
 
-    virtual E_CODEC_STATUS Encode(const HttpMsg& oHttpMsg, thunder::CBuffer* pBuff);
-    virtual E_CODEC_STATUS Decode(thunder::CBuffer* pBuff, HttpMsg& oHttpMsg);
+    virtual E_CODEC_STATUS Encode(const HttpMsg& oHttpMsg, llib::CBuffer* pBuff);
+    virtual E_CODEC_STATUS Decode(llib::CBuffer* pBuff, HttpMsg& oHttpMsg);
 
     /**
      * @brief 添加http头

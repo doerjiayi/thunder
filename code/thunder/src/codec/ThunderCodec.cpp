@@ -19,8 +19,8 @@
 namespace thunder
 {
 
-ThunderCodec::ThunderCodec(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey)
-    : thunder::CStreamCodec(eCodecType), m_strKey(strKey)//, m_oAes(strKey)
+ThunderCodec::ThunderCodec(llib::E_CODEC_TYPE eCodecType, const std::string& strKey)
+    : llib::CStreamCodec(eCodecType), m_strKey(strKey)//, m_oAes(strKey)
 {
 }
 

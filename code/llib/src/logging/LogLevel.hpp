@@ -12,7 +12,7 @@
 
 #include <string>
 
-namespace thunder
+namespace llib
 {
 
 enum LogLev

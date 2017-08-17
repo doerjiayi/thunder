@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-namespace thunder
+namespace llib
 {
 
 class RedisCmd
@@ -68,6 +68,6 @@ private:
 	std::vector<std::pair<std::string, bool> > m_vecCmdArguments;
 };
 
-} /* namespace thunder */
+} /* namespace llib */
 
 #endif /* SRC_DBI_REDIS_REDISCMD_HPP_ */

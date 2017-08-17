@@ -61,7 +61,7 @@ std::map<std::string, MsgShell> g_mapMsgShell;            // key为Identify
 ThunderCodec* g_pCodec;
 
 bool InitLogger(const std::string& strLogFile);
-tagConnectionAttr* CreateFdAttr(int iFd, thunder::uint32 ulSeq, thunder::E_CODEC_TYPE eCodecType);
+tagConnectionAttr* CreateFdAttr(int iFd, thunder::uint32 ulSeq, llib::E_CODEC_TYPE eCodecType);
 bool DestroyConnect(std::map<int, tagConnectionAttr*>::iterator iter);
 bool AutoSend(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
 bool AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr,int iFd);
@@ -122,7 +122,7 @@ void sendmsg(int argc, char* argv[])
 	char szIdentify[32] = {0};
 	MsgHead oMsgHead;
 	MsgBody oMsgBody;
-	g_pCodec = new CustomMsgCodec(thunder::CODEC_PRIVATE);
+	g_pCodec = new CustomMsgCodec(llib::CODEC_PRIVATE);
 	g_pCodec->SetLogger(m_oLogger);
 	snprintf(szIdentify, sizeof(szIdentify), "%s:%s", argv[1], argv[2]);
 	for (int i = iUidFrom; i <= iUidTo; ++i)
@@ -181,7 +181,7 @@ bool AutoSend(const std::string& strIdentify, const MsgHead& oMsgHead, const Msg
 			return false;
     	}
 	}
-    tagConnectionAttr* pTagConnectionAttr = CreateFdAttr(iFd, g_uiSeq, thunder::CODEC_PRIVATE);
+    tagConnectionAttr* pTagConnectionAttr = CreateFdAttr(iFd, g_uiSeq, llib::CODEC_PRIVATE);
     if (pTagConnectionAttr)
     {
     	if (!AddIoReadEvent(pTagConnectionAttr,iFd))
@@ -202,7 +202,7 @@ bool AutoSend(const std::string& strIdentify, const MsgHead& oMsgHead, const Msg
     }
 }
 
-tagConnectionAttr* CreateFdAttr(int iFd, thunder::uint32 ulSeq, thunder::E_CODEC_TYPE eCodecType)
+tagConnectionAttr* CreateFdAttr(int iFd, thunder::uint32 ulSeq, llib::E_CODEC_TYPE eCodecType)
 {
     LOG4CPLUS_DEBUG_FMT(m_oLogger, "%s(iFd %d, seq %lu, codec %d)", __FUNCTION__, iFd, ulSeq, eCodecType);
     tagConnectionAttr* pConnAttr = new tagConnectionAttr();
@@ -214,21 +214,21 @@ tagConnectionAttr* CreateFdAttr(int iFd, thunder::uint32 ulSeq, thunder::E_CODEC
     std::pair<std::map<int, tagConnectionAttr*>::iterator,bool> ret = g_mapFdAttr.insert(std::make_pair(iFd,pConnAttr));
     if (ret.second)//插入成功（否则是插入过的）
 	{
-    	pConnAttr->pRecvBuff = new thunder::CBuffer();
+    	pConnAttr->pRecvBuff = new llib::CBuffer();
 		if (pConnAttr->pRecvBuff == NULL)
 		{
 			delete pConnAttr;
 			LOG4CPLUS_ERROR_FMT(m_oLogger, "new pConnAttr->pRecvBuff for fd %d error!", iFd);
 			return(NULL);
 		}
-		pConnAttr->pSendBuff = new thunder::CBuffer();
+		pConnAttr->pSendBuff = new llib::CBuffer();
 		if (pConnAttr->pSendBuff == NULL)
 		{
 			delete pConnAttr;
 			LOG4CPLUS_ERROR_FMT(m_oLogger, "new pConnAttr->pSendBuff for fd %d error!", iFd);
 			return(NULL);
 		}
-		pConnAttr->pWaitForSendBuff = new thunder::CBuffer();
+		pConnAttr->pWaitForSendBuff = new llib::CBuffer();
 		if (pConnAttr->pWaitForSendBuff == NULL)
 		{
 			delete pConnAttr;

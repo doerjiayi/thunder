@@ -16,7 +16,7 @@
 #include <sstream>
 #include <sys/time.h>
 
-namespace thunder
+namespace llib
 {
 
 typedef char int8;

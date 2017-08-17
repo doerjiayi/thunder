@@ -31,7 +31,7 @@
 namespace thunder
 {
 
-class ThunderWorker;
+class NodeWorker;
 class Cmd;
 class RedisStep;
 
@@ -237,7 +237,7 @@ protected:
      * @brief 获取Server自定义配置
      * @return Server自定义配置
      */
-    const thunder::CJsonObject& GetCustomConf() const;
+    const llib::CJsonObject& GetCustomConf() const;
 
     /**
      * @brief 获取当前时间
@@ -526,7 +526,7 @@ private:
     std::set<uint32> m_setNextStepSeq;
     std::set<uint32> m_setPreStepSeq;
 
-    friend class ThunderWorker;
+    friend class NodeWorker;
 	thunder::uint32 m_uiUserId;
 	thunder::uint32 m_uiCmd;
 };

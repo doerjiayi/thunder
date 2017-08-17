@@ -30,7 +30,7 @@ enum SESSION_LOAD_STATUS
     SESSION_LOADED      = 2,
 };
 
-class ThunderWorker;
+class NodeWorker;
 
 class Session
 {
@@ -99,7 +99,7 @@ protected:
      * @brief 获取Server自定义配置
      * @return Server自定义配置
      */
-    const thunder::CJsonObject& GetCustomConf() const;
+    const llib::CJsonObject& GetCustomConf() const;
 
     /**
      * @brief 获取当前时间
@@ -180,7 +180,7 @@ private:
     log4cplus::Logger* m_pLogger;
     ev_timer* m_pTimeoutWatcher;
 
-    friend class ThunderWorker;
+    friend class NodeWorker;
 };
 
 } /* namespace thunder */

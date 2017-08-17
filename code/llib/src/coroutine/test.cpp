@@ -1,6 +1,9 @@
 #include "coroutine.h"
 #include <stdio.h>
 
+namespace llib
+{
+
 struct args {
 	int n;
 };
@@ -51,4 +54,4 @@ main end
 //	coroutine_close(S);
 //	return 0;
 //}
-
+};

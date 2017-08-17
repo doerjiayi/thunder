@@ -11,5 +11,7 @@ mks:
 
 clean:  
 	@for make_file in $(STARTSHIP_MAKEFILES); do echo "cleaning in $$make_file"; make clean -f $$make_file; done
-	rm ./*Server ./DbA* libthunder.so
 
+cleanall:
+	@for make_file in $(STARTSHIP_MAKEFILES); do echo "cleaning in $$make_file"; make clean -f $$make_file; done
+	rm ./*Server ./*Agent* libthunder.so HelloThunder

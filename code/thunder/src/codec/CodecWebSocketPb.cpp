@@ -132,7 +132,7 @@ int CodecWebSocketPb::OnChunkComplete(http_parser *parser)
     return (0);
 }
 
-CodecWebSocketPb::CodecWebSocketPb(thunder::E_CODEC_TYPE eCodecType,
+CodecWebSocketPb::CodecWebSocketPb(llib::E_CODEC_TYPE eCodecType,
                 const std::string& strKey)
                 : ThunderCodec(eCodecType, strKey)
 {
@@ -143,7 +143,7 @@ CodecWebSocketPb::~CodecWebSocketPb()
 }
 
 E_CODEC_STATUS CodecWebSocketPb::Encode(const MsgHead& oMsgHead,
-                const MsgBody& oMsgBody, thunder::CBuffer* pBuff)
+                const MsgBody& oMsgBody, llib::CBuffer* pBuff)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     /*
@@ -368,7 +368,7 @@ E_CODEC_STATUS CodecWebSocketPb::Encode(const MsgHead& oMsgHead,
 }
 
 E_CODEC_STATUS CodecWebSocketPb::Encode(const HttpMsg& oHttpMsg,
-                thunder::CBuffer* pBuff)
+                llib::CBuffer* pBuff)
 {
     bool boUpgradeWebSocket(false);
     for (int i = 0; i < oHttpMsg.headers_size(); ++i)
@@ -391,7 +391,7 @@ E_CODEC_STATUS CodecWebSocketPb::Encode(const HttpMsg& oHttpMsg,
 }
 
 E_CODEC_STATUS CodecWebSocketPb::EncodeHandShake(const HttpMsg& oHttpMsg,
-                thunder::CBuffer* pBuff)
+                llib::CBuffer* pBuff)
 {
     LOG4_TRACE("%s() pBuff->ReadableBytes() = %u, ReadIndex = %u, WriteIndex = %u",
                             __FUNCTION__, pBuff->ReadableBytes(),
@@ -466,7 +466,7 @@ E_CODEC_STATUS CodecWebSocketPb::EncodeHandShake(const HttpMsg& oHttpMsg,
 }
 
 E_CODEC_STATUS CodecWebSocketPb::EncodeHttp(const HttpMsg& oHttpMsg,
-                thunder::CBuffer* pBuff)
+                llib::CBuffer* pBuff)
 {
     LOG4_TRACE("%s() pBuff->ReadableBytes() = %u, ReadIndex = %u, WriteIndex = %u",
                     __FUNCTION__, pBuff->ReadableBytes(), pBuff->GetReadIndex(),
@@ -1005,7 +1005,7 @@ E_CODEC_STATUS CodecWebSocketPb::EncodeHttp(const HttpMsg& oHttpMsg,
 }
 
 //把缓存pBuff 中的内容换序列化到oHttpMsg
-E_CODEC_STATUS CodecWebSocketPb::Decode(thunder::CBuffer* pBuff,
+E_CODEC_STATUS CodecWebSocketPb::Decode(llib::CBuffer* pBuff,
                 HttpMsg& oHttpMsg)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
@@ -1014,7 +1014,7 @@ E_CODEC_STATUS CodecWebSocketPb::Decode(thunder::CBuffer* pBuff,
         LOG4_DEBUG("no data...");
         return (CODEC_STATUS_PAUSE);
     }
-    thunder::CBuffer oHttpBuff;        // 用于debug输出Decode前的http协议
+    llib::CBuffer oHttpBuff;        // 用于debug输出Decode前的http协议
     oHttpBuff.Write(pBuff->GetRawReadBuffer(), pBuff->ReadableBytes());
     oHttpBuff.WriteByte('\0');
     LOG4_TRACE("%s", oHttpBuff.GetRawReadBuffer());
@@ -1197,7 +1197,7 @@ E_CODEC_STATUS CodecWebSocketPb::Decode(tagConnectionAttr* pConn,MsgHead& oMsgHe
     return Decode(pConn->pRecvBuff,oMsgHead,oMsgBody);
 }
 
-E_CODEC_STATUS CodecWebSocketPb::Decode(thunder::CBuffer* pBuff,
+E_CODEC_STATUS CodecWebSocketPb::Decode(llib::CBuffer* pBuff,
                 MsgHead& oMsgHead, MsgBody& oMsgBody)
 {
     if (pBuff->ReadableBytes() >= 2)//处理websocket

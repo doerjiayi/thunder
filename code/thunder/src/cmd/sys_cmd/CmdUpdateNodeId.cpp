@@ -25,7 +25,7 @@ bool CmdUpdateNodeId::AnyMessage(
                 const MsgHead& oInMsgHead,
                 const MsgBody& oInMsgBody)
 {
-    thunder::CJsonObject oNode;
+    llib::CJsonObject oNode;
     if (oNode.Parse(oInMsgBody.body()))
     {
         int iNodeId = 0;

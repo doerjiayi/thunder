@@ -11,7 +11,7 @@
 #include "FileLog.hpp"
 
 
-thunder::CLog::CLog(const std::string strLogFile, int iLogLev,
+llib::CLog::CLog(const std::string strLogFile, int iLogLev,
         unsigned int uiMaxFileSize, unsigned int uiMaxRollFileIndex)
     : m_iLogLevel(iLogLev), m_uiMaxFileSize(uiMaxFileSize),
       m_uiMaxRollFileIndex(uiMaxRollFileIndex), m_strLogFileBase(strLogFile)
@@ -20,7 +20,7 @@ thunder::CLog::CLog(const std::string strLogFile, int iLogLev,
     OpenLogFile(strLogFile);
 }
 
-int thunder::CLog::OpenLogFile(const std::string strLogFile)
+int llib::CLog::OpenLogFile(const std::string strLogFile)
 {
     m_fp = fopen(strLogFile.c_str(), "a+" );
     if(NULL == m_fp)
@@ -31,7 +31,7 @@ int thunder::CLog::OpenLogFile(const std::string strLogFile)
     return 0;
 }
 
-int thunder::CLog::WriteLog(int iLev, const char* szLogStr, ...)
+int llib::CLog::WriteLog(int iLev, const char* szLogStr, ...)
 {
     if (iLev > m_iLogLevel)
     {
@@ -56,7 +56,7 @@ int thunder::CLog::WriteLog(int iLev, const char* szLogStr, ...)
     return 0;
 }
 
-void thunder::CLog::ReOpen()
+void llib::CLog::ReOpen()
 {
     if (NULL != m_fp)
     {
@@ -66,7 +66,7 @@ void thunder::CLog::ReOpen()
     m_fp = fopen(m_strLogFileBase.c_str(), "a+");
 }
 
-void thunder::CLog::RollOver()
+void llib::CLog::RollOver()
 {
     if (NULL != m_fp)
     {
@@ -96,7 +96,7 @@ void thunder::CLog::RollOver()
     rename(m_strLogFileBase.c_str(), strBackupFile.c_str());
 }
 
-int thunder::CLog::Vappend(int iLev, const char* szLogStr, va_list ap)
+int llib::CLog::Vappend(int iLev, const char* szLogStr, va_list ap)
 {
     long file_size = -1;
     if (NULL != m_fp)
@@ -120,8 +120,8 @@ int thunder::CLog::Vappend(int iLev, const char* szLogStr, va_list ap)
     {
         return -1;
     }
-    fprintf(m_fp, "[%s] [%s]\t", thunder::GetCurrentTime(20).c_str(),
-       thunder::LogLevMsg[iLev].c_str());
+    fprintf(m_fp, "[%s] [%s]\t", llib::GetCurrentTime(20).c_str(),
+       llib::LogLevMsg[iLev].c_str());
     vfprintf(m_fp, szLogStr, ap);
     return 0;
 }

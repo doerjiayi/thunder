@@ -36,7 +36,7 @@ public:
 
 public:
     //json数据信息
-    thunder::CJsonObject m_jsonData;
+    llib::CJsonObject m_jsonData;
 private:
     int m_iTimeoutNum;          ///< 超时次数
     MsgShell m_stMsgShell;

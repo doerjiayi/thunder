@@ -64,19 +64,19 @@ public:
     virtual E_CMD_STATUS Timeout(){return(STATUS_CMD_FAULT);}
 
 public:
-    thunder::RedisCmd* RedisCmd()
+    llib::RedisCmd* RedisCmd()
     {
         return(m_pRedisCmd);
     }
 
 public:
-    const thunder::RedisCmd* GetRedisCmd()
+    const llib::RedisCmd* GetRedisCmd()
     {
         return(m_pRedisCmd);
     }
 
 private:
-    thunder::RedisCmd* m_pRedisCmd;
+    llib::RedisCmd* m_pRedisCmd;
 };
 
 

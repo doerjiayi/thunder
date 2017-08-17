@@ -10,7 +10,7 @@
 #ifndef STREAMCODER_HPP_
 #define STREAMCODER_HPP_
 
-namespace thunder
+namespace llib
 {
 
 enum E_CODEC_TYPE

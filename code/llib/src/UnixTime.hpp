@@ -19,7 +19,7 @@
 #include <sys/time.h>
 #include "CommonUtils.hpp"
 
-namespace thunder
+namespace llib
 {
 
 time_t GetCurrentTime();

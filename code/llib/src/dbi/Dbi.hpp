@@ -19,7 +19,7 @@
 #include <map>
 
 
-namespace thunder
+namespace llib
 {
 
 enum E_DB_TYPE                              // 数据库类型
@@ -123,11 +123,11 @@ public:
     CDbi(){};
     virtual ~CDbi(){};
 
-    virtual int InitDbConn(const thunder::tagDbConfDetail& stDbConfDetail) = 0;
+    virtual int InitDbConn(const llib::tagDbConfDetail& stDbConfDetail) = 0;
 
-    // 本应统一使用InitDbConn(const thunder::tagDbConnInfo& stDbConnInfo)的，
+    // 本应统一使用InitDbConn(const llib::tagDbConnInfo& stDbConnInfo)的，
     // 因数据访问数据库安全需要，走数据代理的连接不传输DB连接信息
-//    virtual int InitDbConn(const thunder::tagAgentNode& stAgentNode)
+//    virtual int InitDbConn(const llib::tagAgentNode& stAgentNode)
 //    {
 //    	return 0;
 //    }

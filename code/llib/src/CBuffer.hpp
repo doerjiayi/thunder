@@ -21,7 +21,7 @@
 #include <cstring>
 #include <string>
 
-namespace thunder
+namespace llib
 {
 
 typedef unsigned int uint32_t;

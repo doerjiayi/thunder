@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Project:  AsyncServer
- * @file     ThunderWorker.hpp
+ * @file     NodeWorker.hpp
  * @brief    Oss工作者
  * @author   cjy
  * @date:    2017年7月27日
@@ -23,15 +23,17 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include "../../../../l3lib/include/hiredis/hiredis.h"
-#include "../../../../l3lib/include/libev/ev.h"
-#include "../../../../l3lib/include/log4cplus/fileappender.h"
-#include "../../../../l3lib/include/log4cplus/logger.h"
-#include "../../../../l3lib/include/log4cplus/loggingmacros.h"
-#include "../../../../l3lib/include/log4cplus/socketappender.h"
+#include "hiredis/hiredis.h"
+#include "libev/ev.h"
+#include "log4cplus/fileappender.h"
+#include "log4cplus/logger.h"
+#include "log4cplus/loggingmacros.h"
+#include "log4cplus/socketappender.h"
+
 #include "../../step/StepLog.hpp"
 #include "../../step/StepNodeAccess.hpp"
 #include "../process/Attribution.hpp"
+
 #include "protocol/msg.pb.h"
 #include "protocol/oss_sys.pb.h"
 #include "labor/NodeLabor.hpp"
@@ -45,7 +47,7 @@ class CmdConnectWorker;
 
 typedef Cmd* CreateCmd();
 
-class ThunderWorker;
+class NodeWorker;
 
 struct tagSo
 {
@@ -73,7 +75,7 @@ struct tagIoWatcherData
 {
     int iFd;
     uint32 ulSeq;
-    ThunderWorker* pWorker;     // 不在结构体析构时回收
+    NodeWorker* pWorker;     // 不在结构体析构时回收
 
     tagIoWatcherData() : iFd(0), ulSeq(0), pWorker(NULL)
     {
@@ -84,7 +86,7 @@ struct tagSessionWatcherData
 {
     char szSessionName[32];
     char szSessionId[64];
-    ThunderWorker* pWorker;     // 不在结构体析构时回收
+    NodeWorker* pWorker;     // 不在结构体析构时回收
     tagSessionWatcherData() : pWorker(NULL)
     {
         memset(szSessionName, 0, sizeof(szSessionName));
@@ -92,13 +94,13 @@ struct tagSessionWatcherData
     }
 };
 
-class ThunderWorker : public NodeLabor
+class NodeWorker : public NodeLabor
 {
 public:
     typedef std::map<std::string, std::pair<std::set<std::string>::iterator, std::set<std::string> > > T_MAP_NODE_TYPE_IDENTIFY;
 public:
-    ThunderWorker(const std::string& strWorkPath, int iControlFd, int iDataFd, int iWorkerIndex, thunder::CJsonObject& oJsonConf);
-    virtual ~ThunderWorker();
+    NodeWorker(const std::string& strWorkPath, int iControlFd, int iDataFd, int iWorkerIndex, llib::CJsonObject& oJsonConf);
+    virtual ~NodeWorker();
 
     void Run();
 
@@ -153,7 +155,7 @@ public:     // Cmd类和Step类只需关注这些方法
         return(m_strNodeType);
     }
 
-    virtual const thunder::CJsonObject& GetCustomConf() const
+    virtual const llib::CJsonObject& GetCustomConf() const
     {
         return(m_oCustomConf);
     }
@@ -201,9 +203,11 @@ public:     // Cmd类和Step类只需关注这些方法
     virtual bool Pretreat(Step* pStep);
     virtual bool Pretreat(Session* pSession);
 
-    int NewCoroutine(coroutine_func callback,void *ud);
-    void RunCoroutine(int co1);
-    void YieldCoroutine();
+    int CoroutineNew(llib::coroutine_func callback,void *ud);
+    void CoroutineResume(int co1);
+    void CoroutineYield();
+    int CoroutineStatus(int coid = -1);
+    int CoroutineRunning();
 
     virtual bool RegisterCallback(Step* pStep, ev_tstamp dTimeout = 0.0);
     virtual bool RegisterCallback(uint32 uiSelfStepSeq, Step* pStep, ev_tstamp dTimeout = 0.0);
@@ -220,7 +224,7 @@ public:     // Cmd类和Step类只需关注这些方法
     virtual bool Disconnect(const std::string& strIdentify, bool bMsgShellNotice = true);
 
 public:     // Worker相关设置（由专用Cmd类调用这些方法完成Worker自身的初始化和更新）
-    virtual bool SetProcessName(const thunder::CJsonObject& oJsonConf);
+    virtual bool SetProcessName(const llib::CJsonObject& oJsonConf);
     /** @brief 加载配置，刷新Server */
     virtual void ResetLogLevel(log4cplus::LogLevel iLogLevel);
     virtual bool AddMsgShell(const std::string& strIdentify, const MsgShell& stMsgShell);
@@ -256,9 +260,9 @@ public:     // 发送数据或从Worker获取数据
     virtual void SetNodeId(uint32 uiNodeId) {m_uiNodeId = uiNodeId;}
     virtual void AddInnerFd(const MsgShell& stMsgShell);
     virtual bool GetMsgShell(const std::string& strIdentify, MsgShell& stMsgShell);
-    virtual bool SetClientData(const MsgShell& stMsgShell, thunder::CBuffer* pBuff);
+    virtual bool SetClientData(const MsgShell& stMsgShell, llib::CBuffer* pBuff);
     virtual bool HadClientData(const MsgShell& stMsgShell);
-	virtual bool GetClientData(const MsgShell& stMsgShell, thunder::CBuffer* pBuff);
+	virtual bool GetClientData(const MsgShell& stMsgShell, llib::CBuffer* pBuff);
     virtual std::string GetClientAddr(const MsgShell& stMsgShell);
     virtual std::string GetConnectIdentify(const MsgShell& stMsgShell);
     virtual bool AbandonConnect(const std::string& strIdentify);
@@ -285,8 +289,8 @@ public:     // 发送数据或从Worker获取数据
 	bool EmitStandardAccess(thunder::Step* pUpperStep,const std::string &strMsgSerial,
 			StandardCallbackStep callback,const std::string &nodeType,uint32 uiCmd);
 protected:
-    bool Init(thunder::CJsonObject& oJsonConf);
-    bool InitLogger(const thunder::CJsonObject& oJsonConf);
+    bool Init(llib::CJsonObject& oJsonConf);
+    bool InitLogger(const llib::CJsonObject& oJsonConf);
     bool CreateEvents();
     void PreloadCmd();
     void Destroy();
@@ -302,9 +306,9 @@ protected:
 
     bool DelEvents(ev_io** io_watcher_attr);
     bool AddIoTimeout(int iFd, uint32 ulSeq, tagConnectionAttr* pConnAttr, ev_tstamp dTimeout = 1.0);
-    tagConnectionAttr* CreateFdAttr(int iFd, uint32 ulSeq, thunder::E_CODEC_TYPE eCodecType = thunder::CODEC_PROTOBUF);
+    tagConnectionAttr* CreateFdAttr(int iFd, uint32 ulSeq, llib::E_CODEC_TYPE eCodecType = llib::CODEC_PROTOBUF);
     bool DestroyConnect(std::map<int, tagConnectionAttr*>::iterator iter, bool bMsgShellNotice = true);
-    void MsgShellNotice(const MsgShell& stMsgShell, const std::string& strIdentify, thunder::CBuffer* pClientData);
+    void MsgShellNotice(const MsgShell& stMsgShell, const std::string& strIdentify, llib::CBuffer* pClientData);
 
     /**
      * @brief 收到完整数据包后处理
@@ -340,16 +344,16 @@ protected:
     bool Dispose(const MsgShell& stMsgShell,
                     const HttpMsg& oInHttpMsg, HttpMsg& oOutHttpMsg);
 
-    void LoadSo(thunder::CJsonObject& oSoConf);
-    void ReloadSo(thunder::CJsonObject& oCmds);
+    void LoadSo(llib::CJsonObject& oSoConf);
+    void ReloadSo(llib::CJsonObject& oCmds);
     tagSo* LoadSoAndGetCmd(int iCmd, const std::string& strSoPath, const std::string& strSymbol, int iVersion);
     void UnloadSoAndDeleteCmd(int iCmd);
-    void LoadModule(thunder::CJsonObject& oModuleConf);
-    void ReloadModule(thunder::CJsonObject& oUrlPaths);
+    void LoadModule(llib::CJsonObject& oModuleConf);
+    void ReloadModule(llib::CJsonObject& oUrlPaths);
     tagModule* LoadSoAndGetModule(const std::string& strModulePath, const std::string& strSoPath, const std::string& strSymbol, int iVersion);
     void UnloadSoAndDeleteModule(const std::string& strModulePath);
 private:
-    struct schedule * m_pSchedule;
+    struct llib::schedule * m_pCoroutineSchedule;
     char* m_pErrBuff;
     uint32 m_ulSequence;
     log4cplus::Logger m_oLogger;
@@ -362,7 +366,7 @@ private:
     std::string m_strWorkerIdentify;    ///< 进程标识
     int m_iPortForServer;               ///< Server间通信监听端口（用于生成当前Worker标识）
     std::string m_strWorkPath;          ///< 工作路径
-    thunder::CJsonObject m_oCustomConf;    ///< 自定义配置
+    llib::CJsonObject m_oCustomConf;    ///< 自定义配置
     uint32 m_uiNodeId;                  ///< 节点ID
     int m_iManagerControlFd;            ///< 与Manager父进程通信fd（控制流）
     int m_iManagerDataFd;               ///< 与Manager父进程通信fd（数据流）
@@ -378,7 +382,7 @@ private:
 
     struct ev_loop* m_loop;
     CmdConnectWorker* m_pCmdConnect;
-    std::map<thunder::E_CODEC_TYPE, ThunderCodec*> m_mapCodec;   ///< 编解码器
+    std::map<llib::E_CODEC_TYPE, ThunderCodec*> m_mapCodec;   ///< 编解码器
     std::map<int, tagConnectionAttr*> m_mapFdAttr;   ///< 连接的文件描述符属性
     std::map<int, uint32> m_mapInnerFd;              ///< 服务端之间连接的文件描述符（用于区分连接是服务内部还是外部客户端接入）
     std::map<uint32, int> m_mapSeq2WorkerIndex;      ///< 序列号对应的Worker进程编号（用于connect成功后，向对端Manager发送希望连接的Worker进程编号）

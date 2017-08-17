@@ -12,7 +12,7 @@
 namespace thunder
 {
 
-ProtoCodec::ProtoCodec(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey)
+ProtoCodec::ProtoCodec(llib::E_CODEC_TYPE eCodecType, const std::string& strKey)
     : ThunderCodec(eCodecType, strKey)
 {
 }
@@ -21,7 +21,7 @@ ProtoCodec::~ProtoCodec()
 {
 }
 
-E_CODEC_STATUS ProtoCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, thunder::CBuffer* pBuff)
+E_CODEC_STATUS ProtoCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, llib::CBuffer* pBuff)
 {
     LOG4_TRACE("%s() pBuff->ReadableBytes()=%u", __FUNCTION__, pBuff->ReadableBytes());
     if (oMsgBody.ByteSize() > 64000000) // pb 最大限制
@@ -93,7 +93,7 @@ E_CODEC_STATUS ProtoCodec::Decode(tagConnectionAttr* pConn,MsgHead& oMsgHead, Ms
     return eCodecStatus;
 }
 
-E_CODEC_STATUS ProtoCodec::Decode(thunder::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody)
+E_CODEC_STATUS ProtoCodec::Decode(llib::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s() pBuff->ReadableBytes()=%d, pBuff->GetReadIndex()=%d",
                     __FUNCTION__, pBuff->ReadableBytes(), pBuff->GetReadIndex());

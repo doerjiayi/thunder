@@ -61,7 +61,7 @@ const std::string& Cmd::GetNodeType() const
     return(m_pLabor->GetNodeType());
 }
 
-const thunder::CJsonObject& Cmd::GetCustomConf() const
+const llib::CJsonObject& Cmd::GetCustomConf() const
 {
     return(m_pLabor->GetCustomConf());
 }

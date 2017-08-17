@@ -11,7 +11,7 @@
 #include <cstdio>
 #include <vector>
 #include <algorithm>
-namespace thunder
+namespace llib
 {
     char *url_encode(const char *s, int len, int *new_length);
     void url_encode(std::string &s);

@@ -181,14 +181,14 @@ void daemonize(const char* cmd)
     if (getrlimit(RLIMIT_NOFILE, &rl) < 0)
     {
 //        m_pLog->WriteLog(ERROR, "%s: error %d can't get file limit: %s", cmd,
-//                errno, strerror_r(errno, m_szErrBuffer, thunder::gc_uiMaxErrBufferLength));
+//                errno, strerror_r(errno, m_szErrBuffer, llib::gc_uiMaxErrBufferLength));
     }
 
     // fork锛岀粓姝㈢埗杩涚▼
     if((pid = fork()) < 0)
     {
 //        m_pLog->WriteLog(ERROR, "%s error %d can't fork: %s", cmd,
-//                errno, strerror_r(errno, m_szErrBuffer, thunder::gc_uiMaxErrBufferLength));
+//                errno, strerror_r(errno, m_szErrBuffer, llib::gc_uiMaxErrBufferLength));
     }
     else if (pid != 0)
     {
@@ -204,14 +204,14 @@ void daemonize(const char* cmd)
     if (sigaction(SIGHUP, &sa, NULL) < 0)
     {
 //        m_pLog->WriteLog(ERROR, "%s error %d can't ignore SIGHUP: %s", cmd,
-//                errno, strerror_r(errno, m_szErrBuffer, thunder::gc_uiMaxErrBufferLength));
+//                errno, strerror_r(errno, m_szErrBuffer, llib::gc_uiMaxErrBufferLength));
     }
 
     // fork锛岀粓姝㈢涓�瀛愯繘绋�
     if ((pid = fork()) < 0)
     {
 //        m_pLog->WriteLog(ERROR, "%s error %d can't fork: %s", cmd,
-//                errno, strerror_r(errno, m_szErrBuffer, thunder::gc_uiMaxErrBufferLength));
+//                errno, strerror_r(errno, m_szErrBuffer, llib::gc_uiMaxErrBufferLength));
     }
     else if (pid != 0)
     {
@@ -224,7 +224,7 @@ void daemonize(const char* cmd)
 //    if (chdir("/") < 0)
 //    {
 //        m_pLog->WriteLog(ERROR, "%s error %d can't change directory to /: %s",
-//                errno, strerror_r(errno, m_szErrBuffer, thunder::gc_uiMaxErrBufferLength));
+//                errno, strerror_r(errno, m_szErrBuffer, llib::gc_uiMaxErrBufferLength));
 //    }
 
     // 娓呴櫎鏂囦欢鎺╃爜

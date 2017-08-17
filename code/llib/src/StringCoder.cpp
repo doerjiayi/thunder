@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "StringCoder.hpp"
 
-namespace thunder
+namespace llib
 {
 
 unsigned char ToHex(unsigned char x)
@@ -180,4 +180,4 @@ void DecodeParameter(const std::string& strParameter, std::map<std::string, std:
     }
 }
 
-} /* namespace thunder */
+} /* namespace llib */

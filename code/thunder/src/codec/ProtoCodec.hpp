@@ -18,11 +18,11 @@ namespace thunder
 class ProtoCodec: public ThunderCodec
 {
 public:
-    ProtoCodec(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey = "That's a lizard.");
+    ProtoCodec(llib::E_CODEC_TYPE eCodecType, const std::string& strKey = "That's a lizard.");
     virtual ~ProtoCodec();
 
-    virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, thunder::CBuffer* pBuff);
-    virtual E_CODEC_STATUS Decode(thunder::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody);
+    virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, llib::CBuffer* pBuff);
+    virtual E_CODEC_STATUS Decode(llib::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody);
     /**
      * @brief 连接的字节流解码
      * @return 编解码状态

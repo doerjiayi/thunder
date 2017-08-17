@@ -17,17 +17,17 @@
 #include "LogBase.hpp"
 #include "UnixTime.hpp"
 
-namespace thunder
+namespace llib
 {
 
-class CLog : public thunder::CLogBase
+class CLog : public llib::CLogBase
 {
 public:
     explicit CLog(
             const std::string strLogFile,
-            int iLogLev = thunder::DEFAULT_LOG_LEVEL,
-            unsigned int uiMaxFileSize = thunder::gc_uiMaxLogFileSize,
-            unsigned int uiMaxRollFileIndex = thunder::gc_uiMaxRollLogFileIndex);
+            int iLogLev = llib::DEFAULT_LOG_LEVEL,
+            unsigned int uiMaxFileSize = llib::gc_uiMaxLogFileSize,
+            unsigned int uiMaxRollFileIndex = llib::gc_uiMaxRollLogFileIndex);
     virtual ~CLog()
     {
         fclose(m_fp);

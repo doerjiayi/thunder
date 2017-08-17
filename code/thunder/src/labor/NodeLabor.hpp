@@ -11,8 +11,9 @@
 #define SRC_NodeLabor_HPP_
 #include <string>
 
-#include "../../../l3lib/include/libev/ev.h"
-#include "../../../l3lib/include/log4cplus/loggingmacros.h"
+#include "libev/ev.h"
+#include "log4cplus/loggingmacros.h"
+
 #include "../ThunderDefine.hpp"
 #include "cmd/CW.hpp"
 #include "json/CJsonObject.hpp"
@@ -57,7 +58,7 @@ public:     // Labor相关设置（由Cmd类或Step类调用这些方法完成La
      * @param oJsonConf 配置信息
      * @return 是否设置成功
      */
-    virtual bool SetProcessName(const thunder::CJsonObject& oJsonConf) = 0;
+    virtual bool SetProcessName(const llib::CJsonObject& oJsonConf) = 0;
 
     /** @brief 设置日志级别 */
     virtual void ResetLogLevel(log4cplus::LogLevel iLogLevel) = 0;
@@ -179,7 +180,7 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
      * @brief 获取自定义配置
      * @return 自定义配置
      */
-    virtual const thunder::CJsonObject& GetCustomConf() const
+    virtual const llib::CJsonObject& GetCustomConf() const
     {
         return(m_oCustomConfTmp);
     }
@@ -503,7 +504,7 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
      * @param oBuff 客户端连接相关数据
      * @return 是否设置成功
      */
-    virtual bool SetClientData(const MsgShell& stMsgShell, thunder::CBuffer* pBuff)
+    virtual bool SetClientData(const MsgShell& stMsgShell, llib::CBuffer* pBuff)
     {
         return(false);
     }
@@ -518,7 +519,7 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
         return(false);
     }
 
-	virtual bool GetClientData(const MsgShell& stMsgShell, thunder::CBuffer* pBuff)
+	virtual bool GetClientData(const MsgShell& stMsgShell, llib::CBuffer* pBuff)
 	{
 		return(false);
 	}
@@ -553,8 +554,10 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
     {
         return(false);
     }
-
-    //服务器使用的发送到客户端接口
+    /*
+     * @brief 服务器使用的发送到客户端接口
+     * @note 为支持对不同客户端构造不同响应消息，以及为支持需要用到pb与json转换的消息
+     * */
     virtual bool SendToClient(const MsgShell& stMsgShell,MsgHead& oMsgHead,const google::protobuf::Message &message,
                         const std::string& additional = "",uint64 sessionid = 0,const std::string& strSession = "")
     {
@@ -574,6 +577,9 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
     {
         return(false);
     }
+    /*
+     * @brief 异步通用回调接口简化封装
+     * */
     virtual bool EmitStorageAccess(thunder::Session* pSession,const std::string &strMsgSerial,
 			StorageCallbackSession callback,bool boPermanentSession,
 			const std::string &nodeType="PROXY",uint32 uiCmd = thunder::CMD_REQ_STORATE)
@@ -705,7 +711,7 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
 private:
     std::string m_strNodeTypeTmp;
     std::string m_strHostForServerTmp;
-    thunder::CJsonObject m_oCustomConfTmp;
+    llib::CJsonObject m_oCustomConfTmp;
 };
 
 } /* namespace thunder */

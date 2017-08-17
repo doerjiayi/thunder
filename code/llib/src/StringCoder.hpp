@@ -14,7 +14,7 @@
 #include <string>
 #include <map>
 
-namespace thunder
+namespace llib
 {
 
 unsigned char ToHex(unsigned char x);
@@ -38,6 +38,6 @@ void EncodeParameter(const std::map<std::string, std::string>& mapParameters, st
 void DecodeParameter(const std::string& strParameter, std::map<std::string, std::string>& mapParameters);
 
 
-} /* namespace thunder */
+} /* namespace llib */
 
 #endif /* STRINGCODER_HPP_ */

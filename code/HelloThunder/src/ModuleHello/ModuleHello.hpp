@@ -35,11 +35,13 @@ class ModuleHello: public thunder::Module
 public:
 	ModuleHello();
     virtual ~ModuleHello();
+    virtual bool Init();
     virtual bool AnyMessage(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
 private:
     bool TestStepHello(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
     bool TestHttpRequest(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
     bool TestRedisCmd(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
+    void TestCoroutinue();
     StepHello* pStepHello;
     StepGetHelloName* pStepGetHelloName;
     StepHttpRequest* pStepHttpRequest;

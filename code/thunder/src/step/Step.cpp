@@ -131,7 +131,7 @@ const std::string& Step::GetNodeType() const
     return(m_pLabor->GetNodeType());
 }
 
-const thunder::CJsonObject& Step::GetCustomConf() const
+const llib::CJsonObject& Step::GetCustomConf() const
 {
     return(m_pLabor->GetCustomConf());
 }

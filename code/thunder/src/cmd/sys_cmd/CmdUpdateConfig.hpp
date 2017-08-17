@@ -27,7 +27,7 @@ public:
 private:
     bool ReadConfig();
     std::string m_ReqConfigFileName;
-    thunder::CJsonObject m_ReqConfigContent;
+    llib::CJsonObject m_ReqConfigContent;
     int m_ReqConfigType;
 };
 

@@ -12,7 +12,7 @@
 #include "CBuffer.hpp"
 
 
-namespace thunder
+namespace llib
 {
 
 int CBuffer::VPrintf(const char *fmt, va_list ap)

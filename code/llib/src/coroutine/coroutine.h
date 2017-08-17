@@ -1,6 +1,9 @@
 #ifndef C_COROUTINE_H
 #define C_COROUTINE_H
 
+namespace llib
+{
+
 #define COROUTINE_DEAD 0
 #define COROUTINE_READY 1
 #define COROUTINE_RUNNING 2
@@ -18,5 +21,8 @@ void coroutine_resume(struct schedule *, int id);
 int coroutine_status(struct schedule *, int id);
 int coroutine_running(struct schedule *);
 void coroutine_yield(struct schedule *);
+
+};
+
 
 #endif

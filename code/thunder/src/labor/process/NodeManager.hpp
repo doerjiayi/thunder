@@ -112,8 +112,8 @@ public:
     void Run();
 
 public:     // Manager相关设置（由专用Cmd类调用这些方法完成Manager自身的初始化和更新）
-    bool InitLogger(const thunder::CJsonObject& oJsonConf);
-    virtual bool SetProcessName(const thunder::CJsonObject& oJsonConf);
+    bool InitLogger(const llib::CJsonObject& oJsonConf);
+    virtual bool SetProcessName(const llib::CJsonObject& oJsonConf);
     /** @brief 加载配置，刷新Server */
     virtual void ResetLogLevel(log4cplus::LogLevel iLogLevel);
     virtual bool SendTo(const MsgShell& stMsgShell);
@@ -125,7 +125,7 @@ public:     // Manager相关设置（由专用Cmd类调用这些方法完成Mana
     virtual void SetNodeId(uint32 uiNodeId) {m_uiNodeId = uiNodeId;}
     virtual void AddInnerFd(const MsgShell& stMsgShell){};
 
-    void SetWorkerLoad(int iPid, thunder::CJsonObject& oJsonLoad);
+    void SetWorkerLoad(int iPid, llib::CJsonObject& oJsonLoad);
     void AddWorkerLoad(int iPid, int iLoad = 1);
     const std::map<int, tagWorkerAttr>& GetWorkerAttr() const;
 
@@ -156,8 +156,8 @@ protected:
     bool ReportToCenter();  // 向管理中心上报负载信息
     bool SendToWorker(const MsgHead& oMsgHead, const MsgBody& oMsgBody);    // 向Worker发送数据
     bool SendToWorkerWithMod(unsigned int uiModFactor,const MsgHead& oMsgHead, const MsgBody& oMsgBody);    // 向Worker发送数据
-    bool DisposeDataFromWorker(const MsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody, thunder::CBuffer* pSendBuff);
-    bool DisposeDataAndTransferFd(const MsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody, thunder::CBuffer* pSendBuff);
+    bool DisposeDataFromWorker(const MsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody, llib::CBuffer* pSendBuff);
+    bool DisposeDataAndTransferFd(const MsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody, llib::CBuffer* pSendBuff);
     bool DisposeDataFromCenter(const MsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody, tagConnectionAttr* pTagConnectionAttr);
 
     uint32 GetSequence()
@@ -176,8 +176,8 @@ protected:
     }
 
 private:
-    thunder::CJsonObject m_oLastConf;          ///< 上次加载的配置
-    thunder::CJsonObject m_oCurrentConf;       ///< 当前加载的配置
+    llib::CJsonObject m_oLastConf;          ///< 上次加载的配置
+    llib::CJsonObject m_oCurrentConf;       ///< 当前加载的配置
 
     uint32 m_ulSequence;
     char* m_pErrBuff;
@@ -196,7 +196,7 @@ private:
     int32 m_iPortForClient;                 ///< 对Client通信监听端口，对应 m_iC2SListenFd
     int32 m_iGatewayIp;                     ///< 对Client服务的真实端口
     uint32 m_uiWorkerNum;                   ///< Worker子进程数量
-    thunder::E_CODEC_TYPE m_eCodec;            ///< 接入端编解码器
+    llib::E_CODEC_TYPE m_eCodec;            ///< 接入端编解码器
     ev_tstamp m_dAddrStatInterval;          ///< IP地址数据统计时间间隔
     int32  m_iAddrPermitNum;                ///< IP地址统计时间内允许连接次数
     int m_iLogLevel;

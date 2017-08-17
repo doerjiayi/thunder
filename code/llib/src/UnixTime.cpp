@@ -9,12 +9,12 @@
 #include "UnixTime.hpp"
 
 
-time_t thunder::GetCurrentTime()
+time_t llib::GetCurrentTime()
 {
     return time(NULL);
 }
 
-std::string thunder::GetCurrentTime(int iTimeSize)
+std::string llib::GetCurrentTime(int iTimeSize)
 {
     char szCurrentTime[20] = {0};
     time_t lTime = time(NULL);
@@ -25,7 +25,7 @@ std::string thunder::GetCurrentTime(int iTimeSize)
     return std::string(szCurrentTime);
 }
 
-time_t thunder::TimeStr2time_t(
+time_t llib::TimeStr2time_t(
         const std::string& strTime,
         const std::string& strTimeFormat)
 {
@@ -35,7 +35,7 @@ time_t thunder::TimeStr2time_t(
             == strTimeFormat || "%Y-%m-%d %H:%M:%S" == strTimeFormat
             || "%Y-%m-%d" == strTimeFormat)
     {
-        return thunder::TimeStr2time_t(strTime.c_str());
+        return llib::TimeStr2time_t(strTime.c_str());
     }
     else if ("YYYYMMDDHHMISS" == strTimeFormat || "yyyymmddhhmiss"
             == strTimeFormat || "%Y%m%d%H%M%S" == strTimeFormat)
@@ -47,7 +47,7 @@ time_t thunder::TimeStr2time_t(
                 << strTime[9] << std::string(":") << strTime[10]
                 << strTime[11] << std::string(":") << strTime[12]
                 << strTime[13];
-        return thunder::TimeStr2time_t(osStream.str().c_str());
+        return llib::TimeStr2time_t(osStream.str().c_str());
     }
     else if ("YYYYMMDD" == strTimeFormat || "yyyymmdd" == strTimeFormat
             || "%Y-%m-%d" == strTimeFormat)
@@ -56,13 +56,13 @@ time_t thunder::TimeStr2time_t(
                 << strTime[3] << std::string("-") << strTime[4]
                 << strTime[5] << std::string("-") << strTime[6]
                 << strTime[7];
-        return thunder::TimeStr2time_t(osStream.str().c_str());
+        return llib::TimeStr2time_t(osStream.str().c_str());
     }
 
     return 0;
 }
 
-time_t thunder::TimeStr2time_t(const char *szTimeStr)
+time_t llib::TimeStr2time_t(const char *szTimeStr)
 {
     int iYear = 1971;
     int iMonth = 1;
@@ -284,7 +284,7 @@ time_t thunder::TimeStr2time_t(const char *szTimeStr)
     return lTime;
 }
 
-const std::string thunder::time_t2TimeStr(
+const std::string llib::time_t2TimeStr(
         time_t lTime,
         const std::string& strTimeFormat)
 {
@@ -338,7 +338,7 @@ const std::string thunder::time_t2TimeStr(
     return szTime;
 }
 
-long thunder::LocalTimeDiffGmTime()
+long llib::LocalTimeDiffGmTime()
 {
     time_t lTime = time(NULL);
     struct tm stLocalTime;
@@ -350,7 +350,7 @@ long thunder::LocalTimeDiffGmTime()
     return mktime(&stLocalTime) - mktime(&stGmTime);
 }
 
-long thunder::DiffTime(
+long llib::DiffTime(
         const std::string& strTime1,
         const std::string& strTime2,
         const std::string& strTimeFormat1,
@@ -359,13 +359,13 @@ long thunder::DiffTime(
     time_t lTime1, lTime2;
     long lSeconds;
 
-    lTime1 = thunder::TimeStr2time_t(strTime1, strTimeFormat1);
-    lTime2 = thunder::TimeStr2time_t(strTime2, strTimeFormat2);
+    lTime1 = llib::TimeStr2time_t(strTime1, strTimeFormat1);
+    lTime2 = llib::TimeStr2time_t(strTime2, strTimeFormat2);
     lSeconds = lTime2 - lTime1;
     return (lSeconds > 0)?(lSeconds):(lSeconds * -1);
 }
 
-time_t thunder::GetBeginTimeOfTheHour(time_t lTime)
+time_t llib::GetBeginTimeOfTheHour(time_t lTime)
 {
     time_t lHourBeginTime = 0;
     struct tm stTime;
@@ -380,18 +380,18 @@ time_t thunder::GetBeginTimeOfTheHour(time_t lTime)
     return lHourBeginTime;
 }
 
-const std::string thunder::GetBeginTimeOfTheHour(
+const std::string llib::GetBeginTimeOfTheHour(
         const std::string& strTime,
         const std::string& strTimeFormat)
 {
     time_t lTime = 0;
     time_t lHourBeginTime = 0;
-    lTime = thunder::TimeStr2time_t(strTime, strTimeFormat);
-    lHourBeginTime = thunder::GetBeginTimeOfTheHour(lTime);
-    return thunder::time_t2TimeStr(lHourBeginTime, strTimeFormat);
+    lTime = llib::TimeStr2time_t(strTime, strTimeFormat);
+    lHourBeginTime = llib::GetBeginTimeOfTheHour(lTime);
+    return llib::time_t2TimeStr(lHourBeginTime, strTimeFormat);
 }
 
-time_t thunder::GetEndTimeOfTheHour(time_t lTime)
+time_t llib::GetEndTimeOfTheHour(time_t lTime)
 {
     time_t lHourEndTime = 0;
     struct tm stTime;
@@ -405,18 +405,18 @@ time_t thunder::GetEndTimeOfTheHour(time_t lTime)
     return lHourEndTime;
 }
 
-const std::string thunder::GetEndTimeOfTheHour(
+const std::string llib::GetEndTimeOfTheHour(
         const std::string& strTime,
         const std::string& strTimeFormat)
 {
     time_t lTime = 0;
     time_t lHourEndTime = 0;
-    lTime = thunder::TimeStr2time_t(strTime, strTimeFormat);
-    lHourEndTime = thunder::GetEndTimeOfTheHour(lTime);
-    return thunder::time_t2TimeStr(lHourEndTime, strTimeFormat);
+    lTime = llib::TimeStr2time_t(strTime, strTimeFormat);
+    lHourEndTime = llib::GetEndTimeOfTheHour(lTime);
+    return llib::time_t2TimeStr(lHourEndTime, strTimeFormat);
 }
 
-time_t thunder::GetBeginTimeOfTheDay(time_t lTime)
+time_t llib::GetBeginTimeOfTheDay(time_t lTime)
 {
     time_t lDayBeginTime = 0;
     struct tm stTime;
@@ -431,18 +431,18 @@ time_t thunder::GetBeginTimeOfTheDay(time_t lTime)
     return lDayBeginTime;
 }
 
-const std::string thunder::GetBeginTimeOfTheDay(
+const std::string llib::GetBeginTimeOfTheDay(
         const std::string& strTime,
         const std::string& strTimeFormat)
 {
     time_t lTime = 0;
     time_t lDayBeginTime = 0;
-    lTime = thunder::TimeStr2time_t(strTime, strTimeFormat);
-    lDayBeginTime = thunder::GetBeginTimeOfTheDay(lTime);
-    return thunder::time_t2TimeStr(lDayBeginTime, strTimeFormat);
+    lTime = llib::TimeStr2time_t(strTime, strTimeFormat);
+    lDayBeginTime = llib::GetBeginTimeOfTheDay(lTime);
+    return llib::time_t2TimeStr(lDayBeginTime, strTimeFormat);
 }
 
-time_t thunder::GetEndTimeOfTheDay(time_t lTime)
+time_t llib::GetEndTimeOfTheDay(time_t lTime)
 {
     struct tm stTime;
     time_t lDayEndTime;
@@ -457,18 +457,18 @@ time_t thunder::GetEndTimeOfTheDay(time_t lTime)
     return lDayEndTime;
 }
 
-const std::string thunder::GetEndTimeOfTheDay(
+const std::string llib::GetEndTimeOfTheDay(
         const std::string& strTime,
         const std::string& strTimeFormat)
 {
     time_t lTime = 0;
     time_t lDayEndTime = 0;
-    lTime = thunder::TimeStr2time_t(strTime, strTimeFormat);
-    lDayEndTime = thunder::GetEndTimeOfTheDay(lTime);
-    return thunder::time_t2TimeStr(lDayEndTime, strTimeFormat);
+    lTime = llib::TimeStr2time_t(strTime, strTimeFormat);
+    lDayEndTime = llib::GetEndTimeOfTheDay(lTime);
+    return llib::time_t2TimeStr(lDayEndTime, strTimeFormat);
 }
 
-time_t thunder::GetBeginTimeOfTheWeek(time_t lTime)
+time_t llib::GetBeginTimeOfTheWeek(time_t lTime)
 {
     struct tm stTime;
     time_t lDayBeginTime;
@@ -485,18 +485,18 @@ time_t thunder::GetBeginTimeOfTheWeek(time_t lTime)
     return lWeekBeginTime;
 }
 
-const std::string thunder::GetBeginTimeOfTheWeek(
+const std::string llib::GetBeginTimeOfTheWeek(
         const std::string& strTime,
         const std::string& strTimeFormat)
 {
     time_t lTime = 0;
     time_t lWeekBeginTime = 0;
-    lTime = thunder::TimeStr2time_t(strTime, strTimeFormat);
-    lWeekBeginTime = thunder::GetBeginTimeOfTheWeek(lTime);
-    return thunder::time_t2TimeStr(lWeekBeginTime, strTimeFormat);
+    lTime = llib::TimeStr2time_t(strTime, strTimeFormat);
+    lWeekBeginTime = llib::GetBeginTimeOfTheWeek(lTime);
+    return llib::time_t2TimeStr(lWeekBeginTime, strTimeFormat);
 }
 
-time_t thunder::GetBeginTimeOfTheMonth(time_t lTime)
+time_t llib::GetBeginTimeOfTheMonth(time_t lTime)
 {
     struct tm stTime;
     time_t lMonthBeginTime;
@@ -512,18 +512,18 @@ time_t thunder::GetBeginTimeOfTheMonth(time_t lTime)
     return lMonthBeginTime;
 }
 
-const std::string thunder::GetBeginTimeOfTheMonth(
+const std::string llib::GetBeginTimeOfTheMonth(
         const std::string& strTime,
         const std::string& strTimeFormat)
 {
     time_t lTime = 0;
     time_t lMonthBeginTime = 0;
-    lTime = thunder::TimeStr2time_t(strTime, strTimeFormat);
-    lMonthBeginTime = thunder::GetBeginTimeOfTheMonth(lTime);
-    return thunder::time_t2TimeStr(lMonthBeginTime, strTimeFormat);
+    lTime = llib::TimeStr2time_t(strTime, strTimeFormat);
+    lMonthBeginTime = llib::GetBeginTimeOfTheMonth(lTime);
+    return llib::time_t2TimeStr(lMonthBeginTime, strTimeFormat);
 }
 
-time_t thunder::GetEndTimeOfTheMonth(time_t lTime)
+time_t llib::GetEndTimeOfTheMonth(time_t lTime)
 {
     struct tm stTime;
     time_t lMonthEndTime;
@@ -544,18 +544,18 @@ time_t thunder::GetEndTimeOfTheMonth(time_t lTime)
     return lMonthEndTime - 86400;
 }
 
-const std::string thunder::GetEndTimeOfTheMonth(
+const std::string llib::GetEndTimeOfTheMonth(
         const std::string& strTime,
         const std::string& strTimeFormat)
 {
     time_t lTime = 0;
     time_t lMonthEndTime = 0;
-    lTime = thunder::TimeStr2time_t(strTime, strTimeFormat);
-    lMonthEndTime = thunder::GetEndTimeOfTheMonth(lTime);
-    return thunder::time_t2TimeStr(lMonthEndTime, strTimeFormat);
+    lTime = llib::TimeStr2time_t(strTime, strTimeFormat);
+    lMonthEndTime = llib::GetEndTimeOfTheMonth(lTime);
+    return llib::time_t2TimeStr(lMonthEndTime, strTimeFormat);
 }
 
-time_t thunder::GetBeginTimeOfNextMonth(time_t lTime)
+time_t llib::GetBeginTimeOfNextMonth(time_t lTime)
 {
     struct tm stTime;
     time_t lMonthBeginTime;
@@ -576,25 +576,25 @@ time_t thunder::GetBeginTimeOfNextMonth(time_t lTime)
     return lMonthBeginTime;
 }
 
-const std::string thunder::GetBeginTimeOfNextMonth(
+const std::string llib::GetBeginTimeOfNextMonth(
         const std::string& strTime,
         const std::string& strTimeFormat)
 {
     time_t lTime = 0;
     time_t lMonthEndTime = 0;
-    lTime = thunder::TimeStr2time_t(strTime, strTimeFormat);
-    lMonthEndTime = thunder::GetBeginTimeOfNextMonth(lTime);
-    return thunder::time_t2TimeStr(lMonthEndTime, strTimeFormat);
+    lTime = llib::TimeStr2time_t(strTime, strTimeFormat);
+    lMonthEndTime = llib::GetBeginTimeOfNextMonth(lTime);
+    return llib::time_t2TimeStr(lMonthEndTime, strTimeFormat);
 }
 
-time_t thunder::GetDaysBefore(
+time_t llib::GetDaysBefore(
         time_t lTime,
         int iDaysBefore)
 {
     return lTime - (iDaysBefore * 86400);
 }
 
-const std::string thunder::GetDaysBefore(
+const std::string llib::GetDaysBefore(
         const std::string& strTime,
         int iDaysBefore,
         const std::string& strTimeFormat)
@@ -602,30 +602,30 @@ const std::string thunder::GetDaysBefore(
     time_t lTime;
     time_t lDaysBefore;
 
-    lTime = thunder::TimeStr2time_t(strTime, strTimeFormat);
-    lDaysBefore = thunder::GetDaysBefore(lTime, iDaysBefore);
-    return thunder::time_t2TimeStr(lDaysBefore, strTimeFormat);
+    lTime = llib::TimeStr2time_t(strTime, strTimeFormat);
+    lDaysBefore = llib::GetDaysBefore(lTime, iDaysBefore);
+    return llib::time_t2TimeStr(lDaysBefore, strTimeFormat);
 }
 
-int thunder::GetTotalDaysOfTheMonth(time_t lTime)
+int llib::GetTotalDaysOfTheMonth(time_t lTime)
 {
-    time_t lLastMoment = thunder::GetEndTimeOfTheMonth(lTime);
+    time_t lLastMoment = llib::GetEndTimeOfTheMonth(lTime);
     struct tm stTime;
 
     localtime_r(&lLastMoment, &stTime);
     return stTime.tm_mday;
 }
 
-int thunder::GetTotalDaysOfTheMonth(
+int llib::GetTotalDaysOfTheMonth(
         const std::string& strTime,
         const std::string& strTimeFormat)
 {
     time_t lTime;
-    lTime = thunder::TimeStr2time_t(strTime, strTimeFormat);
-    return thunder::GetTotalDaysOfTheMonth(lTime);
+    lTime = llib::TimeStr2time_t(strTime, strTimeFormat);
+    return llib::GetTotalDaysOfTheMonth(lTime);
 }
 
-unsigned long long thunder::GetMicrosecond()
+unsigned long long llib::GetMicrosecond()
 {
     timeval stTime;
     gettimeofday(&stTime, NULL);

@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "RedisCmd.hpp"
 
-namespace thunder
+namespace llib
 {
 
 RedisCmd::RedisCmd()
@@ -54,4 +54,4 @@ std::string RedisCmd::ToString() const
     return strCmd;
 }
 
-} /* namespace thunder */
+} /* namespace llib */

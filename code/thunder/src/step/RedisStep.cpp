@@ -15,13 +15,13 @@ namespace thunder
 RedisStep::RedisStep(Step* pNextStep)
     : Step(pNextStep), m_pRedisCmd(NULL)
 {
-    m_pRedisCmd = new thunder::RedisCmd();
+    m_pRedisCmd = new llib::RedisCmd();
 }
 
 RedisStep::RedisStep(const MsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, const MsgBody& oReqMsgBody, Step* pNextStep)
     : Step(stReqMsgShell, oReqMsgHead, oReqMsgBody, pNextStep), m_pRedisCmd(NULL)
 {
-    m_pRedisCmd = new thunder::RedisCmd();
+    m_pRedisCmd = new llib::RedisCmd();
 }
 
 RedisStep::~RedisStep()

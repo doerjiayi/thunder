@@ -13,7 +13,7 @@
 #include "HttpParamCodec.h"
 #include "HttpUrlCoder.h"
 
-namespace thunder
+namespace llib
 {
 
 HttpParamCodec::HttpParamCodec()

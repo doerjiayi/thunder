@@ -29,7 +29,7 @@ protected:
     }
 
 private:
-    friend class ThunderWorker;
+    friend class NodeWorker;
 };
 
 } /* namespace thunder */

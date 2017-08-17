@@ -20,10 +20,10 @@
 #include "errmsg.h"
 #include "Dbi.hpp"
 
-namespace thunder
+namespace llib
 {
 
-class CMysqlDbi : public thunder::CDbi
+class CMysqlDbi : public llib::CDbi
 {
 public:
     CMysqlDbi();
@@ -37,7 +37,7 @@ public:
     virtual ~CMysqlDbi();
 
     //初始化连接实例
-    virtual int InitDbConn(const thunder::tagDbConfDetail& stDbConfDetail);
+    virtual int InitDbConn(const llib::tagDbConfDetail& stDbConfDetail);
 
     //执行SQL语句
     virtual int ExecSql(const std::string& strSql);
@@ -54,7 +54,7 @@ public:
     /**
      * @brief 设置mysql参数
      * @note  设置mysql参数，包括设置连接超时时间、设置传输数据压缩、设置是否允许LOAD FILE等.可参考
-     * thunder::CMysqlDbi::InitDbConn(const thunder::tagDbConfDetail& stDbConfDetail)
+     * llib::CMysqlDbi::InitDbConn(const llib::tagDbConfDetail& stDbConfDetail)
      * 中的使用。
      */
     virtual int SetMysqlOptions(
@@ -143,7 +143,7 @@ public:
     const char* MysqlInfo();
 
     virtual int GetResultToFile();
-    thunder::T_mapRow& GetRowFromFile();
+    llib::T_mapRow& GetRowFromFile();
 
 private:
 	//初始化数据成员，仅供构造函数使用
@@ -159,10 +159,10 @@ private:
     int m_iQueryResult;         //MySQL函数Query返回值
     int m_iErrno;       //上次调用的MySQL函数的错误编号
     std::string m_strError;  //上次调用的MySQL函数的错误消息
-    thunder::T_vecDict m_vecDict;	//结果集数据字典
-    thunder::T_mapRow m_mapRow;	//结果集行
+    llib::T_vecDict m_vecDict;	//结果集数据字典
+    llib::T_mapRow m_mapRow;	//结果集行
 
-    thunder::tagDbConfDetail m_stDbConfDetail; // 数据库连接信息
+    llib::tagDbConfDetail m_stDbConfDetail; // 数据库连接信息
  };
 
 

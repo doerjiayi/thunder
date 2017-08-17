@@ -1,7 +1,7 @@
 
 /*******************************************************************************
  * Project:  AsyncServer
- * @file     ThunderWorker.cpp
+ * @file     NodeWorker.cpp
  * @brief 
  * @author   cjy
  * @date:    2017年7月27日
@@ -11,8 +11,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "../../../../l3lib/include/hiredis/async.h"
-#include "../../../../l3lib/include/hiredis/adapters/libev.h"
+#include "hiredis/async.h"
+#include "hiredis/adapters/libev.h"
 #include "unix_util/process_helper.h"
 #include "unix_util/proctitle_helper.h"
 #ifdef __cplusplus
@@ -77,30 +77,30 @@ tagModule::~tagModule()
 }
 
 
-void ThunderWorker::TerminatedCallback(struct ev_loop* loop, struct ev_signal* watcher, int revents)
+void NodeWorker::TerminatedCallback(struct ev_loop* loop, struct ev_signal* watcher, int revents)
 {
     if (watcher->data != NULL)
     {
-        ThunderWorker* pWorker = (ThunderWorker*)watcher->data;
+        NodeWorker* pWorker = (NodeWorker*)watcher->data;
         pWorker->Terminated(watcher);  // timeout，worker进程无响应或与Manager通信通道异常，被manager进程终止时返回
     }
 }
 
-void ThunderWorker::IdleCallback(struct ev_loop* loop, struct ev_idle* watcher, int revents)
+void NodeWorker::IdleCallback(struct ev_loop* loop, struct ev_idle* watcher, int revents)
 {
     if (watcher->data != NULL)
     {
-        ThunderWorker* pWorker = (ThunderWorker*)watcher->data;
+        NodeWorker* pWorker = (NodeWorker*)watcher->data;
         pWorker->CheckParent();
     }
 }
 
-void ThunderWorker::IoCallback(struct ev_loop* loop, struct ev_io* watcher, int revents)
+void NodeWorker::IoCallback(struct ev_loop* loop, struct ev_io* watcher, int revents)
 {
     if (watcher->data != NULL)
     {
         tagIoWatcherData* pData = (tagIoWatcherData*)watcher->data;
-        ThunderWorker* pWorker = (ThunderWorker*)pData->pWorker;
+        NodeWorker* pWorker = (NodeWorker*)pData->pWorker;
         if (revents & EV_READ)
         {
             pWorker->IoRead(pData, watcher);
@@ -116,21 +116,21 @@ void ThunderWorker::IoCallback(struct ev_loop* loop, struct ev_io* watcher, int 
     }
 }
 
-void ThunderWorker::IoTimeoutCallback(struct ev_loop* loop, struct ev_timer* watcher, int revents)
+void NodeWorker::IoTimeoutCallback(struct ev_loop* loop, struct ev_timer* watcher, int revents)
 {
     if (watcher->data != NULL)
     {
         tagIoWatcherData* pData = (tagIoWatcherData*)watcher->data;
-        ThunderWorker* pWorker = pData->pWorker;
+        NodeWorker* pWorker = pData->pWorker;
         pWorker->IoTimeout(watcher);
     }
 }
 
-void ThunderWorker::PeriodicTaskCallback(struct ev_loop* loop, struct ev_timer* watcher, int revents)
+void NodeWorker::PeriodicTaskCallback(struct ev_loop* loop, struct ev_timer* watcher, int revents)
 {
     if (watcher->data != NULL)
     {
-        ThunderWorker* pWorker = (ThunderWorker*)(watcher->data);
+        NodeWorker* pWorker = (NodeWorker*)(watcher->data);
 
         pWorker->CheckParent();
 
@@ -140,52 +140,52 @@ void ThunderWorker::PeriodicTaskCallback(struct ev_loop* loop, struct ev_timer* 
     ev_timer_start (loop, watcher);
 }
 
-void ThunderWorker::StepTimeoutCallback(struct ev_loop* loop, struct ev_timer* watcher, int revents)
+void NodeWorker::StepTimeoutCallback(struct ev_loop* loop, struct ev_timer* watcher, int revents)
 {
     if (watcher->data != NULL)
     {
         Step* pStep = (Step*)watcher->data;
-        ((ThunderWorker*)(pStep->GetLabor()))->StepTimeout(pStep, watcher);
+        ((NodeWorker*)(pStep->GetLabor()))->StepTimeout(pStep, watcher);
     }
 }
 
-void ThunderWorker::SessionTimeoutCallback(struct ev_loop* loop, struct ev_timer* watcher, int revents)
+void NodeWorker::SessionTimeoutCallback(struct ev_loop* loop, struct ev_timer* watcher, int revents)
 {
     if (watcher->data != NULL)
     {
         Session* pSession = (Session*)watcher->data;
-        ((ThunderWorker*)pSession->GetLabor())->SessionTimeout(pSession, watcher);
+        ((NodeWorker*)pSession->GetLabor())->SessionTimeout(pSession, watcher);
     }
 }
 
-void ThunderWorker::RedisConnectCallback(const redisAsyncContext *c, int status)
+void NodeWorker::RedisConnectCallback(const redisAsyncContext *c, int status)
 {
     if (c->data != NULL)
     {
-        ThunderWorker* pWorker = (ThunderWorker*)c->data;
+        NodeWorker* pWorker = (NodeWorker*)c->data;
         pWorker->RedisConnect(c, status);
     }
 }
 
-void ThunderWorker::RedisDisconnectCallback(const redisAsyncContext *c, int status)
+void NodeWorker::RedisDisconnectCallback(const redisAsyncContext *c, int status)
 {
     if (c->data != NULL)
     {
-        ThunderWorker* pWorker = (ThunderWorker*)c->data;
+        NodeWorker* pWorker = (NodeWorker*)c->data;
         pWorker->RedisDisconnect(c, status);
     }
 }
 
-void ThunderWorker::RedisCmdCallback(redisAsyncContext *c, void *reply, void *privdata)
+void NodeWorker::RedisCmdCallback(redisAsyncContext *c, void *reply, void *privdata)
 {
     if (c->data != NULL)
     {
-        ThunderWorker* pWorker = (ThunderWorker*)c->data;
+        NodeWorker* pWorker = (NodeWorker*)c->data;
         pWorker->RedisCmdResult(c, reply, privdata);
     }
 }
 
-ThunderWorker::ThunderWorker(const std::string& strWorkPath, int iControlFd, int iDataFd, int iWorkerIndex, thunder::CJsonObject& oJsonConf)
+NodeWorker::NodeWorker(const std::string& strWorkPath, int iControlFd, int iDataFd, int iWorkerIndex, llib::CJsonObject& oJsonConf)
     : m_pErrBuff(NULL), m_ulSequence(0), m_bInitLogger(false), m_dIoTimeout(480.0), m_strWorkPath(strWorkPath), m_uiNodeId(0),
       m_iManagerControlFd(iControlFd), m_iManagerDataFd(iDataFd), m_iWorkerIndex(iWorkerIndex), m_iWorkerPid(0),
       m_dMsgStatInterval(60.0), m_iMsgPermitNum(60),
@@ -202,28 +202,28 @@ ThunderWorker::ThunderWorker(const std::string& strWorkPath, int iControlFd, int
     {
         exit(-2);
     }
+    m_pCoroutineSchedule = llib::coroutine_open();
     PreloadCmd();
     LoadSo(oJsonConf["so"]);
     LoadModule(oJsonConf["module"]);
-    m_pSchedule = coroutine_open();
 }
 
-ThunderWorker::~ThunderWorker()
+NodeWorker::~NodeWorker()
 {
-	if (m_pSchedule)
+	if (m_pCoroutineSchedule)
 	{
-		coroutine_close(m_pSchedule);
+		coroutine_close(m_pCoroutineSchedule);
 	}
     Destroy();
 }
 
-void ThunderWorker::Run()
+void NodeWorker::Run()
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     ev_run (m_loop, 0);
 }
 
-void ThunderWorker::Terminated(struct ev_signal* watcher)
+void NodeWorker::Terminated(struct ev_signal* watcher)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     int iSignum = watcher->signum;
@@ -233,7 +233,7 @@ void ThunderWorker::Terminated(struct ev_signal* watcher)
     exit(iSignum);
 }
 
-bool ThunderWorker::CheckParent()
+bool NodeWorker::CheckParent()
 {
     //LOG4_TRACE("%s()", __FUNCTION__);
     pid_t iParentPid = getppid();
@@ -245,7 +245,7 @@ bool ThunderWorker::CheckParent()
     }
     MsgHead oMsgHead;
     MsgBody oMsgBody;
-    thunder::CJsonObject oJsonLoad;
+    llib::CJsonObject oJsonLoad;
     oJsonLoad.Add("load", int32(m_mapFdAttr.size() + m_mapCallbackStep.size()));
     oJsonLoad.Add("connect", int32(m_mapFdAttr.size()));
     oJsonLoad.Add("recv_num", m_iRecvNum);
@@ -276,7 +276,7 @@ bool ThunderWorker::CheckParent()
     return(true);
 }
 
-bool ThunderWorker::SendToParent(const MsgHead& oMsgHead,const MsgBody& oMsgBody)
+bool NodeWorker::SendToParent(const MsgHead& oMsgHead,const MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     std::map<int, tagConnectionAttr*>::iterator iter = m_mapFdAttr.find(m_iManagerControlFd);
@@ -295,7 +295,7 @@ bool ThunderWorker::SendToParent(const MsgHead& oMsgHead,const MsgBody& oMsgBody
     return(true);
 }
 
-bool ThunderWorker::IoRead(tagIoWatcherData* pData, struct ev_io* watcher)
+bool NodeWorker::IoRead(tagIoWatcherData* pData, struct ev_io* watcher)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     if (watcher->fd == m_iManagerDataFd)
@@ -308,7 +308,7 @@ bool ThunderWorker::IoRead(tagIoWatcherData* pData, struct ev_io* watcher)
     }
 }
 
-bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* watcher)
+bool NodeWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* watcher)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     int iErrno = 0;
@@ -359,7 +359,7 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
             MsgHead oInMsgHead, oOutMsgHead;
             MsgBody oInMsgBody, oOutMsgBody;
             ThunderCodec* pCodec = NULL;
-            std::map<thunder::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
+            std::map<llib::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
             if (codec_iter == m_mapCodec.end())
             {
                 LOG4_ERROR("no codec found for %d!", conn_iter->second->eCodecType);
@@ -381,13 +381,13 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
                 {
                     //网关默认配置websocket json(可修改为websocket pb)
                     if (CODEC_STATUS_ERR == eCodecStatus &&
-                        (thunder::CODEC_WEBSOCKET_EX_JS == pTagConnectionAttr->eCodecType
-                        		|| thunder::CODEC_WEBSOCKET_EX_PB == pTagConnectionAttr->eCodecType))
+                        (llib::CODEC_WEBSOCKET_EX_JS == pTagConnectionAttr->eCodecType
+                        		|| llib::CODEC_WEBSOCKET_EX_PB == pTagConnectionAttr->eCodecType))
                     {
                         //切换为http协议
                         LOG4_DEBUG("failed to decode for codec %d,switch to CODEC_HTTP",pTagConnectionAttr->eCodecType);
-                        conn_iter->second->eCodecType = thunder::CODEC_HTTP;
-                        std::map<thunder::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(pTagConnectionAttr->eCodecType);
+                        conn_iter->second->eCodecType = llib::CODEC_HTTP;
+                        std::map<llib::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(pTagConnectionAttr->eCodecType);
                         if (codec_iter == m_mapCodec.end())
                         {
                             LOG4_ERROR("no codec found for %d!", pTagConnectionAttr->eCodecType);
@@ -400,12 +400,12 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
                         }
                         eCodecStatus = codec_iter->second->Decode(pTagConnectionAttr, oInMsgHead, oInMsgBody);
                     }
-                    if (CODEC_STATUS_ERR == eCodecStatus && thunder::CODEC_HTTP == pTagConnectionAttr->eCodecType)
+                    if (CODEC_STATUS_ERR == eCodecStatus && llib::CODEC_HTTP == pTagConnectionAttr->eCodecType)
                     {
                         //切换为私有协议编解码（与客户端通信协议） private pb
                         LOG4_DEBUG("failed to decode for codec %d,switch to CODEC_PRIVATE",pTagConnectionAttr->eCodecType);
-                        conn_iter->second->eCodecType = thunder::CODEC_PRIVATE;
-                        std::map<thunder::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(pTagConnectionAttr->eCodecType);
+                        conn_iter->second->eCodecType = llib::CODEC_PRIVATE;
+                        std::map<llib::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(pTagConnectionAttr->eCodecType);
                         if (codec_iter == m_mapCodec.end())
                         {
                             LOG4_ERROR("no codec found for %d!", pTagConnectionAttr->eCodecType);
@@ -442,8 +442,8 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
                         else
                         {
                             // 如果是websocket连接，则需要验证连接
-                            if (thunder::CODEC_WEBSOCKET_EX_PB == pTagConnectionAttr->eCodecType ||
-                                            thunder::CODEC_WEBSOCKET_EX_JS == pTagConnectionAttr->eCodecType)
+                            if (llib::CODEC_WEBSOCKET_EX_PB == pTagConnectionAttr->eCodecType ||
+                                            llib::CODEC_WEBSOCKET_EX_JS == pTagConnectionAttr->eCodecType)
                             {
                                 std::map<int32, std::list<uint32> >::iterator http_iter = m_mapHttpAttr.find(stMsgShell.iFd);
                                 if (http_iter == m_mapHttpAttr.end())   // 未经握手的websocket客户端连接发送数据过来，直接断开
@@ -507,8 +507,8 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
                         HttpMsg oOutHttpMsg;
                         if (oInHttpMsg.ParseFromString(oInMsgBody.body()))
                         {
-                            if (thunder::CODEC_WEBSOCKET_EX_PB != conn_iter->second->eCodecType &&
-                                    thunder::CODEC_WEBSOCKET_EX_JS != conn_iter->second->eCodecType)
+                            if (llib::CODEC_WEBSOCKET_EX_PB != conn_iter->second->eCodecType &&
+                                    llib::CODEC_WEBSOCKET_EX_JS != conn_iter->second->eCodecType)
                             {
                                 conn_iter->second->dKeepAlive = 10;   // 未带KeepAlive参数的http协议，默认10秒钟关闭
                                 LOG4_TRACE("set dKeepAlive(%lf)",pTagConnectionAttr->dKeepAlive);
@@ -659,7 +659,7 @@ bool ThunderWorker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* wa
     return(false);
 }
 
-bool ThunderWorker::FdTransfer()
+bool NodeWorker::FdTransfer()
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     char szIpAddr[16] = {0};
@@ -683,7 +683,7 @@ bool ThunderWorker::FdTransfer()
     else
     {
         uint32 ulSeq = GetSequence();
-        tagConnectionAttr* pConnAttr = CreateFdAttr(iAcceptFd, ulSeq, thunder::E_CODEC_TYPE(iCodec));
+        tagConnectionAttr* pConnAttr = CreateFdAttr(iAcceptFd, ulSeq, llib::E_CODEC_TYPE(iCodec));
         x_sock_set_block(iAcceptFd, 0);
         if (pConnAttr)
         {
@@ -720,7 +720,7 @@ bool ThunderWorker::FdTransfer()
     return(false);
 }
 
-bool ThunderWorker::IoWrite(tagIoWatcherData* pData, struct ev_io* watcher)
+bool NodeWorker::IoWrite(tagIoWatcherData* pData, struct ev_io* watcher)
 {
     //LOG4_TRACE("%s()", __FUNCTION__);
     std::map<int, tagConnectionAttr*>::iterator attr_iter =  m_mapFdAttr.find(pData->iFd);
@@ -788,7 +788,7 @@ bool ThunderWorker::IoWrite(tagIoWatcherData* pData, struct ev_io* watcher)
                     stMsgShell.iFd = pData->iFd;
                     stMsgShell.ulSeq = attr_iter->second->ulSeq;
                     AddInnerFd(stMsgShell);
-                    if (thunder::CODEC_PROTOBUF == attr_iter->second->eCodecType)  // 系统内部Server间通信
+                    if (llib::CODEC_PROTOBUF == attr_iter->second->eCodecType)  // 系统内部Server间通信
                     {
                         m_pCmdConnect->Start(stMsgShell, index_iter->second);
                     }
@@ -813,7 +813,7 @@ bool ThunderWorker::IoWrite(tagIoWatcherData* pData, struct ev_io* watcher)
     }
 }
 
-bool ThunderWorker::IoError(tagIoWatcherData* pData, struct ev_io* watcher)
+bool NodeWorker::IoError(tagIoWatcherData* pData, struct ev_io* watcher)
 {
     //LOG4_TRACE("%s()", __FUNCTION__);
     std::map<int, tagConnectionAttr*>::iterator iter =  m_mapFdAttr.find(pData->iFd);
@@ -841,7 +841,7 @@ bool ThunderWorker::IoError(tagIoWatcherData* pData, struct ev_io* watcher)
     }
 }
 
-bool ThunderWorker::IoTimeout(struct ev_timer* watcher, bool bCheckBeat)
+bool NodeWorker::IoTimeout(struct ev_timer* watcher, bool bCheckBeat)
 {
     LOG4_TRACE("%s()",__FUNCTION__);
     bool bRes = false;
@@ -959,7 +959,7 @@ bool ThunderWorker::IoTimeout(struct ev_timer* watcher, bool bCheckBeat)
     return(bRes);
 }
 
-bool ThunderWorker::StepTimeout(Step* pStep, struct ev_timer* watcher)
+bool NodeWorker::StepTimeout(Step* pStep, struct ev_timer* watcher)
 {
     ev_tstamp after = pStep->GetActiveTime() - ev_now(m_loop) + pStep->GetTimeout();
     if (after > 0)    // 在定时时间内被重新刷新过，重新设置定时器
@@ -990,7 +990,7 @@ bool ThunderWorker::StepTimeout(Step* pStep, struct ev_timer* watcher)
     }
 }
 
-bool ThunderWorker::SessionTimeout(Session* pSession, struct ev_timer* watcher)
+bool NodeWorker::SessionTimeout(Session* pSession, struct ev_timer* watcher)
 {
     ev_tstamp after = pSession->GetActiveTime() - ev_now(m_loop) + pSession->GetTimeout();
     if (after > 0)    // 定时时间内被重新刷新过，重新设置定时器
@@ -1019,7 +1019,7 @@ bool ThunderWorker::SessionTimeout(Session* pSession, struct ev_timer* watcher)
     }
 }
 
-bool ThunderWorker::RedisConnect(const redisAsyncContext *c, int status)
+bool NodeWorker::RedisConnect(const redisAsyncContext *c, int status)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     std::map<redisAsyncContext*, tagRedisAttr*>::iterator attr_iter = m_mapRedisAttr.find((redisAsyncContext*)c);
@@ -1076,7 +1076,7 @@ bool ThunderWorker::RedisConnect(const redisAsyncContext *c, int status)
     return(true);
 }
 
-bool ThunderWorker::RedisDisconnect(const redisAsyncContext *c, int status)
+bool NodeWorker::RedisDisconnect(const redisAsyncContext *c, int status)
 {
     LOG4_DEBUG("%s()", __FUNCTION__);
     std::map<redisAsyncContext*, tagRedisAttr*>::iterator attr_iter = m_mapRedisAttr.find((redisAsyncContext*)c);
@@ -1112,7 +1112,7 @@ bool ThunderWorker::RedisDisconnect(const redisAsyncContext *c, int status)
     return(true);
 }
 
-bool ThunderWorker::RedisCmdResult(redisAsyncContext *c, void *reply, void *privdata)
+bool NodeWorker::RedisCmdResult(redisAsyncContext *c, void *reply, void *privdata)
 {
     LOG4_DEBUG("%s()", __FUNCTION__);
     std::map<redisAsyncContext*, tagRedisAttr*>::iterator attr_iter = m_mapRedisAttr.find((redisAsyncContext*)c);
@@ -1163,12 +1163,12 @@ bool ThunderWorker::RedisCmdResult(redisAsyncContext *c, void *reply, void *priv
     return(true);
 }
 
-time_t ThunderWorker::GetNowTime() const
+time_t NodeWorker::GetNowTime() const
 {
     return((time_t)ev_now(m_loop));
 }
 
-bool ThunderWorker::Pretreat(Cmd* pCmd)
+bool NodeWorker::Pretreat(Cmd* pCmd)
 {
     LOG4_TRACE("%s(Cmd*)", __FUNCTION__);
     if (pCmd == NULL)
@@ -1180,7 +1180,7 @@ bool ThunderWorker::Pretreat(Cmd* pCmd)
     return(true);
 }
 
-bool ThunderWorker::Pretreat(Step* pStep)
+bool NodeWorker::Pretreat(Step* pStep)
 {
     LOG4_TRACE("%s(Step*)", __FUNCTION__);
     if (pStep == NULL)
@@ -1192,7 +1192,7 @@ bool ThunderWorker::Pretreat(Step* pStep)
     return(true);
 }
 
-bool ThunderWorker::Pretreat(Session* pSession)
+bool NodeWorker::Pretreat(Session* pSession)
 {
     LOG4_TRACE("%s(Session*)", __FUNCTION__);
     if (pSession == NULL)
@@ -1204,36 +1204,43 @@ bool ThunderWorker::Pretreat(Session* pSession)
     return(true);
 }
 
-int ThunderWorker::NewCoroutine(coroutine_func func,void *ud)
+int NodeWorker::CoroutineNew(llib::coroutine_func func,void *ud)
 {
-	int co1 = coroutine_new(m_pSchedule, func, ud);
-	LOG4_TRACE("%s coroutine_new co1:%d", __FUNCTION__,co1);
-	if (co1 == -1)
+	int coid = llib::coroutine_new(m_pCoroutineSchedule, func, ud);
+	LOG4_TRACE("%s coroutine_new co1:%d", __FUNCTION__,coid);
+	if (coid == -1)
 	{
-		LOG4_ERROR("%s coroutine invalid co1(%u)", __FUNCTION__, co1);
+		LOG4_ERROR("%s coroutine invalid coid(%u)", __FUNCTION__, coid);
 	}
-	return co1;
+	else
+	{
+		LOG4_TRACE("%s coroutine coid(%u) status(%d)",
+				__FUNCTION__,coid,llib::coroutine_status(m_pCoroutineSchedule,coid));
+	}
+	return coid;
 }
 
-void ThunderWorker::RunCoroutine(int co1)
+void NodeWorker::CoroutineResume(int coid)
 {
-	int running_id = coroutine_running(m_pSchedule);
+	int running_id = llib::coroutine_running(m_pCoroutineSchedule);
 	if (running_id != -1)//抢占式
 	{
 		LOG4_TRACE("%s coroutine_yield running_id(%d)", __FUNCTION__, running_id);
-		coroutine_yield(m_pSchedule);//放弃执行权
+		llib::coroutine_yield(m_pCoroutineSchedule);//放弃执行权
 	}
-	LOG4_TRACE("%s coroutine_resume co1(%d)", __FUNCTION__, co1);
-	coroutine_resume(m_pSchedule,co1);//执行函数
+	LOG4_TRACE("%s coroutine_resume coid(%d) status(%d)",
+			__FUNCTION__, coid,llib::coroutine_status(m_pCoroutineSchedule,coid));
+	llib::coroutine_resume(m_pCoroutineSchedule,coid);//执行函数
 }
 
-void ThunderWorker::YieldCoroutine()
+void NodeWorker::CoroutineYield()
 {
-	int running_id = coroutine_running(m_pSchedule);
+	int running_id = llib::coroutine_running(m_pCoroutineSchedule);
 	if (running_id != -1)
 	{
-		LOG4_TRACE("%s coroutine_yield running_id(%d)", __FUNCTION__, running_id);
-		coroutine_yield(m_pSchedule);//放弃执行权
+		LOG4_TRACE("%s coroutine_yield running_id(%d) status(%d)",
+				__FUNCTION__, running_id,coroutine_status(m_pCoroutineSchedule,running_id));
+		llib::coroutine_yield(m_pCoroutineSchedule);//放弃执行权
 	}
 	else
 	{
@@ -1241,7 +1248,35 @@ void ThunderWorker::YieldCoroutine()
 	}
 }
 
-bool ThunderWorker::RegisterCallback(Step* pStep, ev_tstamp dTimeout)
+int NodeWorker::CoroutineStatus(int coid)
+{
+	if (-1 != coid)
+	{
+		int status = llib::coroutine_status(m_pCoroutineSchedule,coid);
+		LOG4_TRACE("%s coroutine_status coid(%d) status(%d)",
+				__FUNCTION__, coid,status);
+		return status;
+	}
+	int running_id = llib::coroutine_running(m_pCoroutineSchedule);
+	if (-1 != running_id)
+	{
+		int status = llib::coroutine_status(m_pCoroutineSchedule,running_id);
+		LOG4_TRACE("%s coroutine_status running_id(%d) status(%d)",
+				__FUNCTION__, running_id,status);
+		return status;
+	}
+	return 0;//dead
+}
+
+int NodeWorker::CoroutineRunning()
+{
+	int running_id = llib::coroutine_running(m_pCoroutineSchedule);
+	LOG4_TRACE("%s coroutine_status running_id(%d)",
+					__FUNCTION__, running_id);
+	return running_id;
+}
+
+bool NodeWorker::RegisterCallback(Step* pStep, ev_tstamp dTimeout)
 {
     LOG4_TRACE("%s(Step* 0x%X, lifetime %lf)", __FUNCTION__, pStep, dTimeout);
     if (pStep == NULL)
@@ -1288,7 +1323,7 @@ bool ThunderWorker::RegisterCallback(Step* pStep, ev_tstamp dTimeout)
     return(ret.second);
 }
 
-bool ThunderWorker::RegisterCallback(uint32 uiSelfStepSeq, Step* pStep, ev_tstamp dTimeout)
+bool NodeWorker::RegisterCallback(uint32 uiSelfStepSeq, Step* pStep, ev_tstamp dTimeout)
 {
     LOG4_TRACE("%s(Step* 0x%X, lifetime %lf)", __FUNCTION__, pStep, dTimeout);
     if (pStep == NULL)
@@ -1354,7 +1389,7 @@ bool ThunderWorker::RegisterCallback(uint32 uiSelfStepSeq, Step* pStep, ev_tstam
     return(ret.second);
 }
 
-void ThunderWorker::DeleteCallback(Step* pStep)
+void NodeWorker::DeleteCallback(Step* pStep)
 {
     LOG4_TRACE("%s(Step* 0x%X)", __FUNCTION__, pStep);
     if (pStep == NULL)
@@ -1390,7 +1425,7 @@ void ThunderWorker::DeleteCallback(Step* pStep)
     }
 }
 
-void ThunderWorker::DeleteCallback(uint32 uiSelfStepSeq, Step* pStep)
+void NodeWorker::DeleteCallback(uint32 uiSelfStepSeq, Step* pStep)
 {
     LOG4_TRACE("%s(self_seq[%u], Step* 0x%X)", __FUNCTION__, uiSelfStepSeq, pStep);
     if (pStep == NULL)
@@ -1436,7 +1471,7 @@ void ThunderWorker::DeleteCallback(uint32 uiSelfStepSeq, Step* pStep)
 }
 
 /*
-bool ThunderWorker::UnRegisterCallback(Step* pStep)
+bool NodeWorker::UnRegisterCallback(Step* pStep)
 {
     LOG4_TRACE("%s(Step* 0x%X)", __FUNCTION__, pStep);
     if (pStep == NULL)
@@ -1458,7 +1493,7 @@ bool ThunderWorker::UnRegisterCallback(Step* pStep)
 }
 */
 
-bool ThunderWorker::RegisterCallback(Session* pSession)
+bool NodeWorker::RegisterCallback(Session* pSession)
 {
     LOG4_TRACE("%s(Session* 0x%X, lifetime %lf)", __FUNCTION__, &pSession, pSession->GetTimeout());
     if (pSession == NULL)
@@ -1532,7 +1567,7 @@ bool ThunderWorker::RegisterCallback(Session* pSession)
     return(ret.second);
 }
 
-void ThunderWorker::DeleteCallback(Session* pSession)
+void NodeWorker::DeleteCallback(Session* pSession)
 {
     LOG4_TRACE("%s(Session* 0x%X)", __FUNCTION__, &pSession);
     if (pSession == NULL)
@@ -1557,7 +1592,7 @@ void ThunderWorker::DeleteCallback(Session* pSession)
     }
 }
 
-bool ThunderWorker::RegisterCallback(const redisAsyncContext* pRedisContext, RedisStep* pRedisStep)
+bool NodeWorker::RegisterCallback(const redisAsyncContext* pRedisContext, RedisStep* pRedisStep)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     if (pRedisStep == NULL)
@@ -1636,7 +1671,7 @@ bool ThunderWorker::RegisterCallback(const redisAsyncContext* pRedisContext, Red
     }
 }
 
-bool ThunderWorker::ResetTimeout(Step* pStep, struct ev_timer* watcher)
+bool NodeWorker::ResetTimeout(Step* pStep, struct ev_timer* watcher)
 {
     ev_tstamp after = ev_now(m_loop) + pStep->GetTimeout();
     ev_timer_stop (m_loop, watcher);
@@ -1645,7 +1680,7 @@ bool ThunderWorker::ResetTimeout(Step* pStep, struct ev_timer* watcher)
     return(true);
 }
 
-Session* ThunderWorker::GetSession(uint64 uiSessionId, const std::string& strSessionClass)
+Session* NodeWorker::GetSession(uint64 uiSessionId, const std::string& strSessionClass)
 {
     std::map<std::string, std::map<std::string, Session*> >::iterator name_iter = m_mapCallbackSession.find(strSessionClass);
     if (name_iter == m_mapCallbackSession.end())
@@ -1670,7 +1705,7 @@ Session* ThunderWorker::GetSession(uint64 uiSessionId, const std::string& strSes
     }
 }
 
-Session* ThunderWorker::GetSession(const std::string& strSessionId, const std::string& strSessionClass)
+Session* NodeWorker::GetSession(const std::string& strSessionId, const std::string& strSessionClass)
 {
     std::map<std::string, std::map<std::string, Session*> >::iterator name_iter = m_mapCallbackSession.find(strSessionClass);
     if (name_iter == m_mapCallbackSession.end())
@@ -1692,7 +1727,7 @@ Session* ThunderWorker::GetSession(const std::string& strSessionId, const std::s
     }
 }
 
-//bool ThunderWorker::RegisterCallback(Session* pSession)
+//bool NodeWorker::RegisterCallback(Session* pSession)
 //{
 //    if (pSession == NULL)
 //    {
@@ -1722,7 +1757,7 @@ Session* ThunderWorker::GetSession(const std::string& strSessionId, const std::s
 //    return(ret.second);
 //}
 //
-//void ThunderWorker::DeleteCallback(Session* pSession)
+//void NodeWorker::DeleteCallback(Session* pSession)
 //{
 //    if (pSession == NULL)
 //    {
@@ -1737,7 +1772,7 @@ Session* ThunderWorker::GetSession(const std::string& strSessionId, const std::s
 //    }
 //}
 
-bool ThunderWorker::Disconnect(const MsgShell& stMsgShell, bool bMsgShellNotice)
+bool NodeWorker::Disconnect(const MsgShell& stMsgShell, bool bMsgShellNotice)
 {
     std::map<int, tagConnectionAttr*>::iterator iter = m_mapFdAttr.find(stMsgShell.iFd);
     if (iter != m_mapFdAttr.end())
@@ -1751,7 +1786,7 @@ bool ThunderWorker::Disconnect(const MsgShell& stMsgShell, bool bMsgShellNotice)
     return(false);
 }
 
-bool ThunderWorker::Disconnect(const std::string& strIdentify, bool bMsgShellNotice)
+bool NodeWorker::Disconnect(const std::string& strIdentify, bool bMsgShellNotice)
 {
     std::map<std::string, MsgShell>::iterator shell_iter = m_mapMsgShell.find(strIdentify);
     if (shell_iter == m_mapMsgShell.end())
@@ -1764,7 +1799,7 @@ bool ThunderWorker::Disconnect(const std::string& strIdentify, bool bMsgShellNot
     }
 }
 
-bool ThunderWorker::SetProcessName(const thunder::CJsonObject& oJsonConf)
+bool NodeWorker::SetProcessName(const llib::CJsonObject& oJsonConf)
 {
     char szProcessName[64] = {0};
     snprintf(szProcessName, sizeof(szProcessName), "%s_W%d", oJsonConf("server_name").c_str(), m_iWorkerIndex);
@@ -1772,7 +1807,7 @@ bool ThunderWorker::SetProcessName(const thunder::CJsonObject& oJsonConf)
     return(true);
 }
 
-bool ThunderWorker::Init(thunder::CJsonObject& oJsonConf)
+bool NodeWorker::Init(llib::CJsonObject& oJsonConf)
 {
     char szProcessName[64] = {0};
     snprintf(szProcessName, sizeof(szProcessName), "%s_W%d", oJsonConf("server_name").c_str(), m_iWorkerIndex);
@@ -1794,21 +1829,21 @@ bool ThunderWorker::Init(thunder::CJsonObject& oJsonConf)
     {
         return(false);
     }
-    ThunderCodec* pCodec = new ProtoCodec(thunder::CODEC_PROTOBUF);
+    ThunderCodec* pCodec = new ProtoCodec(llib::CODEC_PROTOBUF);
     pCodec->SetLogger(m_oLogger);
-    m_mapCodec.insert(std::pair<thunder::E_CODEC_TYPE, ThunderCodec*>(thunder::CODEC_PROTOBUF, pCodec));
-    pCodec = new HttpCodec(thunder::CODEC_HTTP);
+    m_mapCodec.insert(std::pair<llib::E_CODEC_TYPE, ThunderCodec*>(llib::CODEC_PROTOBUF, pCodec));
+    pCodec = new HttpCodec(llib::CODEC_HTTP);
     pCodec->SetLogger(m_oLogger);
-    m_mapCodec.insert(std::pair<thunder::E_CODEC_TYPE, ThunderCodec*>(thunder::CODEC_HTTP, pCodec));
-    pCodec = new CustomMsgCodec(thunder::CODEC_PRIVATE);
+    m_mapCodec.insert(std::pair<llib::E_CODEC_TYPE, ThunderCodec*>(llib::CODEC_HTTP, pCodec));
+    pCodec = new CustomMsgCodec(llib::CODEC_PRIVATE);
     pCodec->SetLogger(m_oLogger);
-    m_mapCodec.insert(std::pair<thunder::E_CODEC_TYPE, ThunderCodec*>(thunder::CODEC_PRIVATE, pCodec));
-    pCodec = new CodecWebSocketJson(thunder::CODEC_WEBSOCKET_EX_JS);
+    m_mapCodec.insert(std::pair<llib::E_CODEC_TYPE, ThunderCodec*>(llib::CODEC_PRIVATE, pCodec));
+    pCodec = new CodecWebSocketJson(llib::CODEC_WEBSOCKET_EX_JS);
     pCodec->SetLogger(m_oLogger);
-    m_mapCodec.insert(std::pair<thunder::E_CODEC_TYPE, ThunderCodec*>(thunder::CODEC_WEBSOCKET_EX_JS, pCodec));
-    pCodec = new CodecWebSocketPb(thunder::CODEC_WEBSOCKET_EX_PB);
+    m_mapCodec.insert(std::pair<llib::E_CODEC_TYPE, ThunderCodec*>(llib::CODEC_WEBSOCKET_EX_JS, pCodec));
+    pCodec = new CodecWebSocketPb(llib::CODEC_WEBSOCKET_EX_PB);
     pCodec->SetLogger(m_oLogger);
-    m_mapCodec.insert(std::pair<thunder::E_CODEC_TYPE, ThunderCodec*>(thunder::CODEC_WEBSOCKET_EX_PB, pCodec));
+    m_mapCodec.insert(std::pair<llib::E_CODEC_TYPE, ThunderCodec*>(llib::CODEC_WEBSOCKET_EX_PB, pCodec));
     m_pCmdConnect = new CmdConnectWorker();
     if (m_pCmdConnect == NULL)
     {
@@ -1819,7 +1854,7 @@ bool ThunderWorker::Init(thunder::CJsonObject& oJsonConf)
     return(true);
 }
 
-bool ThunderWorker::InitLogger(const thunder::CJsonObject& oJsonConf)
+bool NodeWorker::InitLogger(const llib::CJsonObject& oJsonConf)
 {
     if (m_bInitLogger)  // 已经被初始化过，只修改日志级别
     {
@@ -1890,7 +1925,7 @@ bool ThunderWorker::InitLogger(const thunder::CJsonObject& oJsonConf)
     }
 }
 
-bool ThunderWorker::CreateEvents()
+bool NodeWorker::CreateEvents()
 {
     m_loop = ev_loop_new(EVFLAG_AUTO);
     if (m_loop == NULL)
@@ -1966,7 +2001,7 @@ bool ThunderWorker::CreateEvents()
     return(true);
 }
 
-void ThunderWorker::PreloadCmd()
+void NodeWorker::PreloadCmd()
 {
     Cmd* pCmdToldWorker = new CmdToldWorker();
     pCmdToldWorker->SetCmd(CMD_REQ_TELL_WORKER);
@@ -2000,7 +2035,7 @@ void ThunderWorker::PreloadCmd()
     m_mapCmd.insert(std::pair<int32, Cmd*>(pCmdUpdateConfig->GetCmd(), pCmdUpdateConfig));
 }
 
-void ThunderWorker::Destroy()
+void NodeWorker::Destroy()
 {
     LOG4_TRACE("%s()", __FUNCTION__);
 
@@ -2037,7 +2072,7 @@ void ThunderWorker::Destroy()
         DestroyConnect(attr_iter);
     }
 
-    for (std::map<thunder::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.begin();
+    for (std::map<llib::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.begin();
                     codec_iter != m_mapCodec.end(); ++codec_iter)
     {
         delete codec_iter->second;
@@ -2058,12 +2093,12 @@ void ThunderWorker::Destroy()
     }
 }
 
-void ThunderWorker::ResetLogLevel(log4cplus::LogLevel iLogLevel)
+void NodeWorker::ResetLogLevel(log4cplus::LogLevel iLogLevel)
 {
     m_oLogger.setLogLevel(iLogLevel);
 }
 
-bool ThunderWorker::AddMsgShell(const std::string& strIdentify, const MsgShell& stMsgShell)
+bool NodeWorker::AddMsgShell(const std::string& strIdentify, const MsgShell& stMsgShell)
 {
     LOG4_TRACE("%s(%s, fd %d, seq %u)", __FUNCTION__, strIdentify.c_str(), stMsgShell.iFd, stMsgShell.ulSeq);
     std::map<std::string, MsgShell>::iterator shell_iter = m_mapMsgShell.find(strIdentify);
@@ -2099,7 +2134,7 @@ bool ThunderWorker::AddMsgShell(const std::string& strIdentify, const MsgShell& 
     return(true);
 }
 
-void ThunderWorker::DelMsgShell(const std::string& strIdentify,const MsgShell& stMsgShell)
+void NodeWorker::DelMsgShell(const std::string& strIdentify,const MsgShell& stMsgShell)
 {
     std::map<std::string, MsgShell>::iterator shell_iter = m_mapMsgShell.find(strIdentify);
     if (shell_iter == m_mapMsgShell.end())
@@ -2149,7 +2184,7 @@ void ThunderWorker::DelMsgShell(const std::string& strIdentify,const MsgShell& s
 //    }
 }
 
-void ThunderWorker::AddNodeIdentify(const std::string& strNodeType, const std::string& strIdentify)
+void NodeWorker::AddNodeIdentify(const std::string& strNodeType, const std::string& strIdentify)
 {
     LOG4_TRACE("%s(%s, %s)", __FUNCTION__, strNodeType.c_str(), strIdentify.c_str());
     std::map<std::string, std::string>::iterator iter = m_mapIdentifyNodeType.find(strIdentify);
@@ -2186,7 +2221,7 @@ void ThunderWorker::AddNodeIdentify(const std::string& strNodeType, const std::s
     }
 }
 
-void ThunderWorker::DelNodeIdentify(const std::string& strNodeType, const std::string& strIdentify)
+void NodeWorker::DelNodeIdentify(const std::string& strNodeType, const std::string& strIdentify)
 {
     LOG4_TRACE("%s(%s, %s)", __FUNCTION__, strNodeType.c_str(), strIdentify.c_str());
     std::map<std::string, std::string>::iterator identify_iter = m_mapIdentifyNodeType.find(strIdentify);
@@ -2207,7 +2242,7 @@ void ThunderWorker::DelNodeIdentify(const std::string& strNodeType, const std::s
     }
 }
 
-void ThunderWorker::GetNodeIdentifys(const std::string& strNodeType, std::vector<std::string>& strIdentifys)
+void NodeWorker::GetNodeIdentifys(const std::string& strNodeType, std::vector<std::string>& strIdentifys)
 {
     strIdentifys.clear();
     //std::map<std::string, std::pair<std::set<std::string>::iterator, std::set<std::string> > >
@@ -2227,7 +2262,7 @@ void ThunderWorker::GetNodeIdentifys(const std::string& strNodeType, std::vector
     }
 }
 
-bool ThunderWorker::RegisterCallback(const std::string& strIdentify, RedisStep* pRedisStep)
+bool NodeWorker::RegisterCallback(const std::string& strIdentify, RedisStep* pRedisStep)
 {
     LOG4_TRACE("%s(%s)", __FUNCTION__, strIdentify.c_str());
     int iPosIpPortSeparator = strIdentify.find(':');
@@ -2255,7 +2290,7 @@ bool ThunderWorker::RegisterCallback(const std::string& strIdentify, RedisStep* 
     }
 }
 
-bool ThunderWorker::RegisterCallback(const std::string& strHost, int iPort, RedisStep* pRedisStep)
+bool NodeWorker::RegisterCallback(const std::string& strHost, int iPort, RedisStep* pRedisStep)
 {
     LOG4_TRACE("%s(%s, %d)", __FUNCTION__, strHost.c_str(), iPort);
     char szIdentify[32] = {0};
@@ -2273,7 +2308,7 @@ bool ThunderWorker::RegisterCallback(const std::string& strHost, int iPort, Redi
     }
 }
 
-bool ThunderWorker::AddRedisContextAddr(const std::string& strHost, int iPort, redisAsyncContext* ctx)
+bool NodeWorker::AddRedisContextAddr(const std::string& strHost, int iPort, redisAsyncContext* ctx)
 {
     LOG4_TRACE("%s(%s, %d, 0x%X)", __FUNCTION__, strHost.c_str(), iPort, ctx);
     char szIdentify[32] = {0};
@@ -2299,7 +2334,7 @@ bool ThunderWorker::AddRedisContextAddr(const std::string& strHost, int iPort, r
     }
 }
 
-void ThunderWorker::DelRedisContextAddr(const redisAsyncContext* ctx)
+void NodeWorker::DelRedisContextAddr(const redisAsyncContext* ctx)
 {
     std::map<const redisAsyncContext*, std::string>::iterator identify_iter = m_mapContextIdentify.find(ctx);
     if (identify_iter != m_mapContextIdentify.end())
@@ -2313,7 +2348,7 @@ void ThunderWorker::DelRedisContextAddr(const redisAsyncContext* ctx)
     }
 }
 
-bool ThunderWorker::SendTo(const MsgShell& stMsgShell)
+bool NodeWorker::SendTo(const MsgShell& stMsgShell)
 {
     LOG4_TRACE("%s(fd %d, seq %lu) pWaitForSendBuff", __FUNCTION__, stMsgShell.iFd, stMsgShell.ulSeq);
     std::map<int, tagConnectionAttr*>::iterator iter = m_mapFdAttr.find(stMsgShell.iFd);
@@ -2377,7 +2412,7 @@ bool ThunderWorker::SendTo(const MsgShell& stMsgShell)
     return(false);
 }
 
-bool ThunderWorker::ParseFromMsg(const MsgBody& oInMsgBody,google::protobuf::Message &message)
+bool NodeWorker::ParseFromMsg(const MsgBody& oInMsgBody,google::protobuf::Message &message)
 {
     if (oInMsgBody.sbody().size() > 0)//websocket json
     {
@@ -2406,7 +2441,7 @@ bool ThunderWorker::ParseFromMsg(const MsgBody& oInMsgBody,google::protobuf::Mes
     return true;
 }
 
-bool ThunderWorker::SendToClient(const MsgShell& stMsgShell,MsgHead& oMsgHead,const google::protobuf::Message &message,
+bool NodeWorker::SendToClient(const MsgShell& stMsgShell,MsgHead& oMsgHead,const google::protobuf::Message &message,
                 const std::string& additional,uint64 sessionid,const std::string& strSession)
 {
     MsgBody oMsgBody;
@@ -2441,7 +2476,7 @@ bool ThunderWorker::SendToClient(const MsgShell& stMsgShell,MsgHead& oMsgHead,co
     return SendTo(stMsgShell,oMsgHead,oMsgBody);
 }
 
-bool ThunderWorker::SendToClient(const std::string& strIdentify,MsgHead& oMsgHead,const google::protobuf::Message &message,
+bool NodeWorker::SendToClient(const std::string& strIdentify,MsgHead& oMsgHead,const google::protobuf::Message &message,
                 const std::string& additional,uint64 sessionid,const std::string& strSession)
 {
     LOG4_TRACE("%s(identify: %s)", __FUNCTION__, strIdentify.c_str());
@@ -2485,7 +2520,7 @@ bool ThunderWorker::SendToClient(const std::string& strIdentify,MsgHead& oMsgHea
     }
 }
 
-bool ThunderWorker::BuildClientMsg(MsgHead& oMsgHead,MsgBody &oMsgBody,const google::protobuf::Message &message,
+bool NodeWorker::BuildClientMsg(MsgHead& oMsgHead,MsgBody &oMsgBody,const google::protobuf::Message &message,
                             const std::string& additional,uint64 sessionid,const std::string& strSession)
 {
     oMsgBody.Clear();
@@ -2518,7 +2553,7 @@ bool ThunderWorker::BuildClientMsg(MsgHead& oMsgHead,MsgBody &oMsgBody,const goo
     return true;
 }
 
-bool ThunderWorker::EmitStorageAccess(thunder::Session* pSession,const std::string &strMsgSerial,
+bool NodeWorker::EmitStorageAccess(thunder::Session* pSession,const std::string &strMsgSerial,
 		StorageCallbackSession callback,bool boPermanentSession,const std::string &nodeType,uint32 uiCmd)
 {
 	StepNodeAccess* pStep = new StepNodeAccess(strMsgSerial);
@@ -2545,7 +2580,7 @@ bool ThunderWorker::EmitStorageAccess(thunder::Session* pSession,const std::stri
     return true;
 }
 
-bool ThunderWorker::EmitStorageAccess(thunder::Step* pUpperStep,const std::string &strMsgSerial,
+bool NodeWorker::EmitStorageAccess(thunder::Step* pUpperStep,const std::string &strMsgSerial,
 		StorageCallbackStep callback,const std::string &nodeType,uint32 uiCmd)
 {
 	StepNodeAccess* pStep = new StepNodeAccess(strMsgSerial);
@@ -2573,7 +2608,7 @@ bool ThunderWorker::EmitStorageAccess(thunder::Step* pUpperStep,const std::strin
     return true;
 }
 
-bool ThunderWorker::EmitStandardAccess(thunder::Session* pSession,const std::string &strMsgSerial,
+bool NodeWorker::EmitStandardAccess(thunder::Session* pSession,const std::string &strMsgSerial,
 		StandardCallbackSession callback,bool boPermanentSession,const std::string &nodeType,uint32 uiCmd)
 {
 	StepNodeAccess* pStep = new StepNodeAccess(strMsgSerial);
@@ -2600,7 +2635,7 @@ bool ThunderWorker::EmitStandardAccess(thunder::Session* pSession,const std::str
     return true;
 }
 
-bool ThunderWorker::EmitStandardAccess(thunder::Step* pUpperStep,const std::string &strMsgSerial,
+bool NodeWorker::EmitStandardAccess(thunder::Step* pUpperStep,const std::string &strMsgSerial,
 		StandardCallbackStep callback,const std::string &nodeType,uint32 uiCmd)
 {
 	StepNodeAccess* pStep = new StepNodeAccess(strMsgSerial);
@@ -2628,7 +2663,7 @@ bool ThunderWorker::EmitStandardAccess(thunder::Step* pUpperStep,const std::stri
     return true;
 }
 
-bool ThunderWorker::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+bool NodeWorker::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s(fd %d, fd_seq %lu, cmd %u, msg_seq %u)",
                     __FUNCTION__, stMsgShell.iFd, stMsgShell.ulSeq, oMsgHead.cmd(), oMsgHead.seq());
@@ -2642,7 +2677,7 @@ bool ThunderWorker::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, 
     {
         if (conn_iter->second->ulSeq == stMsgShell.ulSeq)
         {
-            std::map<thunder::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
+            std::map<llib::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
             if (codec_iter == m_mapCodec.end())
             {
                 LOG4_ERROR("no codec found for %d!", conn_iter->second->eCodecType);
@@ -2650,7 +2685,7 @@ bool ThunderWorker::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, 
                 return(false);
             }
             E_CODEC_STATUS eCodecStatus = CODEC_STATUS_OK;
-            if (thunder::CODEC_PROTOBUF == conn_iter->second->eCodecType)//内部协议需要检查连接过程
+            if (llib::CODEC_PROTOBUF == conn_iter->second->eCodecType)//内部协议需要检查连接过程
             {
                 LOG4_TRACE("connect status %u", conn_iter->second->ucConnectStatus);
                 if (eConnectStatus_ok != conn_iter->second->ucConnectStatus)   // 连接尚未完成
@@ -2774,7 +2809,7 @@ bool ThunderWorker::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, 
     }
 }
 
-bool ThunderWorker::SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+bool NodeWorker::SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s(identify: %s)", __FUNCTION__, strIdentify.c_str());
     std::map<std::string, MsgShell>::iterator shell_iter = m_mapMsgShell.find(strIdentify);
@@ -2789,7 +2824,7 @@ bool ThunderWorker::SendTo(const std::string& strIdentify, const MsgHead& oMsgHe
     }
 }
 
-bool ThunderWorker::SendToNext(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+bool NodeWorker::SendToNext(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s(node_type: %s)", __FUNCTION__, strNodeType.c_str());
     std::map<std::string, std::pair<std::set<std::string>::iterator, std::set<std::string> > >::iterator node_type_iter;
@@ -2825,7 +2860,7 @@ bool ThunderWorker::SendToNext(const std::string& strNodeType, const MsgHead& oM
     }
 }
 
-bool ThunderWorker::SendToWithMod(const std::string& strNodeType, unsigned int uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+bool NodeWorker::SendToWithMod(const std::string& strNodeType, unsigned int uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s(nody_type: %s, mod_factor: %u)", __FUNCTION__, strNodeType.c_str(), uiModFactor);
     std::map<std::string, std::pair<std::set<std::string>::iterator, std::set<std::string> > >::iterator node_type_iter;
@@ -2861,7 +2896,7 @@ bool ThunderWorker::SendToWithMod(const std::string& strNodeType, unsigned int u
     }
 }
 
-bool ThunderWorker::SendToNodeType(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+bool NodeWorker::SendToNodeType(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s(node_type: %s)", __FUNCTION__, strNodeType.c_str());
     std::map<std::string, std::pair<std::set<std::string>::iterator, std::set<std::string> > >::iterator node_type_iter;
@@ -2892,7 +2927,7 @@ bool ThunderWorker::SendToNodeType(const std::string& strNodeType, const MsgHead
     return(true);
 }
 
-bool ThunderWorker::SendTo(const MsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpStep* pHttpStep)
+bool NodeWorker::SendTo(const MsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpStep* pHttpStep)
 {
     LOG4_TRACE("%s(fd %d, seq %lu)", __FUNCTION__, stMsgShell.iFd, stMsgShell.ulSeq);
     std::map<int, tagConnectionAttr*>::iterator conn_iter = m_mapFdAttr.find(stMsgShell.iFd);
@@ -2905,7 +2940,7 @@ bool ThunderWorker::SendTo(const MsgShell& stMsgShell, const HttpMsg& oHttpMsg, 
     {
         if (conn_iter->second->ulSeq == stMsgShell.ulSeq)
         {
-            std::map<thunder::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
+            std::map<llib::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
             if (codec_iter == m_mapCodec.end())
             {
                 LOG4_ERROR("no codec found for %d!", conn_iter->second->eCodecType);
@@ -2913,7 +2948,7 @@ bool ThunderWorker::SendTo(const MsgShell& stMsgShell, const HttpMsg& oHttpMsg, 
                 return(false);
             }
             E_CODEC_STATUS eCodecStatus;
-            if(thunder::CODEC_WEBSOCKET_EX_PB == conn_iter->second->eCodecType)
+            if(llib::CODEC_WEBSOCKET_EX_PB == conn_iter->second->eCodecType)
             {
                 if (conn_iter->second->pWaitForSendBuff->ReadableBytes() > 0)   // 正在连接
                 {
@@ -2924,7 +2959,7 @@ bool ThunderWorker::SendTo(const MsgShell& stMsgShell, const HttpMsg& oHttpMsg, 
                     eCodecStatus = ((CodecWebSocketPb*)codec_iter->second)->Encode(oHttpMsg, conn_iter->second->pSendBuff);
                 }
             }
-            else if(thunder::CODEC_WEBSOCKET_EX_JS == conn_iter->second->eCodecType)
+            else if(llib::CODEC_WEBSOCKET_EX_JS == conn_iter->second->eCodecType)
             {
                 if (conn_iter->second->pWaitForSendBuff->ReadableBytes() > 0)   // 正在连接
                 {
@@ -2935,7 +2970,7 @@ bool ThunderWorker::SendTo(const MsgShell& stMsgShell, const HttpMsg& oHttpMsg, 
                     eCodecStatus = ((CodecWebSocketJson*)codec_iter->second)->Encode(oHttpMsg, conn_iter->second->pSendBuff);
                 }
             }
-            else if (thunder::CODEC_HTTP == conn_iter->second->eCodecType)
+            else if (llib::CODEC_HTTP == conn_iter->second->eCodecType)
             {
                 if (conn_iter->second->pWaitForSendBuff->ReadableBytes() > 0)   // 正在连接
                 {
@@ -3042,7 +3077,7 @@ bool ThunderWorker::SendTo(const MsgShell& stMsgShell, const HttpMsg& oHttpMsg, 
     }
 }
 
-bool ThunderWorker::SentTo(const std::string& strHost, int iPort, const std::string& strUrlPath, const HttpMsg& oHttpMsg, HttpStep* pHttpStep)
+bool NodeWorker::SentTo(const std::string& strHost, int iPort, const std::string& strUrlPath, const HttpMsg& oHttpMsg, HttpStep* pHttpStep)
 {
     char szIdentify[256] = {0};
     snprintf(szIdentify, sizeof(szIdentify), "%s:%d%s", strHost.c_str(), iPort, strUrlPath.c_str());
@@ -3061,7 +3096,7 @@ bool ThunderWorker::SentTo(const std::string& strHost, int iPort, const std::str
 //    }
 }
 
-bool ThunderWorker::SetConnectIdentify(const MsgShell& stMsgShell, const std::string& strIdentify)
+bool NodeWorker::SetConnectIdentify(const MsgShell& stMsgShell, const std::string& strIdentify)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     if (stMsgShell.iFd == 0 || strIdentify.size() == 0)
@@ -3092,7 +3127,7 @@ bool ThunderWorker::SetConnectIdentify(const MsgShell& stMsgShell, const std::st
     }
 }
 
-bool ThunderWorker::AutoSend(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+bool NodeWorker::AutoSend(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s(%s)", __FUNCTION__, strIdentify.c_str());
     int iPosIpPortSeparator = strIdentify.find(':');
@@ -3153,7 +3188,7 @@ bool ThunderWorker::AutoSend(const std::string& strIdentify, const MsgHead& oMsg
                 DestroyConnect(conn_iter);
                 return(false);
             }
-            std::map<thunder::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
+            std::map<llib::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
             if (codec_iter == m_mapCodec.end())
             {
                 LOG4_ERROR("no codec found for %d!", conn_iter->second->eCodecType);
@@ -3193,7 +3228,7 @@ bool ThunderWorker::AutoSend(const std::string& strIdentify, const MsgHead& oMsg
     }
 }
 
-bool ThunderWorker::AutoSend(const std::string& strHost, int iPort, const std::string& strUrlPath, const HttpMsg& oHttpMsg, HttpStep* pHttpStep)
+bool NodeWorker::AutoSend(const std::string& strHost, int iPort, const std::string& strUrlPath, const HttpMsg& oHttpMsg, HttpStep* pHttpStep)
 {
     LOG4_TRACE("%s(%s, %d, %s)", __FUNCTION__, strHost.c_str(), iPort, strUrlPath.c_str());
     struct sockaddr_in stAddr;
@@ -3228,7 +3263,7 @@ bool ThunderWorker::AutoSend(const std::string& strHost, int iPort, const std::s
     tagConnectionAttr* pConnAttr = CreateFdAttr(stMsgShell.iFd, stMsgShell.ulSeq);
     if (pConnAttr)
     {
-        pConnAttr->eCodecType = thunder::CODEC_HTTP;
+        pConnAttr->eCodecType = llib::CODEC_HTTP;
         snprintf(pConnAttr->pRemoteAddr, 32, strHost.c_str());
         std::map<int, tagConnectionAttr*>::iterator conn_iter =  m_mapFdAttr.find(stMsgShell.iFd);
         if(AddIoTimeout(stMsgShell.iFd, stMsgShell.ulSeq, conn_iter->second, 2.5))
@@ -3247,7 +3282,7 @@ bool ThunderWorker::AutoSend(const std::string& strHost, int iPort, const std::s
                 DestroyConnect(conn_iter);
                 return(false);
             }
-            std::map<thunder::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
+            std::map<llib::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
             if (codec_iter == m_mapCodec.end())
             {
                 LOG4_ERROR("no codec found for %d!", conn_iter->second->eCodecType);
@@ -3309,7 +3344,7 @@ bool ThunderWorker::AutoSend(const std::string& strHost, int iPort, const std::s
     }
 }
 
-bool ThunderWorker::AutoRedisCmd(const std::string& strHost, int iPort, RedisStep* pRedisStep)
+bool NodeWorker::AutoRedisCmd(const std::string& strHost, int iPort, RedisStep* pRedisStep)
 {
     LOG4_TRACE("%s() redisAsyncConnect(%s, %d)", __FUNCTION__, strHost.c_str(), iPort);
     redisAsyncContext *c = redisAsyncConnect(strHost.c_str(), iPort);
@@ -3338,7 +3373,7 @@ bool ThunderWorker::AutoRedisCmd(const std::string& strHost, int iPort, RedisSte
     return(true);
 }
 
-bool ThunderWorker::AutoConnect(const std::string& strIdentify)
+bool NodeWorker::AutoConnect(const std::string& strIdentify)
 {
     LOG4_DEBUG("%s(%s)", __FUNCTION__, strIdentify.c_str());
     int iPosIpPortSeparator = strIdentify.find(':');
@@ -3420,7 +3455,7 @@ bool ThunderWorker::AutoConnect(const std::string& strIdentify)
     }
 }
 
-void ThunderWorker::AddInnerFd(const MsgShell& stMsgShell)
+void NodeWorker::AddInnerFd(const MsgShell& stMsgShell)
 {
     std::map<int, uint32>::iterator iter = m_mapInnerFd.find(stMsgShell.iFd);
     if (iter == m_mapInnerFd.end())
@@ -3434,7 +3469,7 @@ void ThunderWorker::AddInnerFd(const MsgShell& stMsgShell)
     LOG4_TRACE("%s() now m_mapInnerFd.size() = %u", __FUNCTION__, m_mapInnerFd.size());
 }
 
-bool ThunderWorker::GetMsgShell(const std::string& strIdentify, MsgShell& stMsgShell)
+bool NodeWorker::GetMsgShell(const std::string& strIdentify, MsgShell& stMsgShell)
 {
     LOG4_TRACE("%s(identify: %s)", __FUNCTION__, strIdentify.c_str());
     std::map<std::string, MsgShell>::iterator shell_iter = m_mapMsgShell.find(strIdentify);
@@ -3450,7 +3485,7 @@ bool ThunderWorker::GetMsgShell(const std::string& strIdentify, MsgShell& stMsgS
     }
 }
 
-bool ThunderWorker::SetClientData(const MsgShell& stMsgShell, thunder::CBuffer* pBuff)
+bool NodeWorker::SetClientData(const MsgShell& stMsgShell, llib::CBuffer* pBuff)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     std::map<int, tagConnectionAttr*>::iterator iter = m_mapFdAttr.find(stMsgShell.iFd);
@@ -3472,7 +3507,7 @@ bool ThunderWorker::SetClientData(const MsgShell& stMsgShell, thunder::CBuffer* 
     }
 }
 
-bool ThunderWorker::HadClientData(const MsgShell& stMsgShell)
+bool NodeWorker::HadClientData(const MsgShell& stMsgShell)
 {
     std::map<int, tagConnectionAttr*>::iterator conn_iter;
     conn_iter = m_mapFdAttr.find(stMsgShell.iFd);
@@ -3504,7 +3539,7 @@ bool ThunderWorker::HadClientData(const MsgShell& stMsgShell)
     }
 }
 
-bool ThunderWorker::GetClientData(const MsgShell& stMsgShell, thunder::CBuffer* pBuff)
+bool NodeWorker::GetClientData(const MsgShell& stMsgShell, llib::CBuffer* pBuff)
 {
 	LOG4_TRACE("%s()", __FUNCTION__);
 	std::map<int, tagConnectionAttr*>::iterator iter = m_mapFdAttr.find(stMsgShell.iFd);
@@ -3529,7 +3564,7 @@ bool ThunderWorker::GetClientData(const MsgShell& stMsgShell, thunder::CBuffer* 
 }
 
 
-std::string ThunderWorker::GetClientAddr(const MsgShell& stMsgShell)
+std::string NodeWorker::GetClientAddr(const MsgShell& stMsgShell)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     std::map<int, tagConnectionAttr*>::iterator iter = m_mapFdAttr.find(stMsgShell.iFd);
@@ -3557,7 +3592,7 @@ std::string ThunderWorker::GetClientAddr(const MsgShell& stMsgShell)
     }
 }
 
-std::string ThunderWorker::GetConnectIdentify(const MsgShell& stMsgShell)
+std::string NodeWorker::GetConnectIdentify(const MsgShell& stMsgShell)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     std::map<int, tagConnectionAttr*>::iterator iter = m_mapFdAttr.find(stMsgShell.iFd);
@@ -3578,7 +3613,7 @@ std::string ThunderWorker::GetConnectIdentify(const MsgShell& stMsgShell)
     }
 }
 
-bool ThunderWorker::AbandonConnect(const std::string& strIdentify)
+bool NodeWorker::AbandonConnect(const std::string& strIdentify)
 {
     LOG4_TRACE("%s(identify: %s)", __FUNCTION__, strIdentify.c_str());
     std::map<std::string, MsgShell>::iterator shell_iter = m_mapMsgShell.find(strIdentify);
@@ -3612,7 +3647,7 @@ bool ThunderWorker::AbandonConnect(const std::string& strIdentify)
     }
 }
 
-void ThunderWorker::ExecStep(uint32 uiCallerStepSeq, uint32 uiCalledStepSeq,
+void NodeWorker::ExecStep(uint32 uiCallerStepSeq, uint32 uiCalledStepSeq,
                 int iErrno, const std::string& strErrMsg, const std::string& strErrShow)
 {
     LOG4_TRACE("%s(caller[%u], called[%u])", __FUNCTION__, uiCallerStepSeq, uiCalledStepSeq);
@@ -3640,7 +3675,7 @@ void ThunderWorker::ExecStep(uint32 uiCallerStepSeq, uint32 uiCalledStepSeq,
     }
 }
 
-void ThunderWorker::LoadSo(thunder::CJsonObject& oSoConf)
+void NodeWorker::LoadSo(llib::CJsonObject& oSoConf)
 {
     LOG4_TRACE("%s():oSoConf(%s)", __FUNCTION__,oSoConf.ToString().c_str());
     int iCmd = 0;
@@ -3726,7 +3761,7 @@ void ThunderWorker::LoadSo(thunder::CJsonObject& oSoConf)
     }
 }
 
-void ThunderWorker::ReloadSo(thunder::CJsonObject& oCmds)
+void NodeWorker::ReloadSo(llib::CJsonObject& oCmds)
 {
     LOG4_DEBUG("%s():oCmds(%s)", __FUNCTION__,oCmds.ToString().c_str());
     int iCmd = 0;
@@ -3772,7 +3807,7 @@ void ThunderWorker::ReloadSo(thunder::CJsonObject& oCmds)
     }
 }
 
-tagSo* ThunderWorker::LoadSoAndGetCmd(int iCmd, const std::string& strSoPath, const std::string& strSymbol, int iVersion)
+tagSo* NodeWorker::LoadSoAndGetCmd(int iCmd, const std::string& strSoPath, const std::string& strSymbol, int iVersion)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     tagSo* pSo = NULL;
@@ -3829,7 +3864,7 @@ tagSo* ThunderWorker::LoadSoAndGetCmd(int iCmd, const std::string& strSoPath, co
     return(pSo);
 }
 
-void ThunderWorker::UnloadSoAndDeleteCmd(int iCmd)
+void NodeWorker::UnloadSoAndDeleteCmd(int iCmd)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     std::map<int, tagSo*>::iterator cmd_iter;
@@ -3842,7 +3877,7 @@ void ThunderWorker::UnloadSoAndDeleteCmd(int iCmd)
     }
 }
 
-void ThunderWorker::LoadModule(thunder::CJsonObject& oModuleConf)
+void NodeWorker::LoadModule(llib::CJsonObject& oModuleConf)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     std::string strModulePath;
@@ -3916,7 +3951,7 @@ void ThunderWorker::LoadModule(thunder::CJsonObject& oModuleConf)
     }
 }
 
-void ThunderWorker::ReloadModule(thunder::CJsonObject& oUrlPaths)
+void NodeWorker::ReloadModule(llib::CJsonObject& oUrlPaths)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     std::map<std::string, tagModule*>::iterator module_iter;
@@ -3959,7 +3994,7 @@ void ThunderWorker::ReloadModule(thunder::CJsonObject& oUrlPaths)
     }
 }
 
-tagModule* ThunderWorker::LoadSoAndGetModule(const std::string& strModulePath, const std::string& strSoPath, const std::string& strSymbol, int iVersion)
+tagModule* NodeWorker::LoadSoAndGetModule(const std::string& strModulePath, const std::string& strSoPath, const std::string& strSymbol, int iVersion)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     tagModule* pSo = NULL;
@@ -4011,7 +4046,7 @@ tagModule* ThunderWorker::LoadSoAndGetModule(const std::string& strModulePath, c
     return(pSo);
 }
 
-void ThunderWorker::UnloadSoAndDeleteModule(const std::string& strModulePath)
+void NodeWorker::UnloadSoAndDeleteModule(const std::string& strModulePath)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     std::map<std::string, tagModule*>::iterator module_iter;
@@ -4024,7 +4059,7 @@ void ThunderWorker::UnloadSoAndDeleteModule(const std::string& strModulePath)
     }
 }
 
-bool ThunderWorker::AddPeriodicTaskEvent()
+bool NodeWorker::AddPeriodicTaskEvent()
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     ev_timer* timeout_watcher = new ev_timer();
@@ -4039,7 +4074,7 @@ bool ThunderWorker::AddPeriodicTaskEvent()
     return(true);
 }
 
-bool ThunderWorker::AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr,int iFd)
+bool NodeWorker::AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr,int iFd)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     ev_io* io_watcher = NULL;
@@ -4076,7 +4111,7 @@ bool ThunderWorker::AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr,int iFd
     return(true);
 }
 
-bool ThunderWorker::AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr,int iFd)
+bool NodeWorker::AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr,int iFd)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     ev_io* io_watcher = NULL;
@@ -4113,7 +4148,7 @@ bool ThunderWorker::AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr,int iF
     return(true);
 }
 
-//bool ThunderWorker::AddIoErrorEvent(int iFd)
+//bool NodeWorker::AddIoErrorEvent(int iFd)
 //{
 //    LOG4_TRACE("%s()", __FUNCTION__);
 //    ev_io* io_watcher = NULL;
@@ -4152,7 +4187,7 @@ bool ThunderWorker::AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr,int iF
 //    return(true);
 //}
 
-bool ThunderWorker::RemoveIoWriteEvent(tagConnectionAttr* pTagConnectionAttr)
+bool NodeWorker::RemoveIoWriteEvent(tagConnectionAttr* pTagConnectionAttr)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
 	if (NULL != pTagConnectionAttr->pIoWatcher)
@@ -4168,7 +4203,7 @@ bool ThunderWorker::RemoveIoWriteEvent(tagConnectionAttr* pTagConnectionAttr)
     return(true);
 }
 
-bool ThunderWorker::AddIoReadEvent(std::map<int, tagConnectionAttr*>::iterator iter)
+bool NodeWorker::AddIoReadEvent(std::map<int, tagConnectionAttr*>::iterator iter)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     ev_io* io_watcher = NULL;
@@ -4205,7 +4240,7 @@ bool ThunderWorker::AddIoReadEvent(std::map<int, tagConnectionAttr*>::iterator i
     return(true);
 }
 
-bool ThunderWorker::AddIoWriteEvent(std::map<int, tagConnectionAttr*>::iterator iter)
+bool NodeWorker::AddIoWriteEvent(std::map<int, tagConnectionAttr*>::iterator iter)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     ev_io* io_watcher = NULL;
@@ -4242,7 +4277,7 @@ bool ThunderWorker::AddIoWriteEvent(std::map<int, tagConnectionAttr*>::iterator 
     return(true);
 }
 
-bool ThunderWorker::RemoveIoWriteEvent(std::map<int, tagConnectionAttr*>::iterator iter)
+bool NodeWorker::RemoveIoWriteEvent(std::map<int, tagConnectionAttr*>::iterator iter)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     ev_io* io_watcher = NULL;
@@ -4259,7 +4294,7 @@ bool ThunderWorker::RemoveIoWriteEvent(std::map<int, tagConnectionAttr*>::iterat
     return(true);
 }
 
-bool ThunderWorker::DelEvents(ev_io** io_watcher_addr)
+bool NodeWorker::DelEvents(ev_io** io_watcher_addr)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     if (io_watcher_addr == NULL)
@@ -4280,7 +4315,7 @@ bool ThunderWorker::DelEvents(ev_io** io_watcher_addr)
     return(true);
 }
 
-bool ThunderWorker::AddIoTimeout(int iFd, uint32 ulSeq, tagConnectionAttr* pConnAttr, ev_tstamp dTimeout)
+bool NodeWorker::AddIoTimeout(int iFd, uint32 ulSeq, tagConnectionAttr* pConnAttr, ev_tstamp dTimeout)
 {
     LOG4_TRACE("%s() RemoteAddr(%s) dTimeout(%lf)", __FUNCTION__,pConnAttr->pRemoteAddr ? pConnAttr->pRemoteAddr :"",dTimeout);
     if (pConnAttr->pTimeWatcher != NULL)
@@ -4321,7 +4356,7 @@ bool ThunderWorker::AddIoTimeout(int iFd, uint32 ulSeq, tagConnectionAttr* pConn
     }
 }
 
-tagConnectionAttr* ThunderWorker::CreateFdAttr(int iFd, uint32 ulSeq, thunder::E_CODEC_TYPE eCodecType)
+tagConnectionAttr* NodeWorker::CreateFdAttr(int iFd, uint32 ulSeq, llib::E_CODEC_TYPE eCodecType)
 {
     LOG4_DEBUG("%s(fd[%d], seq[%u], codec[%d])", __FUNCTION__, iFd, ulSeq, eCodecType);
     std::map<int, tagConnectionAttr*>::iterator fd_attr_iter;
@@ -4334,21 +4369,21 @@ tagConnectionAttr* ThunderWorker::CreateFdAttr(int iFd, uint32 ulSeq, thunder::E
             LOG4_ERROR("new pConnAttr for fd %d error!", iFd);
             return(NULL);
         }
-        pConnAttr->pRecvBuff = new thunder::CBuffer();
+        pConnAttr->pRecvBuff = new llib::CBuffer();
         if (pConnAttr->pRecvBuff == NULL)
         {
             delete pConnAttr;
             LOG4_ERROR("new pConnAttr->pRecvBuff for fd %d error!", iFd);
             return(NULL);
         }
-        pConnAttr->pSendBuff = new thunder::CBuffer();
+        pConnAttr->pSendBuff = new llib::CBuffer();
         if (pConnAttr->pSendBuff == NULL)
         {
             delete pConnAttr;
             LOG4_ERROR("new pConnAttr->pSendBuff for fd %d error!", iFd);
             return(NULL);
         }
-        pConnAttr->pWaitForSendBuff = new thunder::CBuffer();
+        pConnAttr->pWaitForSendBuff = new llib::CBuffer();
         if (pConnAttr->pWaitForSendBuff == NULL)
         {
             delete pConnAttr;
@@ -4362,7 +4397,7 @@ tagConnectionAttr* ThunderWorker::CreateFdAttr(int iFd, uint32 ulSeq, thunder::E
             LOG4_ERROR("new pConnAttr->pRemoteAddr for fd %d error!", iFd);
             return(NULL);
         }
-        pConnAttr->pClientData = new thunder::CBuffer();
+        pConnAttr->pClientData = new llib::CBuffer();
         if (pConnAttr->pClientData == NULL)
         {
             delete pConnAttr;
@@ -4382,7 +4417,7 @@ tagConnectionAttr* ThunderWorker::CreateFdAttr(int iFd, uint32 ulSeq, thunder::E
     }
 }
 
-bool ThunderWorker::DestroyConnect(std::map<int, tagConnectionAttr*>::iterator iter, bool bMsgShellNotice)
+bool NodeWorker::DestroyConnect(std::map<int, tagConnectionAttr*>::iterator iter, bool bMsgShellNotice)
 {
     if (iter == m_mapFdAttr.end())
     {
@@ -4428,7 +4463,7 @@ bool ThunderWorker::DestroyConnect(std::map<int, tagConnectionAttr*>::iterator i
     return(true);
 }
 
-void ThunderWorker::MsgShellNotice(const MsgShell& stMsgShell, const std::string& strIdentify, thunder::CBuffer* pClientData)
+void NodeWorker::MsgShellNotice(const MsgShell& stMsgShell, const std::string& strIdentify, llib::CBuffer* pClientData)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     std::map<int32, tagSo*>::iterator cmd_iter;
@@ -4452,7 +4487,7 @@ void ThunderWorker::MsgShellNotice(const MsgShell& stMsgShell, const std::string
     }
 }
 
-bool ThunderWorker::Dispose(const MsgShell& stMsgShell,
+bool NodeWorker::Dispose(const MsgShell& stMsgShell,
                 const MsgHead& oInMsgHead, const MsgBody& oInMsgBody,
                 MsgHead& oOutMsgHead, MsgBody& oOutMsgBody)
 {
@@ -4493,7 +4528,7 @@ bool ThunderWorker::Dispose(const MsgShell& stMsgShell,
                 }
                 else if (CMD_REQ_RELOAD_SO == oInMsgHead.cmd())
                 {
-                    thunder::CJsonObject oSoConfJson;
+                    llib::CJsonObject oSoConfJson;
                     if(!oSoConfJson.Parse(oInMsgBody.body()))
                     {
                         LOG4_WARN("failed to parse oSoConfJson:(%s)",oInMsgBody.body().c_str());
@@ -4506,7 +4541,7 @@ bool ThunderWorker::Dispose(const MsgShell& stMsgShell,
                 }
                 else if (CMD_REQ_RELOAD_MODULE == oInMsgHead.cmd())
                 {
-                    thunder::CJsonObject oModuleConfJson;
+                    llib::CJsonObject oModuleConfJson;
                     if(!oModuleConfJson.Parse(oInMsgBody.body()))
                     {
                         LOG4_WARN("failed to parse oModuleConfJson:(%s)",oInMsgBody.body().c_str());
@@ -4519,20 +4554,20 @@ bool ThunderWorker::Dispose(const MsgShell& stMsgShell,
                 }
                 else if (CMD_REQ_RELOAD_LOGIC_CONFIG == oInMsgHead.cmd())
                 {
-                    thunder::CJsonObject oConfJson;
+                    llib::CJsonObject oConfJson;
                     if(!oConfJson.Parse(oInMsgBody.body()))
                     {
                         LOG4_WARN("failed to parse oConfJson:(%s)",oInMsgBody.body().c_str());
                     }
                     else
                     {
-                        thunder::CJsonObject oCmds;
+                        llib::CJsonObject oCmds;
                         if(oConfJson.Get("cmd",oCmds))
                         {
                             LOG4_INFO("reload so conf to oCmds(%s)", oCmds.ToString().c_str());
                             ReloadSo(oCmds);
                         }
-                        thunder::CJsonObject oUrlPaths;
+                        llib::CJsonObject oUrlPaths;
                         if(oConfJson.Get("url_path",oUrlPaths))
                         {
                             LOG4_INFO("reload module conf to oUrlPaths(%s)", oUrlPaths.ToString().c_str());
@@ -4657,7 +4692,7 @@ bool ThunderWorker::Dispose(const MsgShell& stMsgShell,
     return(true);
 }
 
-bool ThunderWorker::Dispose(const MsgShell& stMsgShell,
+bool NodeWorker::Dispose(const MsgShell& stMsgShell,
                 const HttpMsg& oInHttpMsg, HttpMsg& oOutHttpMsg)
 {
     LOG4_DEBUG("%s() oInHttpMsg.type() = %d, oInHttpMsg.path() = %s",

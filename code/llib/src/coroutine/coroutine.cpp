@@ -13,6 +13,9 @@
 #endif 
 //https://github.com/cloudwu/coroutine
 
+namespace llib
+{
+
 #define STACK_SIZE (1024*1024)
 #define DEFAULT_COROUTINE 16
 
@@ -205,3 +208,5 @@ coroutine_running(struct schedule * S) {
 	return S->running;
 }
 
+
+};

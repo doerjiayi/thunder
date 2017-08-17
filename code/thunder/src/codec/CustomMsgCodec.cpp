@@ -14,7 +14,7 @@
 namespace thunder
 {
 
-CustomMsgCodec::CustomMsgCodec(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey)
+CustomMsgCodec::CustomMsgCodec(llib::E_CODEC_TYPE eCodecType, const std::string& strKey)
     : ThunderCodec(eCodecType, strKey)
 {
 }
@@ -23,7 +23,7 @@ CustomMsgCodec::~CustomMsgCodec()
 {
 }
 
-E_CODEC_STATUS CustomMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, thunder::CBuffer* pBuff)
+E_CODEC_STATUS CustomMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, llib::CBuffer* pBuff)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     tagCustomMsgHead sttagCustomMsgHead;
@@ -185,7 +185,7 @@ E_CODEC_STATUS CustomMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oM
     return(CODEC_STATUS_OK);
 }
 
-E_CODEC_STATUS CustomMsgCodec::Decode(thunder::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody)
+E_CODEC_STATUS CustomMsgCodec::Decode(llib::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s() pBuff->ReadableBytes() = %u", __FUNCTION__, pBuff->ReadableBytes());
     size_t uiHeadSize = sizeof(tagCustomMsgHead);

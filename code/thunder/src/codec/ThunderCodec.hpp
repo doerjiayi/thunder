@@ -43,10 +43,10 @@ enum E_CODEC_STATUS
     CODEC_STATUS_PAUSE      = 2,    ///< 编解码暂停（数据不完整，等待数据完整之后再解码）
 };
 
-class ThunderCodec: public thunder::CStreamCodec
+class ThunderCodec: public llib::CStreamCodec
 {
 public:
-    ThunderCodec(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey = "That's a lizard.");
+    ThunderCodec(llib::E_CODEC_TYPE eCodecType, const std::string& strKey = "That's a lizard.");
     virtual ~ThunderCodec();
     /**
      * @brief 字节流编码
@@ -55,7 +55,7 @@ public:
      * @param[out] pBuff  数据缓冲区
      * @return 编解码状态
      */
-    virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead,const MsgBody& oMsgBody, thunder::CBuffer* pBuff) = 0;
+    virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead,const MsgBody& oMsgBody, llib::CBuffer* pBuff) = 0;
 
     /**
      * @brief 字节流解码
@@ -64,7 +64,7 @@ public:
      * @param[out] oMsgBody 消息包体
      * @return 编解码状态
      */
-    virtual E_CODEC_STATUS Decode(thunder::CBuffer* pBuff,MsgHead& oMsgHead, MsgBody& oMsgBody) = 0;
+    virtual E_CODEC_STATUS Decode(llib::CBuffer* pBuff,MsgHead& oMsgHead, MsgBody& oMsgBody) = 0;
 
     /**
      * @brief 连接的字节流解码,需要处理连接初始化状态

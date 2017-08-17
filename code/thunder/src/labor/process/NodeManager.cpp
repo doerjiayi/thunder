@@ -120,7 +120,7 @@ void NodeManager::ClientConnFrequencyTimeoutCallback(struct ev_loop* loop, struc
 NodeManager::NodeManager(const std::string& strConfFile)
     : m_ulSequence(0), m_pErrBuff(NULL), m_bInitLogger(false), m_dIoTimeout(480), m_strConfFile(strConfFile),
       m_uiNodeId(0), m_iPortForServer(9988), m_iPortForClient(0), m_iGatewayIp(0), m_uiWorkerNum(10),
-      m_eCodec(thunder::CODEC_PROTOBUF), m_dAddrStatInterval(60.0), m_iAddrPermitNum(10),
+      m_eCodec(llib::CODEC_PROTOBUF), m_dAddrStatInterval(60.0), m_iAddrPermitNum(10),
       m_iLogLevel(log4cplus::INFO_LOG_LEVEL), m_iWorkerBeat(11), m_iRefreshInterval(60), m_iLastRefreshCalc(0),
       m_iS2SListenFd(-1), m_iC2SListenFd(-1), m_loop(NULL), m_pPeriodicTaskWatcher(NULL),m_iWaitToExitCounter(0)//, m_pCmdConnect(NULL)
 {
@@ -704,7 +704,7 @@ void NodeManager::Run()
     ev_run (m_loop, 0);
 }
 
-bool NodeManager::InitLogger(const thunder::CJsonObject& oJsonConf)
+bool NodeManager::InitLogger(const llib::CJsonObject& oJsonConf)
 {
     if (m_bInitLogger)  // 已经被初始化过，只修改日志级别
     {
@@ -752,7 +752,7 @@ bool NodeManager::InitLogger(const thunder::CJsonObject& oJsonConf)
     }
 }
 
-bool NodeManager::SetProcessName(const thunder::CJsonObject& oJsonConf)
+bool NodeManager::SetProcessName(const llib::CJsonObject& oJsonConf)
 {
     ngx_setproctitle(oJsonConf("server_name").c_str());
     return(true);
@@ -1075,7 +1075,7 @@ bool NodeManager::GetConf()
         int32 iCodec;
         if (m_oCurrentConf.Get("access_codec", iCodec))
         {
-            m_eCodec = thunder::E_CODEC_TYPE(iCodec);
+            m_eCodec = llib::E_CODEC_TYPE(iCodec);
         }
         m_oCurrentConf["permission"]["addr_permit"].Get("stat_interval", m_dAddrStatInterval);
         m_oCurrentConf["permission"]["addr_permit"].Get("permit_num", m_iAddrPermitNum);
@@ -1298,7 +1298,7 @@ void NodeManager::CreateWorker()
             close(iDataFds[0]);
             x_sock_set_block(iControlFds[1], 0);
             x_sock_set_block(iDataFds[1], 0);
-            ThunderWorker worker(m_strWorkPath, iControlFds[1], iDataFds[1], i, m_oCurrentConf);
+            NodeWorker worker(m_strWorkPath, iControlFds[1], iDataFds[1], i, m_oCurrentConf);
             worker.Run();
             exit(-2);
         }
@@ -1432,8 +1432,8 @@ bool NodeManager::RegisterToCenter()
     int iClientNum = 0;
     MsgHead oMsgHead;
     MsgBody oMsgBody;
-    thunder::CJsonObject oReportData;
-    thunder::CJsonObject oMember;
+    llib::CJsonObject oReportData;
+    llib::CJsonObject oMember;
     oReportData.Add("node_type", m_strNodeType);
     oReportData.Add("node_id", m_uiNodeId);
     oReportData.Add("node_ip", m_strHostForServer);
@@ -1456,8 +1456,8 @@ bool NodeManager::RegisterToCenter()
     }
     oReportData.Add("worker_num", (int)m_mapWorker.size());
     oReportData.Add("active_time", ev_now(m_loop));
-    oReportData.Add("node", thunder::CJsonObject("{}"));
-    oReportData.Add("worker", thunder::CJsonObject("[]"));
+    oReportData.Add("node", llib::CJsonObject("{}"));
+    oReportData.Add("worker", llib::CJsonObject("[]"));
     std::map<int, tagWorkerAttr>::iterator worker_iter = m_mapWorker.begin();
     for (; worker_iter != m_mapWorker.end(); ++worker_iter)
     {
@@ -1575,7 +1575,7 @@ bool NodeManager::RestartWorker(int iDeathPid)
             close(iDataFds[0]);
             x_sock_set_block(iControlFds[1], 0);
             x_sock_set_block(iDataFds[1], 0);
-            ThunderWorker worker(m_strWorkPath, iControlFds[1], iDataFds[1], iWorkerIndex, m_oCurrentConf);
+            NodeWorker worker(m_strWorkPath, iControlFds[1], iDataFds[1], iWorkerIndex, m_oCurrentConf);
             worker.Run();
             exit(-2);   // 子进程worker没有正常运行
         }
@@ -1894,21 +1894,21 @@ tagConnectionAttr* NodeManager::CreateFdAttr(int iFd, uint32 ulSeq)
             LOG4_ERROR("new pConnAttr for fd %d error!", iFd);
             return(NULL);
         }
-        pConnAttr->pRecvBuff = new thunder::CBuffer();
+        pConnAttr->pRecvBuff = new llib::CBuffer();
         if (pConnAttr->pRecvBuff == NULL)
         {
             delete pConnAttr;
             LOG4_ERROR("new pConnAttr->pRecvBuff for fd%d error!", iFd);
             return(NULL);
         }
-        pConnAttr->pSendBuff = new thunder::CBuffer();
+        pConnAttr->pSendBuff = new llib::CBuffer();
         if (pConnAttr->pSendBuff == NULL)
         {
             delete pConnAttr;
             LOG4_ERROR("new pConnAttr->pSendBuff for fd %d error!", iFd);
             return(NULL);
         }
-        pConnAttr->pWaitForSendBuff = new thunder::CBuffer();
+        pConnAttr->pWaitForSendBuff = new llib::CBuffer();
         if (pConnAttr->pWaitForSendBuff == NULL)
         {
             delete pConnAttr;
@@ -1984,7 +1984,7 @@ std::pair<int, int> NodeManager::GetMinLoadWorkerDataFd()
     return(worker_pid_fd);
 }
 
-void NodeManager::SetWorkerLoad(int iPid, thunder::CJsonObject& oJsonLoad)
+void NodeManager::SetWorkerLoad(int iPid, llib::CJsonObject& oJsonLoad)
 {
     //LOG4_TRACE("%s()", __FUNCTION__);
     std::map<int, tagWorkerAttr>::iterator iter;
@@ -2292,8 +2292,8 @@ bool NodeManager::ReportToCenter()
     int iClientNum = 0;
     MsgHead oMsgHead;
     MsgBody oMsgBody;
-    thunder::CJsonObject oReportData;
-    thunder::CJsonObject oMember;
+    llib::CJsonObject oReportData;
+    llib::CJsonObject oMember;
     oReportData.Add("node_type", m_strNodeType);
     oReportData.Add("node_id", m_uiNodeId);
     oReportData.Add("node_ip", m_strHostForServer);
@@ -2316,8 +2316,8 @@ bool NodeManager::ReportToCenter()
     }
     oReportData.Add("worker_num", (int)m_mapWorker.size());
     oReportData.Add("active_time", ev_now(m_loop));
-    oReportData.Add("node", thunder::CJsonObject("{}"));
-    oReportData.Add("worker", thunder::CJsonObject("[]"));
+    oReportData.Add("node", llib::CJsonObject("{}"));
+    oReportData.Add("worker", llib::CJsonObject("[]"));
     std::map<int, tagWorkerAttr>::iterator worker_iter = m_mapWorker.begin();
     for (; worker_iter != m_mapWorker.end(); ++worker_iter)
     {
@@ -2477,7 +2477,7 @@ bool NodeManager::SendToWorkerWithMod(unsigned int uiModFactor,const MsgHead& oM
     return(false);
 }
 
-bool NodeManager::DisposeDataFromWorker(const MsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody, thunder::CBuffer* pSendBuff)
+bool NodeManager::DisposeDataFromWorker(const MsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody, llib::CBuffer* pSendBuff)
 {
     LOG4_DEBUG("%s(cmd %u, seq %u)", __FUNCTION__, oInMsgHead.cmd(), oInMsgHead.seq());
     if (CMD_REQ_UPDATE_WORKER_LOAD == oInMsgHead.cmd())    // 新请求
@@ -2485,7 +2485,7 @@ bool NodeManager::DisposeDataFromWorker(const MsgShell& stMsgShell, const MsgHea
         std::map<int, int>::iterator iter = m_mapWorkerFdPid.find(stMsgShell.iFd);
         if (iter != m_mapWorkerFdPid.end())
         {
-            thunder::CJsonObject oJsonLoad;
+            llib::CJsonObject oJsonLoad;
             oJsonLoad.Parse(oInMsgBody.body());
             SetWorkerLoad(iter->second, oJsonLoad);
         }
@@ -2539,7 +2539,7 @@ bool NodeManager::DisposeDataFromWorker(const MsgShell& stMsgShell, const MsgHea
 }
 
 bool NodeManager::DisposeDataAndTransferFd(const MsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody,
-		thunder::CBuffer* pSendBuff)
+		llib::CBuffer* pSendBuff)
 {
     LOG4_DEBUG("%s(cmd %u, seq %u)", __FUNCTION__, oInMsgHead.cmd(), oInMsgHead.seq());
     int iErrno = 0;
@@ -2571,7 +2571,7 @@ bool NodeManager::DisposeDataAndTransferFd(const MsgShell& stMsgShell, const Msg
 
                     char szIp[16] = {0};
                     strncpy(szIp, "0.0.0.0", 16);   // 内网其他Server的IP不重要
-                    int iErrno = send_fd_with_attr(worker_iter->second.iDataFd, stMsgShell.iFd, szIp, 16, thunder::CODEC_PROTOBUF);
+                    int iErrno = send_fd_with_attr(worker_iter->second.iDataFd, stMsgShell.iFd, szIp, 16, llib::CODEC_PROTOBUF);
                     //int iErrno = send_fd(worker_iter->second.iDataFd, stMsgShell.iFd);
                     if (iErrno != 0)
                     {
@@ -2619,8 +2619,8 @@ bool NodeManager::DisposeDataFromCenter(
 				tagConnectionAttr* pTagConnectionAttr)
 {
     LOG4_DEBUG("%s(cmd %u, seq %u)", __FUNCTION__, oInMsgHead.cmd(), oInMsgHead.seq());
-    thunder::CBuffer* pSendBuff = pTagConnectionAttr->pSendBuff;
-	thunder::CBuffer* pWaitForSendBuff = pTagConnectionAttr->pWaitForSendBuff;
+    llib::CBuffer* pSendBuff = pTagConnectionAttr->pSendBuff;
+	llib::CBuffer* pWaitForSendBuff = pTagConnectionAttr->pWaitForSendBuff;
     int iErrno = 0;
     if (gc_uiCmdReq & oInMsgHead.cmd())    // 新请求，直接转发给Worker，并回复Center已收到请求
     {
@@ -2689,7 +2689,7 @@ bool NodeManager::DisposeDataFromCenter(
     {
         if (CMD_RSP_NODE_REGISTER == oInMsgHead.cmd()) //Manager这层只有向center注册会收到回调，上报状态不收回调或者收到回调不必处理
         {
-            thunder::CJsonObject oNode(oInMsgBody.body());
+            llib::CJsonObject oNode(oInMsgBody.body());
             int iErrno = 0;
             oNode.Get("errcode", iErrno);
             if (0 == iErrno)

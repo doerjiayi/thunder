@@ -30,11 +30,11 @@ bool CmdNodeNotice::AnyMessage(
                 const MsgBody& oInMsgBody)
 {
     bool bResult = false;
-    thunder::CBuffer oBuff;
+    llib::CBuffer oBuff;
     MsgHead oOutMsgHead;
     MsgBody oOutMsgBody;
 
-    thunder::CJsonObject jObj;
+    llib::CJsonObject jObj;
     int iRet = 0;
     if (GetCmd() == (int)oInMsgHead.cmd())
     {

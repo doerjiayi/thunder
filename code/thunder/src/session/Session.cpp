@@ -73,7 +73,7 @@ const std::string& Session::GetNodeType() const
     return(m_pLabor->GetNodeType());
 }
 
-const thunder::CJsonObject& Session::GetCustomConf() const
+const llib::CJsonObject& Session::GetCustomConf() const
 {
     return(m_pLabor->GetCustomConf());
 }

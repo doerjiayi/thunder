@@ -10,19 +10,19 @@
 
 #include "CJsonObject.hpp"
 
-thunder::CJsonObject::CJsonObject()
+llib::CJsonObject::CJsonObject()
     : m_pJsonData(NULL), m_pExternJsonDataRef(NULL)
 {
     // m_pJsonData = cJSON_CreateObject();  //鍦ㄥ悇Add()鏂规硶涓坊鍔犳垚鍛樻椂鑷姩鍐冲畾鏄璞¤繕鏄暟缁�
 }
 
-thunder::CJsonObject::CJsonObject(const std::string& strJson)
+llib::CJsonObject::CJsonObject(const std::string& strJson)
     : m_pJsonData(NULL), m_pExternJsonDataRef(NULL)
 {
     Parse(strJson);
 }
 
-thunder::CJsonObject::CJsonObject(const CJsonObject* pJsonObject)
+llib::CJsonObject::CJsonObject(const CJsonObject* pJsonObject)
     : m_pJsonData(NULL), m_pExternJsonDataRef(NULL)
 {
     if (pJsonObject)
@@ -31,29 +31,29 @@ thunder::CJsonObject::CJsonObject(const CJsonObject* pJsonObject)
     }
 }
 
-thunder::CJsonObject::CJsonObject(const CJsonObject& oJsonObject)
+llib::CJsonObject::CJsonObject(const CJsonObject& oJsonObject)
     : m_pJsonData(NULL), m_pExternJsonDataRef(NULL)
 {
     Parse(oJsonObject.ToString());
 }
 
-thunder::CJsonObject::~CJsonObject()
+llib::CJsonObject::~CJsonObject()
 {
     Clear();
 }
 
-thunder::CJsonObject& thunder::CJsonObject::operator=(const CJsonObject& oJsonObject)
+llib::CJsonObject& llib::CJsonObject::operator=(const CJsonObject& oJsonObject)
 {
     Parse(oJsonObject.ToString().c_str());
     return(*this);
 }
 
-bool thunder::CJsonObject::operator==(const CJsonObject& oJsonObject) const
+bool llib::CJsonObject::operator==(const CJsonObject& oJsonObject) const
 {
     return(this->ToString() == oJsonObject.ToString());
 }
 
-bool thunder::CJsonObject::AddEmptySubObject(const std::string& strKey)
+bool llib::CJsonObject::AddEmptySubObject(const std::string& strKey)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -90,7 +90,7 @@ bool thunder::CJsonObject::AddEmptySubObject(const std::string& strKey)
     return(true);
 }
 
-bool thunder::CJsonObject::AddEmptySubArray(const std::string& strKey)
+bool llib::CJsonObject::AddEmptySubArray(const std::string& strKey)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -127,7 +127,7 @@ bool thunder::CJsonObject::AddEmptySubArray(const std::string& strKey)
     return(true);
 }
 
-thunder::CJsonObject& thunder::CJsonObject::operator[](const std::string& strKey)
+llib::CJsonObject& llib::CJsonObject::operator[](const std::string& strKey)
 {
     std::map<std::string, CJsonObject*>::iterator iter;
     iter = m_mapJsonObjectRef.find(strKey);
@@ -167,7 +167,7 @@ thunder::CJsonObject& thunder::CJsonObject::operator[](const std::string& strKey
     }
 }
 
-thunder::CJsonObject& thunder::CJsonObject::operator[](unsigned int uiWhich)
+llib::CJsonObject& llib::CJsonObject::operator[](unsigned int uiWhich)
 {
     std::map<unsigned int, CJsonObject*>::iterator iter;
     iter = m_mapJsonArrayRef.find(uiWhich);
@@ -207,7 +207,7 @@ thunder::CJsonObject& thunder::CJsonObject::operator[](unsigned int uiWhich)
     }
 }
 
-std::string thunder::CJsonObject::operator()(const std::string& strKey) const
+std::string llib::CJsonObject::operator()(const std::string& strKey) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -282,7 +282,7 @@ std::string thunder::CJsonObject::operator()(const std::string& strKey) const
     return(std::string(""));
 }
 
-std::string thunder::CJsonObject::operator()(unsigned int uiWhich) const
+std::string llib::CJsonObject::operator()(unsigned int uiWhich) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -357,7 +357,7 @@ std::string thunder::CJsonObject::operator()(unsigned int uiWhich) const
     return(std::string(""));
 }
 
-bool thunder::CJsonObject::Parse(const std::string& strJson)
+bool llib::CJsonObject::Parse(const std::string& strJson)
 {
     Clear();
     m_pJsonData = cJSON_Parse(strJson.c_str());
@@ -369,7 +369,7 @@ bool thunder::CJsonObject::Parse(const std::string& strJson)
     return(true);
 }
 
-void thunder::CJsonObject::Clear()
+void llib::CJsonObject::Clear()
 {
     m_pExternJsonDataRef = NULL;
     if (m_pJsonData != NULL)
@@ -399,7 +399,7 @@ void thunder::CJsonObject::Clear()
     m_mapJsonObjectRef.clear();
 }
 
-bool thunder::CJsonObject::IsEmpty() const
+bool llib::CJsonObject::IsEmpty() const
 {
     if (m_pJsonData != NULL)
     {
@@ -412,7 +412,7 @@ bool thunder::CJsonObject::IsEmpty() const
     return(true);
 }
 
-bool thunder::CJsonObject::IsArray() const
+bool llib::CJsonObject::IsArray() const
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -439,7 +439,7 @@ bool thunder::CJsonObject::IsArray() const
     }
 }
 
-std::string thunder::CJsonObject::ToString() const
+std::string llib::CJsonObject::ToString() const
 {
     char* pJsonString = NULL;
     std::string strJsonData = "";
@@ -459,7 +459,7 @@ std::string thunder::CJsonObject::ToString() const
     return(strJsonData);
 }
 
-std::string thunder::CJsonObject::ToFormattedString() const
+std::string llib::CJsonObject::ToFormattedString() const
 {
     char* pJsonString = NULL;
     std::string strJsonData = "";
@@ -480,7 +480,7 @@ std::string thunder::CJsonObject::ToFormattedString() const
 }
 
 
-bool thunder::CJsonObject::Get(const std::string& strKey, CJsonObject& oJsonObject) const
+bool llib::CJsonObject::Get(const std::string& strKey, CJsonObject& oJsonObject) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -514,7 +514,7 @@ bool thunder::CJsonObject::Get(const std::string& strKey, CJsonObject& oJsonObje
     }
 }
 
-bool thunder::CJsonObject::Get(const std::string& strKey, std::string& strValue) const
+bool llib::CJsonObject::Get(const std::string& strKey, std::string& strValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -543,7 +543,7 @@ bool thunder::CJsonObject::Get(const std::string& strKey, std::string& strValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Get(const std::string& strKey, int32& iValue) const
+bool llib::CJsonObject::Get(const std::string& strKey, int32& iValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -572,7 +572,7 @@ bool thunder::CJsonObject::Get(const std::string& strKey, int32& iValue) const
     return(true);
 }
 
-bool thunder::CJsonObject::Get(const std::string& strKey, uint32& uiValue) const
+bool llib::CJsonObject::Get(const std::string& strKey, uint32& uiValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -601,7 +601,7 @@ bool thunder::CJsonObject::Get(const std::string& strKey, uint32& uiValue) const
     return(true);
 }
 
-bool thunder::CJsonObject::Get(const std::string& strKey, int64& llValue) const
+bool llib::CJsonObject::Get(const std::string& strKey, int64& llValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -630,7 +630,7 @@ bool thunder::CJsonObject::Get(const std::string& strKey, int64& llValue) const
     return(true);
 }
 
-bool thunder::CJsonObject::Get(const std::string& strKey, uint64& ullValue) const
+bool llib::CJsonObject::Get(const std::string& strKey, uint64& ullValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -659,7 +659,7 @@ bool thunder::CJsonObject::Get(const std::string& strKey, uint64& ullValue) cons
     return(true);
 }
 
-bool thunder::CJsonObject::Get(const std::string& strKey, bool& bValue) const
+bool llib::CJsonObject::Get(const std::string& strKey, bool& bValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -688,7 +688,7 @@ bool thunder::CJsonObject::Get(const std::string& strKey, bool& bValue) const
     return(true);
 }
 
-bool thunder::CJsonObject::Get(const std::string& strKey, float& fValue) const
+bool llib::CJsonObject::Get(const std::string& strKey, float& fValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -717,7 +717,7 @@ bool thunder::CJsonObject::Get(const std::string& strKey, float& fValue) const
     return(true);
 }
 
-bool thunder::CJsonObject::Get(const std::string& strKey, double& dValue) const
+bool llib::CJsonObject::Get(const std::string& strKey, double& dValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -746,7 +746,7 @@ bool thunder::CJsonObject::Get(const std::string& strKey, double& dValue) const
     return(true);
 }
 
-bool thunder::CJsonObject::Add(const std::string& strKey, const CJsonObject& oJsonObject)
+bool llib::CJsonObject::Add(const std::string& strKey, const CJsonObject& oJsonObject)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -797,7 +797,7 @@ bool thunder::CJsonObject::Add(const std::string& strKey, const CJsonObject& oJs
     return(true);
 }
 
-bool thunder::CJsonObject::Add(const std::string& strKey, const std::string& strValue)
+bool llib::CJsonObject::Add(const std::string& strKey, const std::string& strValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -837,7 +837,7 @@ bool thunder::CJsonObject::Add(const std::string& strKey, const std::string& str
     return(true);
 }
 
-bool thunder::CJsonObject::Add(const std::string& strKey, int32 iValue)
+bool llib::CJsonObject::Add(const std::string& strKey, int32 iValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -877,7 +877,7 @@ bool thunder::CJsonObject::Add(const std::string& strKey, int32 iValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Add(const std::string& strKey, uint32 uiValue)
+bool llib::CJsonObject::Add(const std::string& strKey, uint32 uiValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -917,7 +917,7 @@ bool thunder::CJsonObject::Add(const std::string& strKey, uint32 uiValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Add(const std::string& strKey, int64 llValue)
+bool llib::CJsonObject::Add(const std::string& strKey, int64 llValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -957,7 +957,7 @@ bool thunder::CJsonObject::Add(const std::string& strKey, int64 llValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Add(const std::string& strKey, uint64 ullValue)
+bool llib::CJsonObject::Add(const std::string& strKey, uint64 ullValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -997,7 +997,7 @@ bool thunder::CJsonObject::Add(const std::string& strKey, uint64 ullValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Add(const std::string& strKey, bool bValue, bool bValueAgain)
+bool llib::CJsonObject::Add(const std::string& strKey, bool bValue, bool bValueAgain)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -1037,7 +1037,7 @@ bool thunder::CJsonObject::Add(const std::string& strKey, bool bValue, bool bVal
     return(true);
 }
 
-bool thunder::CJsonObject::Add(const std::string& strKey, float fValue)
+bool llib::CJsonObject::Add(const std::string& strKey, float fValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -1077,7 +1077,7 @@ bool thunder::CJsonObject::Add(const std::string& strKey, float fValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Add(const std::string& strKey, double dValue)
+bool llib::CJsonObject::Add(const std::string& strKey, double dValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -1117,7 +1117,7 @@ bool thunder::CJsonObject::Add(const std::string& strKey, double dValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Delete(const std::string& strKey)
+bool llib::CJsonObject::Delete(const std::string& strKey)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -1152,7 +1152,7 @@ bool thunder::CJsonObject::Delete(const std::string& strKey)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(const std::string& strKey, const CJsonObject& oJsonObject)
+bool llib::CJsonObject::Replace(const std::string& strKey, const CJsonObject& oJsonObject)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -1197,7 +1197,7 @@ bool thunder::CJsonObject::Replace(const std::string& strKey, const CJsonObject&
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(const std::string& strKey, const std::string& strValue)
+bool llib::CJsonObject::Replace(const std::string& strKey, const std::string& strValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -1231,7 +1231,7 @@ bool thunder::CJsonObject::Replace(const std::string& strKey, const std::string&
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(const std::string& strKey, int32 iValue)
+bool llib::CJsonObject::Replace(const std::string& strKey, int32 iValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -1265,7 +1265,7 @@ bool thunder::CJsonObject::Replace(const std::string& strKey, int32 iValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(const std::string& strKey, uint32 uiValue)
+bool llib::CJsonObject::Replace(const std::string& strKey, uint32 uiValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -1299,7 +1299,7 @@ bool thunder::CJsonObject::Replace(const std::string& strKey, uint32 uiValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(const std::string& strKey, int64 llValue)
+bool llib::CJsonObject::Replace(const std::string& strKey, int64 llValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -1333,7 +1333,7 @@ bool thunder::CJsonObject::Replace(const std::string& strKey, int64 llValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(const std::string& strKey, uint64 ullValue)
+bool llib::CJsonObject::Replace(const std::string& strKey, uint64 ullValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -1367,7 +1367,7 @@ bool thunder::CJsonObject::Replace(const std::string& strKey, uint64 ullValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(const std::string& strKey, bool bValue, bool bValueAgain)
+bool llib::CJsonObject::Replace(const std::string& strKey, bool bValue, bool bValueAgain)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -1401,7 +1401,7 @@ bool thunder::CJsonObject::Replace(const std::string& strKey, bool bValue, bool 
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(const std::string& strKey, float fValue)
+bool llib::CJsonObject::Replace(const std::string& strKey, float fValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -1435,7 +1435,7 @@ bool thunder::CJsonObject::Replace(const std::string& strKey, float fValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(const std::string& strKey, double dValue)
+bool llib::CJsonObject::Replace(const std::string& strKey, double dValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -1469,7 +1469,7 @@ bool thunder::CJsonObject::Replace(const std::string& strKey, double dValue)
     return(true);
 }
 
-int thunder::CJsonObject::GetArraySize()
+int llib::CJsonObject::GetArraySize()
 {
     if (m_pJsonData != NULL)
     {
@@ -1488,7 +1488,7 @@ int thunder::CJsonObject::GetArraySize()
     return(0);
 }
 
-bool thunder::CJsonObject::Get(int iWhich, CJsonObject& oJsonObject) const
+bool llib::CJsonObject::Get(int iWhich, CJsonObject& oJsonObject) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -1522,7 +1522,7 @@ bool thunder::CJsonObject::Get(int iWhich, CJsonObject& oJsonObject) const
     }
 }
 
-bool thunder::CJsonObject::Get(int iWhich, std::string& strValue) const
+bool llib::CJsonObject::Get(int iWhich, std::string& strValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -1551,7 +1551,7 @@ bool thunder::CJsonObject::Get(int iWhich, std::string& strValue) const
     return(true);
 }
 
-bool thunder::CJsonObject::Get(int iWhich, int32& iValue) const
+bool llib::CJsonObject::Get(int iWhich, int32& iValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -1580,7 +1580,7 @@ bool thunder::CJsonObject::Get(int iWhich, int32& iValue) const
     return(true);
 }
 
-bool thunder::CJsonObject::Get(int iWhich, uint32& uiValue) const
+bool llib::CJsonObject::Get(int iWhich, uint32& uiValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -1609,7 +1609,7 @@ bool thunder::CJsonObject::Get(int iWhich, uint32& uiValue) const
     return(true);
 }
 
-bool thunder::CJsonObject::Get(int iWhich, int64& llValue) const
+bool llib::CJsonObject::Get(int iWhich, int64& llValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -1638,7 +1638,7 @@ bool thunder::CJsonObject::Get(int iWhich, int64& llValue) const
     return(true);
 }
 
-bool thunder::CJsonObject::Get(int iWhich, uint64& ullValue) const
+bool llib::CJsonObject::Get(int iWhich, uint64& ullValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -1667,7 +1667,7 @@ bool thunder::CJsonObject::Get(int iWhich, uint64& ullValue) const
     return(true);
 }
 
-bool thunder::CJsonObject::Get(int iWhich, bool& bValue) const
+bool llib::CJsonObject::Get(int iWhich, bool& bValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -1696,7 +1696,7 @@ bool thunder::CJsonObject::Get(int iWhich, bool& bValue) const
     return(true);
 }
 
-bool thunder::CJsonObject::Get(int iWhich, float& fValue) const
+bool llib::CJsonObject::Get(int iWhich, float& fValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -1725,7 +1725,7 @@ bool thunder::CJsonObject::Get(int iWhich, float& fValue) const
     return(true);
 }
 
-bool thunder::CJsonObject::Get(int iWhich, double& dValue) const
+bool llib::CJsonObject::Get(int iWhich, double& dValue) const
 {
     cJSON* pJsonStruct = NULL;
     if (m_pJsonData != NULL)
@@ -1754,7 +1754,7 @@ bool thunder::CJsonObject::Get(int iWhich, double& dValue) const
     return(true);
 }
 
-bool thunder::CJsonObject::Add(const CJsonObject& oJsonObject)
+bool llib::CJsonObject::Add(const CJsonObject& oJsonObject)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -1815,7 +1815,7 @@ bool thunder::CJsonObject::Add(const CJsonObject& oJsonObject)
     return(true);
 }
 
-bool thunder::CJsonObject::Add(const std::string& strValue)
+bool llib::CJsonObject::Add(const std::string& strValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -1857,7 +1857,7 @@ bool thunder::CJsonObject::Add(const std::string& strValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Add(int32 iValue)
+bool llib::CJsonObject::Add(int32 iValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -1899,7 +1899,7 @@ bool thunder::CJsonObject::Add(int32 iValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Add(uint32 uiValue)
+bool llib::CJsonObject::Add(uint32 uiValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -1941,7 +1941,7 @@ bool thunder::CJsonObject::Add(uint32 uiValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Add(int64 llValue)
+bool llib::CJsonObject::Add(int64 llValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -1983,7 +1983,7 @@ bool thunder::CJsonObject::Add(int64 llValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Add(uint64 ullValue)
+bool llib::CJsonObject::Add(uint64 ullValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -2025,7 +2025,7 @@ bool thunder::CJsonObject::Add(uint64 ullValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Add(int iAnywhere, bool bValue)
+bool llib::CJsonObject::Add(int iAnywhere, bool bValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -2067,7 +2067,7 @@ bool thunder::CJsonObject::Add(int iAnywhere, bool bValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Add(float fValue)
+bool llib::CJsonObject::Add(float fValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -2109,7 +2109,7 @@ bool thunder::CJsonObject::Add(float fValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Add(double dValue)
+bool llib::CJsonObject::Add(double dValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -2151,7 +2151,7 @@ bool thunder::CJsonObject::Add(double dValue)
     return(true);
 }
 
-bool thunder::CJsonObject::AddAsFirst(const CJsonObject& oJsonObject)
+bool llib::CJsonObject::AddAsFirst(const CJsonObject& oJsonObject)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -2204,7 +2204,7 @@ bool thunder::CJsonObject::AddAsFirst(const CJsonObject& oJsonObject)
     return(true);
 }
 
-bool thunder::CJsonObject::AddAsFirst(const std::string& strValue)
+bool llib::CJsonObject::AddAsFirst(const std::string& strValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -2246,7 +2246,7 @@ bool thunder::CJsonObject::AddAsFirst(const std::string& strValue)
     return(true);
 }
 
-bool thunder::CJsonObject::AddAsFirst(int32 iValue)
+bool llib::CJsonObject::AddAsFirst(int32 iValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -2288,7 +2288,7 @@ bool thunder::CJsonObject::AddAsFirst(int32 iValue)
     return(true);
 }
 
-bool thunder::CJsonObject::AddAsFirst(uint32 uiValue)
+bool llib::CJsonObject::AddAsFirst(uint32 uiValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -2330,7 +2330,7 @@ bool thunder::CJsonObject::AddAsFirst(uint32 uiValue)
     return(true);
 }
 
-bool thunder::CJsonObject::AddAsFirst(int64 llValue)
+bool llib::CJsonObject::AddAsFirst(int64 llValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -2372,7 +2372,7 @@ bool thunder::CJsonObject::AddAsFirst(int64 llValue)
     return(true);
 }
 
-bool thunder::CJsonObject::AddAsFirst(uint64 ullValue)
+bool llib::CJsonObject::AddAsFirst(uint64 ullValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -2414,7 +2414,7 @@ bool thunder::CJsonObject::AddAsFirst(uint64 ullValue)
     return(true);
 }
 
-bool thunder::CJsonObject::AddAsFirst(int iAnywhere, bool bValue)
+bool llib::CJsonObject::AddAsFirst(int iAnywhere, bool bValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -2456,7 +2456,7 @@ bool thunder::CJsonObject::AddAsFirst(int iAnywhere, bool bValue)
     return(true);
 }
 
-bool thunder::CJsonObject::AddAsFirst(float fValue)
+bool llib::CJsonObject::AddAsFirst(float fValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -2498,7 +2498,7 @@ bool thunder::CJsonObject::AddAsFirst(float fValue)
     return(true);
 }
 
-bool thunder::CJsonObject::AddAsFirst(double dValue)
+bool llib::CJsonObject::AddAsFirst(double dValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData != NULL)
@@ -2540,7 +2540,7 @@ bool thunder::CJsonObject::AddAsFirst(double dValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Delete(int iWhich)
+bool llib::CJsonObject::Delete(int iWhich)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -2582,7 +2582,7 @@ bool thunder::CJsonObject::Delete(int iWhich)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(int iWhich, const CJsonObject& oJsonObject)
+bool llib::CJsonObject::Replace(int iWhich, const CJsonObject& oJsonObject)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -2627,7 +2627,7 @@ bool thunder::CJsonObject::Replace(int iWhich, const CJsonObject& oJsonObject)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(int iWhich, const std::string& strValue)
+bool llib::CJsonObject::Replace(int iWhich, const std::string& strValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -2661,7 +2661,7 @@ bool thunder::CJsonObject::Replace(int iWhich, const std::string& strValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(int iWhich, int32 iValue)
+bool llib::CJsonObject::Replace(int iWhich, int32 iValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -2695,7 +2695,7 @@ bool thunder::CJsonObject::Replace(int iWhich, int32 iValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(int iWhich, uint32 uiValue)
+bool llib::CJsonObject::Replace(int iWhich, uint32 uiValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -2729,7 +2729,7 @@ bool thunder::CJsonObject::Replace(int iWhich, uint32 uiValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(int iWhich, int64 llValue)
+bool llib::CJsonObject::Replace(int iWhich, int64 llValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -2763,7 +2763,7 @@ bool thunder::CJsonObject::Replace(int iWhich, int64 llValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(int iWhich, uint64 ullValue)
+bool llib::CJsonObject::Replace(int iWhich, uint64 ullValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -2797,7 +2797,7 @@ bool thunder::CJsonObject::Replace(int iWhich, uint64 ullValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(int iWhich, bool bValue, bool bValueAgain)
+bool llib::CJsonObject::Replace(int iWhich, bool bValue, bool bValueAgain)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -2831,7 +2831,7 @@ bool thunder::CJsonObject::Replace(int iWhich, bool bValue, bool bValueAgain)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(int iWhich, float fValue)
+bool llib::CJsonObject::Replace(int iWhich, float fValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -2865,7 +2865,7 @@ bool thunder::CJsonObject::Replace(int iWhich, float fValue)
     return(true);
 }
 
-bool thunder::CJsonObject::Replace(int iWhich, double dValue)
+bool llib::CJsonObject::Replace(int iWhich, double dValue)
 {
     cJSON* pFocusData = NULL;
     if (m_pJsonData == NULL)
@@ -2899,7 +2899,7 @@ bool thunder::CJsonObject::Replace(int iWhich, double dValue)
     return(true);
 }
 
-thunder::CJsonObject::CJsonObject(cJSON* pJsonData)
+llib::CJsonObject::CJsonObject(cJSON* pJsonData)
     : m_pJsonData(NULL), m_pExternJsonDataRef(pJsonData)
 {
 }

@@ -27,12 +27,12 @@ void StringReplace(string &str, const string &old_value,const string &new_value)
     }
 }
 
-thunder::CMysqlDbi::CMysqlDbi()
+llib::CMysqlDbi::CMysqlDbi()
 {
 	InitVariables();
 }
 
-thunder::CMysqlDbi::CMysqlDbi(
+llib::CMysqlDbi::CMysqlDbi(
         const char* szIp,
         const char* szUserName,
         const char* szUserPwd,
@@ -48,19 +48,19 @@ thunder::CMysqlDbi::CMysqlDbi(
 	strncpy(m_stDbConfDetail.m_stDbConnInfo.m_szDbPwd, szUserPwd, 32);
 	strncpy(m_stDbConfDetail.m_stDbConnInfo.m_szDbName, szDbName, 32);
 	m_stDbConfDetail.m_stDbConnInfo.m_uiDbPort = uiPort;
-	m_stDbConfDetail.m_ucDbType = thunder::MYSQL_DB;
+	m_stDbConfDetail.m_ucDbType = llib::MYSQL_DB;
 	m_stDbConfDetail.m_ucAccess = 1;	//直连
 
     InitDbConn(m_stDbConfDetail);
 }
 
-thunder::CMysqlDbi::~CMysqlDbi()
+llib::CMysqlDbi::~CMysqlDbi()
 {
 		FreeResult();
         mysql_close(&m_dbInstance);
 }
 
-int thunder::CMysqlDbi::InitDbConn(const thunder::tagDbConfDetail& stDbConfDetail)
+int llib::CMysqlDbi::InitDbConn(const llib::tagDbConfDetail& stDbConfDetail)
 {
 	FreeResult();
 	InitVariables();
@@ -100,7 +100,7 @@ int thunder::CMysqlDbi::InitDbConn(const thunder::tagDbConfDetail& stDbConfDetai
     return 0;
 }
 
-int thunder::CMysqlDbi::MysqlInit()
+int llib::CMysqlDbi::MysqlInit()
 {
     if (!mysql_init(&m_dbInstance))
     {
@@ -111,14 +111,14 @@ int thunder::CMysqlDbi::MysqlInit()
     return 0;
 }
 
-int thunder::CMysqlDbi::SetMysqlOptions(
+int llib::CMysqlDbi::SetMysqlOptions(
         enum mysql_option option,
         const char* arg)
 {
     return mysql_options(&m_dbInstance, option, arg);
 }
 
-int thunder::CMysqlDbi::MysqlRealConnect(
+int llib::CMysqlDbi::MysqlRealConnect(
         const char* szIp,
         const char* szUserName,
         const char* szUserPwd,
@@ -137,7 +137,7 @@ int thunder::CMysqlDbi::MysqlRealConnect(
     return 0;
 }
 
-int thunder::CMysqlDbi::SetDbConnCharacterSet(const char* szCharacterSet)
+int llib::CMysqlDbi::SetDbConnCharacterSet(const char* szCharacterSet)
 {
     int ret = 0;
     ret = mysql_set_character_set(&m_dbInstance, szCharacterSet); //mysql 5.0 lib
@@ -151,7 +151,7 @@ int thunder::CMysqlDbi::SetDbConnCharacterSet(const char* szCharacterSet)
     return ret;
 }
 
-int thunder::CMysqlDbi::EscapeString(
+int llib::CMysqlDbi::EscapeString(
         char* szTo,
         const char* szFrom,
         unsigned long uiLength)
@@ -159,12 +159,12 @@ int thunder::CMysqlDbi::EscapeString(
     return mysql_real_escape_string(&m_dbInstance, szTo, szFrom, uiLength);
 }
 
-int thunder::CMysqlDbi::MysqlPing()
+int llib::CMysqlDbi::MysqlPing()
 {
     return mysql_ping(&m_dbInstance);
 }
 
-int thunder::CMysqlDbi::SetAutoCommit(my_bool mode)
+int llib::CMysqlDbi::SetAutoCommit(my_bool mode)
 {
     int ret = 0;
     ret = mysql_autocommit(&m_dbInstance, mode);
@@ -173,7 +173,7 @@ int thunder::CMysqlDbi::SetAutoCommit(my_bool mode)
     return ret;
 }
 
-int thunder::CMysqlDbi::Commit()
+int llib::CMysqlDbi::Commit()
 {
     int ret = 0;
     ret = mysql_commit(&m_dbInstance);
@@ -182,7 +182,7 @@ int thunder::CMysqlDbi::Commit()
     return ret;
 }
 
-int thunder::CMysqlDbi::ExecSql(const std::string& strSql)
+int llib::CMysqlDbi::ExecSql(const std::string& strSql)
 {
     if (!CleanBeforeExecSql())
     {
@@ -214,7 +214,7 @@ int thunder::CMysqlDbi::ExecSql(const std::string& strSql)
     return m_iQueryResult;
 }
 
-int thunder::CMysqlDbi::ExecSql(
+int llib::CMysqlDbi::ExecSql(
         const std::string& strSql,
         MYSQL_RES* pQueryRes)
 {
@@ -237,7 +237,7 @@ int thunder::CMysqlDbi::ExecSql(
     return m_iQueryResult;
 }
 
-int thunder::CMysqlDbi::ExecSql(
+int llib::CMysqlDbi::ExecSql(
         const std::string& strSql,
         T_vecResultSet& vecRes)
 {
@@ -278,7 +278,7 @@ int thunder::CMysqlDbi::ExecSql(
 }
 
 //插入数据记录
-int thunder::CMysqlDbi::ExecSql(
+int llib::CMysqlDbi::ExecSql(
         const std::string& strSql,
         unsigned long long& ullInsertId)
 {
@@ -308,12 +308,12 @@ int thunder::CMysqlDbi::ExecSql(
     return m_iQueryResult;
 }
 
-unsigned int thunder::CMysqlDbi::AffectRows()
+unsigned int llib::CMysqlDbi::AffectRows()
 {
 	return(mysql_affected_rows(&m_dbInstance));
 }
 
-const MYSQL_RES* thunder::CMysqlDbi::StoreResult()
+const MYSQL_RES* llib::CMysqlDbi::StoreResult()
 {
     if (m_iErrno != 0)  // 查询是失败的
     {
@@ -332,7 +332,7 @@ const MYSQL_RES* thunder::CMysqlDbi::StoreResult()
     return m_pQueryRes;
 }
 
-const MYSQL_RES* thunder::CMysqlDbi::UseResult()
+const MYSQL_RES* llib::CMysqlDbi::UseResult()
 {
 	if (m_iErrno != 0)  // 查询是失败的
 	{
@@ -351,7 +351,7 @@ const MYSQL_RES* thunder::CMysqlDbi::UseResult()
     return m_pQueryRes;
 }
 
-int thunder::CMysqlDbi::GetResultSet(T_vecResultSet& vecResultSet)
+int llib::CMysqlDbi::GetResultSet(T_vecResultSet& vecResultSet)
 {
 	vecResultSet.clear();
 	if (m_iQueryResult == 0)
@@ -389,7 +389,7 @@ int thunder::CMysqlDbi::GetResultSet(T_vecResultSet& vecResultSet)
     return m_iQueryResult;
 }
 
-int thunder::CMysqlDbi::GetResultToFile()
+int llib::CMysqlDbi::GetResultToFile()
 {
 	 //查询失败，取不了结果集
 	 if (m_iQueryResult != 0)
@@ -452,7 +452,7 @@ int thunder::CMysqlDbi::GetResultToFile()
 	  }
 }
 
-thunder::T_mapRow& thunder::CMysqlDbi::GetRowFromFile()
+llib::T_mapRow& llib::CMysqlDbi::GetRowFromFile()
 {
 	m_mapRow.clear();
 
@@ -487,7 +487,7 @@ thunder::T_mapRow& thunder::CMysqlDbi::GetRowFromFile()
 
 }
 
-int thunder::CMysqlDbi::GetResultDict(T_vecDict& vecDict)
+int llib::CMysqlDbi::GetResultDict(T_vecDict& vecDict)
 {
 	m_vecDict.clear();
 
@@ -533,7 +533,7 @@ int thunder::CMysqlDbi::GetResultDict(T_vecDict& vecDict)
 	}
 }
 
-int thunder::CMysqlDbi::GetResultRow(T_mapRow& mapRow)
+int llib::CMysqlDbi::GetResultRow(T_mapRow& mapRow)
 {
 	mapRow.clear();
 
@@ -576,7 +576,7 @@ int thunder::CMysqlDbi::GetResultRow(T_mapRow& mapRow)
     return 0;
 }
 
-MYSQL_ROW thunder::CMysqlDbi::GetRow()
+MYSQL_ROW llib::CMysqlDbi::GetRow()
 {
     if (m_pQueryRes == NULL)
     {
@@ -588,7 +588,7 @@ MYSQL_ROW thunder::CMysqlDbi::GetRow()
     return m_stRow;
 }
 
-unsigned long* thunder::CMysqlDbi::FetchLengths()
+unsigned long* llib::CMysqlDbi::FetchLengths()
 {
     if (m_pQueryRes != NULL)
     {
@@ -597,7 +597,7 @@ unsigned long* thunder::CMysqlDbi::FetchLengths()
     return 0;
 }
 
-unsigned int thunder::CMysqlDbi::FetchFieldNum()
+unsigned int llib::CMysqlDbi::FetchFieldNum()
 {
     if (m_pQueryRes != NULL)
     {
@@ -606,7 +606,7 @@ unsigned int thunder::CMysqlDbi::FetchFieldNum()
     return 0;
 }
 
-MYSQL_FIELD* thunder::CMysqlDbi::FetchFields()
+MYSQL_FIELD* llib::CMysqlDbi::FetchFields()
 {
     if (m_pQueryRes != NULL)
     {
@@ -615,12 +615,12 @@ MYSQL_FIELD* thunder::CMysqlDbi::FetchFields()
     return NULL;
 }
 
-unsigned int thunder::CMysqlDbi::FetchFieldCount()
+unsigned int llib::CMysqlDbi::FetchFieldCount()
 {
     return mysql_field_count(&m_dbInstance);
 }
 
-void thunder::CMysqlDbi::FreeResult()
+void llib::CMysqlDbi::FreeResult()
 {
     if (m_pQueryRes != NULL)
     {
@@ -633,12 +633,12 @@ void thunder::CMysqlDbi::FreeResult()
     }
 }
 
-const char* thunder::CMysqlDbi::MysqlInfo()
+const char* llib::CMysqlDbi::MysqlInfo()
 {
     return mysql_info(&m_dbInstance);
 }
 
-void thunder::CMysqlDbi::InitVariables()
+void llib::CMysqlDbi::InitVariables()
 {
 	m_iQueryResult = 0;
 	m_iErrno = 0;
@@ -646,7 +646,7 @@ void thunder::CMysqlDbi::InitVariables()
 	mysql_init(&m_dbInstance);
 }
 
-bool thunder::CMysqlDbi::CleanBeforeExecSql()
+bool llib::CMysqlDbi::CleanBeforeExecSql()
 {
 	//测试数据库连接的可用性
 	if (MysqlPing() == CR_SERVER_GONE_ERROR)

@@ -18,11 +18,11 @@ namespace thunder
 class CustomMsgCodec: public ThunderCodec
 {
 public:
-    CustomMsgCodec(thunder::E_CODEC_TYPE eCodecType, const std::string& strKey = "That's a lizard.");
+    CustomMsgCodec(llib::E_CODEC_TYPE eCodecType, const std::string& strKey = "That's a lizard.");
     virtual ~CustomMsgCodec();
 
-    virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, thunder::CBuffer* pBuff);
-    virtual E_CODEC_STATUS Decode(thunder::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody);
+    virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, llib::CBuffer* pBuff);
+    virtual E_CODEC_STATUS Decode(llib::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody);
     virtual E_CODEC_STATUS Decode(tagConnectionAttr* pConn,MsgHead& oMsgHead, MsgBody& oMsgBody);
 };
 

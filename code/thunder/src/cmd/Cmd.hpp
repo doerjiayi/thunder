@@ -112,7 +112,7 @@ protected:
      * @brief 获取Server自定义配置
      * @return Server自定义配置
      */
-    const thunder::CJsonObject& GetCustomConf() const;
+    const llib::CJsonObject& GetCustomConf() const;
 
     /**
      * @brief 获取当前时间
@@ -241,7 +241,7 @@ private:
     int m_iCmd;
     std::string m_strClassName;
 
-    friend class ThunderWorker;
+    friend class NodeWorker;
 };
 
 } /* namespace thunder */

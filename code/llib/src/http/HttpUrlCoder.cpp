@@ -15,7 +15,7 @@
 
 #include "HttpUrlCoder.h"
 
-namespace thunder
+namespace llib
 {
     /// 十六进制对应的字符
     static unsigned char hexchars[] = "0123456789ABCDEF";
