@@ -1246,6 +1246,7 @@ bool NodeWorker::CoroutineResume()
 		{
 			LOG4CPLUS_TRACE_FMT(GetLogger(), "CoroutineResume coid(%d)",m_CoroutineIdList[m_uiCoroutineRunIndex]);
 			CoroutineResume(m_CoroutineIdList[m_uiCoroutineRunIndex]);//该函数有可能会修改m_CoroutineIdList
+			++m_uiCoroutineRunIndex;
 			return true;
 		}
 	}
@@ -1253,7 +1254,7 @@ bool NodeWorker::CoroutineResume()
 	return false;
 }
 
-void NodeWorker::CoroutineResume(int coid)
+void NodeWorker::CoroutineResume(int coid,int index)
 {
 	int running_id = llib::coroutine_running(m_pCoroutineSchedule);
 	if (running_id >= 0)//抢占式
@@ -1267,14 +1268,21 @@ void NodeWorker::CoroutineResume(int coid)
 	int status = llib::coroutine_status(m_pCoroutineSchedule,coid);
 	if (0 == status)
 	{
-		std::vector<int>::iterator it = m_CoroutineIdList.begin();
-		std::vector<int>::iterator itEnd = m_CoroutineIdList.end();
-		for (;it != itEnd;++it)
+		if (index >= 0 && index < m_CoroutineIdList.size() && (m_CoroutineIdList[index] == coid))
 		{
-			if (*it == coid)
+			m_CoroutineIdList.erase(m_CoroutineIdList.begin() + index);
+		}
+		else
+		{
+			std::vector<int>::iterator it = m_CoroutineIdList.begin();
+			std::vector<int>::iterator itEnd = m_CoroutineIdList.end();
+			for (;it != itEnd;++it)
 			{
-				m_CoroutineIdList.erase(it);//直接删除，后面的任务前移,保证原来的轮询顺序
-				break;
+				if (*it == coid)
+				{
+					m_CoroutineIdList.erase(it);//直接删除，后面的任务前移,保证原来的轮询顺序
+					break;
+				}
 			}
 		}
 	}

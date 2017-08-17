@@ -12,7 +12,7 @@
 #include "../ThunderDefine.hpp"
 #include "../ThunderError.hpp"
 #include "log4cplus/loggingmacros.h"
-#include "CW.hpp"
+#include "cmd/CW.hpp"
 #include "protocol/msg.pb.h"
 //#include "protocol/oss_sys.pb.h"
 #include "labor/NodeLabor.hpp"

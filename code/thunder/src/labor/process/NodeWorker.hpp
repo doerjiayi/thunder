@@ -205,7 +205,7 @@ public:     // Cmd类和Step类只需关注这些方法
 
     int CoroutineNew(llib::coroutine_func callback,void *ud);
     bool CoroutineResume();//自定义调用策略,轮流执行规则
-    void CoroutineResume(int co1);
+    void CoroutineResume(int co1,int index = -1);
     void CoroutineYield();
     int CoroutineStatus(int coid = -1);
     int CoroutineRunning();
