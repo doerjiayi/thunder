@@ -1,3 +1,4 @@
+echo 服务测试
 /usr/bin/siege -c 300 -r 300 'http://192.168.18.68:21000/hello POST ${FILE_DATA}'
 
 length:
