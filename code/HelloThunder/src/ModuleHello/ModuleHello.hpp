@@ -45,6 +45,7 @@ private:
     StepHello* pStepHello;
     StepGetHelloName* pStepGetHelloName;
     StepHttpRequest* pStepHttpRequest;
+    SessionHello* pSession;
 };
 
 } /* namespace hello */

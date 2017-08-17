@@ -10,10 +10,10 @@
 #ifndef SESSION_HPP_
 #define SESSION_HPP_
 
-#include "../../../l3lib/include/libev/ev.h"         // need ev_tstamp
-#include "../../../l3lib/include/log4cplus/fileappender.h"
-#include "../../../l3lib/include/log4cplus/logger.h"
-#include "../../../l3lib/include/log4cplus/loggingmacros.h"
+#include "libev/ev.h"         // need ev_tstamp
+#include "log4cplus/fileappender.h"
+#include "log4cplus/logger.h"
+#include "log4cplus/loggingmacros.h"
 #include "../ThunderDefine.hpp"
 #include "../ThunderError.hpp"
 #include "labor/NodeLabor.hpp"

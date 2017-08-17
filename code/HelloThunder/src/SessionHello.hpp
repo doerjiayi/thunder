@@ -23,6 +23,10 @@ public:
 
     virtual thunder::E_CMD_STATUS Timeout()
     {
+    	if (GetSessionId() == "20000")//常驻会话
+    	{
+    		return(thunder::STATUS_CMD_RUNNING);
+    	}
         return(thunder::STATUS_CMD_COMPLETED);
     }
 
