@@ -14,26 +14,40 @@ namespace thunder
 
 NodeLabor::NodeLabor()
 {
-	m_pCoroutineSchedule = llib::coroutine_open();
-	m_uiCoroutineRunIndex = 0;
 }
 
 NodeLabor::~NodeLabor()
 {
-	if (m_pCoroutineSchedule)
-	{
-		coroutine_close(m_pCoroutineSchedule);
-	}
+//	coroutine_close(m_pCoroutineSchedule);
 }
 
-int NodeLabor::CoroutineNew(llib::coroutine_func func,void *ud)
+int NodeLabor::CoroutineNew(const std::string &coroutineName,llib::coroutine_func func,void *ud)
 {
-	int coid = llib::coroutine_new(m_pCoroutineSchedule, func, ud);//使用指针，因为栈内存会被保存
+	CoroutineScheduleMap::iterator it = m_pCoroutineScheduleMap.find(coroutineName);
+	llib::schedule* schedule(NULL);
+	if (it == m_pCoroutineScheduleMap.end())
+	{
+		CoroutineSchedule coroutineSchedule;
+		schedule = coroutineSchedule.schedule = llib::coroutine_open();
+		std::pair<CoroutineScheduleMap::iterator,bool> ret = m_pCoroutineScheduleMap.insert(std::make_pair(coroutineName,coroutineSchedule));
+		if (!ret.second)
+		{
+			LOG4_ERROR("%s failed to create schedule", __FUNCTION__);
+			coroutine_close(schedule);
+			return -1;
+		}
+		it = ret.first;
+	}
+	else
+	{
+		schedule = it->second.schedule;
+	}
+	int coid = llib::coroutine_new(schedule, func, ud);//使用指针，因为栈内存会被保存
 	if (coid >= 0)
 	{
-		m_CoroutineIdList.push_back(coid);
-		LOG4_TRACE("%s coroutine coid(%u) status(%d)",
-				__FUNCTION__,coid,llib::coroutine_status(m_pCoroutineSchedule,coid));
+		it->second.coroutineIds.push_back(coid);
+		LOG4_TRACE("%s coroutine coid(%u) status(%d) coroutineName(%s)",
+				__FUNCTION__,coid,llib::coroutine_status(schedule,coid),coroutineName.c_str());
 	}
 	else
 	{
@@ -42,31 +56,56 @@ int NodeLabor::CoroutineNew(llib::coroutine_func func,void *ud)
 	return coid;
 }
 
-bool NodeLabor::CoroutineResume()
+bool NodeLabor::CoroutineResume(const std::string &coroutineName)
 {
-	while (m_CoroutineIdList.size() > 0)
+	CoroutineScheduleMap::iterator it = m_pCoroutineScheduleMap.find(coroutineName);
+	if (it == m_pCoroutineScheduleMap.end())
 	{
-		if (m_uiCoroutineRunIndex >= m_CoroutineIdList.size())
+		LOG4_ERROR("%s failed to get CoroutineSchedule coroutineName(%u)", __FUNCTION__, coroutineName.c_str());
+		return false;
+	}
+	CoroutineSchedule& coroutineSchedule = it->second;
+	while (coroutineSchedule.coroutineIds.size() > 0)
+	{
+		if (coroutineSchedule.uiCoroutineRunIndex >= coroutineSchedule.coroutineIds.size())
 		{
-			m_uiCoroutineRunIndex = 0;
+			coroutineSchedule.uiCoroutineRunIndex = 0;
 		}
-		if (0 > m_CoroutineIdList[m_uiCoroutineRunIndex])
+		int coid = coroutineSchedule.coroutineIds[coroutineSchedule.uiCoroutineRunIndex];
+		if (0 > coid)
 		{
-			LOG4CPLUS_ERROR_FMT(GetLogger(), "invaid coid(%d)",m_CoroutineIdList[m_uiCoroutineRunIndex]);
-			m_CoroutineIdList.erase(m_CoroutineIdList.begin() + m_uiCoroutineRunIndex);
+			LOG4_ERROR("%s invaid coid(%d)",__FUNCTION__,coid);
+			coroutineSchedule.coroutineIds.erase(
+					coroutineSchedule.coroutineIds.begin() + coroutineSchedule.uiCoroutineRunIndex);
 			continue;
 		}
-		int nStatus = CoroutineStatus(m_CoroutineIdList[m_uiCoroutineRunIndex]);
+		int nStatus = llib::coroutine_status(coroutineSchedule.schedule,coid);
+		LOG4_TRACE("%s coroutine_status coid(%d) status(%d)",__FUNCTION__,coid,nStatus);
 		if (0 == nStatus)
 		{
-			LOG4CPLUS_DEBUG_FMT(GetLogger(), "dead coid(%d)",m_CoroutineIdList[m_uiCoroutineRunIndex]);
-			m_CoroutineIdList.erase(m_CoroutineIdList.begin() + m_uiCoroutineRunIndex);
+			LOG4_TRACE("%s dead coid(%d)",__FUNCTION__,coid);
+			coroutineSchedule.coroutineIds.erase(coroutineSchedule.coroutineIds.begin() + coroutineSchedule.uiCoroutineRunIndex);
 			continue;
 		}
 		{
-			LOG4CPLUS_TRACE_FMT(GetLogger(), "CoroutineResume coid(%d)",m_CoroutineIdList[m_uiCoroutineRunIndex]);
-			CoroutineResume(m_CoroutineIdList[m_uiCoroutineRunIndex]);//该函数有可能会修改m_CoroutineIdList
-			++m_uiCoroutineRunIndex;
+			LOG4CPLUS_TRACE_FMT(GetLogger(), "%s CoroutineResume coid(%d)",__FUNCTION__,coid);
+			{
+				int running_id = llib::coroutine_running(coroutineSchedule.schedule);
+				if (running_id >= 0)//抢占式(唤醒操作时一般是不会有正在运行的协程)
+				{
+					LOG4_TRACE("%s coroutine_yield running_id(%d)", __FUNCTION__, running_id);
+					llib::coroutine_yield(coroutineSchedule.schedule);//放弃执行权
+				}
+				LOG4_TRACE("%s coroutine_resume coid(%d) status(%d)",
+						__FUNCTION__, coid,llib::coroutine_status(coroutineSchedule.schedule,coid));
+				llib::coroutine_resume(coroutineSchedule.schedule,coid);//执行函数
+				int status = llib::coroutine_status(coroutineSchedule.schedule,coid);
+				if (0 == status)
+				{
+					coroutineSchedule.coroutineIds.erase(coroutineSchedule.coroutineIds.begin() + coroutineSchedule.uiCoroutineRunIndex);
+				}
+			}
+			++coroutineSchedule.uiCoroutineRunIndex;
 			return true;
 		}
 	}
@@ -74,48 +113,21 @@ bool NodeLabor::CoroutineResume()
 	return false;
 }
 
-void NodeLabor::CoroutineResume(int coid,int index)
+void NodeLabor::CoroutineYield(const std::string &coroutineName)
 {
-	int running_id = llib::coroutine_running(m_pCoroutineSchedule);
-	if (running_id >= 0)//抢占式
+	CoroutineScheduleMap::iterator it = m_pCoroutineScheduleMap.find(coroutineName);
+	if (it == m_pCoroutineScheduleMap.end())
 	{
-		LOG4_TRACE("%s coroutine_yield running_id(%d)", __FUNCTION__, running_id);
-		llib::coroutine_yield(m_pCoroutineSchedule);//放弃执行权
+		LOG4_ERROR("%s failed to get m_pCoroutineScheduleMap coroutineName(%u)", __FUNCTION__, coroutineName.c_str());
+		return;
 	}
-	LOG4_TRACE("%s coroutine_resume coid(%d) status(%d)",
-			__FUNCTION__, coid,llib::coroutine_status(m_pCoroutineSchedule,coid));
-	llib::coroutine_resume(m_pCoroutineSchedule,coid);//执行函数
-	int status = llib::coroutine_status(m_pCoroutineSchedule,coid);
-	if (0 == status)
-	{
-		if (index >= 0 && index < m_CoroutineIdList.size() && (m_CoroutineIdList[index] == coid))
-		{
-			m_CoroutineIdList.erase(m_CoroutineIdList.begin() + index);
-		}
-		else
-		{
-			std::vector<int>::iterator it = m_CoroutineIdList.begin();
-			std::vector<int>::iterator itEnd = m_CoroutineIdList.end();
-			for (;it != itEnd;++it)
-			{
-				if (*it == coid)
-				{
-					m_CoroutineIdList.erase(it);//直接删除，后面的任务前移,保证原来的轮询顺序
-					break;
-				}
-			}
-		}
-	}
-}
-
-void NodeLabor::CoroutineYield()
-{
-	int running_id = llib::coroutine_running(m_pCoroutineSchedule);
+	llib::schedule* schedule = it->second.schedule;
+	int running_id = llib::coroutine_running(schedule);
 	if (running_id >= 0)
 	{
 		LOG4_TRACE("%s coroutine_yield running_id(%d) status(%d)",
-				__FUNCTION__, running_id,coroutine_status(m_pCoroutineSchedule,running_id));
-		llib::coroutine_yield(m_pCoroutineSchedule);//放弃执行权
+				__FUNCTION__, running_id,coroutine_status(schedule,running_id));
+		llib::coroutine_yield(schedule);//放弃执行权
 	}
 	else
 	{
@@ -123,32 +135,62 @@ void NodeLabor::CoroutineYield()
 	}
 }
 
-int NodeLabor::CoroutineStatus(int coid)
+int NodeLabor::CoroutineRunning(const std::string &coroutineName)
 {
-	if (coid >= 0)
+	CoroutineScheduleMap::iterator it = m_pCoroutineScheduleMap.find(coroutineName);
+	if (it == m_pCoroutineScheduleMap.end())
 	{
-		int status = llib::coroutine_status(m_pCoroutineSchedule,coid);
-		LOG4_TRACE("%s coroutine_status coid(%d) status(%d)",
-				__FUNCTION__, coid,status);
-		return status;
+		LOG4_ERROR("%s failed to get CoroutineSchedule coroutineName(%u)",
+				__FUNCTION__, coroutineName.c_str());
+		return -1;
 	}
-	int running_id = llib::coroutine_running(m_pCoroutineSchedule);
-	if (-1 != running_id)
-	{
-		int status = llib::coroutine_status(m_pCoroutineSchedule,running_id);
-		LOG4_TRACE("%s coroutine_status running_id(%d) status(%d)",
-				__FUNCTION__, running_id,status);
-		return status;
-	}
-	return 0;//dead
+	int running_id = llib::coroutine_running(it->second.schedule);
+	LOG4_TRACE("%s coroutine_status running_id(%d) coroutineName(%s)",
+			__FUNCTION__, running_id,coroutineName.c_str());
+	return running_id;
 }
 
-int NodeLabor::CoroutineRunning()
+uint32 NodeLabor::CoroutineTaskSize(const std::string &coroutineName)
 {
-	int running_id = llib::coroutine_running(m_pCoroutineSchedule);
-	LOG4_TRACE("%s coroutine_status running_id(%d)",
-					__FUNCTION__, running_id);
-	return running_id;
+	CoroutineScheduleMap::const_iterator it = m_pCoroutineScheduleMap.find(coroutineName);
+	if (it == m_pCoroutineScheduleMap.end())
+	{
+		LOG4_WARN("%s failed to get coroutineName(%u)", __FUNCTION__,coroutineName.c_str());
+		return 0;
+	}
+	return it->second.coroutineIds.size();
+}
+int NodeLabor::CoroutineStatus(const std::string &coroutineName,int coid)
+{
+	CoroutineScheduleMap::const_iterator it = m_pCoroutineScheduleMap.find(coroutineName);
+	if (it == m_pCoroutineScheduleMap.end())
+	{
+		LOG4_WARN("%s failed to get coroutineName(%u)", __FUNCTION__,coroutineName.c_str());
+		return 0;
+	}
+	if (coid >= 0)
+	{
+		return llib::coroutine_status(it->second.schedule,coid);
+	}
+	LOG4_WARN("%s invalid coid(%d) coroutineName(%u)", __FUNCTION__,coid,coroutineName.c_str());
+	return 0;
+}
+
+bool NodeLabor::CoroutineResume(const std::string &coroutineName,int coid)
+{
+	CoroutineScheduleMap::const_iterator it = m_pCoroutineScheduleMap.find(coroutineName);
+	if (it == m_pCoroutineScheduleMap.end())
+	{
+		LOG4_WARN("%s failed to get coroutineName(%u)", __FUNCTION__,coroutineName.c_str());
+		return false;
+	}
+	if (coid >= 0)
+	{
+		llib::coroutine_resume(it->second.schedule,coid);
+		return true;
+	}
+	LOG4_WARN("%s invalid coid(%d) coroutineName(%u)", __FUNCTION__,coid,coroutineName.c_str());
+	return false;
 }
 
 } /* namespace thunder */

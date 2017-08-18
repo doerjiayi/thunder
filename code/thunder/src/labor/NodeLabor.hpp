@@ -10,6 +10,7 @@
 #ifndef SRC_NodeLabor_HPP_
 #define SRC_NodeLabor_HPP_
 #include <string>
+#include <map>
 
 #include "libev/ev.h"
 #include "log4cplus/loggingmacros.h"
@@ -708,20 +709,40 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
     {
         ;
     }
-    int CoroutineNew(llib::coroutine_func callback,void *ud);
-	bool CoroutineResume();//自定义调用策略,轮流执行规则
-	void CoroutineResume(int co1,int index = -1);
-	void CoroutineYield();
-	int CoroutineStatus(int coid = -1);
-	int CoroutineRunning();
-	uint32 CoroutineTaskSize()const{return m_CoroutineIdList.size();}
+    int CoroutineNew(const std::string &coroutineName,llib::coroutine_func func,void *ud);
+	bool CoroutineResume(const std::string &coroutineName);//自定义调用策略,轮流执行规则
+	void CoroutineYield(const std::string &coroutineName);
+	int CoroutineRunning(const std::string &coroutineName);
+	uint32 CoroutineTaskSize(const std::string &coroutineName);
+	//本接口只做测试
+	int CoroutineStatus(const std::string &coroutineName,int coid);
+	bool CoroutineResume(const std::string &coroutineName,int coid);
 private:
     std::string m_strNodeTypeTmp;
     std::string m_strHostForServerTmp;
     llib::CJsonObject m_oCustomConfTmp;
-    struct llib::schedule * m_pCoroutineSchedule;
-	std::vector<int> m_CoroutineIdList;
-	uint32 m_uiCoroutineRunIndex;
+    struct CoroutineSchedule
+    {
+    	CoroutineSchedule():schedule(NULL),uiCoroutineRunIndex(0){}
+    	CoroutineSchedule(const CoroutineSchedule& coroutine)
+    	{
+    		schedule = coroutine.schedule;
+    		coroutineIds = coroutine.coroutineIds;
+    		uiCoroutineRunIndex = coroutine.uiCoroutineRunIndex;
+    	}
+    	const CoroutineSchedule& operator = (const CoroutineSchedule& coroutine)
+    	{
+    		schedule = coroutine.schedule;
+			coroutineIds = coroutine.coroutineIds;
+			uiCoroutineRunIndex = coroutine.uiCoroutineRunIndex;
+			return *this;
+    	}
+    	llib::schedule* schedule;
+    	std::vector<int> coroutineIds;
+    	uint32 uiCoroutineRunIndex;
+    };
+    typedef std::map<std::string,CoroutineSchedule> CoroutineScheduleMap;
+    CoroutineScheduleMap m_pCoroutineScheduleMap;
 };
 
 } /* namespace thunder */

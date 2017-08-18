@@ -9,11 +9,62 @@
  ******************************************************************************/
 #ifndef SRC_SESSIONHELLO_HPP_
 #define SRC_SESSIONHELLO_HPP_
-
+#include <time.h>
+#include <sys/time.h>
 #include "session/Session.hpp"
 
 namespace hello
 {
+
+//函数运行时间计算类
+class CustomClock
+{
+public:
+    CustomClock()
+    {
+        m_desc = NULL;
+        boStart = false;
+    }
+    CustomClock(const char* desc,const log4cplus::Logger &logger)
+    {
+        Start(desc,logger);
+    }
+    void Start(const char* desc,const log4cplus::Logger &logger)
+    {
+        if(!boStart)
+        {
+            m_desc = desc;
+            m_logger = logger;
+            StartClock();
+            boStart = true;
+        }
+    }
+    ~CustomClock()
+    {
+        EndClock();
+    }
+    void StartClock()
+    {
+        gettimeofday(&m_cBeginClock,NULL);
+    }
+    void EndClock()
+    {
+        if (boStart)
+        {
+            gettimeofday(&m_cEndClock,NULL);
+            float useTime=1000000*(m_cEndClock.tv_sec-m_cBeginClock.tv_sec)+
+                            m_cEndClock.tv_usec-m_cBeginClock.tv_usec;
+            useTime/=1000;
+            LOG4CPLUS_INFO_FMT(m_logger,"%s() CustomClock %s use time(%lf) ms",__FUNCTION__,m_desc,useTime);
+            boStart = false;
+        }
+    }
+    bool boStart;
+    timeval m_cBeginClock;
+    timeval m_cEndClock;
+    const char* m_desc;
+    log4cplus::Logger m_logger;
+};
 
 class SessionHello: public thunder::Session
 {

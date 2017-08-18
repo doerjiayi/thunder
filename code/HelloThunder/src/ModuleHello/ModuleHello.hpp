@@ -43,10 +43,13 @@ private:
     bool TestRedisCmd(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
     void TestCoroutinue();
     void TestCoroutinue2();
+    void TestCoroutinueBenchMark();
     StepHello* pStepHello;
     StepGetHelloName* pStepGetHelloName;
     StepHttpRequest* pStepHttpRequest;
     SessionHello* pSession;
+
+    CustomClock m_CustomClock;
 };
 
 } /* namespace hello */
