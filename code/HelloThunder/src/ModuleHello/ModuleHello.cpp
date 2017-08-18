@@ -137,7 +137,7 @@ bool ModuleHello::TestHttpRequest(const thunder::MsgShell& stMsgShell,const Http
 }
 //具体用户参数
 struct CoroutineUserArgs {
-	thunder::NodeWorker* worker;
+	thunder::NodeLabor* labor;
 	int n;
 	SessionHello* pSession;
 	std::string coroutineName;
@@ -150,25 +150,25 @@ testCoroutineFunc(void *ud) {
 	int i;
 	for (i=0;i<3;i++) {
 		arg->pSession->AddHelloNum(2);
-		LOG4CPLUS_TRACE_FMT(arg->worker->GetLogger(),"coroutine running(%d),arg(%d) tid(%u) HelloNum(%d) coroutineName(%s)",
-				arg->worker->CoroutineRunning() , start + i,pthread_self(),
+		LOG4CPLUS_TRACE_FMT(arg->labor->GetLogger(),"coroutine running(%d),arg(%d) tid(%u) HelloNum(%d) coroutineName(%s)",
+				arg->labor->CoroutineRunning() , start + i,pthread_self(),
 				arg->pSession->GetHelloNum(),arg->coroutineName.c_str());
-				arg->worker->CoroutineYield();
+				arg->labor->CoroutineYield();
 	}
 }
 
 void ModuleHello::TestCoroutinue()
 {
-	CoroutineUserArgs arg1 = {(thunder::NodeWorker*) GetLabor(), 0 ,pSession,"Coroutine1"};
-	CoroutineUserArgs arg2 = {(thunder::NodeWorker*) GetLabor(), 100 ,pSession,"Coroutine2"};
-	int co1 = ((thunder::NodeWorker*) GetLabor())->CoroutineNew(testCoroutineFunc,&arg1);
-	int co2 = ((thunder::NodeWorker*) GetLabor())->CoroutineNew(testCoroutineFunc,&arg2);
+	CoroutineUserArgs arg1 = {GetLabor(), 0 ,pSession,"Coroutine1"};
+	CoroutineUserArgs arg2 = {GetLabor(), 100 ,pSession,"Coroutine2"};
+	int co1 = GetLabor()->CoroutineNew(testCoroutineFunc,&arg1);
+	int co2 = GetLabor()->CoroutineNew(testCoroutineFunc,&arg2);
 	LOG4CPLUS_TRACE_FMT(GetLogger(), "Coroutine start! tid(%u)",pthread_self());
-	while (((thunder::NodeWorker*) GetLabor())->CoroutineStatus(co1)
-			|| ((thunder::NodeWorker*) GetLabor())->CoroutineStatus(co2))
+	while (GetLabor()->CoroutineStatus(co1)
+			|| GetLabor()->CoroutineStatus(co2))
 	{
-		((thunder::NodeWorker*) GetLabor())->CoroutineResume(co1);
-		((thunder::NodeWorker*) GetLabor())->CoroutineResume(co2);
+		GetLabor()->CoroutineResume(co1);
+		GetLabor()->CoroutineResume(co2);
 	}
 	LOG4CPLUS_TRACE_FMT(GetLogger(), "Coroutine end!tid(%u)",pthread_self());
 }
@@ -230,14 +230,14 @@ void ModuleHello::TestCoroutinue()
 
 void ModuleHello::TestCoroutinue2()
 {
-	CoroutineUserArgs arg1 = {(thunder::NodeWorker*)GetLabor(), 0 ,pSession,"Coroutine1"};
-	CoroutineUserArgs arg2 = {(thunder::NodeWorker*)GetLabor(), 100 ,pSession,"Coroutine2"};
-	((thunder::NodeWorker*) GetLabor())->CoroutineNew(testCoroutineFunc,&arg1);
-	((thunder::NodeWorker*) GetLabor())->CoroutineNew(testCoroutineFunc,&arg2);
+	CoroutineUserArgs arg1 = {GetLabor(), 0 ,pSession,"Coroutine1"};
+	CoroutineUserArgs arg2 = {GetLabor(), 100 ,pSession,"Coroutine2"};
+	GetLabor()->CoroutineNew(testCoroutineFunc,&arg1);
+	GetLabor()->CoroutineNew(testCoroutineFunc,&arg2);
 	LOG4CPLUS_TRACE_FMT(GetLogger(), "Coroutine start! tid(%u) &arg1:%p",pthread_self(),&arg1);
-	while (((thunder::NodeWorker*) GetLabor())->CoroutineTaskSize() > 0)
+	while (GetLabor()->CoroutineTaskSize() > 0)
 	{
-		((thunder::NodeWorker*) GetLabor())->CoroutineResume();
+		GetLabor()->CoroutineResume();
 	}
 	LOG4CPLUS_TRACE_FMT(GetLogger(), "Coroutine end!tid(%u)",pthread_self());
 }

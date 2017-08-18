@@ -15,7 +15,6 @@
 #include "CBuffer.hpp"
 #include "StreamCodec.hpp"
 #include "json/CJsonObject.hpp"
-#include "coroutine/coroutine.h"
 
 /**
  * @brief 工作进程属性

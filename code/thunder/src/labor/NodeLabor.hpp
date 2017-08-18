@@ -13,6 +13,7 @@
 
 #include "libev/ev.h"
 #include "log4cplus/loggingmacros.h"
+#include "coroutine/coroutine.h"
 
 #include "../ThunderDefine.hpp"
 #include "cmd/CW.hpp"
@@ -707,11 +708,20 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
     {
         ;
     }
-
+    int CoroutineNew(llib::coroutine_func callback,void *ud);
+	bool CoroutineResume();//自定义调用策略,轮流执行规则
+	void CoroutineResume(int co1,int index = -1);
+	void CoroutineYield();
+	int CoroutineStatus(int coid = -1);
+	int CoroutineRunning();
+	uint32 CoroutineTaskSize()const{return m_CoroutineIdList.size();}
 private:
     std::string m_strNodeTypeTmp;
     std::string m_strHostForServerTmp;
     llib::CJsonObject m_oCustomConfTmp;
+    struct llib::schedule * m_pCoroutineSchedule;
+	std::vector<int> m_CoroutineIdList;
+	uint32 m_uiCoroutineRunIndex;
 };
 
 } /* namespace thunder */
