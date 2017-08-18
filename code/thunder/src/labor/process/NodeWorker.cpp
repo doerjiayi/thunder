@@ -2632,12 +2632,12 @@ bool NodeWorker::EmitStorageAccess(thunder::Session* pSession,const std::string 
         pStep = NULL;
         return(false);
     }
+    pStep->SetStorageCallBack(callback,pSession,boPermanentSession,nodeType,uiCmd);
     if (thunder::STATUS_CMD_RUNNING != pStep->Emit(ERR_OK))
     {
         DeleteCallback(pStep);
         return(false);
     }
-    pStep->SetStorageCallBack(callback,pSession,boPermanentSession,nodeType,uiCmd);
     return true;
 }
 
@@ -2659,13 +2659,13 @@ bool NodeWorker::EmitStorageAccess(thunder::Step* pUpperStep,const std::string &
         pStep = NULL;
         return(false);
     }
+    pStep->SetStorageCallBack(callback,pUpperStep,nodeType,uiCmd);
+	pUpperStep->AddNextStepSeq(pStep);
     if (thunder::STATUS_CMD_RUNNING != pStep->Emit(ERR_OK))
     {
         DeleteCallback(pStep);
         return(false);
     }
-    pStep->SetStorageCallBack(callback,pUpperStep,nodeType,uiCmd);
-    pUpperStep->AddNextStepSeq(pStep);
     return true;
 }
 
@@ -2687,12 +2687,12 @@ bool NodeWorker::EmitStandardAccess(thunder::Session* pSession,const std::string
         pStep = NULL;
         return(false);
     }
+    pStep->SetStandardCallBack(callback,pSession,boPermanentSession,nodeType,uiCmd);
     if (thunder::STATUS_CMD_RUNNING != pStep->Emit(ERR_OK))
     {
         DeleteCallback(pStep);
         return(false);
     }
-    pStep->SetStandardCallBack(callback,pSession,boPermanentSession,nodeType,uiCmd);
     return true;
 }
 
@@ -2714,13 +2714,13 @@ bool NodeWorker::EmitStandardAccess(thunder::Step* pUpperStep,const std::string 
         pStep = NULL;
         return(false);
     }
+    pStep->SetStandardCallBack(callback,pUpperStep,nodeType,uiCmd);
+	pUpperStep->AddNextStepSeq(pStep);
     if (thunder::STATUS_CMD_RUNNING != pStep->Emit(ERR_OK))
     {
         DeleteCallback(pStep);
         return(false);
     }
-    pStep->SetStandardCallBack(callback,pUpperStep,nodeType,uiCmd);
-    pUpperStep->AddNextStepSeq(pStep);
     return true;
 }
 
