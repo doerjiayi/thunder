@@ -11,7 +11,7 @@ namespace llib
 
 struct schedule;
 
-typedef void (*coroutine_func)(struct schedule *, void *ud);
+typedef void (*coroutine_func)(void *ud);
 
 struct schedule * coroutine_open(void);
 void coroutine_close(struct schedule *);

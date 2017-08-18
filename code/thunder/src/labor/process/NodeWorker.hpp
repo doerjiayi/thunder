@@ -298,13 +298,9 @@ protected:
     void Destroy();
     bool AddPeriodicTaskEvent();
 
-    bool AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr,int iFd);
-    bool AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr,int iFd);
+    bool AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr);
+    bool AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr);
     bool RemoveIoWriteEvent(tagConnectionAttr* pTagConnectionAttr);
-
-    bool AddIoReadEvent(std::map<int, tagConnectionAttr*>::iterator iter);
-    bool AddIoWriteEvent(std::map<int, tagConnectionAttr*>::iterator iter);
-    bool RemoveIoWriteEvent(std::map<int, tagConnectionAttr*>::iterator iter);
 
     bool DelEvents(ev_io** io_watcher_attr);
     bool AddIoTimeout(int iFd, uint32 ulSeq, tagConnectionAttr* pConnAttr, ev_tstamp dTimeout = 1.0);

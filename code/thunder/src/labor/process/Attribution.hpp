@@ -110,6 +110,7 @@ struct tagConnectionAttr
     llib::E_CODEC_TYPE eCodecType;      ///< 协议（编解码）类型
     ev_tstamp dActiveTime;              ///< 最后一次访问时间
     ev_tstamp dKeepAlive;               ///< 连接保持时间，默认值0为用心跳保持的长连接，大于0的值不做心跳检查，时间到即断连接,小于0为收完数据立即断开连接（主要用于http连接）
+    int iFd;						///< 文件描述符
     uint32 ulSeq;                       ///< 文件描述符创建时对应的序列号
     uint32 ulForeignSeq;                ///< 外来的seq，每个连接的包都是有序的，用作接入Server数据包检查，防止篡包
     uint32 ulMsgNumUnitTime;            ///< 统计单位时间内发送消息数量
@@ -121,7 +122,7 @@ struct tagConnectionAttr
     tagConnectionAttr()
         : ucConnectStatus(0), pRecvBuff(NULL), pSendBuff(NULL), pWaitForSendBuff(NULL), pClientData(NULL),
           pRemoteAddr(NULL), eCodecType(llib::CODEC_PROTOBUF),
-          dActiveTime(0), dKeepAlive(0), ulSeq(0), ulForeignSeq(0), ulMsgNumUnitTime(0), ulMsgNum(0),
+          dActiveTime(0), dKeepAlive(0),iFd(0),ulSeq(0), ulForeignSeq(0), ulMsgNumUnitTime(0), ulMsgNum(0),
           pIoWatcher(NULL), pTimeWatcher(NULL)
     {
     }
@@ -155,6 +156,5 @@ struct tagConnectionAttr
         }
     }
 };
-
 
 #endif /* SRC_LABOR_PROCESS_ATTRIBUTION_HPP_ */

@@ -6,23 +6,24 @@ namespace llib
 
 struct args {
 	int n;
+	struct schedule *S;
 };
 
 static void
-foo(struct schedule * S, void *ud) {
+foo(void *ud) {
 	struct args * arg = (args *)ud;
 	int start = arg->n;
 	int i;
 	for (i=0;i<5;i++) {
-		printf("coroutine %d : %d\n",coroutine_running(S) , start + i);
-		coroutine_yield(S);
+		printf("coroutine %d : %d\n",coroutine_running(arg->S) , start + i);
+		coroutine_yield(arg->S);
 	}
 }
 
 void
 test(struct schedule *S) {
-	struct args arg1 = { 0 };
-	struct args arg2 = { 100 };
+	struct args arg1 = { 0 ,S};
+	struct args arg2 = { 100 ,S};
 
 	int co1 = coroutine_new(S, foo, &arg1);
 	int co2 = coroutine_new(S, foo, &arg2);
@@ -47,11 +48,13 @@ coroutine 0 : 4
 coroutine 1 : 104
 main end
  * */
+
+};
+
 //int
 //main() {
-//	struct schedule * S = coroutine_open();
-//	test(S);
-//	coroutine_close(S);
+//	struct llib::schedule * S = llib::coroutine_open();
+//	llib::test(S);
+//	llib::coroutine_close(S);
 //	return 0;
 //}
-};

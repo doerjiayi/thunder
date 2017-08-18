@@ -693,7 +693,7 @@ bool NodeWorker::FdTransfer()
             std::map<int, tagConnectionAttr*>::iterator iter =  m_mapFdAttr.find(iAcceptFd);
             if(AddIoTimeout(iAcceptFd, ulSeq, iter->second, 1.5))     // 为了防止大量连接攻击，初始化连接只有一秒即超时，在第一次超时检查（或正常发送第一个http数据包）之后才采用正常配置的网络IO超时检查
             {
-                if (!AddIoReadEvent(iter))
+                if (!AddIoReadEvent(iter->second))
                 {
                     LOG4_DEBUG("if (!AddIoReadEvent(iter))");
                     DestroyConnect(iter);
@@ -731,10 +731,11 @@ bool NodeWorker::IoWrite(tagIoWatcherData* pData, struct ev_io* watcher)
     }
     else
     {
-        if (pData->ulSeq != attr_iter->second->ulSeq)
+    	tagConnectionAttr* ptagConnectionAttr = attr_iter->second;
+        if (pData->ulSeq != ptagConnectionAttr->ulSeq || pData->iFd != ptagConnectionAttr->iFd)
         {
-            LOG4_DEBUG("callback seq %lu not match the conn attr seq %lu",
-                            pData->ulSeq, attr_iter->second->ulSeq);
+            LOG4_DEBUG("callback seq %lu iFd %d not match the conn attr seq %lu ifd %d",
+                            pData->ulSeq, pData->iFd,attr_iter->second->ulSeq,ptagConnectionAttr->iFd);
             ev_io_stop(m_loop, watcher);
             pData->pWorker = NULL;
             delete pData;
@@ -746,8 +747,8 @@ bool NodeWorker::IoWrite(tagIoWatcherData* pData, struct ev_io* watcher)
         int iErrno = 0;
         int iNeedWriteLen = (int)attr_iter->second->pSendBuff->ReadableBytes();
         int iWriteLen = 0;
-        iWriteLen = attr_iter->second->pSendBuff->WriteFD(pData->iFd, iErrno);
-        attr_iter->second->pSendBuff->Compact(8192);
+        iWriteLen = ptagConnectionAttr->pSendBuff->WriteFD(pData->iFd, iErrno);
+        ptagConnectionAttr->pSendBuff->Compact(8192);
         if (iWriteLen < 0)
         {
             if (EAGAIN != iErrno && EINTR != iErrno)    // 对非阻塞socket而言，EAGAIN不是一种错误;EINTR即errno为4，错误描述Interrupted system call，操作也应该继续。
@@ -760,7 +761,7 @@ bool NodeWorker::IoWrite(tagIoWatcherData* pData, struct ev_io* watcher)
             else if (EAGAIN == iErrno)  // 内容未写完，添加或保持监听fd写事件
             {
                 attr_iter->second->dActiveTime = ev_now(m_loop);
-                AddIoWriteEvent(attr_iter);
+                AddIoWriteEvent(ptagConnectionAttr);
             }
         }
         else if (iWriteLen > 0)
@@ -769,11 +770,11 @@ bool NodeWorker::IoWrite(tagIoWatcherData* pData, struct ev_io* watcher)
             attr_iter->second->dActiveTime = ev_now(m_loop);
             if (iWriteLen == iNeedWriteLen)  // 已无内容可写，取消监听fd写事件
             {
-                RemoveIoWriteEvent(attr_iter);
+                RemoveIoWriteEvent(ptagConnectionAttr);
             }
             else    // 内容未写完，添加或保持监听fd写事件
             {
-                AddIoWriteEvent(attr_iter);
+                AddIoWriteEvent(ptagConnectionAttr);
             }
         }
         else    // iWriteLen == 0 写缓冲区为空
@@ -799,7 +800,7 @@ bool NodeWorker::IoWrite(tagIoWatcherData* pData, struct ev_io* watcher)
                     }
                     m_mapSeq2WorkerIndex.erase(index_iter);
                     LOG4_TRACE("RemoveIoWriteEvent(%d)", pData->iFd);
-                    RemoveIoWriteEvent(attr_iter);    // 在m_pCmdConnect的两个回调之后再把等待发送的数据发送出去
+                    RemoveIoWriteEvent(ptagConnectionAttr);    // 在m_pCmdConnect的两个回调之后再把等待发送的数据发送出去
                 }
                 else // 与系统外部Server通信，连接成功后直接将数据发送
                 {
@@ -1208,7 +1209,6 @@ bool NodeWorker::Pretreat(Session* pSession)
 int NodeWorker::CoroutineNew(llib::coroutine_func func,void *ud)
 {
 	int coid = llib::coroutine_new(m_pCoroutineSchedule, func, ud);//使用指针，因为栈内存会被保存
-	LOG4_TRACE("%s coroutine_new co1:%d", __FUNCTION__,coid);
 	if (coid >= 0)
 	{
 		m_CoroutineIdList.push_back(coid);
@@ -1299,7 +1299,7 @@ void NodeWorker::CoroutineYield()
 	}
 	else
 	{
-		LOG4_ERROR("%s no running coroutine", __FUNCTION__);
+		LOG4_WARN("%s no running coroutine", __FUNCTION__);
 	}
 }
 
@@ -2010,7 +2010,7 @@ bool NodeWorker::CreateEvents()
         stMsgShell.iFd = m_iManagerControlFd;
         stMsgShell.ulSeq = ulSeq;
         std::map<int, tagConnectionAttr*>::iterator iter =  m_mapFdAttr.find(m_iManagerControlFd);
-        if (!AddIoReadEvent(iter))
+        if (!AddIoReadEvent(iter->second))
         {
             LOG4_TRACE("if (!AddIoReadEvent(conn_iter))");
             DestroyConnect(iter);
@@ -2036,7 +2036,7 @@ bool NodeWorker::CreateEvents()
         stMsgShell.iFd = m_iManagerDataFd;
         stMsgShell.ulSeq = ulSeq;
         std::map<int, tagConnectionAttr*>::iterator iter =  m_mapFdAttr.find(m_iManagerDataFd);
-        if (!AddIoReadEvent(iter))
+        if (!AddIoReadEvent(iter->second))
         {
             LOG4_TRACE("if (!AddIoReadEvent(conn_iter))");
             DestroyConnect(iter);
@@ -2414,17 +2414,18 @@ bool NodeWorker::SendTo(const MsgShell& stMsgShell)
     }
     else
     {
-        if (iter->second->ulSeq == stMsgShell.ulSeq)
+    	tagConnectionAttr* ptagConnectionAttr = iter->second;
+        if (ptagConnectionAttr->ulSeq == stMsgShell.ulSeq && ptagConnectionAttr->iFd == stMsgShell.iFd)
         {
             int iErrno = 0;
             int iWriteLen = 0;
-            int iNeedWriteLen = (int)(iter->second->pWaitForSendBuff->ReadableBytes());
-            int iWriteIdx = iter->second->pSendBuff->GetWriteIndex();
-            iWriteLen = iter->second->pSendBuff->Write(iter->second->pWaitForSendBuff, iter->second->pWaitForSendBuff->ReadableBytes());
+            int iNeedWriteLen = (int)(ptagConnectionAttr->pWaitForSendBuff->ReadableBytes());
+            int iWriteIdx = ptagConnectionAttr->pSendBuff->GetWriteIndex();
+            iWriteLen = ptagConnectionAttr->pSendBuff->Write(ptagConnectionAttr->pWaitForSendBuff, ptagConnectionAttr->pWaitForSendBuff->ReadableBytes());
             if (iWriteLen == iNeedWriteLen)
             {
-                iNeedWriteLen = (int)iter->second->pSendBuff->ReadableBytes();
-                iWriteLen = iter->second->pSendBuff->WriteFD(stMsgShell.iFd, iErrno);
+                iNeedWriteLen = (int)ptagConnectionAttr->pSendBuff->ReadableBytes();
+                iWriteLen = ptagConnectionAttr->pSendBuff->WriteFD(stMsgShell.iFd, iErrno);
                 iter->second->pSendBuff->Compact(8192);
                 if (iWriteLen < 0)
                 {
@@ -2438,7 +2439,7 @@ bool NodeWorker::SendTo(const MsgShell& stMsgShell)
                     else if (EAGAIN == iErrno)  // 内容未写完，添加或保持监听fd写事件
                     {
                         iter->second->dActiveTime = ev_now(m_loop);
-                        AddIoWriteEvent(iter);
+                        AddIoWriteEvent(ptagConnectionAttr);
                     }
                 }
                 else if (iWriteLen > 0)
@@ -2447,11 +2448,11 @@ bool NodeWorker::SendTo(const MsgShell& stMsgShell)
                     iter->second->dActiveTime = ev_now(m_loop);
                     if (iWriteLen == iNeedWriteLen)  // 已无内容可写，取消监听fd写事件
                     {
-                        RemoveIoWriteEvent(iter);
+                        RemoveIoWriteEvent(ptagConnectionAttr);
                     }
                     else    // 内容未写完，添加或保持监听fd写事件
                     {
-                        AddIoWriteEvent(iter);
+                        AddIoWriteEvent(ptagConnectionAttr);
                     }
                 }
                 return(true);
@@ -2462,6 +2463,11 @@ bool NodeWorker::SendTo(const MsgShell& stMsgShell)
                 iter->second->pSendBuff->SetWriteIndex(iWriteIdx);
                 return(false);
             }
+        }
+        else
+        {
+        	LOG4_ERROR("ptagConnectionAttr ulSeq(%llu) iFd(%d) stMsgShell ulSeq(%llu) iFd(%d) not match",
+        			ptagConnectionAttr->ulSeq,ptagConnectionAttr->iFd,stMsgShell.ulSeq,stMsgShell.iFd);
         }
     }
     return(false);
@@ -2730,7 +2736,8 @@ bool NodeWorker::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, con
     }
     else
     {
-        if (conn_iter->second->ulSeq == stMsgShell.ulSeq)
+    	tagConnectionAttr* ptagConnectionAttr = conn_iter->second;
+        if (ptagConnectionAttr->ulSeq == stMsgShell.ulSeq && ptagConnectionAttr->iFd == stMsgShell.iFd)
         {
             std::map<llib::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
             if (codec_iter == m_mapCodec.end())
@@ -2740,9 +2747,9 @@ bool NodeWorker::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, con
                 return(false);
             }
             E_CODEC_STATUS eCodecStatus = CODEC_STATUS_OK;
-            if (llib::CODEC_PROTOBUF == conn_iter->second->eCodecType)//内部协议需要检查连接过程
+            if (llib::CODEC_PROTOBUF == ptagConnectionAttr->eCodecType)//内部协议需要检查连接过程
             {
-                LOG4_TRACE("connect status %u", conn_iter->second->ucConnectStatus);
+                LOG4_TRACE("connect status %u", ptagConnectionAttr->ucConnectStatus);
                 if (eConnectStatus_ok != conn_iter->second->ucConnectStatus)   // 连接尚未完成
                 {
                     if (oMsgHead.cmd() <= CMD_RSP_TELL_WORKER)   // 创建连接的过程
@@ -2799,10 +2806,10 @@ bool NodeWorker::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, con
                 {
                     LOG4_TRACE("try send cmd[%d] seq[%lu] len %d to fd %d ip %s identify %s",
                                 oMsgHead.cmd(), oMsgHead.seq(), iNeedWriteLen, stMsgShell.iFd,
-                                conn_iter->second->pRemoteAddr, conn_iter->second->strIdentify.c_str());
+								ptagConnectionAttr->pRemoteAddr, ptagConnectionAttr->strIdentify.c_str());
                 }
-                int iWriteLen = conn_iter->second->pSendBuff->WriteFD(stMsgShell.iFd, iErrno);
-                conn_iter->second->pSendBuff->Compact(8192);
+                int iWriteLen = ptagConnectionAttr->pSendBuff->WriteFD(stMsgShell.iFd, iErrno);
+                ptagConnectionAttr->pSendBuff->Compact(8192);
                 if (iWriteLen < 0)
                 {
                     if (EAGAIN != iErrno && EINTR != iErrno)    // 对非阻塞socket而言，EAGAIN不是一种错误;EINTR即errno为4，错误描述Interrupted system call，操作也应该继续。
@@ -2816,15 +2823,15 @@ bool NodeWorker::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, con
                     {
                         LOG4_TRACE("write len %d, errno %d: %s",
                                         iWriteLen, iErrno, strerror_r(iErrno, m_pErrBuff, gc_iErrBuffLen));
-                        conn_iter->second->dActiveTime = ev_now(m_loop);
-                        AddIoWriteEvent(conn_iter);
+                        ptagConnectionAttr->dActiveTime = ev_now(m_loop);
+                        AddIoWriteEvent(ptagConnectionAttr);
                     }
                     else
                     {
                         LOG4_TRACE("write len %d, errno %d: %s",
                                         iWriteLen, iErrno, strerror_r(iErrno, m_pErrBuff, gc_iErrBuffLen));
-                        conn_iter->second->dActiveTime = ev_now(m_loop);
-                        AddIoWriteEvent(conn_iter);
+                        ptagConnectionAttr->dActiveTime = ev_now(m_loop);
+                        AddIoWriteEvent(ptagConnectionAttr);
                     }
                 }
                 else if (iWriteLen > 0)
@@ -2837,13 +2844,13 @@ bool NodeWorker::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, con
                                         oMsgHead.cmd(), oMsgHead.seq(), stMsgShell.iFd,
                                         conn_iter->second->pRemoteAddr, conn_iter->second->strIdentify.c_str(),
                                         iNeedWriteLen, iWriteLen);
-                        RemoveIoWriteEvent(conn_iter);
+                        RemoveIoWriteEvent(ptagConnectionAttr);
                     }
                     else    // 内容未写完，添加或保持监听fd写事件
                     {
                         LOG4_TRACE("cmd[%d] seq[%lu] need write %d and had written len %d",
                                         oMsgHead.cmd(), oMsgHead.seq(), iNeedWriteLen, iWriteLen);
-                        AddIoWriteEvent(conn_iter);
+                        AddIoWriteEvent(ptagConnectionAttr);
                     }
                 }
                 return(true);
@@ -2857,8 +2864,8 @@ bool NodeWorker::SendTo(const MsgShell& stMsgShell, const MsgHead& oMsgHead, con
         }
         else
         {
-            LOG4_ERROR("fd %d sequence %lu not match the sequence %lu in m_mapFdAttr",
-                            stMsgShell.iFd, stMsgShell.ulSeq, conn_iter->second->ulSeq);
+            LOG4_ERROR("fd %d sequence %lu not match the iFd %d sequence %lu in m_mapFdAttr",
+                            stMsgShell.iFd, stMsgShell.ulSeq, conn_iter->second->iFd,conn_iter->second->ulSeq);
             return(false);
         }
     }
@@ -2993,71 +3000,72 @@ bool NodeWorker::SendTo(const MsgShell& stMsgShell, const HttpMsg& oHttpMsg, Htt
     }
     else
     {
-        if (conn_iter->second->ulSeq == stMsgShell.ulSeq)
+    	tagConnectionAttr* ptagConnectionAttr = conn_iter->second;
+        if (ptagConnectionAttr->ulSeq == stMsgShell.ulSeq && ptagConnectionAttr->iFd == stMsgShell.iFd)
         {
-            std::map<llib::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
+            std::map<llib::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(ptagConnectionAttr->eCodecType);
             if (codec_iter == m_mapCodec.end())
             {
-                LOG4_ERROR("no codec found for %d!", conn_iter->second->eCodecType);
+                LOG4_ERROR("no codec found for %d!", ptagConnectionAttr->eCodecType);
                 DestroyConnect(conn_iter);
                 return(false);
             }
             E_CODEC_STATUS eCodecStatus;
-            if(llib::CODEC_WEBSOCKET_EX_PB == conn_iter->second->eCodecType)
+            if(llib::CODEC_WEBSOCKET_EX_PB == ptagConnectionAttr->eCodecType)
             {
                 if (conn_iter->second->pWaitForSendBuff->ReadableBytes() > 0)   // 正在连接
                 {
-                    eCodecStatus = ((CodecWebSocketPb*)codec_iter->second)->Encode(oHttpMsg, conn_iter->second->pWaitForSendBuff);
+                    eCodecStatus = ((CodecWebSocketPb*)codec_iter->second)->Encode(oHttpMsg, ptagConnectionAttr->pWaitForSendBuff);
                 }
                 else
                 {
-                    eCodecStatus = ((CodecWebSocketPb*)codec_iter->second)->Encode(oHttpMsg, conn_iter->second->pSendBuff);
+                    eCodecStatus = ((CodecWebSocketPb*)codec_iter->second)->Encode(oHttpMsg, ptagConnectionAttr->pSendBuff);
                 }
             }
             else if(llib::CODEC_WEBSOCKET_EX_JS == conn_iter->second->eCodecType)
             {
                 if (conn_iter->second->pWaitForSendBuff->ReadableBytes() > 0)   // 正在连接
                 {
-                    eCodecStatus = ((CodecWebSocketJson*)codec_iter->second)->Encode(oHttpMsg, conn_iter->second->pWaitForSendBuff);
+                    eCodecStatus = ((CodecWebSocketJson*)codec_iter->second)->Encode(oHttpMsg, ptagConnectionAttr->pWaitForSendBuff);
                 }
                 else
                 {
-                    eCodecStatus = ((CodecWebSocketJson*)codec_iter->second)->Encode(oHttpMsg, conn_iter->second->pSendBuff);
+                    eCodecStatus = ((CodecWebSocketJson*)codec_iter->second)->Encode(oHttpMsg, ptagConnectionAttr->pSendBuff);
                 }
             }
             else if (llib::CODEC_HTTP == conn_iter->second->eCodecType)
             {
                 if (conn_iter->second->pWaitForSendBuff->ReadableBytes() > 0)   // 正在连接
                 {
-                    eCodecStatus = ((HttpCodec*)codec_iter->second)->Encode(oHttpMsg, conn_iter->second->pWaitForSendBuff);
+                    eCodecStatus = ((HttpCodec*)codec_iter->second)->Encode(oHttpMsg, ptagConnectionAttr->pWaitForSendBuff);
                 }
                 else
                 {
-                    eCodecStatus = ((HttpCodec*)codec_iter->second)->Encode(oHttpMsg, conn_iter->second->pSendBuff);
+                    eCodecStatus = ((HttpCodec*)codec_iter->second)->Encode(oHttpMsg, ptagConnectionAttr->pSendBuff);
                 }
             }
             else
             {
                 LOG4_ERROR("the codec for fd %d is not http or websocket codec(%d)!",
-                                                stMsgShell.iFd,conn_iter->second->eCodecType);
+                                                stMsgShell.iFd,ptagConnectionAttr->eCodecType);
                 return(false);
             }
 
-            if (CODEC_STATUS_OK == eCodecStatus && conn_iter->second->pSendBuff->ReadableBytes() > 0)
+            if (CODEC_STATUS_OK == eCodecStatus && ptagConnectionAttr->pSendBuff->ReadableBytes() > 0)
             {
                 ++m_iSendNum;
-                if ((conn_iter->second->pIoWatcher != NULL) && (conn_iter->second->pIoWatcher->events & EV_WRITE))
+                if ((conn_iter->second->pIoWatcher != NULL) && (ptagConnectionAttr->pIoWatcher->events & EV_WRITE))
                 {   // 正在监听fd的写事件，说明发送缓冲区满，此时直接返回，等待EV_WRITE事件再执行WriteFD
                     return(true);
                 }
-                LOG4_TRACE("fd[%d], seq[%u], conn_iter->second->pSendBuff 0x%x", stMsgShell.iFd, stMsgShell.ulSeq, conn_iter->second->pSendBuff);
+                LOG4_TRACE("fd[%d], seq[%u], ptagConnectionAttr->pSendBuff 0x%x", stMsgShell.iFd, stMsgShell.ulSeq, ptagConnectionAttr->pSendBuff);
                 int iErrno = 0;
-                int iNeedWriteLen = (int)conn_iter->second->pSendBuff->ReadableBytes();
-                int iWriteLen = conn_iter->second->pSendBuff->WriteFD(stMsgShell.iFd, iErrno);
-                conn_iter->second->pSendBuff->Compact(8192);
+                int iNeedWriteLen = (int)ptagConnectionAttr->pSendBuff->ReadableBytes();
+                int iWriteLen = ptagConnectionAttr->pSendBuff->WriteFD(stMsgShell.iFd, iErrno);
+                ptagConnectionAttr->pSendBuff->Compact(8192);
                 if (iWriteLen < 0)
                 {
-                    if (EAGAIN != iErrno && EINTR != iErrno)    // 对非阻塞socket而言，EAGAIN不是一种错误;EINTR即errno为4，错误描述Interrupted system call，操作也应该继续。
+                    if (EAGAIN != iErrno && EINTR != iErrno)  // 对非阻塞socket而言，EAGAIN不是一种错误;EINTR即errno为4，错误描述Interrupted system call，操作也应该继续。
                     {
                         LOG4_ERROR("send to fd %d error %d: %s",
                                         stMsgShell.iFd, iErrno, strerror_r(iErrno, m_pErrBuff, gc_iErrBuffLen));
@@ -3069,14 +3077,14 @@ bool NodeWorker::SendTo(const MsgShell& stMsgShell, const HttpMsg& oHttpMsg, Htt
                         LOG4_TRACE("write len %d, error %d: %s",
                                         iWriteLen, iErrno, strerror_r(iErrno, m_pErrBuff, gc_iErrBuffLen));
                         conn_iter->second->dActiveTime = ev_now(m_loop);
-                        AddIoWriteEvent(conn_iter);
+                        AddIoWriteEvent(ptagConnectionAttr);
                     }
                     else
                     {
                         LOG4_TRACE("write len %d, error %d: %s",
                                         iWriteLen, iErrno, strerror_r(iErrno, m_pErrBuff, gc_iErrBuffLen));
                         conn_iter->second->dActiveTime = ev_now(m_loop);
-                        AddIoWriteEvent(conn_iter);
+                        AddIoWriteEvent(ptagConnectionAttr);
                     }
                 }
                 else if (iWriteLen > 0)
@@ -3109,11 +3117,11 @@ bool NodeWorker::SendTo(const MsgShell& stMsgShell, const HttpMsg& oHttpMsg, Htt
                     if (iWriteLen == iNeedWriteLen)  // 已无内容可写，取消监听fd写事件
                     {
                         LOG4_TRACE("need write len %d, and had writen len %d", iNeedWriteLen, iWriteLen);
-                        RemoveIoWriteEvent(conn_iter);
+                        RemoveIoWriteEvent(ptagConnectionAttr);
                     }
                     else    // 内容未写完，添加或保持监听fd写事件
                     {
-                        AddIoWriteEvent(conn_iter);
+                        AddIoWriteEvent(ptagConnectionAttr);
                     }
                 }
                 return(true);
@@ -3125,8 +3133,8 @@ bool NodeWorker::SendTo(const MsgShell& stMsgShell, const HttpMsg& oHttpMsg, Htt
         }
         else
         {
-            LOG4_ERROR("fd %d sequence %lu not match the sequence %lu in m_mapFdAttr",
-                            stMsgShell.iFd, stMsgShell.ulSeq, conn_iter->second->ulSeq);
+            LOG4_ERROR("fd %d sequence %lu not match the ifd %d sequence %lu in m_mapFdAttr",
+                            stMsgShell.iFd, stMsgShell.ulSeq, conn_iter->second->iFd,conn_iter->second->ulSeq);
             return(false);
         }
     }
@@ -3225,8 +3233,9 @@ bool NodeWorker::AutoSend(const std::string& strIdentify, const MsgHead& oMsgHea
         snprintf(conn_iter->second->pRemoteAddr, 32, strIdentify.c_str());
         if(AddIoTimeout(iFd, ulSeq, conn_iter->second, 1.5))
         {
-            conn_iter->second->ucConnectStatus = 0;
-            if (!AddIoReadEvent(conn_iter))
+        	tagConnectionAttr* ptagConnectionAttr = conn_iter->second;
+        	ptagConnectionAttr->ucConnectStatus = 0;
+            if (!AddIoReadEvent(conn_iter->second))
             {
                 LOG4_TRACE("if (!AddIoReadEvent(conn_iter))");
                 DestroyConnect(conn_iter);
@@ -3237,20 +3246,20 @@ bool NodeWorker::AutoSend(const std::string& strIdentify, const MsgHead& oMsgHea
 //                DestroyConnect(iter);
 //                return(false);
 //            }
-            if (!AddIoWriteEvent(conn_iter))
+            if (!AddIoWriteEvent(ptagConnectionAttr))
             {
                 LOG4_TRACE("if (!AddIoWriteEvent(conn_iter))");
                 DestroyConnect(conn_iter);
                 return(false);
             }
-            std::map<llib::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
+            std::map<llib::E_CODEC_TYPE, ThunderCodec*>::iterator codec_iter = m_mapCodec.find(ptagConnectionAttr->eCodecType);
             if (codec_iter == m_mapCodec.end())
             {
                 LOG4_ERROR("no codec found for %d!", conn_iter->second->eCodecType);
                 DestroyConnect(conn_iter);
                 return(false);
             }
-            E_CODEC_STATUS eCodecStatus = codec_iter->second->Encode(oMsgHead, oMsgBody, conn_iter->second->pWaitForSendBuff);
+            E_CODEC_STATUS eCodecStatus = codec_iter->second->Encode(oMsgHead, oMsgBody, ptagConnectionAttr->pWaitForSendBuff);
             if (CODEC_STATUS_OK == eCodecStatus)
             {
                 ++m_iSendNum;
@@ -3325,13 +3334,13 @@ bool NodeWorker::AutoSend(const std::string& strHost, int iPort, const std::stri
         {
             conn_iter->second->dKeepAlive = 10;
             LOG4_TRACE("set dKeepAlive(%lf)",conn_iter->second->dKeepAlive);
-            if (!AddIoReadEvent(conn_iter))
+            if (!AddIoReadEvent(conn_iter->second))
             {
                 LOG4_TRACE("if (!AddIoReadEvent(conn_iter))");
                 DestroyConnect(conn_iter);
                 return(false);
             }
-            if (!AddIoWriteEvent(conn_iter))
+            if (!AddIoWriteEvent(conn_iter->second))
             {
                 LOG4_TRACE("if (!AddIoWriteEvent(conn_iter))");
                 DestroyConnect(conn_iter);
@@ -3470,10 +3479,11 @@ bool NodeWorker::AutoConnect(const std::string& strIdentify)
         std::map<int, tagConnectionAttr*>::iterator conn_iter =  m_mapFdAttr.find(iFd);
         if(AddIoTimeout(iFd, ulSeq, conn_iter->second, 1.5))
         {
-            conn_iter->second->ucConnectStatus = 0;
-            if (!AddIoReadEvent(conn_iter))
+        	tagConnectionAttr* ptagConnectionAttr = conn_iter->second;
+        	ptagConnectionAttr->ucConnectStatus = 0;
+            if (!AddIoReadEvent(ptagConnectionAttr))
             {
-                LOG4_TRACE("if (!AddIoReadEvent(conn_iter))");
+                LOG4_ERROR("if (!AddIoReadEvent(ptagConnectionAttr))");
                 DestroyConnect(conn_iter);
                 return(false);
             }
@@ -3482,9 +3492,9 @@ bool NodeWorker::AutoConnect(const std::string& strIdentify)
 //                DestroyConnect(iter);
 //                return(false);
 //            }
-            if (!AddIoWriteEvent(conn_iter))
+            if (!AddIoWriteEvent(ptagConnectionAttr))
             {
-                LOG4_TRACE("if (!AddIoWriteEvent(conn_iter))");
+            	LOG4_ERROR("if (!AddIoWriteEvent(ptagConnectionAttr))");
                 DestroyConnect(conn_iter);
                 return(false);
             }
@@ -4129,7 +4139,7 @@ bool NodeWorker::AddPeriodicTaskEvent()
     return(true);
 }
 
-bool NodeWorker::AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr,int iFd)
+bool NodeWorker::AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     ev_io* io_watcher = NULL;
@@ -4148,10 +4158,10 @@ bool NodeWorker::AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr,int iFd)
 			delete io_watcher;
 			return(false);
 		}
-		pData->iFd = iFd;
+		pData->iFd = pTagConnectionAttr->iFd;
 		pData->ulSeq = pTagConnectionAttr->ulSeq;
 		pData->pWorker = this;
-		ev_io_init (pTagConnectionAttr->pIoWatcher, IoCallback, iFd, EV_READ);
+		ev_io_init (io_watcher, IoCallback, pData->iFd, EV_READ);
 		io_watcher->data = (void*)pData;
 		pTagConnectionAttr->pIoWatcher = io_watcher;
 		ev_io_start (m_loop, io_watcher);
@@ -4166,7 +4176,7 @@ bool NodeWorker::AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr,int iFd)
     return(true);
 }
 
-bool NodeWorker::AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr,int iFd)
+bool NodeWorker::AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     ev_io* io_watcher = NULL;
@@ -4185,10 +4195,10 @@ bool NodeWorker::AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr,int iFd)
 			delete io_watcher;
 			return(false);
 		}
-		pData->iFd = iFd;
+		pData->iFd = pTagConnectionAttr->iFd;
 		pData->ulSeq = pTagConnectionAttr->ulSeq;
 		pData->pWorker = this;
-		ev_io_init (io_watcher, IoCallback, iFd, EV_WRITE);
+		ev_io_init (io_watcher, IoCallback, pData->iFd, EV_WRITE);
 		io_watcher->data = (void*)pData;
 		pTagConnectionAttr->pIoWatcher = io_watcher;
 		ev_io_start (m_loop, io_watcher);
@@ -4255,97 +4265,6 @@ bool NodeWorker::RemoveIoWriteEvent(tagConnectionAttr* pTagConnectionAttr)
 			ev_io_start (m_loop, pTagConnectionAttr->pIoWatcher);
 		}
 	}
-    return(true);
-}
-
-bool NodeWorker::AddIoReadEvent(std::map<int, tagConnectionAttr*>::iterator iter)
-{
-    LOG4_TRACE("%s()", __FUNCTION__);
-    ev_io* io_watcher = NULL;
-    if (NULL == iter->second->pIoWatcher)
-    {
-        io_watcher = new ev_io();
-        if (io_watcher == NULL)
-        {
-            LOG4_ERROR("new io_watcher error!");
-            return(false);
-        }
-        tagIoWatcherData* pData = new tagIoWatcherData();
-        if (pData == NULL)
-        {
-            LOG4_ERROR("new tagIoWatcherData error!");
-            delete io_watcher;
-            return(false);
-        }
-        pData->iFd = iter->first;
-        pData->ulSeq = iter->second->ulSeq;
-        pData->pWorker = this;
-        ev_io_init (io_watcher, IoCallback, iter->first, EV_READ);
-        io_watcher->data = (void*)pData;
-        iter->second->pIoWatcher = io_watcher;
-        ev_io_start (m_loop, io_watcher);
-    }
-    else
-    {
-        io_watcher = iter->second->pIoWatcher;
-        ev_io_stop(m_loop, io_watcher);
-        ev_io_set(io_watcher, io_watcher->fd, io_watcher->events | EV_READ);
-        ev_io_start (m_loop, io_watcher);
-    }
-    return(true);
-}
-
-bool NodeWorker::AddIoWriteEvent(std::map<int, tagConnectionAttr*>::iterator iter)
-{
-    LOG4_TRACE("%s()", __FUNCTION__);
-    ev_io* io_watcher = NULL;
-    if (NULL == iter->second->pIoWatcher)
-    {
-        io_watcher = new ev_io();
-        if (io_watcher == NULL)
-        {
-            LOG4_ERROR("new io_watcher error!");
-            return(false);
-        }
-        tagIoWatcherData* pData = new tagIoWatcherData();
-        if (pData == NULL)
-        {
-            LOG4_ERROR("new tagIoWatcherData error!");
-            delete io_watcher;
-            return(false);
-        }
-        pData->iFd = iter->first;
-        pData->ulSeq = iter->second->ulSeq;
-        pData->pWorker = this;
-        ev_io_init (io_watcher, IoCallback, iter->first, EV_WRITE);
-        io_watcher->data = (void*)pData;
-        iter->second->pIoWatcher = io_watcher;
-        ev_io_start (m_loop, io_watcher);
-    }
-    else
-    {
-        io_watcher = iter->second->pIoWatcher;
-        ev_io_stop(m_loop, io_watcher);
-        ev_io_set(io_watcher, io_watcher->fd, io_watcher->events | EV_WRITE);
-        ev_io_start (m_loop, io_watcher);
-    }
-    return(true);
-}
-
-bool NodeWorker::RemoveIoWriteEvent(std::map<int, tagConnectionAttr*>::iterator iter)
-{
-    LOG4_TRACE("%s()", __FUNCTION__);
-    ev_io* io_watcher = NULL;
-    if (NULL != iter->second->pIoWatcher)
-    {
-        if (iter->second->pIoWatcher->events & EV_WRITE)
-        {
-            io_watcher = iter->second->pIoWatcher;
-            ev_io_stop(m_loop, io_watcher);
-            ev_io_set(io_watcher, io_watcher->fd, io_watcher->events & ~EV_WRITE);
-            ev_io_start (m_loop, iter->second->pIoWatcher);
-        }
-    }
     return(true);
 }
 
@@ -4424,6 +4343,7 @@ tagConnectionAttr* NodeWorker::CreateFdAttr(int iFd, uint32 ulSeq, llib::E_CODEC
             LOG4_ERROR("new pConnAttr for fd %d error!", iFd);
             return(NULL);
         }
+        pConnAttr->iFd = iFd;
         pConnAttr->pRecvBuff = new llib::CBuffer();
         if (pConnAttr->pRecvBuff == NULL)
         {

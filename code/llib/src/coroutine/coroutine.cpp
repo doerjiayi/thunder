@@ -122,7 +122,7 @@ mainfunc(uint32_t low32, uint32_t hi32) {
 	struct schedule *S = (struct schedule *)ptr;
 	int id = S->running;
 	struct coroutine *C = S->co[id];
-	C->func(S,C->ud);
+	C->func(C->ud);
 	_co_delete(C);
 	S->co[id] = NULL;
 	--S->nco;

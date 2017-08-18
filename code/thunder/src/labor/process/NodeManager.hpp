@@ -139,8 +139,8 @@ protected:
     bool RestartWorker(int iDeathPid);
     bool AddPeriodicTaskEvent();
     bool AddWaitToExitTaskEvent(const MsgShell& stMsgShell,uint32 cmd,uint32 seq);
-    bool AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr,int iFd);
-    bool AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr,int iFd);
+    bool AddIoReadEvent(tagConnectionAttr* pTagConnectionAttr);
+    bool AddIoWriteEvent(tagConnectionAttr* pTagConnectionAttr);
     bool RemoveIoWriteEvent(tagConnectionAttr* pTagConnectionAttr);
     bool DelEvents(ev_io** io_watcher_addr);
     bool AddIoTimeout(int iFd, uint32 ulSeq, ev_tstamp dTimeout = 1.0);

@@ -135,32 +135,32 @@ bool ModuleHello::TestHttpRequest(const thunder::MsgShell& stMsgShell,const Http
 	}
 	return(true);
 }
-
-struct CoroutineArgs {
-	int n;
+//具体用户参数
+struct CoroutineUserArgs {
 	thunder::NodeWorker* worker;
+	int n;
 	SessionHello* pSession;
 	std::string coroutineName;
 };
 
-static void
-testCoroutineFunc(struct llib::schedule * S, void *ud) {
-	CoroutineArgs * arg = (CoroutineArgs *)ud;
+void
+testCoroutineFunc(void *ud) {
+	CoroutineUserArgs* arg = (CoroutineUserArgs*)ud;
 	int start = arg->n;
 	int i;
 	for (i=0;i<3;i++) {
 		arg->pSession->AddHelloNum(2);
 		LOG4CPLUS_TRACE_FMT(arg->worker->GetLogger(),"coroutine running(%d),arg(%d) tid(%u) HelloNum(%d) coroutineName(%s)",
-				((thunder::NodeWorker*) arg->worker)->CoroutineRunning() , start + i,pthread_self(),
+				arg->worker->CoroutineRunning() , start + i,pthread_self(),
 				arg->pSession->GetHelloNum(),arg->coroutineName.c_str());
-		((thunder::NodeWorker*) arg->worker)->CoroutineYield();
-}
+				arg->worker->CoroutineYield();
+	}
 }
 
 void ModuleHello::TestCoroutinue()
 {
-	CoroutineArgs arg1 = { 0 ,(thunder::NodeWorker*) GetLabor(),pSession,"Coroutine1"};
-	CoroutineArgs arg2 = { 100 ,(thunder::NodeWorker*) GetLabor(),pSession,"Coroutine2"};
+	CoroutineUserArgs arg1 = {(thunder::NodeWorker*) GetLabor(), 0 ,pSession,"Coroutine1"};
+	CoroutineUserArgs arg2 = {(thunder::NodeWorker*) GetLabor(), 100 ,pSession,"Coroutine2"};
 	int co1 = ((thunder::NodeWorker*) GetLabor())->CoroutineNew(testCoroutineFunc,&arg1);
 	int co2 = ((thunder::NodeWorker*) GetLabor())->CoroutineNew(testCoroutineFunc,&arg2);
 	LOG4CPLUS_TRACE_FMT(GetLogger(), "Coroutine start! tid(%u)",pthread_self());
@@ -171,124 +171,127 @@ void ModuleHello::TestCoroutinue()
 		((thunder::NodeWorker*) GetLabor())->CoroutineResume(co2);
 	}
 	LOG4CPLUS_TRACE_FMT(GetLogger(), "Coroutine end!tid(%u)",pthread_self());
-	/*
-	详细流程：
-	创建协程
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1210] CoroutineNew coroutine_new co1:0
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1218] CoroutineNew coroutine coid(0) status(1)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1210] CoroutineNew coroutine_new co1:1
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1218] CoroutineNew coroutine coid(1) status(1)
-	启动协程，唤醒0号协程
-	[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:146] Coroutine start!tid(2330580960) HelloNum(2) coroutineName(Coroutine1)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(0) status(1)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(1) status(1)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(0) status(1)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1275] CoroutineRunning coroutine_status running_id(0)
-	执行0号协程，然后退出0号协程,回到主协程，唤醒1号协程
-	[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:135] coroutine running(0),arg(0) tid(2330580960) HelloNum(4) coroutineName(Coroutine2)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1242] CoroutineYield coroutine_yield running_id(0) status(2)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(1) status(1)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1275] CoroutineRunning coroutine_status running_id(1)
-	执行1号协程，然后退出1号协程,回到主协程，唤醒0号协程
-	[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:135] coroutine running(1),arg(100) tid(2330580960) HelloNum(6) coroutineName(Coroutine1)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1242] CoroutineYield coroutine_yield running_id(1) status(2)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(0) status(3)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(1) status(3)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(0) status(3)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1275] CoroutineRunning coroutine_status running_id(0)
-	执行0号协程，然后退出0号协程,回到主协程，唤醒1号协程
-	[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:135] coroutine running(0),arg(1) tid(2330580960) HelloNum(8) coroutineName(Coroutine2)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1242] CoroutineYield coroutine_yield running_id(0) status(2)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(1) status(3)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1275] CoroutineRunning coroutine_status running_id(1)
-	执行1号协程，然后退出1号协程,回到主协程，唤醒0号协程
-	[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:135] coroutine running(1),arg(101) tid(2330580960) HelloNum(10) coroutineName(Coroutine1)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1242] CoroutineYield coroutine_yield running_id(1) status(2)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(0) status(3)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(1) status(3)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(0) status(3)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1275] CoroutineRunning coroutine_status running_id(0)
-	执行0号协程，然后退出0号协程,回到主协程，唤醒1号协程
-	[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:135] coroutine running(0),arg(2) tid(2330580960) HelloNum(12) coroutineName(Coroutine2)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1242] CoroutineYield coroutine_yield running_id(0) status(2)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(1) status(3)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1275] CoroutineRunning coroutine_status running_id(1)
-	执行1号协程，然后退出1号协程,回到主协程，尝试唤醒0号协程，已执行完毕，尝试唤醒1号协程，已执行完毕，获取0号协程状态，已是dead状态,不再唤醒该协程，获取1号协程状态，已是dead状态,不再唤醒该协程
-	[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:135] coroutine running(1),arg(102) tid(2330580960)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1242] CoroutineYield coroutine_yield running_id(1) status(2)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(0) status(3)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(1) status(3)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(0) status(3)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(1) status(3)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(0) status(0)
-	[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(1) status(0)
-	协程结束
-	[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:153] Coroutine end!
-	 * */
 }
+
+/*
+详细流程：
+创建协程
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1210] CoroutineNew coroutine_new co1:0
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1218] CoroutineNew coroutine coid(0) status(1)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1210] CoroutineNew coroutine_new co1:1
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1218] CoroutineNew coroutine coid(1) status(1)
+启动协程，唤醒0号协程
+[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:146] Coroutine start!tid(2330580960) HelloNum(2) coroutineName(Coroutine1)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(0) status(1)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(1) status(1)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(0) status(1)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1275] CoroutineRunning coroutine_status running_id(0)
+执行0号协程，然后退出0号协程,回到主协程，唤醒1号协程
+[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:135] coroutine running(0),arg(0) tid(2330580960) HelloNum(4) coroutineName(Coroutine2)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1242] CoroutineYield coroutine_yield running_id(0) status(2)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(1) status(1)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1275] CoroutineRunning coroutine_status running_id(1)
+执行1号协程，然后退出1号协程,回到主协程，唤醒0号协程
+[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:135] coroutine running(1),arg(100) tid(2330580960) HelloNum(6) coroutineName(Coroutine1)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1242] CoroutineYield coroutine_yield running_id(1) status(2)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(0) status(3)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(1) status(3)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(0) status(3)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1275] CoroutineRunning coroutine_status running_id(0)
+执行0号协程，然后退出0号协程,回到主协程，唤醒1号协程
+[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:135] coroutine running(0),arg(1) tid(2330580960) HelloNum(8) coroutineName(Coroutine2)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1242] CoroutineYield coroutine_yield running_id(0) status(2)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(1) status(3)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1275] CoroutineRunning coroutine_status running_id(1)
+执行1号协程，然后退出1号协程,回到主协程，唤醒0号协程
+[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:135] coroutine running(1),arg(101) tid(2330580960) HelloNum(10) coroutineName(Coroutine1)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1242] CoroutineYield coroutine_yield running_id(1) status(2)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(0) status(3)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(1) status(3)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(0) status(3)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1275] CoroutineRunning coroutine_status running_id(0)
+执行0号协程，然后退出0号协程,回到主协程，唤醒1号协程
+[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:135] coroutine running(0),arg(2) tid(2330580960) HelloNum(12) coroutineName(Coroutine2)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1242] CoroutineYield coroutine_yield running_id(0) status(2)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(1) status(3)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1275] CoroutineRunning coroutine_status running_id(1)
+执行1号协程，然后退出1号协程,回到主协程，尝试唤醒0号协程，已执行完毕，尝试唤醒1号协程，已执行完毕，获取0号协程状态，已是dead状态,不再唤醒该协程，获取1号协程状态，已是dead状态,不再唤醒该协程
+[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:135] coroutine running(1),arg(102) tid(2330580960)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1242] CoroutineYield coroutine_yield running_id(1) status(2)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(0) status(3)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(1) status(3)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(0) status(3)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1232] CoroutineResume coroutine_resume coid(1) status(3)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(0) status(0)
+[2017-08-17 15:40:59,582][TRACE] [../src/labor/process/NodeWorker.cpp:1257] CoroutineStatus coroutine_status coid(1) status(0)
+协程结束
+[2017-08-17 15:40:59,582][TRACE] [ModuleHello.cpp:153] Coroutine end!
+ * */
 
 void ModuleHello::TestCoroutinue2()
 {
-	CoroutineArgs arg1 = { 0 ,(thunder::NodeWorker*) GetLabor(),pSession,"Coroutine1"};
-	CoroutineArgs arg2 = { 100 ,(thunder::NodeWorker*) GetLabor(),pSession,"Coroutine2"};
+	CoroutineUserArgs arg1 = {(thunder::NodeWorker*)GetLabor(), 0 ,pSession,"Coroutine1"};
+	CoroutineUserArgs arg2 = {(thunder::NodeWorker*)GetLabor(), 100 ,pSession,"Coroutine2"};
 	((thunder::NodeWorker*) GetLabor())->CoroutineNew(testCoroutineFunc,&arg1);
 	((thunder::NodeWorker*) GetLabor())->CoroutineNew(testCoroutineFunc,&arg2);
-	LOG4CPLUS_TRACE_FMT(GetLogger(), "Coroutine start! tid(%u)",pthread_self());
+	LOG4CPLUS_TRACE_FMT(GetLogger(), "Coroutine start! tid(%u) &arg1:%p",pthread_self(),&arg1);
 	while (((thunder::NodeWorker*) GetLabor())->CoroutineTaskSize() > 0)
 	{
 		((thunder::NodeWorker*) GetLabor())->CoroutineResume();
 	}
 	LOG4CPLUS_TRACE_FMT(GetLogger(), "Coroutine end!tid(%u)",pthread_self());
-	/*
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1211] CoroutineNew coroutine_new co1:0
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1216] CoroutineNew coroutine coid(0) status(1)
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1211] CoroutineNew coroutine_new co1:1
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1216] CoroutineNew coroutine coid(1) status(1)
-[2017-08-18 01:16:08,902][TRACE] [ModuleHello.cpp:236] Coroutine start! tid(3483912320)
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(0) status(1)
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(0)
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(0) status(1)
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1330] CoroutineRunning coroutine_status running_id(0)
-[2017-08-18 01:16:08,902][TRACE] [ModuleHello.cpp:155] coroutine running(0),arg(0) tid(3483912320) HelloNum(2) coroutineName(Coroutine1)
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1297] CoroutineYield coroutine_yield running_id(0) status(2)
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(1) status(1)
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(1)
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(1) status(1)
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1330] CoroutineRunning coroutine_status running_id(1)
-[2017-08-18 01:16:08,902][TRACE] [ModuleHello.cpp:155] coroutine running(1),arg(100) tid(3483912320) HelloNum(4) coroutineName(Coroutine2)
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1297] CoroutineYield coroutine_yield running_id(1) status(2)
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(0) status(3)
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(0)
-[2017-08-18 01:16:08,902][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(0) status(3)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1330] CoroutineRunning coroutine_status running_id(0)
-[2017-08-18 01:16:08,903][TRACE] [ModuleHello.cpp:155] coroutine running(0),arg(1) tid(3483912320) HelloNum(6) coroutineName(Coroutine1)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1297] CoroutineYield coroutine_yield running_id(0) status(2)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(1) status(3)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(1)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(1) status(3)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1330] CoroutineRunning coroutine_status running_id(1)
-[2017-08-18 01:16:08,903][TRACE] [ModuleHello.cpp:155] coroutine running(1),arg(101) tid(3483912320) HelloNum(8) coroutineName(Coroutine2)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1297] CoroutineYield coroutine_yield running_id(1) status(2)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(0) status(3)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(0)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(0) status(3)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1330] CoroutineRunning coroutine_status running_id(0)
-[2017-08-18 01:16:08,903][TRACE] [ModuleHello.cpp:155] coroutine running(0),arg(2) tid(3483912320) HelloNum(10) coroutineName(Coroutine1)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1297] CoroutineYield coroutine_yield running_id(0) status(2)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(1) status(3)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(1)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(1) status(3)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1330] CoroutineRunning coroutine_status running_id(1)
-[2017-08-18 01:16:08,903][TRACE] [ModuleHello.cpp:155] coroutine running(1),arg(102) tid(3483912320) HelloNum(12) coroutineName(Coroutine2)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1297] CoroutineYield coroutine_yield running_id(1) status(2)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(0) status(3)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(0)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(0) status(3)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(1) status(3)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(1)
-[2017-08-18 01:16:08,903][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(1) status(3)
-[2017-08-18 01:16:08,903][TRACE] [ModuleHello.cpp:241] Coroutine end!tid(3483912320)
-	 * */
 }
 
-} /* namespace hello */
+/*
+ * 过程如下
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1216] CoroutineNew coroutine coid(0) status(1)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1216] CoroutineNew coroutine coid(1) status(1)
+[2017-08-18 15:12:14,846][TRACE] [ModuleHello.cpp:237] Coroutine start! tid(598419424) &arg1:0x7fff84589c70
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(0) status(1)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(0)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(0) status(1)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1330] CoroutineRunning coroutine_status running_id(0)
+[2017-08-18 15:12:14,846][TRACE] [ModuleHello.cpp:155] coroutine running(0),arg(0) tid(598419424) HelloNum(2) coroutineName(Coroutine1)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1297] CoroutineYield coroutine_yield running_id(0) status(2)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(1) status(1)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(1)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(1) status(1)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1330] CoroutineRunning coroutine_status running_id(1)
+[2017-08-18 15:12:14,846][TRACE] [ModuleHello.cpp:155] coroutine running(1),arg(100) tid(598419424) HelloNum(4) coroutineName(Coroutine2)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1297] CoroutineYield coroutine_yield running_id(1) status(2)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(0) status(3)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(0)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(0) status(3)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1330] CoroutineRunning coroutine_status running_id(0)
+[2017-08-18 15:12:14,846][TRACE] [ModuleHello.cpp:155] coroutine running(0),arg(1) tid(598419424) HelloNum(6) coroutineName(Coroutine1)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1297] CoroutineYield coroutine_yield running_id(0) status(2)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(1) status(3)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(1)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(1) status(3)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1330] CoroutineRunning coroutine_status running_id(1)
+[2017-08-18 15:12:14,846][TRACE] [ModuleHello.cpp:155] coroutine running(1),arg(101) tid(598419424) HelloNum(8) coroutineName(Coroutine2)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1297] CoroutineYield coroutine_yield running_id(1) status(2)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(0) status(3)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(0)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(0) status(3)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1330] CoroutineRunning coroutine_status running_id(0)
+[2017-08-18 15:12:14,846][TRACE] [ModuleHello.cpp:155] coroutine running(0),arg(2) tid(598419424) HelloNum(10) coroutineName(Coroutine1)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1297] CoroutineYield coroutine_yield running_id(0) status(2)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(1) status(3)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(1)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(1) status(3)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1330] CoroutineRunning coroutine_status running_id(1)
+[2017-08-18 15:12:14,846][TRACE] [ModuleHello.cpp:155] coroutine running(1),arg(102) tid(598419424) HelloNum(12) coroutineName(Coroutine2)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1297] CoroutineYield coroutine_yield running_id(1) status(2)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(0) status(3)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(0)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(0) status(3)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1312] CoroutineStatus coroutine_status coid(1) status(3)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1247] CoroutineResume coid(1)
+[2017-08-18 15:12:14,846][TRACE] [../src/labor/process/NodeWorker.cpp:1266] CoroutineResume coroutine_resume coid(1) status(3)
+[2017-08-18 15:12:14,846][TRACE] [ModuleHello.cpp:242] Coroutine end!tid(598419424)
+*/
+
+
+}
+/* namespace hello */
