@@ -27,6 +27,7 @@ int NodeLabor::CoroutineNew(const std::string &coroutineName,llib::coroutine_fun
 	llib::schedule* schedule(NULL);
 	if (it == m_pCoroutineScheduleMap.end())
 	{
+		LOG4_DEBUG("%s new CoroutineSchedule coroutineName(%u)", __FUNCTION__, coroutineName.c_str());
 		CoroutineSchedule coroutineSchedule;
 		schedule = coroutineSchedule.schedule = llib::coroutine_open();
 		std::pair<CoroutineScheduleMap::iterator,bool> ret = m_pCoroutineScheduleMap.insert(std::make_pair(coroutineName,coroutineSchedule));
