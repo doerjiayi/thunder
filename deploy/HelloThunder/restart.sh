@@ -1,10 +1,10 @@
 #!/bin/bash
 
-THUNDER_HOME=`dirname $0`
+SERVER_HOME=`dirname $0`
 SCRIPT_NAME=`basename $0`
-cd ${THUNDER_HOME}
-THUNDER_HOME=`pwd`
+cd ${SERVER_HOME}
+SERVER_HOME=`pwd`
 
-echo "yes" | ${THUNDER_HOME}/stop.sh $@
-${THUNDER_HOME}/start.sh $@
+${SERVER_HOME}/stop.sh
+${SERVER_HOME}/start.sh
 
