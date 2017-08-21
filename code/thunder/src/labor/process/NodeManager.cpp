@@ -599,7 +599,7 @@ bool NodeManager::IoWrite(tagManagerIoWatcherData* pData, struct ev_io* watcher)
 
 bool NodeManager::IoError(tagManagerIoWatcherData* pData, struct ev_io* watcher)
 {
-    //LOG4_TRACE("%s()", __FUNCTION__);
+    LOG4_TRACE("%s()", __FUNCTION__);
     std::map<int, tagConnectionAttr*>::iterator iter =  m_mapFdAttr.find(pData->iFd);
     if (iter == m_mapFdAttr.end())
     {
@@ -607,7 +607,7 @@ bool NodeManager::IoError(tagManagerIoWatcherData* pData, struct ev_io* watcher)
     }
     else
     {
-        if (pData->ulSeq != iter->second->ulSeq)
+        if (pData->ulSeq != iter->second->ulSeq || pData->iFd != iter->second->iFd)
         {
             LOG4_DEBUG("callback seq %llu not match the conn attr seq %llu",
                             pData->ulSeq, iter->second->ulSeq);
@@ -641,7 +641,7 @@ bool NodeManager::IoTimeout(tagManagerIoWatcherData* pData, struct ev_timer* wat
     }
     else
     {
-        if (iter->second->ulSeq != pData->ulSeq)      // 文件描述符数值相等，但已不是原来的文件描述符
+        if (pData->ulSeq != iter->second->ulSeq || pData->iFd != iter->second->iFd)      // 文件描述符数值相等，但已不是原来的文件描述符
         {
             bRes = false;
         }
