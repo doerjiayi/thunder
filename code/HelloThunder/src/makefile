@@ -1,4 +1,4 @@
-CXX = g++
+CXX = $(shell command -v ccache >/dev/null 2>&1 && echo "ccache g++" || echo "g++")
 ROOT = .
 SUBDIRS=$(shell find $(ROOT) -name 'Module*' -type d)
 

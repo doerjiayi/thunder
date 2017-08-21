@@ -43,6 +43,7 @@ private:
     bool TestRedisCmd(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
     void TestCoroutinue();
     void TestCoroutinue2();
+    void TestCoroutinue3();
     void TestCoroutinueBenchMark();
     StepHello* pStepHello;
     StepGetHelloName* pStepGetHelloName;

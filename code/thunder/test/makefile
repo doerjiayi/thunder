@@ -1,5 +1,5 @@
 CC = gcc
-CXX = g++
+CXX = $(shell command -v ccache >/dev/null 2>&1 && echo "ccache g++" || echo "g++")
 CXXFLAG = -Wall -Wno-format -g -O2 
 
 ARCH:=$(shell uname -m)

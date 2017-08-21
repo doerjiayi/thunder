@@ -50,6 +50,7 @@ bool ModuleHello::Init()
 	if (pSession)
 	{
 		TestCoroutinue2();
+		TestCoroutinue3();
 //		TestCoroutinueBenchMark();
 	}
 	return(true);
@@ -262,106 +263,45 @@ void ModuleHello::TestCoroutinue2()
 	}
 }
 
-/*
- * 过程如下
-[2017-08-19 02:04:36,125][DEBUG] [../src/labor/NodeLabor.cpp:30] CoroutineNew new CoroutineSchedule coroutineName(1514472400)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:51] CoroutineNew coroutine coid(0) status(1) coroutineName(CoroutineName)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:51] CoroutineNew coroutine coid(1) status(1) coroutineName(CoroutineName)
-[2017-08-19 02:04:36,125][TRACE] [ModuleHello.cpp:248] TestCoroutinue2 Coroutine start! tid(1593948288) &arg1:0x7ffc20c18c20
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(0) status(1)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(0)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(0) status(1)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:150] CoroutineRunning coroutine_status running_id(0) coroutineName(CoroutineName)
-[2017-08-19 02:04:36,125][TRACE] [ModuleHello.cpp:148] coroutine running(0),arg(0) tid(1593948288) HelloNum(2) coroutineName(CoroutineName)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:130] CoroutineYield coroutine_yield running_id(0) status(2)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(1) status(1)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(1)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(1) status(1)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:150] CoroutineRunning coroutine_status running_id(1) coroutineName(CoroutineName)
-[2017-08-19 02:04:36,125][TRACE] [ModuleHello.cpp:148] coroutine running(1),arg(100) tid(1593948288) HelloNum(4) coroutineName(CoroutineName)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:130] CoroutineYield coroutine_yield running_id(1) status(2)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(0) status(3)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(0)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(0) status(3)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:150] CoroutineRunning coroutine_status running_id(0) coroutineName(CoroutineName)
-[2017-08-19 02:04:36,125][TRACE] [ModuleHello.cpp:148] coroutine running(0),arg(1) tid(1593948288) HelloNum(6) coroutineName(CoroutineName)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:130] CoroutineYield coroutine_yield running_id(0) status(2)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(1) status(3)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(1)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(1) status(3)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:150] CoroutineRunning coroutine_status running_id(1) coroutineName(CoroutineName)
-[2017-08-19 02:04:36,125][TRACE] [ModuleHello.cpp:148] coroutine running(1),arg(101) tid(1593948288) HelloNum(8) coroutineName(CoroutineName)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:130] CoroutineYield coroutine_yield running_id(1) status(2)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(0) status(3)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(0)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(0) status(3)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:150] CoroutineRunning coroutine_status running_id(0) coroutineName(CoroutineName)
-[2017-08-19 02:04:36,125][TRACE] [ModuleHello.cpp:148] coroutine running(0),arg(2) tid(1593948288) HelloNum(10) coroutineName(CoroutineName)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:130] CoroutineYield coroutine_yield running_id(0) status(2)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(1) status(3)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(1)
-[2017-08-19 02:04:36,125][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(1) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:150] CoroutineRunning coroutine_status running_id(1) coroutineName(CoroutineName)
-[2017-08-19 02:04:36,126][TRACE] [ModuleHello.cpp:148] coroutine running(1),arg(102) tid(1593948288) HelloNum(12) coroutineName(CoroutineName)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:130] CoroutineYield coroutine_yield running_id(1) status(2)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(0) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(0)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(0) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(1) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(1)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(1) status(3)
-[2017-08-19 02:04:36,126][TRACE] [ModuleHello.cpp:250] TestCoroutinue2 Coroutine end!tid(1593948288)
+void ModuleHello::TestCoroutinue3()
+{
+    std::vector<CoroutineArgs> coroutineArgsList;//对象缓存列表
+    {
+        CoroutineArgs arg1 = {GetLabor(), 0 ,pSession};
+        CoroutineArgs arg2 = {GetLabor(), 100 ,pSession};
+        coroutineArgsList.push_back(arg1);
+        coroutineArgsList.push_back(arg2);
+        //GetLabor()->CoroutineNew(CoroutineArgs::CoroutineName,CoroutineArgs::CoroutineFunc,&arg1);
+        //两个协程对象
+        for(uint32 i = 0;i < coroutineArgsList.size();++i)
+        {
+            MakeCoroutine(CoroutineArgs,coroutineArgsList[i]);
+        }
+    }
 
+    std::vector<CoroutineArgs2> coroutineArgs2List;//对象缓存列表
+    {
+        //两个协程对象
+        CoroutineArgs2 arg1 = {GetLabor(), "param1" ,pSession};
+        CoroutineArgs2 arg2 = {GetLabor(), "param2" ,pSession};
+        coroutineArgs2List.push_back(arg1);
+        coroutineArgs2List.push_back(arg2);
+        //GetLabor()->CoroutineNew(CoroutineArgs::CoroutineName,CoroutineArgs::CoroutineFunc,&arg1);
+        //两个协程对象
+        for(uint32 i = 0;i < coroutineArgs2List.size();++i)
+        {
+            MakeCoroutine(CoroutineArgs2,coroutineArgs2List[i]);
+        }
+    }
 
-[2017-08-19 02:04:36,126][DEBUG] [../src/labor/NodeLabor.cpp:30] CoroutineNew new CoroutineSchedule coroutineName(1514472432)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:51] CoroutineNew coroutine coid(0) status(1) coroutineName(CoroutineName2)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:51] CoroutineNew coroutine coid(1) status(1) coroutineName(CoroutineName2)
-[2017-08-19 02:04:36,126][TRACE] [ModuleHello.cpp:259] TestCoroutinue2 Coroutine start! tid(1593948288) &arg1:0x7ffc20c18ba0
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(0) status(1)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(0)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(0) status(1)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:150] CoroutineRunning coroutine_status running_id(0) coroutineName(CoroutineName2)
-[2017-08-19 02:04:36,126][TRACE] [ModuleHello.cpp:161] coroutine running(0),param(param1) tid(1593948288) HelloNum(14) coroutineName(CoroutineName2)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:130] CoroutineYield coroutine_yield running_id(0) status(2)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(1) status(1)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(1)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(1) status(1)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:150] CoroutineRunning coroutine_status running_id(1) coroutineName(CoroutineName2)
-[2017-08-19 02:04:36,126][TRACE] [ModuleHello.cpp:161] coroutine running(1),param(param2) tid(1593948288) HelloNum(16) coroutineName(CoroutineName2)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:130] CoroutineYield coroutine_yield running_id(1) status(2)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(0) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(0)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(0) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:150] CoroutineRunning coroutine_status running_id(0) coroutineName(CoroutineName2)
-[2017-08-19 02:04:36,126][TRACE] [ModuleHello.cpp:161] coroutine running(0),param(param1) tid(1593948288) HelloNum(18) coroutineName(CoroutineName2)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:130] CoroutineYield coroutine_yield running_id(0) status(2)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(1) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(1)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(1) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:150] CoroutineRunning coroutine_status running_id(1) coroutineName(CoroutineName2)
-[2017-08-19 02:04:36,126][TRACE] [ModuleHello.cpp:161] coroutine running(1),param(param2) tid(1593948288) HelloNum(20) coroutineName(CoroutineName2)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:130] CoroutineYield coroutine_yield running_id(1) status(2)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(0) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(0)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(0) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:150] CoroutineRunning coroutine_status running_id(0) coroutineName(CoroutineName2)
-[2017-08-19 02:04:36,126][TRACE] [ModuleHello.cpp:161] coroutine running(0),param(param1) tid(1593948288) HelloNum(22) coroutineName(CoroutineName2)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:130] CoroutineYield coroutine_yield running_id(0) status(2)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(1) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(1)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(1) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:150] CoroutineRunning coroutine_status running_id(1) coroutineName(CoroutineName2)
-[2017-08-19 02:04:36,126][TRACE] [ModuleHello.cpp:161] coroutine running(1),param(param2) tid(1593948288) HelloNum(24) coroutineName(CoroutineName2)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:130] CoroutineYield coroutine_yield running_id(1) status(2)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(0) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(0)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(0) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:84] CoroutineResume coroutine_status coid(1) status(3)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:92] CoroutineResume CoroutineResume coid(1)
-[2017-08-19 02:04:36,126][TRACE] [../src/labor/NodeLabor.cpp:101] CoroutineResume coroutine_resume coid(1) status(3)
-[2017-08-19 02:04:36,126][TRACE] [ModuleHello.cpp:261] TestCoroutinue2 Coroutine end!tid(1593948288)
+    LOG4CPLUS_TRACE_FMT(GetLogger(), "%s Coroutine start!tid(%u) CoroutineArgs2",__FUNCTION__,pthread_self());
+    RunCoroutine(CoroutineArgs2);
+    LOG4CPLUS_TRACE_FMT(GetLogger(), "%s Coroutine end!tid(%u)",__FUNCTION__,pthread_self());
 
-*/
+    LOG4CPLUS_TRACE_FMT(GetLogger(), "%s Coroutine start! tid(%u) CoroutineArgs",__FUNCTION__,pthread_self());
+    RunCoroutine(CoroutineArgs);
+    LOG4CPLUS_TRACE_FMT(GetLogger(), "%s Coroutine end!tid(%u)",__FUNCTION__,pthread_self());
+}
 
 void ModuleHello::TestCoroutinueBenchMark()
 {
