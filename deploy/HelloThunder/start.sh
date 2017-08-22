@@ -40,7 +40,7 @@ do
             fi
             ps -ef | awk -vpname=$target_server '{idx=index($8,pname); if (idx == 1)print}'
         else
-            info_log "the im process for $server_bin was exist!"
+            info_log "the server process for $server_bin was exist!"
         fi
     fi
 done

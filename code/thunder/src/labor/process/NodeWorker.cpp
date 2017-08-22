@@ -3609,7 +3609,7 @@ void NodeWorker::ExecStep(uint32 uiCallerStepSeq, uint32 uiCalledStepSeq,
     }
 }
 
-void NodeWorker::LoadSo(llib::CJsonObject& oSoConf)
+void NodeWorker::LoadSo(llib::CJsonObject& oSoConf,bool boForce)
 {
     LOG4_TRACE("%s():oSoConf(%s)", __FUNCTION__,oSoConf.ToString().c_str());
     int iCmd = 0;
@@ -3647,7 +3647,7 @@ void NodeWorker::LoadSo(llib::CJsonObject& oSoConf)
                 }
                 else
                 {
-                    if (iVersion != cmd_iter->second->iVersion)
+                    if (iVersion != cmd_iter->second->iVersion || boForce)
                     {
                         if (0 != access(strSoPath.c_str(), F_OK))
                         {
@@ -3811,7 +3811,7 @@ void NodeWorker::UnloadSoAndDeleteCmd(int iCmd)
     }
 }
 
-void NodeWorker::LoadModule(llib::CJsonObject& oModuleConf)
+void NodeWorker::LoadModule(llib::CJsonObject& oModuleConf,bool boForce)
 {
     LOG4_TRACE("%s()", __FUNCTION__);
     std::string strModulePath;
@@ -3849,7 +3849,7 @@ void NodeWorker::LoadModule(llib::CJsonObject& oModuleConf)
                 }
                 else
                 {
-                    if (iVersion != module_iter->second->iVersion)
+                    if (iVersion != module_iter->second->iVersion || boForce)
                     {
                         strSoPath = m_strWorkPath + std::string("/") + oModuleConf[i]("so_path");
                         if (0 != access(strSoPath.c_str(), F_OK))
@@ -3861,7 +3861,7 @@ void NodeWorker::LoadModule(llib::CJsonObject& oModuleConf)
                         LOG4_TRACE("%s:%d after LoadSoAndGetCmd", __FILE__, __LINE__);
                         if (pModule != NULL)
                         {
-                            LOG4_INFO("succeed in loading %s", strSoPath.c_str());
+                            LOG4_INFO("succeed in loading new module %s,and delete old module", strSoPath.c_str());
                             delete module_iter->second;
                             module_iter->second = pModule;
                         }
@@ -4341,8 +4341,9 @@ bool NodeWorker::Dispose(const MsgShell& stMsgShell,
     oOutMsgBody.Clear();
     if (gc_uiCmdReq & oInMsgHead.cmd())    // 新请求
     {
+    	uint32 uiCmd = gc_uiCmdBit & oInMsgHead.cmd();
         std::map<int32, Cmd*>::iterator cmd_iter;
-        cmd_iter = m_mapCmd.find(gc_uiCmdBit & oInMsgHead.cmd());
+        cmd_iter = m_mapCmd.find(uiCmd);
         if (cmd_iter != m_mapCmd.end() && cmd_iter->second != NULL)
         {
             cmd_iter->second->AnyMessage(stMsgShell, oInMsgHead, oInMsgBody);
@@ -4350,14 +4351,14 @@ bool NodeWorker::Dispose(const MsgShell& stMsgShell,
         else
         {
             std::map<int, tagSo*>::iterator cmd_so_iter;
-            cmd_so_iter = m_mapSo.find(gc_uiCmdBit & oInMsgHead.cmd());
+            cmd_so_iter = m_mapSo.find(uiCmd);
             if (cmd_so_iter != m_mapSo.end() && cmd_so_iter->second != NULL)
             {
                 cmd_so_iter->second->pCmd->AnyMessage(stMsgShell, oInMsgHead, oInMsgBody);
             }
             else        // 没有对应的cmd，是需由接入层转发的请求
             {
-                if (CMD_REQ_SET_LOG_LEVEL == oInMsgHead.cmd())
+                if (CMD_REQ_SET_LOG_LEVEL == uiCmd)
                 {
                     LogLevel oLogLevel;
                     if(!oLogLevel.ParseFromString(oInMsgBody.body()))
@@ -4370,7 +4371,7 @@ bool NodeWorker::Dispose(const MsgShell& stMsgShell,
                         m_oLogger.setLogLevel(oLogLevel.log_level());
                     }
                 }
-                else if (CMD_REQ_RELOAD_SO == oInMsgHead.cmd())
+                else if (CMD_REQ_RELOAD_SO == uiCmd)
                 {
                     llib::CJsonObject oSoConfJson;
                     if(!oSoConfJson.Parse(oInMsgBody.body()))
@@ -4379,11 +4380,17 @@ bool NodeWorker::Dispose(const MsgShell& stMsgShell,
                     }
                     else
                     {
-                        LOG4_INFO("CMD_REQ_RELOAD_SO:update so conf to oSoConfJson(%s)", oSoConfJson.ToString().c_str());
-                        LoadSo(oSoConfJson);
+                    	bool boForce(false);
+                    	if (0x08000000 & oInMsgHead.cmd())
+                    	{
+                    		boForce = true;
+                    	}
+                        LOG4_INFO("CMD_REQ_RELOAD_SO:update so conf to oSoConfJson(%s) %s",
+                        		oSoConfJson.ToString().c_str(),boForce?"force operation":"normal operation");
+                        LoadSo(oSoConfJson,boForce);
                     }
                 }
-                else if (CMD_REQ_RELOAD_MODULE == oInMsgHead.cmd())
+                else if (CMD_REQ_RELOAD_MODULE == uiCmd)
                 {
                     llib::CJsonObject oModuleConfJson;
                     if(!oModuleConfJson.Parse(oInMsgBody.body()))
@@ -4392,8 +4399,14 @@ bool NodeWorker::Dispose(const MsgShell& stMsgShell,
                     }
                     else
                     {
-                        LOG4_INFO("CMD_REQ_RELOAD_MODULE:update module conf to oModuleConfJson(%s)", oModuleConfJson.ToString().c_str());
-                        LoadModule(oModuleConfJson);
+                    	bool boForce(false);
+                    	if (0x08000000 & oInMsgHead.cmd())
+                    	{
+                    		boForce = true;
+                    	}
+                        LOG4_INFO("CMD_REQ_RELOAD_MODULE:update module conf to oModuleConfJson(%s) %s",
+                        		oModuleConfJson.ToString().c_str(),boForce?"force operation":"normal operation");
+                        LoadModule(oModuleConfJson,boForce);
                     }
                 }
                 else if (CMD_REQ_RELOAD_LOGIC_CONFIG == oInMsgHead.cmd())

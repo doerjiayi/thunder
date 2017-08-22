@@ -334,11 +334,11 @@ protected:
     bool Dispose(const MsgShell& stMsgShell,
                     const HttpMsg& oInHttpMsg, HttpMsg& oOutHttpMsg);
 
-    void LoadSo(llib::CJsonObject& oSoConf);
+    void LoadSo(llib::CJsonObject& oSoConf,bool boForce=false);
     void ReloadSo(llib::CJsonObject& oCmds);
     tagSo* LoadSoAndGetCmd(int iCmd, const std::string& strSoPath, const std::string& strSymbol, int iVersion);
     void UnloadSoAndDeleteCmd(int iCmd);
-    void LoadModule(llib::CJsonObject& oModuleConf);
+    void LoadModule(llib::CJsonObject& oModuleConf,bool boForce=false);
     void ReloadModule(llib::CJsonObject& oUrlPaths);
     tagModule* LoadSoAndGetModule(const std::string& strModulePath, const std::string& strSoPath, const std::string& strSymbol, int iVersion);
     void UnloadSoAndDeleteModule(const std::string& strModulePath);

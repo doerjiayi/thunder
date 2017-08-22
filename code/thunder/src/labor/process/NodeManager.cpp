@@ -24,6 +24,10 @@ void NodeManager::SignalCallback(struct ev_loop* loop, struct ev_signal* watcher
         {
             pManager->ChildTerminated(watcher);
         }
+        else if (SIGUSR1 == watcher->signum)
+        {
+        	pManager->RefreshServer(true);//kill -SIGUSR1 xxx    killall -SIGUSR1   HelloThunder
+        }
         else
         {
             pManager->ManagerTerminated(watcher);
@@ -1411,6 +1415,12 @@ bool NodeManager::CreateEvents()
     kill_signal_watcher->data = (void*)this;
     ev_signal_start (m_loop, kill_signal_watcher);
 
+    //自定义信号1（处理进程初始化）
+	ev_signal* user1_signal_watcher = new ev_signal();
+	ev_signal_init (user1_signal_watcher, SignalCallback, SIGUSR1);
+	user1_signal_watcher->data = (void*)this;
+	ev_signal_start (m_loop, user1_signal_watcher);
+
     AddPeriodicTaskEvent();
     // 注册idle事件在Server空闲时会导致CPU占用过高，暂时弃用之，改用定时器实现
 //    ev_idle* idle_watcher = new ev_idle();
@@ -2207,14 +2217,17 @@ bool NodeManager::CheckWorkerLoadNullRestartWorkers(tagManagerWaitExitWatcherDat
     return boCanRestart;
 }
 
-void NodeManager::RefreshServer()
+void NodeManager::RefreshServer(bool boForce)
 {
     LOG4_TRACE("%s(m_iRefreshInterval %d, m_iLastRefreshCalc %d)", __FUNCTION__, m_iRefreshInterval, m_iLastRefreshCalc);
     int iErrno = 0;
-    ++m_iLastRefreshCalc;
-    if (m_iLastRefreshCalc < m_iRefreshInterval)
+    if (!boForce)
     {
-        return;
+    	++m_iLastRefreshCalc;
+		if (m_iLastRefreshCalc < m_iRefreshInterval)
+		{
+			return;
+		}
     }
     m_iLastRefreshCalc = 0;
     if (GetConf())
@@ -2233,26 +2246,45 @@ void NodeManager::RefreshServer()
             oMsgHead.set_msgbody_len(oMsgBody.ByteSize());
             SendToWorker(oMsgHead, oMsgBody);
         }
-
-        // 更新动态库配置或重新加载动态库
-        if (m_oLastConf["so"].ToString() != m_oCurrentConf["so"].ToString())
+        else if (boForce)
         {
-            LOG4_DEBUG("update so:(%s)",m_oCurrentConf("so").c_str());
+			LOG4_DEBUG("same log_level:(%s)",m_oCurrentConf("log_level").c_str());
+        }
+        // 更新动态库配置或重新加载动态库
+        if (m_oLastConf["so"].ToString() != m_oCurrentConf["so"].ToString() || boForce)
+        {
+        	std::string strSo = m_oCurrentConf["so"].ToString();
+        	LOG4_INFO("update so:(%s) %s",strSo.c_str(),boForce?"force operation":"normal operation");
             MsgHead oMsgHead;
             MsgBody oMsgBody;
-            oMsgBody.set_body(m_oCurrentConf["so"].ToString());
-            oMsgHead.set_cmd(CMD_REQ_RELOAD_SO);
+            oMsgBody.set_body(strSo);
             oMsgHead.set_seq(GetSequence());
+            if (boForce)
+			{
+            	oMsgHead.set_cmd(CMD_REQ_RELOAD_SO| 0x08000000);
+			}
+            else
+            {
+            	oMsgHead.set_cmd(CMD_REQ_RELOAD_SO);
+            }
             oMsgHead.set_msgbody_len(oMsgBody.ByteSize());
             SendToWorker(oMsgHead, oMsgBody);
         }
-        if (m_oLastConf["module"].ToString() != m_oCurrentConf["module"].ToString())
+        if (m_oLastConf["module"].ToString() != m_oCurrentConf["module"].ToString()|| boForce)
         {
-            LOG4_DEBUG("update module:(%s)",m_oCurrentConf("module").c_str());
+        	std::string strModule = m_oCurrentConf["module"].ToString();
+        	LOG4_INFO("update Module:(%s) %s",strModule.c_str(),boForce?"force operation":"normal operation");
             MsgHead oMsgHead;
             MsgBody oMsgBody;
-            oMsgBody.set_body(m_oCurrentConf["module"].ToString());
-            oMsgHead.set_cmd(CMD_REQ_RELOAD_MODULE);
+            oMsgBody.set_body(strModule);
+            if (boForce)
+            {
+            	oMsgHead.set_cmd(CMD_REQ_RELOAD_MODULE| 0x08000000);
+            }
+            else
+            {
+            	oMsgHead.set_cmd(CMD_REQ_RELOAD_MODULE);
+            }
             oMsgHead.set_seq(GetSequence());
             oMsgHead.set_msgbody_len(oMsgBody.ByteSize());
             SendToWorker(oMsgHead, oMsgBody);

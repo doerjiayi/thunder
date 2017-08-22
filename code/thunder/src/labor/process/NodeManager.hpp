@@ -152,7 +152,7 @@ protected:
     bool RestartWorkers();
     bool CheckWorkerLoadNullExit(tagManagerWaitExitWatcherData* pData,struct ev_timer* watcher);
     bool CheckWorkerLoadNullRestartWorkers(tagManagerWaitExitWatcherData* pData,struct ev_timer* watcher);
-    void RefreshServer();
+    void RefreshServer(bool boForce=false);
     bool ReportToCenter();  // 向管理中心上报负载信息
     bool SendToWorker(const MsgHead& oMsgHead, const MsgBody& oMsgBody);    // 向Worker发送数据
     bool SendToWorkerWithMod(unsigned int uiModFactor,const MsgHead& oMsgHead, const MsgBody& oMsgBody);    // 向Worker发送数据
