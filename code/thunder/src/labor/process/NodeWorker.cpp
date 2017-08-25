@@ -3658,7 +3658,7 @@ void NodeWorker::LoadSo(llib::CJsonObject& oSoConf,bool boForce)
                         LOG4_TRACE("%s:%d after LoadSoAndGetCmd", __FILE__, __LINE__);
                         if (pSo != NULL)
                         {
-                            LOG4_INFO("succeed in loading %s", strSoPath.c_str());
+                            LOG4_INFO("succeed in loading new so %s,and delete old so", strSoPath.c_str());
                             delete cmd_iter->second;
                             cmd_iter->second = pSo;
                         }

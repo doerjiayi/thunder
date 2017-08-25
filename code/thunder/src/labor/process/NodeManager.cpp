@@ -2248,7 +2248,7 @@ void NodeManager::RefreshServer(bool boForce)
         }
         else if (boForce)
         {
-			LOG4_DEBUG("same log_level:(%s)",m_oCurrentConf("log_level").c_str());
+			LOG4_INFO("same log_level:(%s)",m_oCurrentConf("log_level").c_str());
         }
         // 更新动态库配置或重新加载动态库
         if (m_oLastConf["so"].ToString() != m_oCurrentConf["so"].ToString() || boForce)
@@ -2277,6 +2277,7 @@ void NodeManager::RefreshServer(bool boForce)
             MsgHead oMsgHead;
             MsgBody oMsgBody;
             oMsgBody.set_body(strModule);
+            oMsgHead.set_seq(GetSequence());
             if (boForce)
             {
             	oMsgHead.set_cmd(CMD_REQ_RELOAD_MODULE| 0x08000000);
@@ -2285,7 +2286,6 @@ void NodeManager::RefreshServer(bool boForce)
             {
             	oMsgHead.set_cmd(CMD_REQ_RELOAD_MODULE);
             }
-            oMsgHead.set_seq(GetSequence());
             oMsgHead.set_msgbody_len(oMsgBody.ByteSize());
             SendToWorker(oMsgHead, oMsgBody);
         }
