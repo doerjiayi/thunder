@@ -846,9 +846,6 @@ bool NodeWorker::IoTimeout(struct ev_timer* watcher, bool bCheckBeat)
     {
         LOG4_ERROR("pData is null in %s()", __FUNCTION__);
         ev_timer_stop(m_loop, watcher);
-        pData->pWorker = NULL;
-        delete pData;
-        watcher->data = NULL;
         delete watcher;
         watcher = NULL;
         return(false);
@@ -4148,6 +4145,7 @@ bool NodeWorker::DelEvents(ev_io** io_watcher_addr)
     {
         return(false);
     }
+    LOG4_TRACE("%s() ev_io_stop io_watcher:%p", __FUNCTION__,*io_watcher_addr);
     ev_io_stop (m_loop, *io_watcher_addr);
     tagIoWatcherData* pData = (tagIoWatcherData*)(*io_watcher_addr)->data;
     delete pData;
@@ -4301,6 +4299,13 @@ bool NodeWorker::DestroyConnect(std::map<int, tagConnectionAttr*>::iterator iter
         MsgShellNotice(stMsgShell, iter->second->strIdentify, iter->second->pClientData);
     }
     DelEvents(&(iter->second->pIoWatcher));
+	if (iter->second->pTimeWatcher != NULL)//删除io定时器
+	{
+		LOG4_TRACE("%s() timer ev_timer_stop",__FUNCTION__);
+		ev_timer_stop (m_loop, iter->second->pTimeWatcher);
+		delete iter->second->pTimeWatcher;
+		iter->second->pTimeWatcher = NULL;
+	}
     delete iter->second;
     iter->second = NULL;
     m_mapFdAttr.erase(iter);

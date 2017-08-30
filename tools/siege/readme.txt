@@ -5,15 +5,15 @@ echo 服务测试（消息体长度38字节）
 压测结果
 Transactions:                  90000 hits
 Availability:                 100.00 %
-Elapsed time:                  12.50 secs
+Elapsed time:                  12.30 secs
 Data transferred:              32.27 MB
 Response time:                  0.04 secs
-Transaction rate:            7200.00 trans/sec
-Throughput:                     2.58 MB/sec
-Concurrency:                  298.03
+Transaction rate:            7317.07 trans/sec
+Throughput:                     2.62 MB/sec
+Concurrency:                  298.41
 Successful transactions:       90000
 Failed transactions:               0
-Longest transaction:            0.05
+Longest transaction:            0.07
 Shortest transaction:           0.00
 
 资源消耗
