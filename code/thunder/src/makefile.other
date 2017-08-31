@@ -84,6 +84,7 @@ libthunder.so: $(COMM_OBJS)
 	$(CXX) $(UNITTEST) -fPIE -rdynamic -shared -g -o $@ $^ $(LDFLAGS)
 	mkdir -p $(THUNDER_PATH)/lib/
 	cp -f libthunder.so $(THUNDER_PATH)/lib/
+	cp -f libthunder.so ../../../deploy/lib/
 
 install: 
 	#安装执行文件

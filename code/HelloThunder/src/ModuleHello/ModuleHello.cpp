@@ -59,9 +59,8 @@ bool ModuleHello::Init()
 bool ModuleHello::AnyMessage(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
     LOG4CPLUS_DEBUG_FMT(GetLogger(), "%s()", __FUNCTION__);
-    return GetLabor()->SendTo(stMsgShell, oInHttpMsg);//空载测试
-//    TestHttpRequest(stMsgShell,oInHttpMsg);
-//    return(true);
+    return TestHttpRequestState(stMsgShell,oInHttpMsg);
+    //    return GetLabor()->SendTo(stMsgShell, oInHttpMsg);//空载测试
 }
 
 
@@ -136,6 +135,12 @@ bool ModuleHello::TestHttpRequest(const thunder::MsgShell& stMsgShell,const Http
 		return(false);
 	}
 	return(true);
+}
+
+bool ModuleHello::TestHttpRequestState(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
+{
+	 // HttpStep
+	return thunder::StepState::Launch(GetLabor(),new StepHttpRequestState(stMsgShell,oInHttpMsg));
 }
 
 void CoroutineArgs::CoroutineFunc(void *ud) {
@@ -320,6 +325,7 @@ void ModuleHello::TestCoroutinueBenchMark()
 	//CustomClock TestCoroutinueBenchMark use time(165.996994) ms
 	////120000 switch Coroutine + 20000 new Coroutine + 20000 delete Coroutine
 }
+
 
 
 }

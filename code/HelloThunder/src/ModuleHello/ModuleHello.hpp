@@ -14,6 +14,8 @@
 #include "StepGetHelloName.hpp"
 #include "StepHello.hpp"
 #include "StepHttpRequest.hpp"
+#include "StepHttpRequestState.hpp"
+#include "step/StepState.hpp"
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,6 +42,7 @@ public:
 private:
     bool TestStepHello(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
     bool TestHttpRequest(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
+    bool TestHttpRequestState(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
     bool TestRedisCmd(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
     void TestCoroutinue();
     void TestCoroutinue2();
