@@ -56,7 +56,7 @@ C_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.c))
 OBJS = $(patsubst %.cpp,%.o,$(CPP_SRCS)) $(patsubst %.c,%.o,$(C_SRCS)) $(patsubst %.cc,%.o,$(CC_SRCS))
 
 COMPILE_TARGETS = ThunderGateServer  
-GATE_TARGETS = WebServer LoginServer GateServer FileServer ESAgentR ESAgentW ESAgentS HelloThunder
+GATE_TARGETS = HelloThunder
 
 all:$(COMPILE_TARGETS)
 	@for target in $(GATE_TARGETS);do cp -vf ThunderGateServer $$target; done

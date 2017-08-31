@@ -71,7 +71,7 @@ COMM_C_SRCS = $(foreach dir, $(COMM_PATH), $(wildcard $(dir)/*.c))
 COMM_OBJS = $(patsubst %.cpp,%.o,$(COMM_CPP_SRCS)) $(patsubst %.c,%.o,$(COMM_C_SRCS)) $(patsubst %.cc,%.o,$(COMM_CC_SRCS))
 
 COMPILE_TARGETS = ThunderServer libthunder.so
-SERVER_TARGETS = LogicServer DataProxyServer DbAgentWrite DbAgentRead LogServer RobotServer CrmServer
+SERVER_TARGETS = 
 
 all:$(COMPILE_TARGETS)
 	@for target in $(SERVER_TARGETS);do cp -vf ThunderServer $$target; done
