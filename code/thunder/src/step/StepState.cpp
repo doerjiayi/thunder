@@ -22,11 +22,14 @@ StepState::StepState()
 
 thunder::E_CMD_STATUS StepState::Emit(int iErrno , const std::string& strErrMsg , const std::string& strErrShow )
 {
+	LOG4CPLUS_TRACE_FMT(GetLogger(),"%s() uiState(%u)",__FUNCTION__,m_uiState);
 	StateMap::iterator it = m_StateMap.find(m_uiState);
 	if (it != m_StateMap.end())
 	{
 		m_uiLastState = m_uiState;
+		LOG4CPLUS_TRACE_FMT(GetLogger(),"%s() uiState(%u) before exe",__FUNCTION__,m_uiState);
 		thunder::E_CMD_STATUS s = it->second(this);
+		LOG4CPLUS_TRACE_FMT(GetLogger(),"%s() uiState(%u) after exe",__FUNCTION__,m_uiState);
 		if (s == thunder::STATUS_CMD_RUNNING && m_uiLastState == m_uiState)
 		{
 			StateMap::iterator itNext = it;
@@ -34,13 +37,16 @@ thunder::E_CMD_STATUS StepState::Emit(int iErrno , const std::string& strErrMsg 
 			if (itNext != m_StateMap.end())
 			{
 				m_uiState = itNext->first;//默认为下一个状态，如果需要另行设置状态则需要自己设置
+				LOG4CPLUS_TRACE_FMT(GetLogger(),"%s() next uiState(%u)",__FUNCTION__,m_uiState);
 			}
 			else
 			{
+				LOG4CPLUS_TRACE_FMT(GetLogger(),"%s() done uiState(%u)",__FUNCTION__,m_uiState);
 				//没有下一个状态的则结束
 				return thunder::STATUS_CMD_COMPLETED;
 			}
 		}
+		LOG4CPLUS_TRACE_FMT(GetLogger(),"%s() return uiState(%u) s(%d)",__FUNCTION__,m_uiState,s);
 		return s;
 	}
 	LOG4CPLUS_ERROR_FMT(GetLogger(),"%s() invalid state(%u)",__FUNCTION__,m_uiState);
@@ -57,18 +63,14 @@ bool StepState::Launch(NodeLabor* pLabor,StepState *step)
 	if (!pLabor->RegisterCallback(step))
 	{
 		LOG4CPLUS_ERROR_FMT(pLabor->GetLogger(),"%s() RegisterCallback error",__FUNCTION__);
-		if (thunder::STATUS_CMD_RUNNING == step->Emit())
-		{
-			return(true);
-		}
-		pLabor->DeleteCallback(step);
-		return(false);
-	}
-	else
-	{
 		delete step;
 		step = NULL;
 		return(false);
+	}
+	if (thunder::STATUS_CMD_RUNNING != step->Emit())
+	{
+		pLabor->DeleteCallback(step);
+		return(true);
 	}
 	return true;
 }

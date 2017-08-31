@@ -16,6 +16,7 @@ StepHttpRequestState::StepHttpRequestState(const thunder::MsgShell& stMsgShell,c
 {
 	m_stReqMsgShell = stMsgShell;
 	m_oInHttpMsg = oInHttpMsg;
+	StateInit();
 }
 
 StepHttpRequestState::~StepHttpRequestState()
@@ -24,7 +25,6 @@ StepHttpRequestState::~StepHttpRequestState()
 
 void StepHttpRequestState::StateInit()
 {
-	LOG4CPLUS_TRACE_FMT(GetLogger(),"%s()",__FUNCTION__);
 	StateFunc callback1 = (StateFunc)&StepHttpRequestState::State1;//强制转换func()的类型
 	StateAdd(1,callback1);
 	StateFunc callback2 = (StateFunc)&StepHttpRequestState::State2;//强制转换func()的类型

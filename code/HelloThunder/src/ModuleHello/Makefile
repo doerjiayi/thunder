@@ -35,8 +35,6 @@ INC := $(INC) \
 LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
            -L$(SYSTEM_LIB_PATH) -lpthread \
            -L$(SYSTEM_LIB_PATH) -lc -ldl -lrt \
-           -L$(PROTO_PATH) -lrobot_proto \
-           -L$(PROTO_PATH)/src -lrobot_proto \
            -L$(THUNDER_PATH)/lib -lthunder \
            -L$(LLIB_PATH)/lib -lllib \
            -L$(L3LIB_PATH)/lib -lhiredis \
@@ -68,7 +66,7 @@ SOS = $(patsubst %.o,%.so,$(SO_OBJS))
 TARGET = $(SOS)
 
 all: $(TARGET)
-	install -v $(TARGET) ../../../../deploy/HelloThunder/plugins
+	install -v $(TARGET) ../../../../deploy/HelloThunder/plugins/Hello
 
 .SECONDARY: $(PB_OBJS) $(CMD_DEP_OBJS)
 

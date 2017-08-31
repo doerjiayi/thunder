@@ -5,7 +5,7 @@ SCRIPT_NAME=`basename $0`
 cd ${ROBOT_HOME}
 ROBOT_HOME=`pwd`
 
-SIEGE_BIN=/usr/bin/siege
+SIEGE_BIN=/usr/local/bin/siege
 SIEGE_COMMAND="http://192.168.18.68:21000/hello"
 
 FILE_DATA=`cat ./postfile`
