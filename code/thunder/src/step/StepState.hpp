@@ -17,9 +17,21 @@ class StepState: public thunder::HttpStep
 {
 public:
 	typedef thunder::E_CMD_STATUS (*StateFunc)(StepState*);
-	typedef std::map<uint32,StateFunc> StateMap;
+#define StepStateSize (10)
 	StepState();
     virtual ~StepState(){};
+    virtual void InitState();
+    virtual thunder::E_CMD_STATUS State0(){LOG4_TRACE("%s() uiState(%u)",__FUNCTION__,m_uiState);return thunder::STATUS_CMD_COMPLETED;}
+    virtual thunder::E_CMD_STATUS State1(){LOG4_TRACE("%s() uiState(%u)",__FUNCTION__,m_uiState);return thunder::STATUS_CMD_COMPLETED;}
+    virtual thunder::E_CMD_STATUS State2(){LOG4_TRACE("%s() uiState(%u)",__FUNCTION__,m_uiState);return thunder::STATUS_CMD_COMPLETED;}
+    virtual thunder::E_CMD_STATUS State3(){LOG4_TRACE("%s() uiState(%u)",__FUNCTION__,m_uiState);return thunder::STATUS_CMD_COMPLETED;}
+    virtual thunder::E_CMD_STATUS State4(){LOG4_TRACE("%s() uiState(%u)",__FUNCTION__,m_uiState);return thunder::STATUS_CMD_COMPLETED;}
+    virtual thunder::E_CMD_STATUS State5(){LOG4_TRACE("%s() uiState(%u)",__FUNCTION__,m_uiState);return thunder::STATUS_CMD_COMPLETED;}
+    virtual thunder::E_CMD_STATUS State6(){LOG4_TRACE("%s() uiState(%u)",__FUNCTION__,m_uiState);return thunder::STATUS_CMD_COMPLETED;}
+	virtual thunder::E_CMD_STATUS State7(){LOG4_TRACE("%s() uiState(%u)",__FUNCTION__,m_uiState);return thunder::STATUS_CMD_COMPLETED;}
+	virtual thunder::E_CMD_STATUS State8(){LOG4_TRACE("%s() uiState(%u)",__FUNCTION__,m_uiState);return thunder::STATUS_CMD_COMPLETED;}
+	virtual thunder::E_CMD_STATUS State9(){LOG4_TRACE("%s() uiState(%u)",__FUNCTION__,m_uiState);return thunder::STATUS_CMD_COMPLETED;}
+
     virtual thunder::E_CMD_STATUS Callback(
         const thunder::MsgShell& stMsgShell,
         const MsgHead& oInMsgHead,
@@ -30,18 +42,9 @@ public:
                         const HttpMsg& oHttpMsg,
                         void* data = NULL);
     virtual thunder::E_CMD_STATUS Timeout();
-    virtual void StateInit() = 0;
-    void StateAdd(uint32 s,StateFunc func)
-	{
-    	m_StateMap.insert(std::make_pair(s,func));
-    	if (s < m_uiState)//初始状态为最小状态
-    	{
-    		m_uiLastState = m_uiState = s;
-    	}
-	}
-    void StateSet(uint32 s)
+    void SetNextState(uint32 s)
     {
-    	if (m_StateMap.find(s) != m_StateMap.end())
+    	if (s < StepStateSize)
     	{
     		m_uiState = s;
     	}
@@ -55,17 +58,17 @@ public:
 	}
 protected:
 	thunder::MsgShell m_ResponseMsgShell;
-
 	HttpMsg m_oResHttpMsg;
 	MsgHead m_oResMsgHead;
 	MsgBody m_oResMsgBody;
+
+	StateFunc m_StateVec[StepStateSize];
 private:
     uint32 m_uiTimeOut;
     uint32 m_uiTimeOutCounter;
     uint32 m_uiRetryTry;
     uint32 m_uiState;
     uint32 m_uiLastState;
-	StateMap m_StateMap;
 };
 
 }

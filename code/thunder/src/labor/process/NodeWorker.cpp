@@ -4299,13 +4299,13 @@ bool NodeWorker::DestroyConnect(std::map<int, tagConnectionAttr*>::iterator iter
         MsgShellNotice(stMsgShell, iter->second->strIdentify, iter->second->pClientData);
     }
     DelEvents(&(iter->second->pIoWatcher));
-	if (iter->second->pTimeWatcher != NULL)//删除io定时器
-	{
-		LOG4_TRACE("%s() timer ev_timer_stop",__FUNCTION__);
-		ev_timer_stop (m_loop, iter->second->pTimeWatcher);
-		delete iter->second->pTimeWatcher;
-		iter->second->pTimeWatcher = NULL;
-	}
+//	if (iter->second->pTimeWatcher != NULL)//删除io定时器
+//	{
+//		LOG4_TRACE("%s() timer ev_timer_stop",__FUNCTION__);
+//		ev_timer_stop (m_loop, iter->second->pTimeWatcher);
+//		delete iter->second->pTimeWatcher;
+//		iter->second->pTimeWatcher = NULL;
+//	}
     delete iter->second;
     iter->second = NULL;
     m_mapFdAttr.erase(iter);

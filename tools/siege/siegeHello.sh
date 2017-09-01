@@ -12,8 +12,14 @@ FILE_DATA=`cat ./postfile`
 echo "length:"
 echo "${FILE_DATA}" |wc -L
 
-if [ "$1"x == "one"x ]; then 
-	${SIEGE_BIN} -c 1 -r 1 "${SIEGE_COMMAND} POST ${FILE_DATA}"
+if [ $# -ge 1 ]; then 
+	if [ "$1"x == "one"x ]; then 
+		${SIEGE_BIN} -c 1 -r 1 "${SIEGE_COMMAND} POST ${FILE_DATA}"
+	elif [[ $1 != *[!0-9]* ]]; then
+		${SIEGE_BIN} -c 1 -r $1 "${SIEGE_COMMAND} POST ${FILE_DATA}"
+	else
+		echo "do nothings"
+	fi
 else
 	${SIEGE_BIN} -c 300 -r 300 "${SIEGE_COMMAND} POST ${FILE_DATA}"
 fi

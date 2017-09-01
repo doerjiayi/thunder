@@ -16,21 +16,21 @@ StepHttpRequestState::StepHttpRequestState(const thunder::MsgShell& stMsgShell,c
 {
 	m_stReqMsgShell = stMsgShell;
 	m_oInHttpMsg = oInHttpMsg;
-	StateInit();
 }
 
 StepHttpRequestState::~StepHttpRequestState()
 {
 }
 
-void StepHttpRequestState::StateInit()
+void StepHttpRequestState::InitState()
 {
-	StateAdd(1,(StateFunc)&StepHttpRequestState::State1);//强制转换func()的类型
-	StateAdd(2,(StateFunc)&StepHttpRequestState::State2);
-	StateAdd(3,(StateFunc)&StepHttpRequestState::State3);
+	m_StateVec[0] = (StateFunc)&StepHttpRequestState::State0;
+	m_StateVec[1] = (StateFunc)&StepHttpRequestState::State1;
+	m_StateVec[2] = (StateFunc)&StepHttpRequestState::State2;
+	m_StateVec[3] = (StateFunc)&StepHttpRequestState::State3;
 }
 
-thunder::E_CMD_STATUS StepHttpRequestState::State1()
+thunder::E_CMD_STATUS StepHttpRequestState::State0()
 {
 	LOG4CPLUS_DEBUG_FMT(GetLogger(), "%s last state:%u ResHttpMsg:%s",
 				__FUNCTION__,GetLastState(),m_oResHttpMsg.DebugString().c_str());
@@ -44,12 +44,13 @@ thunder::E_CMD_STATUS StepHttpRequestState::State1()
 	}
 }
 
-thunder::E_CMD_STATUS StepHttpRequestState::State2()
+thunder::E_CMD_STATUS StepHttpRequestState::State1()
 {
 	LOG4CPLUS_DEBUG_FMT(GetLogger(), "%s last state:%u ResHttpMsg:%s",
 			__FUNCTION__,GetLastState(),m_oResHttpMsg.DebugString().c_str());
-	if (HttpGet("https://www.github.com"))
+	if (HttpGet("https://www.sogou.com/"))
 	{
+		SetNextState(3);
 		return(thunder::STATUS_CMD_RUNNING);
 	}
 	else
@@ -58,14 +59,22 @@ thunder::E_CMD_STATUS StepHttpRequestState::State2()
 	}
 }
 
+thunder::E_CMD_STATUS StepHttpRequestState::State2()
+{
+	LOG4CPLUS_DEBUG_FMT(GetLogger(), "%s last state:%u ResHttpMsg:%s",
+				__FUNCTION__,GetLastState(),m_oResHttpMsg.DebugString().c_str());
+	LOG4CPLUS_DEBUG_FMT(GetLogger(),"StepState done");
+	SendTo(m_stReqMsgShell, m_oInHttpMsg);
+	return(thunder::STATUS_CMD_COMPLETED);
+}
+
 thunder::E_CMD_STATUS StepHttpRequestState::State3()
 {
 	LOG4CPLUS_DEBUG_FMT(GetLogger(), "%s last state:%u ResHttpMsg:%s",
 				__FUNCTION__,GetLastState(),m_oResHttpMsg.DebugString().c_str());
 	LOG4CPLUS_DEBUG_FMT(GetLogger(),"StepState done");
-	return(thunder::STATUS_CMD_RUNNING);
+	SendTo(m_stReqMsgShell, m_oInHttpMsg);
+	return(thunder::STATUS_CMD_COMPLETED);
 }
-
-
 
 } /* namespace oss */

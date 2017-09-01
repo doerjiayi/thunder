@@ -21,10 +21,11 @@ class StepHttpRequestState: public thunder::StepState
 public:
 	StepHttpRequestState(const thunder::MsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
     virtual ~StepHttpRequestState();
-    void StateInit();
-    thunder::E_CMD_STATUS State1();
-    thunder::E_CMD_STATUS State2();
-    thunder::E_CMD_STATUS State3();
+    virtual void InitState();
+    virtual thunder::E_CMD_STATUS State0();
+    virtual thunder::E_CMD_STATUS State1();
+    virtual thunder::E_CMD_STATUS State2();
+    virtual thunder::E_CMD_STATUS State3();
     HttpMsg m_oInHttpMsg;
 };
 
