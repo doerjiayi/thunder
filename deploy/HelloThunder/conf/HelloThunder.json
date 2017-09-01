@@ -25,7 +25,7 @@
     "so":[
     ],
     "module":[
-    	{"url_path":"/hello","so_path":"plugins/ModuleHello.so","entrance_symbol":"create", "load":true, "version":1}
+    	{"url_path":"/hello","so_path":"plugins/Hello/ModuleHello.so","entrance_symbol":"create", "load":true, "version":1}
     ]
 }
 

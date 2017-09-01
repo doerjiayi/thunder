@@ -3,7 +3,7 @@
 code_path=`pwd`
 cd ${code_path}
 run_path=${code_path}/../deploy
-lib3_path=/app/robot/robotServer/deploy/3lib
+lib3_path=/app/analysis/analysisServer/deploy/3lib
 code_lib3_path=${code_path}/l3lib/lib
 
 if [ $# -lt 1 ]; then 
@@ -39,12 +39,12 @@ elif [ $1 == "all" ];then
 elif [ $1 == "pre" ];then
 	#准备工作
 	find ./ -maxdepth 3 -type f -name "*.sh"  |xargs -i chmod +x {}
-	test ! -d ${code_lib3_path} && test -d ${lib3_path} && ln -s ${lib3_path} ${code_lib3_path}
+	test ! -d ${code_lib3_path} && test -d ${lib3_path} && ln -s ${lib3_path} ${code_lib3_path} && echo "ln 3lib for code"
 	test ! -d ${run_path}/bin && mkdir ${run_path}/bin
 	test ! -d ${run_path}/lib && mkdir ${run_path}/lib
 	test ! -d ${run_path}/plugins && mkdir ${run_path}/plugins
 	cd ${run_path} 
-	chmod +x ./install.sh && ./install.sh pre
+	chmod +x ./install.sh && ./install.sh pre && echo "install.sh pre ok"
 else
 	echo "do nothings"
 fi

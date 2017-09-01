@@ -46,6 +46,7 @@ public:
     		m_uiState = s;
     	}
     }
+    uint32 GetLastState()const{return m_uiLastState;}
     static bool Launch(NodeLabor* pLabor,StepState *step);
     virtual thunder::E_CMD_STATUS Emit(int iErrno = 0, const std::string& strErrMsg = "", const std::string& strErrShow = "");
 	void SetTimeOut(uint32 uiTimeOutCounter)
@@ -55,9 +56,9 @@ public:
 protected:
 	thunder::MsgShell m_ResponseMsgShell;
 
-	HttpMsg m_oResponseHttpMsg;
-	MsgHead m_oResponseMsgHead;
-	MsgBody m_oResponseMsgBody;
+	HttpMsg m_oResHttpMsg;
+	MsgHead m_oResMsgHead;
+	MsgBody m_oResMsgBody;
 private:
     uint32 m_uiTimeOut;
     uint32 m_uiTimeOutCounter;

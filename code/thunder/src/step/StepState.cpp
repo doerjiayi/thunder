@@ -27,16 +27,16 @@ thunder::E_CMD_STATUS StepState::Emit(int iErrno , const std::string& strErrMsg 
 	if (it != m_StateMap.end())
 	{
 		m_uiLastState = m_uiState;
-		LOG4CPLUS_TRACE_FMT(GetLogger(),"%s() uiState(%u) before exe",__FUNCTION__,m_uiState);
+		LOG4CPLUS_TRACE_FMT(GetLogger(),"%s() uiState(%u) before run",__FUNCTION__,m_uiState);
 		thunder::E_CMD_STATUS s = it->second(this);
-		LOG4CPLUS_TRACE_FMT(GetLogger(),"%s() uiState(%u) after exe",__FUNCTION__,m_uiState);
+		LOG4CPLUS_TRACE_FMT(GetLogger(),"%s() uiState(%u) after run",__FUNCTION__,m_uiState);
 		if (s == thunder::STATUS_CMD_RUNNING && m_uiLastState == m_uiState)
 		{
 			StateMap::iterator itNext = it;
 			++itNext;
 			if (itNext != m_StateMap.end())
 			{
-				m_uiState = itNext->first;//默认为下一个状态，如果需要另行设置状态则需要自己设置
+				m_uiState = itNext->first;//默认转为下一个状态，如果需要另行设置状态则需要自己设置
 				LOG4CPLUS_TRACE_FMT(GetLogger(),"%s() next uiState(%u)",__FUNCTION__,m_uiState);
 			}
 			else
@@ -103,6 +103,8 @@ thunder::E_CMD_STATUS StepState::Callback(
         LOG4CPLUS_ERROR_FMT(GetLogger(),"system response error");
         return thunder::STATUS_CMD_FAULT;
     }
+    m_oResMsgHead = oInMsgHead;
+    m_oResMsgBody = oInMsgBody;
     return Emit();
 }
 
@@ -112,6 +114,7 @@ thunder::E_CMD_STATUS StepState::Callback(
                         void* data)
 {
 	LOG4CPLUS_TRACE_FMT(GetLogger(),"%s()",__FUNCTION__);
+	m_oResHttpMsg = oHttpMsg;
 	return Emit();
 }
 

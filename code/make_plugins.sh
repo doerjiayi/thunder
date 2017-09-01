@@ -16,8 +16,7 @@ do
     test ! -d  ${RUN_PATH}${dest_path} && mkdir -p ${RUN_PATH}${dest_path}
 done < make_plugins_list.conf
 
-if [ $1 == "all" ]
-then
+if [ $1 == "all" ];then
     cd ${MAKE_PATH}
     while read src_path dest_path nodetype others
     do
@@ -33,8 +32,7 @@ then
         echo "${nodetype}:"
         find  ${RUN_PATH}${dest_path} -type f -name "*.so" | xargs -i ls -l --color=tty {}
     done < make_plugins_list.conf 
-elif [ $1 == "clean" ] 
-then
+elif [ $1 == "clean" ] ;then
     cd ${MAKE_PATH}
     while read src_path dest_path nodetype others
     do
@@ -57,5 +55,3 @@ else
     echo "USAGE: $0 param1" 
     echo "please input param1:nodetype[All,Clean,Gate,DbAgentRead,DbAgentWrite,Proxy,Log,Logic,Robot,Center,Crm,File]"
 fi
-
-
