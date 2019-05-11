@@ -98,14 +98,14 @@ function flush_ssdb()
 	#使用双主模式的不能只用此操作
 	PORT=7000
 	echo "input:flushdb "
-	/app/analysis3/db/ssdb/ssdb/tools/ssdb-cli -h $HOST -p $PORT
+	/app/thunder/db/ssdb/ssdb/tools/ssdb-cli -h $HOST -p $PORT
 }
 
 #清空ssdb数据
 function clear_ssdb()
 {
 	echo "try to clear_ssdb"
-	CLIENT=/app/analysis3/db/redis/bin/redis-cli
+	CLIENT=/app/thunder/db/redis/bin/redis-cli
 	PORT=7000
 	SIZE=1000000
 	

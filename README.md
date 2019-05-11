@@ -93,17 +93,7 @@ llib
 
 
 # 空载压测 #
-压测工具siege，本机压测
-
-Transactions:                  90000 hits	</br>
-Availability:                 100.00 %		</br>
-Elapsed time:                  12.07 secs		</br>
-Data transferred:              32.27 MB		</br>
-Response time:                  0.04 secs		</br>
-Transaction rate:            7456.50 trans/sec		</br>
-Throughput:                     2.67 MB		</br>
-Concurrency:                  298.61		</br>
-Successful transactions:       90000		</br>
-Failed transactions:               0		</br>
-Longest transaction:            0.05		</br>
-Shortest transaction:           0.00		</br>
+压测工具siege
+测试为单个物理机6核cpu，16G内存，200.0 GB机械硬盘，1000Mb网卡和路由。压测客户端、计算集群、存储集群在一个物理机。
+单进程23255.81qps网络收发（http Web服务器）返回默认响应  300连接 分别300消息 单进程23255.81qps
+ 
