@@ -1,0 +1,18 @@
+syntax = "proto3";
+package server;
+
+message user_basic
+{
+    uint32 appid               = 1; ///< appid
+    bytes appguid              = 2; ///< appguid
+    bytes appsecret            = 3; ///< appsecret
+    uint64 login_token         = 4; ///< login token
+	uint32 userid			   = 5;	///< 用户ID
+	bytes account              = 6; ///< 用户账号
+	bytes nickname			   = 7;	///< 用户昵称
+	bytes avatar			   = 8;	///< 用户头像URL
+	uint32 user_type     	   = 9; ///< 用户类型
+	uint32 login_client_type   = 10;///< 客户登录客户端类型 0:未定义1:安卓2 安卓平板 3:IOS 4:IPAD 5:网页
+	string login_ip			   = 11;///< 客户端IP地址（通过OssWorker的GetClientAddr()函数可以获得）
+    uint64 user_identity	   = 12;///< 用户身份
+}

@@ -1,0 +1,36 @@
+{
+    "node_type":"WEB",
+    "access_host":"192.168.18.78",
+    "access_port":17037,
+    "access_codec":3,
+    "inner_host":"192.168.18.78",
+    "inner_port":17038,
+    "center":[
+        {"host":"192.168.18.78","port":"17000"}],
+    "server_name":"Web_demo",
+    "process_num":1,
+    "worker_capacity":1000000,
+    "config_path":"conf/",
+    "log_path":"log/",
+    "max_log_file_num":5,
+    "max_log_file_size":20480000,
+    "permission":{
+        "addr_permit":{"stat_interval":60.0, "permit_num":100000},
+        "uin_permit":{"stat_interval":60.0, "permit_num":60}
+    },
+    "io_timeout":300.0,
+    "step_timeout":1.0,
+    "log_level":0,
+    "load_so_interval":60.0,
+    "so":[
+         {"cmd":20001, "so_path":"plugins/Web/CmdHello.so", "entrance_symbol":"create","process_num":0, "load":true, "version":1}
+    ],
+    "module":[
+    {"url_path":"/analysis/collect/shake","so_path":"plugins/collect/ModuleShake.so","entrance_symbol":"create", "load":true, "version":1},
+    {"url_path":"/analysis/collect/locatedata","so_path":"plugins/collect/ModuleLocateData.so","entrance_symbol":"create", "load":true, "version":1},
+    {"url_path":"/analysis/collect/hello","so_path":"plugins/collect/ModuleHello.so","entrance_symbol":"create", "load":true, "version":1},
+    {"url_path":"/analysis/collect/benchmark","so_path":"plugins/collect/ModuleBenchmark.so","entrance_symbol":"create", "load":true, "version":1},
+    {"url_path":"/analysis/collect/apptrace","so_path":"plugins/collect/ModuleAppTrace.so","entrance_symbol":"create", "load":true, "version":1},
+    ]
+}
+

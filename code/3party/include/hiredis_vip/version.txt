@@ -1,0 +1,11 @@
+基于hiredis-0.13.1上拓展，支持原来的所有接口
+源码来源https://github.com/vipshop/hiredis-vip，也是redis官方收纳客户端库 https://redis.io/clients#c
+为唯品会下 开源 软件 下 的项目  https://github.com/vipshop
+使用原因是其支持redis cluster
+目录clustertest中为自己添加的测试代码
+编译出来的动态库为
+libhiredis_vip.so libhiredis_vip.so.1.0
+
+性能测试
+useTime:4348.041016 ms succ_count:1000000 fail_count:0 count:1000000 all_count:1000000
+可用性测试和资源占用在文件test.txt

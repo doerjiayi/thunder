@@ -1,0 +1,22 @@
+{
+    "center":	 [{
+        "center_inner_host":    "192.168.18.78",
+        "center_inner_port":    27000
+    }],
+    "gate": ["INTERFACE"],
+    "route":
+    {
+    	"route_brief":"优先使用auto则所有节点之间可以互发消息，否则使用node下的路由",
+    	"auto":["COLLECT","LOGQUEUE","PROXYSSDB","SESSION","USER","HELLO","PGAGENT","PGAGENT_ONLINE","PGAGENT_OFFLINE","PGAGENT_JOB"],
+    	"ipwhite":["192.168.18.78"],
+	    "node":{
+	    	"COLLECT":["PROXYSSDB","LOGQUEUE","STATISTICS","USER"],
+	    	"PGAGENT":[],
+	    	"LOGQUEUE":["PROXYSSDB"],
+	    	"PROXYSSDB":["DBAGENT_W","DBAGENT_R"],
+	    	"SESSION":["PROXYSSDB"],
+	    	"HELLO":["PROXYSSDB","DBAGENT_W","DBAGENT_R","PGAGENT"]
+	    }
+    }
+}
+ 

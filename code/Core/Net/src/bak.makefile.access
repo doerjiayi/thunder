@@ -1,0 +1,104 @@
+server_dep=../../../server.dep
+exist_file=$(shell test -f ${server_dep} && echo "exist"||echo "notexist")
+ifeq (exist,${exist_file})
+include ${server_dep}
+ $(info  "include ${server_dep}")
+else
+ $(warning "${server_dep} not exist")
+endif
+
+ $(info  $(ACCESS_TARGETS))
+CC = gcc
+CXX = $(shell command -v ccache >/dev/null 2>&1 && echo "ccache g++" || echo "g++")
+#编译选项 
+CFLAGS = -g -Og
+CPPFLAGS = -g -Og -D_GNU_SOURCE=1 -D_REENTRANT -fPIC -DNODE_BEAT=10.0  -DWORKER_OVERDUE=60.0 -std=c++11 -Wno-deprecated-declarations -Wno-pmf-conversions
+#链接选项
+CXXFLAG = -g -Og -Wall -ggdb -m64 -Wl,--export-dynamic 
+
+DEFINE_SERVER = -DNODE_TYPE_GATE
+
+ifeq ($(unit_test),y)
+CPPFLAGS += -DUNIT_TEST
+endif
+
+ARCH:=$(shell uname -m)
+
+ARCH32:=i686
+ARCH64:=x86_64
+
+ifeq ($(ARCH),$(ARCH64))
+SYSTEM_LIB_PATH:=/usr/lib64
+else
+SYSTEM_LIB_PATH:=/usr/lib
+endif
+3PARTY_PATH = ../../../3party
+UTIL_PATH = ../../Util
+
+NET_PATH = ..
+
+DEPLOY_BIN = ../../../../deploy/bin/
+DEPLOY_LIB = ../../../../deploy/lib/
+
+VPATH = $(NET_PATH)/src
+SUB_DIRS := $(foreach dir, $(VPATH), $(shell find $(dir) -maxdepth 5 -type d))
+DIRS := $(SUB_DIRS)
+
+
+INC := $(INC) \
+       -I $(3PARTY_PATH)/include \
+       -I $(3PARTY_PATH)/include/mariadb \
+       -I $(3PARTY_PATH)/include/libev \
+       -I $(UTIL_PATH)/src -I $(UTIL_PATH)/src/Util \
+       -I $(NET_PATH)/src 
+
+
+LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
+           -L$(UTIL_PATH)/lib -lUtil \
+           -L$(3PARTY_PATH)/lib -lmariadb \
+           -L$(3PARTY_PATH)/lib -lhiredis_vip \
+           -L$(3PARTY_PATH)/lib -lcryptopp \
+           -L$(3PARTY_PATH)/lib -lprotobuf \
+           -L$(3PARTY_PATH)/lib -llog4cplus \
+           -L$(3PARTY_PATH)/lib -lev \
+		   -L$(3PARTY_PATH)/lib -ljemalloc \
+		   -L$(3PARTY_PATH)/lib -lcares \
+		   -L$(3PARTY_PATH)/lib -lcurl \
+           -L$(SYSTEM_LIB_PATH) -lpthread \
+           -L$(SYSTEM_LIB_PATH) -lz -ldl -lrt -lssl
+
+SUB_INCLUDE = cmd step session labor protocol
+COMM_PATH = $(NET_PATH)/src/cmd \
+            $(NET_PATH)/src/step \
+            $(NET_PATH)/src/session \
+            $(NET_PATH)/src/labor \
+            $(NET_PATH)/src/protocol
+CPP_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
+CC_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cc))
+C_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.c))
+COMM_CPP_SRCS = $(foreach dir, $(COMM_PATH), $(wildcard $(dir)/*.cpp))
+COMM_CC_SRCS = $(foreach dir, $(COMM_PATH), $(wildcard $(dir)/*.cc))
+COMM_C_SRCS = $(foreach dir, $(COMM_PATH), $(wildcard $(dir)/*.c))
+OBJS = $(patsubst %.cpp,%.o,$(CPP_SRCS)) $(patsubst %.c,%.o,$(C_SRCS)) $(patsubst %.cc,%.o,$(CC_SRCS))
+COMM_OBJS = $(patsubst %.cpp,%.o,$(COMM_CPP_SRCS)) $(patsubst %.c,%.o,$(COMM_C_SRCS)) $(patsubst %.cc,%.o,$(COMM_CC_SRCS))
+
+TARGET = Hello
+
+all: $(TARGET)
+	@for target in $(ACCESS_TARGETS);do cp -vf Hello $$target;echo "try to install $$target";install -v $$target ${DEPLOY_BIN} ;done
+	
+Hello: $(OBJS)
+	$(CXX) $(CXXFLAG) $(DEFINE_SERVER) $(UNITTEST) -o $@ $(OBJS) $(LDFLAGS) $(INC)
+	test  -d ${DEPLOY_BIN} && install -v $@ ${DEPLOY_BIN}
+
+%.o:%.cpp
+	$(CXX) $(INC) $(CPPFLAGS) $(CFLAGS) $(DEFINE_SERVER) $(UNITTEST) -c -o $@ $< $(LDFLAGS)
+%.o:%.cc
+	$(CXX) $(INC) $(CPPFLAGS) $(UNITTEST) -c -o $@ $< $(LDFLAGS)
+%.o:%.c
+	$(CC) $(INC) $(CFLAGS) $(UNITTEST) -c -o $@ $< $(LDFLAGS)
+clean:
+	rm -f $(OBJS)
+	rm -f $(TARGET)
+        
+        

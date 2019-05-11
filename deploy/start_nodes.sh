@@ -5,16 +5,21 @@ SCRIPT_NAME=`basename $0`
 cd ${SERVER_HOME}
 SERVER_HOME=`pwd`
 
-if [ $# != 1 ]; then 
-    echo "USAGE: $0 param1(servername)" 
+function list_server()
+{
+	echo "USAGE: $0 param1(servername):" 
     while read server others
     do 
     	echo "${server}"
     done < server_list.conf
+}
+
+if [ $# != 1 ]; then 
+    list_server
     exit 1; 
 fi
 
-if [ $1 == "all" ]
+if [ "$1"x == "all"x ]
 then
     while read server others
     do
@@ -27,11 +32,7 @@ else
         ${SERVER_HOME}/$1/start.sh &&\
         echo "start ${server} ok" && exit 0
     done < server_list.conf
-	echo "USAGE: $0 param1(servername):" 
-    while read server others
-    do 
-    	echo "${server}"
-    done < server_list.conf
+	list_server
 fi
 
 

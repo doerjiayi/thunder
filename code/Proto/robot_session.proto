@@ -1,0 +1,105 @@
+syntax = "proto3";
+import "common.proto";
+package robot_session;
+//机器人会话（4001~5000）
+message pre_question
+{
+    uint64 question_id =    1;//问题id
+    bytes question    =     2;//前置问题
+    uint32 question_type =  3;//前置问题类型  1:推送问题 2:常用问题 3:闲聊问题
+    bytes answer      =     4;//前置问题答案
+    uint32 answer_template= 5;//答案模板  1:普通答案 2:引导问题答案 3:复合问题答案
+    uint32 create_date = 6;//创建时间
+    uint32 update_date = 7;//修改时间
+}
+
+//3.1.1.C2S客户请求进入机器人会话(4001/4002)
+message enter_robot_session_req
+{
+}
+
+message enter_robot_session_ack
+{
+  common.errorinfo error = 1;//错误码以及错误描述信息
+  uint32 userid         = 2;//机器人id
+  bytes robot_name     = 3;//机器人名称
+  uint32 enter_session_time  = 4;//进入会话时间
+  uint64 session_id          = 5;//会话id
+  bytes robot_welcome         = 6;//机器人欢迎语
+  repeated pre_question pre_questions = 7;//前置问题列表
+}
+
+//3.1.2.C2S客户发送机器人单聊消息(4003/4004)
+message robot_single_msg_req
+{
+    uint32 msg_type = 1;//消息类型 0:文字类型
+    bytes msg  = 2; // 消息内容
+    uint64 msg_id     = 3; // 消息ID(微秒级时间戳) (服务器填写，客户端不需要处理)
+    uint32 send_time  = 4; // 发送时间(从1970年开始的秒数)(服务器填写，客户端不需要处理)
+}
+
+//客户发送机器人单聊消息响应
+message robot_single_msg_ack
+{
+    common.errorinfo error = 1; // 应答信息
+    uint64 msg_id     = 2; // 消息ID(微秒级时间戳)
+    uint32 send_time  = 3; // 发送时间(从1970年开始的秒数)
+    uint32 msg_type = 4;//消息类型 1:文字类型
+    bytes msg  = 5; // 响应消息内容
+    uint32 msg_template = 6;///响应消息模板1:普通答案 2:引导问题答案 3:复合问题答案（只对文字类型消息有用）
+}
+
+//3.1.3.C2S用户查询智能前置问题列表（4005/4007）
+message get_robot_pre_question_list_req
+{
+    uint32 question_type= 1;//查询问题类型（为0则查询全部问题类型）
+    uint32 answer_template = 2;//答案模板 （为0则查询全部答案模板）
+    bytes search_words = 3;//搜索关键字（匹配该关键字的模糊查询）
+    uint32 page = 4;//页数(从0开始，一页10项)
+}
+
+message get_robot_pre_question_list_ack
+{
+  common.errorinfo error = 1;//错误码以及错误描述信息
+  repeated pre_question pre_questions = 2;//前置问题列表
+  uint32 total_num = 3;//总共数量
+}
+
+
+//3.1.4.C2S客户咨询智能前置问题(4005/4006)
+//咨询前置问题咨询请求
+message inquery_robot_pre_question_req
+{
+    uint64 question_id = 1;//问题id,如11
+}
+
+//前置问题响应
+message inquery_robot_pre_question_ack
+{
+    common.errorinfo error = 1;//错误码以及错误描述信息
+    bytes answer= 2;//答案
+    uint32 answer_template = 3;//答案模板 1:普通答案 2:引导问题答案 3:复合问题答案
+}
+
+//3.1.5.C2S客服编辑智能前置问题(4007/4009)
+message edit_pre_question
+{
+    uint64 question_id = 1;//问题id,如10（只有删除时发送，增加时不发送）
+    bytes question = 2;//请求的问题,如商品的税收是怎么计算的(增加时才发送)
+    bytes answer = 3;//回答的答案,如根据税率(增加时才发送)
+    uint32 type = 4;//问题类型 1:推送问题 2:常用问题 3:闲聊问题
+    uint32 answer_template= 5;//答案模板  1:普通答案 2:引导问题答案 3:复合问题答案
+}
+
+message edit_robot_pre_questions_req
+{
+    repeated edit_pre_question edit_pre_questions = 1;  //编辑前置问题列表
+    uint32 update_type = 2;//更新类型 1：增加 2:删除
+}
+
+//编辑前置问题响应
+message edit_robot_pre_questions_ack
+{
+    common.errorinfo error = 1;//错误码以及错误描述信息
+}
+

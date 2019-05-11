@@ -1,0 +1,22 @@
+syntax = "proto3";
+package server;
+
+message test_bar 
+{
+	int32 test_bar1 = 1;
+	uint64 testBar2 = 2;
+	string TestBar3 = 3;
+	bytes Testbar4 = 4;
+	fixed32 test_Bar5 = 5;
+	sint64 Test_Bar6 = 6;
+	double Test_bar7 = 7;
+}
+
+message test_proto3
+{
+    repeated string test_foo1 = 1;
+	repeated bytes test_foo2 = 2;
+	repeated int32 test_foo3 = 3;
+	repeated uint64 test_foo4 = 4;
+	repeated test_bar test_foo5 = 5;
+}

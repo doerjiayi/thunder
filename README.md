@@ -90,3 +90,20 @@ llib
     "custom":{}
 
 }
+
+
+# 空载压测 #
+压测工具siege，本机压测
+
+Transactions:                  90000 hits	</br>
+Availability:                 100.00 %		</br>
+Elapsed time:                  12.07 secs		</br>
+Data transferred:              32.27 MB		</br>
+Response time:                  0.04 secs		</br>
+Transaction rate:            7456.50 trans/sec		</br>
+Throughput:                     2.67 MB		</br>
+Concurrency:                  298.61		</br>
+Successful transactions:       90000		</br>
+Failed transactions:               0		</br>
+Longest transaction:            0.05		</br>
+Shortest transaction:           0.00		</br>

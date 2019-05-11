@@ -1,0 +1,105 @@
+syntax = "proto3";
+package server;
+
+//错误码
+message errorinfo
+{
+	 int32 error_code	=1;//错误码
+	 bytes error_info	=2;//错误描述信息
+	 bytes error_client_show	=3;//客户端展示信息
+}
+
+message node_config
+{
+    //查询和更新发送
+    string node_type = 1;//节点类型 ,”LOGIC”
+    uint32 config_type = 2;//配置类型，0:服务器配置，其他类型为逻辑配置
+    string config_content = 3;//配置内容（目前更新内容的字段名为"so"、"module"、"log_level",可更新其中之一，或者一起更新）
+    uint32 auto_send = 4;//是否自动下发0：不是，1：是
+    uint32 reload_config = 5;//是否在线已加载配置，0：不是，1：是
+    //查询时Server发送
+    string config_file  = 6;//配置文件名，如LogicServer.json
+    uint32 update_time = 7;//更新时间
+}
+
+//查询服务器配置请求
+message inquery_server_config_req
+{
+    string node_type= 1;//节点类型，如LOGIC
+    uint32 config_type = 2;//配置类型，0:服务器配置，其他类型为逻辑配置
+}
+//查询服务器配置响应
+message inquery_server_config_ack
+{
+    errorinfo error = 1;//错误码以及错误描述信息
+    node_config config =2;//服务器配置
+}
+
+//更新服务器配置请求
+message update_server_config_req
+{
+    node_config config =1;//服务器配置
+    string inner_ip = 2;//指定修改节点ip（可选）
+    uint32 inner_port = 3;//指定修改节点端口（可选）
+}
+//更新服务器配置响应
+message update_server_config_ack
+{
+    errorinfo error = 1;//错误码以及错误描述信息
+    node_config config =2;//服务器配置
+    string inner_ip = 3;//指定修改节点ip（可选）
+    uint32 inner_port = 4;//指定修改节点端口（可选）
+}
+
+//服务器节点下线请求
+message offline_node_req
+{
+    string inner_ip = 1;//指定修改节点ip
+    uint32 inner_port = 2;//指定修改节点端口
+    uint32 offline = 3;//挂起节点路由:0，关闭节点:1
+}
+
+//服务器节点下线响应
+message offline_node_ack
+{
+    errorinfo error = 1;//错误码以及错误描述信息
+    string inner_ip = 2;//指定修改节点ip
+    uint32 inner_port = 3;//指定修改节点端口
+    uint32 offline = 4;//挂起节点路由:0，关闭节点:1
+}
+
+//服务器节点上线请求
+message online_node_req
+{
+    string inner_ip = 1;//指定修改节点ip
+    uint32 inner_port = 2;//指定修改节点端口
+    uint32 online= 3;//恢复节点路由:0,重启工作者:1(非中心节点只有挂起的节点才能重启工作者)
+}
+//服务器节点上线响应
+message online_node_ack
+{
+    errorinfo error = 1;//错误码以及错误描述信息
+    string inner_ip = 2;//指定修改节点ip
+    uint32 inner_port = 3;//指定修改节点端口
+    uint32 online = 4;//恢复节点路由:0,重启工作者:1
+}
+
+//查询服务器负载请求
+message check_server_load_req
+{
+    string inner_ip = 1;//指定节点ip
+    uint32 inner_port = 2;//指定节点端口
+}
+//查询服务器负载响应
+message check_server_load_ack
+{
+    errorinfo error = 1;//错误码以及错误描述信息
+    string inner_ip = 2;//指定修改节点ip
+    uint32 inner_port = 3;//指定修改节点端口
+    uint32 status = 4;//1:已启动，2:未启动
+    uint32 add_up_recv_num = 5;//最近收包数量统计（统计时间为配置时间）
+    uint32 add_up_send_num = 6;//最近发包数量统计
+    uint32 add_up_recv_byte = 7;//最近收包字节统计
+    uint32 add_up_send_byte = 8;//最近发包字节统计
+}
+

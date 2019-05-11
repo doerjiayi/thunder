@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+ //客户端类型（0:未定义1:安卓2 安卓平板 3:IOS 4:IPAD 5:网页）
+enum E_CLIENT_TYPE
+{
+    E_TYPE_UNKNOWN_DEV    = 0; //未定义
+    E_TYPE_ANDRIOD        = 1; //安卓
+    E_TYPE_ANDRIOD_PAD    = 2; //安卓平板
+    E_TYPE_IOS            = 3; //IOS
+	E_TYPE_IPAD           = 4; //IPAD
+	E_TYPE_WEB            = 5; //网页
+}
+
+ //聊天消息类型
+enum E_CHAT_TYPE
+{
+    E_TYPE_CHAT_UNKNOWN      = 0; ///< 未定义
+    E_TYPE_CHAT_TEXT         = 1; ///< 文本消息
+    E_TYPE_CHAT_PIC          = 2; ///< 图片消息
+    E_TYPE_CHAT_VOICE        = 3; ///< 语音消息
+    E_TYPE_CHAT_LOCATION     = 4; ///< 位置消息
+}
+
+//用户身份定义
+enum E_USER_IDENTITY_TYPE
+{
+    E_USER_IDENTITY_UNKOWN   = 0;    //未知
+	E_USER_IDENTITY        	 = 0x00000001; // 第一位：是否实名认证
+}
+
+

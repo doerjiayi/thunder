@@ -1,0 +1,132 @@
+[imdev@node3 deploy]$ ps -ef |grep redis
+root     13544     1  0 Dec11 ?        00:01:16 /app/tools/redis-cluster/redis-3.2.11/deploy/bin/redis-server 192.168.18.78:6002 [cluster]                               
+root     13549     1  0 Dec11 ?        00:01:11 /app/tools/redis-cluster/redis-3.2.11/deploy/bin/redis-server 192.168.18.78:6003 [cluster]                               
+root     13556     1  0 Dec11 ?        00:01:12 /app/tools/redis-cluster/redis-3.2.11/deploy/bin/redis-server 192.168.18.78:6004 [cluster]                               
+root     13559     1  0 Dec11 ?        00:01:12 /app/tools/redis-cluster/redis-3.2.11/deploy/bin/redis-server 192.168.18.78:6005 [cluster]                               
+root     24364     1 10 16:47 ?        00:00:03 /app/tools/redis-cluster/redis-3.2.11/deploy/bin/redis-server 192.168.18.78:6000 [cluster]                               
+root     24369     1  8 16:47 ?        00:00:03 /app/tools/redis-cluster/redis-3.2.11/deploy/bin/redis-server 192.168.18.78:6001 [cluster]                               
+imdev    25442 24143  0 16:48 pts/12   00:00:00 grep redis
+[imdev@node3 deploy]$ sudo kill 13549
+[imdev@node3 deploy]$ ps -ef |grep redis
+root     13544     1  0 Dec11 ?        00:01:16 /app/tools/redis-cluster/redis-3.2.11/deploy/bin/redis-server 192.168.18.78:6002 [cluster]                               
+root     13556     1  0 Dec11 ?        00:01:12 /app/tools/redis-cluster/redis-3.2.11/deploy/bin/redis-server 192.168.18.78:6004 [cluster]                               
+root     13559     1  0 Dec11 ?        00:01:12 /app/tools/redis-cluster/redis-3.2.11/deploy/bin/redis-server 192.168.18.78:6005 [cluster]                               
+root     24364     1  8 16:47 ?        00:00:04 /app/tools/redis-cluster/redis-3.2.11/deploy/bin/redis-server 192.168.18.78:6000 [cluster]                               
+root     24369     1  6 16:47 ?        00:00:03 /app/tools/redis-cluster/redis-3.2.11/deploy/bin/redis-server 192.168.18.78:6001 [cluster]                               
+imdev    26166 24143  0 16:48 pts/12   00:00:00 grep redis
+[imdev@node3 deploy]$ ./start.sh check  
+[ERR] Sorry, can't connect to node 192.168.18.78:6003
+*** WARNING: 192.168.18.78:6000 claims to be slave of unknown node ID 746346edfbbc1a431e357911e04fe78e815eab30.
+>>> Performing Cluster Check (using node 192.168.18.78:6000)
+S: 567e94b76d410770c14602d2d03a583c2e0a34db 192.168.18.78:6000
+   slots: (0 slots) slave
+   replicates 746346edfbbc1a431e357911e04fe78e815eab30
+S: c303549a6975e271cf3a94eee818f2148371cb80 192.168.18.78:6005
+   slots: (0 slots) slave
+   replicates 799c86ae1d1d2ae1307a87b4c65bfd8759c44f99
+M: 00b8a82c4796238827ffa049f989324587a14fa8 192.168.18.78:6001
+   slots:5461-10922 (5462 slots) master
+   1 additional replica(s)
+M: 799c86ae1d1d2ae1307a87b4c65bfd8759c44f99 192.168.18.78:6002
+   slots:10923-16383 (5461 slots) master
+   1 additional replica(s)
+S: a0f490717ea00196e3988c69dc104913b322f559 192.168.18.78:6004
+   slots: (0 slots) slave
+   replicates 00b8a82c4796238827ffa049f989324587a14fa8
+[OK] All nodes agree about slots configuration.
+>>> Check for open slots...
+>>> Check slots coverage...
+[ERR] Not all 16384 slots are covered by nodes.
+cluster nodes
+c303549a6975e271cf3a94eee818f2148371cb80 192.168.18.78:6005 slave 799c86ae1d1d2ae1307a87b4c65bfd8759c44f99 0 1513068503365 6 connected
+567e94b76d410770c14602d2d03a583c2e0a34db 192.168.18.78:6000 myself,slave 746346edfbbc1a431e357911e04fe78e815eab30 0 0 1 connected
+746346edfbbc1a431e357911e04fe78e815eab30 192.168.18.78:6003 master - 1513068501358 1513068498351 7 disconnected 0-5460
+00b8a82c4796238827ffa049f989324587a14fa8 192.168.18.78:6001 master - 0 1513068502361 2 connected 5461-10922
+799c86ae1d1d2ae1307a87b4c65bfd8759c44f99 192.168.18.78:6002 master - 0 1513068507377 3 connected 10923-16383
+a0f490717ea00196e3988c69dc104913b322f559 192.168.18.78:6004 slave 00b8a82c4796238827ffa049f989324587a14fa8 0 1513068505371 5 connected
+cluster info
+cluster_state:ok
+cluster_slots_assigned:16384
+cluster_slots_ok:16384
+cluster_slots_pfail:0
+cluster_slots_fail:0
+cluster_known_nodes:6
+cluster_size:3
+cluster_current_epoch:8
+cluster_my_epoch:7
+cluster_stats_messages_sent:184
+cluster_stats_messages_received:122
+[imdev@node3 deploy]$ ./start.sh check
+>>> Performing Cluster Check (using node 192.168.18.78:6000)
+M: 567e94b76d410770c14602d2d03a583c2e0a34db 192.168.18.78:6000
+   slots:0-5460 (5461 slots) master
+   0 additional replica(s)
+S: c303549a6975e271cf3a94eee818f2148371cb80 192.168.18.78:6005
+   slots: (0 slots) slave
+   replicates 799c86ae1d1d2ae1307a87b4c65bfd8759c44f99
+M: 00b8a82c4796238827ffa049f989324587a14fa8 192.168.18.78:6001
+   slots:5461-10922 (5462 slots) master
+   1 additional replica(s)
+M: 799c86ae1d1d2ae1307a87b4c65bfd8759c44f99 192.168.18.78:6002
+   slots:10923-16383 (5461 slots) master
+   1 additional replica(s)
+S: a0f490717ea00196e3988c69dc104913b322f559 192.168.18.78:6004
+   slots: (0 slots) slave
+   replicates 00b8a82c4796238827ffa049f989324587a14fa8
+[OK] All nodes agree about slots configuration.
+>>> Check for open slots...
+>>> Check slots coverage...
+[OK] All 16384 slots covered.
+cluster nodes
+c303549a6975e271cf3a94eee818f2148371cb80 192.168.18.78:6005 slave 799c86ae1d1d2ae1307a87b4c65bfd8759c44f99 0 1513068533486 6 connected
+567e94b76d410770c14602d2d03a583c2e0a34db 192.168.18.78:6000 myself,master - 0 0 9 connected 0-5460
+746346edfbbc1a431e357911e04fe78e815eab30 192.168.18.78:6003 master,fail - 1513068501358 1513068498351 7 disconnected
+00b8a82c4796238827ffa049f989324587a14fa8 192.168.18.78:6001 master - 0 1513068532483 2 connected 5461-10922
+799c86ae1d1d2ae1307a87b4c65bfd8759c44f99 192.168.18.78:6002 master - 0 1513068531480 3 connected 10923-16383
+a0f490717ea00196e3988c69dc104913b322f559 192.168.18.78:6004 slave 00b8a82c4796238827ffa049f989324587a14fa8 0 1513068530477 5 connected
+cluster info
+cluster_state:ok
+cluster_slots_assigned:16384
+cluster_slots_ok:16384
+cluster_slots_pfail:0
+cluster_slots_fail:0
+cluster_known_nodes:6
+cluster_size:3
+cluster_current_epoch:9
+cluster_my_epoch:9
+cluster_stats_messages_sent:502
+cluster_stats_messages_received:179
+
+usage:
+
+13544 root      20   0  202m  59m 1388 S  0.3  0.4   1:18.44 redis-server                                                                                                                              
+13556 root      20   0  194m  62m 1404 S  0.3  0.4   1:13.97 redis-server                                                                                                                              
+13559 root      20   0  208m  58m 1400 S  0.3  0.4   1:14.00 redis-server                                                                                                                              
+24364 root      20   0  186m  63m 1388 S  0.3  0.4   0:06.21 redis-server                                                                                                                              
+13559 root      20   0  208m  58m 1400 S  0.3  0.4   1:14.01 redis-server                                                                                                                              
+24369 root      20   0  188m  63m 1360 S  0.3  0.4   0:05.34 redis-server                                                                                                                              
+13544 root      20   0  202m  59m 1388 S  0.3  0.4   1:18.45 redis-server                                                                                                                              
+24369 root      20   0  188m  63m 1360 S  0.3  0.4   0:05.35 redis-server                                                                                                                              
+ 1151 root      20   0  174m  51m 1376 S  0.3  0.3   0:04.41 redis-server                                                                                                                              
+13544 root      20   0  202m  59m 1388 S  0.3  0.4   1:18.46 redis-server  
+
+[imdev@node3 deploy]$ ./start.sh info |grep used_memory_rss_human
+used_memory_rss_human:63.56M
+used_memory_rss_human:63.56M
+used_memory_rss_human:63.56M
+used_memory_rss_human:63.56M
+used_memory_rss_human:63.56M
+used_memory_rss_human:63.56M
+[imdev@node3 deploy]$ ./start.sh info |grep used_cpu_user
+used_cpu_user:5.86
+used_cpu_user_children:0.95
+used_cpu_user:5.86
+used_cpu_user_children:0.95
+used_cpu_user:5.86
+used_cpu_user_children:0.95
+used_cpu_user:5.86
+used_cpu_user_children:0.95
+used_cpu_user:5.86
+used_cpu_user_children:0.95
+used_cpu_user:5.86
+used_cpu_user_children:0.95

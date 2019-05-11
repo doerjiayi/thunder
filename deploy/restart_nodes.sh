@@ -5,7 +5,7 @@ SCRIPT_NAME=`basename $0`
 cd ${SERVER_HOME}
 SERVER_HOME=`pwd`
 
-if [ $# -lt 1 ]; then 
+if [ $# -ne 1 ]; then 
 	#参数说明
     echo "USAGE: $0 param1(servername)" 
     echo "All"
@@ -16,7 +16,13 @@ if [ $# -lt 1 ]; then
 	exit 1; 
 fi
 
-if [ $1 == "all" ]
+if [ "$1"x == "reload"x ]
+then
+    while read server others
+    do
+        ${SERVER_HOME}/${server}/restart.sh "reload"
+    done < server_list.conf
+elif [ "$1"x == "all"x ]
 then
     while read server others
     do

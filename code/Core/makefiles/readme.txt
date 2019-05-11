@@ -1,0 +1,5 @@
+为了方便逻辑节点，统一使用的逻辑节点的makefile文件模板
+
+makefileserver 为节点makefile文件模板
+makefileso 为节点下的第一层插件makefile文件模板
+makefileso2 为节点下的第二层插件makefile文件模板
