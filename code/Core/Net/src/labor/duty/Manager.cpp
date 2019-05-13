@@ -1025,22 +1025,10 @@ bool Manager::LoadConf()
         }
     }
     m_oLastConf = m_oCurrentConf;
-    std::ifstream fin(m_strConfFile.c_str());
-	if (fin.good())
+
+    if (!net::GetConfig(m_oCurrentConf,m_strConfFile))//读取配置文件
 	{
-		std::stringstream ssContent;
-		ssContent << fin.rdbuf();
-		if (!m_oCurrentConf.Parse(ssContent.str()))
-		{
-			//配置文件解析失败
-			ssContent.str("");
-			fin.close();
-			m_oCurrentConf = m_oLastConf;
-			return false;
-		}
-	}
-	else
-	{
+		LOG4_ERROR("Open conf (%s) to read error!",m_strConfFile.c_str());
 		return false;
 	}
 	if (m_oLastConf.ToString() != m_oCurrentConf.ToString())

@@ -15,7 +15,7 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${SERVER_LIB}:${SERVER_3LIB}
 
 LOG_FILE="${SERVER_HOME}/log/${SCRIPT_NAME}.log"
 
-. ${SERVER_HOME}/scripts/analysis_script_func.sh
+. ${SERVER_HOME}/scripts/script_func.sh
 
 if [ $# == 0 ]; then 
 	echo "do you want to stop robot server process ${SERVER_HOME}? [yes|no]"

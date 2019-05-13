@@ -9,7 +9,9 @@
  ******************************************************************************/
 #ifndef SRC_NodeLabor_HPP_
 #define SRC_NodeLabor_HPP_
+#include "util/CodeConvert.h"
 #include "Interface.hpp"
+
 
 struct redisAsyncContext;
 
@@ -415,12 +417,13 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
     virtual bool ExecStep(uint32 uiCallerStepSeq, uint32 uiCalledStepSeq,int iErrno = 0, const std::string& strErrMsg = "", const std::string& strErrShow = ""){return false;}
 	virtual bool ExecStep(uint32 uiCalledStepSeq,int iErrno = 0, const std::string& strErrMsg = "", const std::string& strErrShow = ""){return false;}
 	virtual bool ExecStep(Step* pStep,int iErrno = 0, const std::string& strErrMsg = "", const std::string& strErrShow = "",ev_tstamp dTimeout = 0.0){return false;}
-	virtual bool ExecStep(RedisStep* pStep){return false;};
+	virtual bool ExecStep(RedisStep* pStep){return false;}
 	virtual Step* GetStep(uint32 uiStepSeq){return NULL;}
 
 	const std::string& GetWorkerIdentify();
 	std::string m_strWorkerIdentify;
 	Coroutine m_Coroutine;
+	util::IgnoreChars m_IgnoreChars;//含默认过滤字符
 private:
     std::string m_strNodeTypeTmp;
     std::string m_strHostForServerTmp;

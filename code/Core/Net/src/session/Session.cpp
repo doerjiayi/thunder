@@ -30,11 +30,7 @@ Session::Session(const std::string& strSessionId, ev_tstamp dSessionTimeout, con
 
 Session::~Session()
 {
-    if (m_pTimeoutWatcher != 0)
-    {
-        free(m_pTimeoutWatcher);
-        m_pTimeoutWatcher = 0;
-    }
+	SAFE_DELETE(m_pTimeoutWatcher)
 }
 
 } /* namespace net */

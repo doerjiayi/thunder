@@ -149,8 +149,7 @@ bool ParseMsgBody(const MsgBody& oInMsgBody,google::protobuf::Message &message);
  * */
 bool RegisterCallback(net::Step* pStep);
 void DeleteCallback(net::Step* pStep);
-//注册MysqlStep
-bool RegisterCallback(net::MysqlStep* pMysqlStep);
+bool RegisterCallback(net::MysqlStep* pMysqlStep);//注册MysqlStep
 /**
  * @brief 登记会话
  * @param pSession 会话实例
@@ -276,6 +275,12 @@ void DelRedisContextAddr(const redisAsyncContext* ctx);
  * */
 bool Launch(StepState *step,uint32 uiTimeOutMax=3,uint8 uiToRetry = 1,double dTimeout = 0.0);
 bool Register(StepState *step,uint32 uiTimeOutMax=3,uint8 uiToRetry = 1,double dTimeout = 0.0);
+
+void SkipNonsenseLetters(std::string& word);
+void SkipFormatLetters(std::string& word);
+bool GetConfig(util::CJsonObject& oConf,const std::string &strConfFile);
+
+bool ExecStep(Step* pStep,int iErrno = 0, const std::string& strErrMsg = "", const std::string& strErrShow = "",ev_tstamp dTimeout = 0.0);
 /*
  * @brief 唤醒协程
  * @param nMaxTimes 唤醒协程次数 (最大执行协程次数，0则执行所有的协程)

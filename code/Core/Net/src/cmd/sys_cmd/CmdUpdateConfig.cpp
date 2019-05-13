@@ -63,34 +63,11 @@ bool CmdUpdateConfig::ReadConfig()
     LOG4_DEBUG("ReqConfigType(%d).CONF FILE = %s.ReqConfigContent(%s).",
                     m_ReqConfigType,strConfFile.c_str(),m_ReqConfigContent.ToString().c_str());
     util::CJsonObject oLocalConfJson;
-    {//读取配置文件
-    	std::ifstream fin(strConfFile.c_str());
-		//配置信息输入流
-		if (fin.good())
-		{
-			//解析配置信息 JSON格式
-			std::stringstream ssContent;
-			ssContent << fin.rdbuf();
-			if (!oLocalConfJson.Parse(ssContent.str()))
-			{
-				//配置文件解析失败
-				LOG4_ERROR("Read conf (%s) error,it's maybe not a json file!",
-								strConfFile.c_str());
-				ssContent.str("");
-				fin.close();
-				return false;
-			}
-			ssContent.str("");
-			fin.close();
-		}
-		else
-		{
-			//配置信息流读取失败
-			LOG4_ERROR("Open conf (%s) to read error!",
-							strConfFile.c_str());
-			return false;
-		}
-    }
+	if (!net::GetConfig(oLocalConfJson,strConfFile))//读取配置文件
+	{
+		LOG4_ERROR("Open conf (%s) to read error!",strConfFile.c_str());
+		return false;
+	}
     std::string oConfJsonStr;
     if(0 == m_ReqConfigType)
     {//修改配置文件内容(这里是检查服务器配置)

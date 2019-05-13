@@ -45,7 +45,7 @@ HelloSession* GetHelloSession()
         return (NULL);
     }
     util::CJsonObject   oCurrentConf;
-	if (!net::GetJsonConfigFile(net::GetConfigPath() + std::string("HelloCmd.json"),oCurrentConf))
+	if (!net::GetConfig(oCurrentConf,net::GetConfigPath() + std::string("HelloCmd.json")))
 	{
 		delete pSess;
 		pSess = NULL;

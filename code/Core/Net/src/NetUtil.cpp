@@ -129,33 +129,6 @@ void RunClock::TotalRunTime()
 	LOG4_TRACE("%s() RunClock use time(%lf) ms",__FUNCTION__,TotalUseTime());
 }
 
-bool GetJsonConfigFile(const std::string& strConfFile,util::CJsonObject &oConf)
-{
-	LOG4_DEBUG("CONF FILE = %s.", strConfFile.c_str());
-	std::ifstream fin(strConfFile.c_str());
-	//配置信息输入流
-	if (fin.good())
-	{
-		//解析配置信息 JSON格式
-		std::stringstream ssContent;
-		ssContent << fin.rdbuf();
-		if (!oConf.Parse(ssContent.str()))
-		{
-			//配置文件解析失败
-			LOG4_ERROR("Read conf (%s) error,it's maybe not a json file!",strConfFile.c_str());
-			ssContent.str("");
-			fin.close();
-			return false;
-		}
-	}
-	else
-	{
-		LOG4_ERROR("Open conf (%s) error!",strConfFile.c_str());
-		return false;
-	}
-	return true;
-}
-
 
 }
 

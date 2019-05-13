@@ -102,8 +102,6 @@ public:
     char m_desc[256];
 };
 
-bool GetJsonConfigFile(const std::string& strConfFile,util::CJsonObject &oConf);
-
 struct BUFF_RW
 {
     BUFF_RW(): m_pbuffer(NULL), size(0),indexW(0),indexR(0)

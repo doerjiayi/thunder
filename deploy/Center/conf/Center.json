@@ -1,9 +1,9 @@
 {
     "node_type":    "CENTER",
-    "inner_host":   "192.168.18.78",
+    "inner_host":   "192.168.3.6",
     "inner_port":   27000,
     "center":   [],
-    "server_name":  "Center_analysis3",
+    "server_name":  "Center_robot",
     "process_num":  1,
     "worker_capacity":  1000000,
     "config_path":  "conf/",

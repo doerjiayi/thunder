@@ -4,6 +4,7 @@
 
 namespace util
 {
+//冗余校验函数
 
 inline unsigned char CalcCrc(const std::string &strData)
 {

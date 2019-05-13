@@ -23,7 +23,7 @@ net::E_CMD_STATUS NodeSession::Timeout()
 
 bool NodeSession::ReadConfig()
 {
-	if (!net::GetJsonConfigFile(net::GetConfigPath() + std::string("CenterCmd.json"),m_oCurrentConf))
+	if (!net::GetConfig(m_oCurrentConf,net::GetConfigPath() + std::string("CenterCmd.json")))
 	{
 		return false;
 	}

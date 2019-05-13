@@ -54,11 +54,7 @@ tagSo::tagSo() : pSoHandle(NULL), pCmd(NULL), iVersion(0)
 
 tagSo::~tagSo()
 {
-    if (pCmd != NULL)
-    {
-        delete pCmd;
-        pCmd = NULL;
-    }
+	SAFE_DELETE(pCmd);
 //    if (pSoHandle != NULL)
 //    {
 //        dlclose(pSoHandle);
@@ -73,11 +69,7 @@ tagModule::tagModule() : pSoHandle(NULL), pModule(NULL), iVersion(0)
 
 tagModule::~tagModule()
 {
-    if (pModule != NULL)
-    {
-        delete pModule;
-        pModule = NULL;
-    }
+	SAFE_DELETE(pModule);
 //    if (pSoHandle != NULL)
 //    {
 //        dlclose(pSoHandle);
@@ -354,8 +346,7 @@ bool Worker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* watcher)
     	pConn->dActiveTime = ev_now(m_loop);
         if (pData->ulSeq != pConn->ulSeq)
         {
-            LOG4_DEBUG("callback seq %lu not match the conn attr seq %lu",
-                            pData->ulSeq, pConn->ulSeq);
+            LOG4_DEBUG("callback seq %lu not match the conn attr seq %lu",pData->ulSeq, pConn->ulSeq);
             ev_io_stop(m_loop, watcher);
             pData->pWorker = NULL;
             delete pData;
@@ -376,7 +367,7 @@ bool Worker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* watcher)
             MsgHead oInMsgHead, oOutMsgHead;
             MsgBody oInMsgBody, oOutMsgBody;
             StarshipCodec* pCodec = NULL;
-            std::unordered_map<util::E_CODEC_TYPE, StarshipCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
+            auto codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
             if (codec_iter == m_mapCodec.end())
             {
                 LOG4_ERROR("no codec found for %d!", conn_iter->second->eCodecType);
@@ -403,7 +394,7 @@ bool Worker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* watcher)
                         //切换为http协议
                         LOG4_DEBUG("failed to decode for codec %d,switch to CODEC_HTTP",pConn->eCodecType);
                         conn_iter->second->eCodecType = util::CODEC_HTTP;
-                        std::unordered_map<util::E_CODEC_TYPE, StarshipCodec*>::iterator codec_iter = m_mapCodec.find(pConn->eCodecType);
+                        auto codec_iter = m_mapCodec.find(pConn->eCodecType);
                         if (codec_iter == m_mapCodec.end())
                         {
                             LOG4_ERROR("no codec found for %d!", pConn->eCodecType);
@@ -421,7 +412,7 @@ bool Worker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* watcher)
                         //切换为私有协议编解码（与客户端通信协议） private pb
                         LOG4_DEBUG("failed to decode for codec %d,switch to CODEC_PRIVATE",pConn->eCodecType);
                         conn_iter->second->eCodecType = util::CODEC_PRIVATE;
-                        std::unordered_map<util::E_CODEC_TYPE, StarshipCodec*>::iterator codec_iter = m_mapCodec.find(pConn->eCodecType);
+                        auto codec_iter = m_mapCodec.find(pConn->eCodecType);
                         if (codec_iter == m_mapCodec.end())
                         {
                             LOG4_ERROR("no codec found for %d!", pConn->eCodecType);
@@ -595,7 +586,6 @@ bool Worker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* watcher)
                                 {
                                     LOG4_ERROR("faild to Encode");
                                 }
-
                             }
                         }
                         else

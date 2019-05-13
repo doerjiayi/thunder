@@ -162,6 +162,51 @@ bool Register(StepState *pStep,uint32 uiTimeOutMax,uint8 uiToRetry,double dTimeo
 	return true;
 }
 
+void SkipNonsenseLetters(std::string& word)
+{
+	g_pLabor->m_IgnoreChars.SkipNonsenseLetters(word);
+}
+
+void SkipFormatLetters(std::string& word)
+{
+	g_pLabor->m_IgnoreChars.SkipFormatLetters(word);
+}
+
+bool GetConfig(util::CJsonObject& oConf,const std::string &strConfFile)
+{
+	std::ifstream fin(strConfFile.c_str());
+	//配置信息输入流
+	if (fin.good())
+	{
+		//解析配置信息 JSON格式
+		std::stringstream ssContent;
+		ssContent << fin.rdbuf();
+		if (!oConf.Parse(ssContent.str()))
+		{
+			//配置文件解析失败
+			LOG4_ERROR("Read conf (%s) error,it's maybe not a json file!",strConfFile.c_str());
+			ssContent.str("");
+			fin.close();
+			return false;
+		}
+		ssContent.str("");
+		fin.close();
+		return true;
+	}
+	else
+	{
+		//配置信息流读取失败
+		LOG4_ERROR( "Open conf (%s) error!",strConfFile.c_str());
+		return false;
+	}
+}
+
+bool ExecStep(Step* pStep,int iErrno, const std::string& strErrMsg, const std::string& strErrShow,ev_tstamp dTimeout)
+{
+	return g_pLabor->ExecStep(pStep,iErrno,strErrMsg,strErrShow,dTimeout);
+}
+
+
 bool CoroutineResumeWithTimes(uint32 nMaxTimes){return g_pLabor->m_Coroutine.CoroutineResumeWithTimes(nMaxTimes);}
 bool CoroutineNewWithArg(util::coroutine_func func,tagCoroutineArg *arg) {return g_pLabor->m_Coroutine.CoroutineNewWithArg(func,arg);}
 int CoroutineNew(util::coroutine_func func,void *ud) {return g_pLabor->m_Coroutine.CoroutineNew(func,ud);}

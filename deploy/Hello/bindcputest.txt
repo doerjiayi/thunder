@@ -57,4 +57,3 @@ Successful transactions:       90000
 Failed transactions:               0
 Longest transaction:            0.04
 Shortest transaction:           0.00
-

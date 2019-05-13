@@ -3,18 +3,25 @@
 #include <cstdio>
 #include <stdlib.h>  
 #include <locale.h>  
+#include <algorithm>
 #include <string>
+#include <cstring>
+#include <vector>
+#include <iostream>
+#include <sstream>
 
 namespace util
 {
 
-// FUNCTION: gbk2utf8 
-// DESCRIPTION: 实现由gbk编码到utf8编码的转换
-//  param: strDst 转换后的字符串;
-//  param maxStrDstlen utfStr的最大长度
-//  param strSrc 待转换的字符串;
-// Output: utfStr 
-//  Returns: <= 0,fail ; > 0 ,success
+// 实现由gbk编码到utf8编码的转换
+/*
+ 实现由gbk编码到utf8编码的转换
+param: strDst 转换后的字符串;
+param maxStrDstlen utfStr的最大长度
+param strSrc 待转换的字符串;
+Output: utfStr
+Returns: -1,fail ; > 0 ,success
+ * */
 inline int gbk2utf8(char *strDst,size_t maxStrDstlen,const char *strSrc)
 {  
 	if(!strSrc||!strDst)
@@ -80,42 +87,26 @@ struct IgnoreChars
 	{
 		LoadLetters("0,9,10,11,13,32,33,34,35,39,42,43,59,64,94,126");
 	}
-	void RemoveFlag(std::string &str,char flag = ' ')const
+	void RemoveFlag(std::string &str,const char flag = ' ')const
 	{
 		std::string::iterator it = std::remove(str.begin(), str.end(), flag);
 		str.erase(it, str.end());
 	}
 	void LoadLetters(const std::string &ignore_chars)
 	{
-		if (ignore_chars.size() > 0)
+		std::string tmp(ignore_chars);
+		if(ignore_chars.size())
 		{
-			int s = ignore_chars.length();
-			char *tmpChars = new char[s + 1];
-			snprintf(tmpChars,s + 1,ignore_chars.c_str());
-			int j(0);
-			int ascii(0);
-			for(int i = 0;i <= s;)
+			RemoveFlag(tmp,' ');
+			std::istringstream in(tmp);
+			while(std::getline(in,tmp,','))
 			{
-				if (',' == tmpChars[i])//逗号分隔
-				{
-					tmpChars[i] = 0;
-					ascii = atoi(&tmpChars[j]);
-					++i;
-					j = i;
-					m_ignoreCharsVec.push_back((unsigned char)ascii);
-				}
-				else if(0 == tmpChars[i])
-				{
-					ascii = atoi(&tmpChars[j]);
-					m_ignoreCharsVec.push_back((unsigned char)ascii);
-					break;
-				}
-				else
-				{
-					++i;
-				}
+				m_ignoreCharsVec.push_back((unsigned char)atoi(tmp.c_str()));
 			}
-			delete [] tmpChars;
+		}
+		else
+		{
+			m_ignoreCharsVec.push_back((unsigned char)' ');
 		}
 	}
 	void SkipNonsenseLetters(std::string& word)const
@@ -123,6 +114,14 @@ struct IgnoreChars
 		for(int i = m_ignoreCharsVec.size() -1;i > -1; --i)
 		{
 			RemoveFlag(word,m_ignoreCharsVec[i]);
+		}
+	}
+	void SkipFormatLetters(std::string& word)const
+	{
+		if (word.size() > 0)
+		{
+			RemoveFlag(word,'\"');
+			RemoveFlag(word,' ');
 		}
 	}
 };
