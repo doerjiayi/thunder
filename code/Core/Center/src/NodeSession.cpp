@@ -18,6 +18,7 @@ auto defaultCallback = [](const MsgHead& oInMsgHead,const MsgBody& oInMsgBody,vo
 
 net::E_CMD_STATUS NodeSession::Timeout()
 {//定时检查中心活跃状态
+	CheckCenterActive();
 	return net::STATUS_CMD_RUNNING;
 }
 
@@ -128,6 +129,11 @@ bool NodeSession::Init(std::string &err,bool boReload)
 		LOG4_INFO("center InnerPort:%d InnerHost:%s NodeType:%s ProcessNum:%d",
 				m_centerInnerPort,m_centerInnerHost.c_str(),m_centerNodeType.c_str(),m_centerProcessNum);
 	}
+	{
+		util::CJsonObject redlock;
+		LOAD_CONFIG(conf,"redlock", redlock);
+		m_RedLock.Load(redlock);
+	}
     CheckCenterActive();
     boInit = true;
     return true;
@@ -135,7 +141,24 @@ bool NodeSession::Init(std::string &err,bool boReload)
 
 bool NodeSession::CheckCenterActive()
 {
-	m_CenterActive.status = eMasterStatus;//本节点为主节点
+	m_CenterActive.status = eMasterStatus;//本节点默认为主节点
+	if (m_RedLock.ServerSize())
+	{
+		if (m_RedLock.ContinueLock())
+		{
+			m_CenterActive.status = eMasterStatus;
+
+		}
+		else
+		{
+			m_CenterActive.status = eSlaveStatus;
+		}
+	}
+	else
+	{
+		LOG4_INFO("RedLock.ServerSize zero");
+	}
+	LOG4_INFO("Center is %s",m_CenterActive.status == eMasterStatus ? "eMasterStatus":"eSlaveStatus");
 	return true;
 }
 
@@ -230,11 +253,9 @@ bool NodeSession::CheckNodeType(const std::string& nodeType)
 
 bool NodeSession::CheckWhiteNode(const std::string& nodeInnerIp)
 {
-    std::vector<WhiteNode>::const_iterator it = m_vecWhiteNode.begin();
-    std::vector<WhiteNode>::const_iterator itEnd = m_vecWhiteNode.end();
-    for(;it!=itEnd;++it)
+    for(auto it:m_vecWhiteNode)
     {
-        if(it->inner_ip == nodeInnerIp)
+        if(it.inner_ip == nodeInnerIp)
         {
             return true;
         }

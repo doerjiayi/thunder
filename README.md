@@ -24,7 +24,7 @@ storage 存储接口对象
 
 **第三方库**
 
-l3lib
+3party
 
 **自定义库**
 
@@ -33,13 +33,13 @@ llib
 # 服务配置说明 #
 {
 
-    "node_type":"节点类型：ACCESS，LOGIC，PROXY，CENTER等，由业务层定义",
-    "node_type":"ACCESS",
+    "node_type":"节点类型：HELLO，CENTER等，由业务层定义",
+    "node_type":"HELLO",
     "access_host":"对系统外提供服务绑定的IP（Client to Server），若不提供对外服务，则无需配置",
     "access_host":"192.168.18.81",
     "access_port":"对系统外提供服务监听的端口",
     "access_port":9988,
-    "access_codec":"接入端编解码器，目前支持CODEC_PRIVATE(4),CODEC_HTTP(3),CODEC_PROTOBUF(2)",
+    "access_codec":"接入端编解码器，目前支持  私有协议 CODEC_PRIVATE(4),http协议 CODEC_HTTP(3),CODEC_PROTOBUF(2) CODEC_PROTOBUF(2) websocket Json（与客户端通信协议） CODEC_WEBSOCKET_EX_JS,websocket Protobuf（与客户端通信协议） CODEC_WEBSOCKET_EX_PB",
     "access_codec":4,
     "gateway":"113.102.157.188",
     "gateway_port":"9988,

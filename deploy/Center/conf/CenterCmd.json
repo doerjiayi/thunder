@@ -17,6 +17,18 @@
 	    	"SESSION":["PROXYSSDB"],
 	    	"HELLO":["PROXYSSDB","DBAGENT_W","DBAGENT_R","PGAGENT"]
 	    }
-    }
+    },
+    "redlock":	 [{
+        "host":    "192.168.3.6",
+        "port":    16379
+    },
+    {
+        "host":    "192.168.3.6",
+        "port":    16380
+    },
+    {
+        "host":    "192.168.3.6",
+        "port":    16381
+    }]
 }
  

@@ -16,6 +16,9 @@
 #include "session/Timer.hpp"
 #include "step/StepState.hpp"
 #include "Comm.hpp"
+#include <stdlib.h>
+#include <unistd.h>
+#include "redlock/redlock-cpp/redlock.h"
 
 enum NodeStatus
 {
@@ -34,6 +37,35 @@ enum CenterStatus
 namespace core
 {
 
+struct CustomRedLock
+{
+	CustomRedLock(){m_redlock = new CRedLock();}
+	~CustomRedLock(){delete m_redlock;}
+	bool Load(util::CJsonObject& redlock)
+	{
+		int s = redlock.GetArraySize();
+		for(int i = 0;i < s;++i)
+		{
+			std::string host;int port(0);
+			util::CJsonObject obj = redlock[i];
+			LOAD_CONFIG(obj,"host",host);
+			LOAD_CONFIG(obj,"port",port);
+
+			m_redlock->AddServerUrl(host.c_str(), port);
+			LOG4_INFO("redlock port:%d host:%s",port,host.c_str());
+		}
+		return true;
+	}
+	bool ContinueLock()
+	{
+		CLock lock;
+		return  m_redlock->ContinueLock("center_master", 21000, lock);
+	}
+	unsigned int ServerSize() {return m_redlock->RedisServerSize();}
+private:
+	CRedLock * m_redlock;
+};
+
 class NodeSession: public net::Timer
 {
 public:
@@ -47,8 +79,9 @@ public:
         m_CenterActive.activetime = m_uiCurrentTime;
         m_CenterActive.status = eOfflineStatus;//根据仲裁来判断
         m_nNodeTimeBeat = dSessionTimeout;//中心活跃上报时间
+
     }
-    virtual ~NodeSession(){};
+    virtual ~NodeSession(){}
     net::E_CMD_STATUS Timeout();
     //读取配置
     bool ReadConfig();
@@ -137,7 +170,10 @@ public:
 	//去掉符号
 	void RemoveFlag(std::string &str, char flag = '\"')const;
 	std::string RemoveFlagString(std::string str, char flag = '\"')const;
+
+	bool SelectMaster();
 private:
+	CustomRedLock m_RedLock;
     //中心活跃状态
     CenterActive m_CenterActive;
     //节点类型配置

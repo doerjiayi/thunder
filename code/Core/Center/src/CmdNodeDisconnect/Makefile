@@ -41,6 +41,7 @@ INC := $(INC) \
        -I $(PROTO_PATH) -I $(PROTO_PATH)/src -I $(PROTO_PATH)/include \
        -I $(3PARTY_PATH)/include \
        -I $(3PARTY_PATH)/include/mariadb \
+       -I $(3PARTY_PATH)/include/redlock \
        -I $(UTIL_PATH)/src -I $(UTIL_PATH)/src/util \
        -I $(NET_PATH)/src 
 
@@ -48,6 +49,7 @@ INC := $(INC) \
 LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
            -L$(UTIL_PATH)/lib -lUtil \
            -L$(3PARTY_PATH)/lib -lhiredis_vip \
+           -L$(3PARTY_PATH)/lib -lhiredis -lredlock \
            -L$(3PARTY_PATH)/lib -lprotobuf \
            -L$(3PARTY_PATH)/lib -llog4cplus \
            -L$(3PARTY_PATH)/lib -ljemalloc \
