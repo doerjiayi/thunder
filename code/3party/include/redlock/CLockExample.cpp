@@ -11,9 +11,9 @@
 
 int main (int argc, char **argv) {
     CRedLock * dlm = new CRedLock();
-    dlm->AddServerUrl("127.0.0.1", 5005);
-    dlm->AddServerUrl("127.0.0.1", 5006);
-    dlm->AddServerUrl("127.0.0.1", 5007);
+    dlm->AddServerUrl("192.168.3.6", 16379);
+    dlm->AddServerUrl("192.168.3.6", 16380);
+    dlm->AddServerUrl("192.168.3.6", 16381);
     
     // 连续分布式锁的使用案例
     while (1) {

@@ -151,6 +151,10 @@ bool NodeSession::CheckCenterActive()
 		}
 		else
 		{
+//			for(auto s:m_RedLock.Servers())
+//			{
+//				LOG4_INFO("server error(%d,%s)",s->err,s->errstr);
+//			}
 			m_CenterActive.status = eSlaveStatus;
 		}
 	}

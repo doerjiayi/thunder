@@ -59,9 +59,10 @@ struct CustomRedLock
 	bool ContinueLock()
 	{
 		CLock lock;
-		return  m_redlock->ContinueLock("center_master", 21000, lock);
+		return  m_redlock->ContinueLock("center_master", 21000, lock,true);
 	}
 	unsigned int ServerSize() {return m_redlock->RedisServerSize();}
+	const vector<redisContext *>& Servers() {return m_redlock->RedisServers();}
 private:
 	CRedLock * m_redlock;
 };
