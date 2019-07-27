@@ -16,6 +16,9 @@ if [ $# -ne 1 ]; then
 	exit 1; 
 fi
 
+#准备工作
+find ./ -maxdepth 3 -type f -name "*.sh"  |xargs -i chmod +x {}
+
 if [ "$1"x == "reload"x ]
 then
     while read server others

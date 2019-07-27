@@ -2,7 +2,7 @@
 * Project:  DataAnalysis
 * File:     LogBase.hpp
 * Description: 写日志基类
-* Author:        bwarliao
+* Author:        chenjiayi
 * Created date:  2010-12-23
 * Modify history:
 *******************************************************************************/

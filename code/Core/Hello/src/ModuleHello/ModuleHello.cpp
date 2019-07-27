@@ -15,6 +15,7 @@
 
 #include "util/UnixTime.hpp"
 #include "ModuleHello.hpp"
+#include "util/StringCoder.hpp"
 #include "StepHttpRequestState.hpp"
 
 MUDULE_CREATE(core::ModuleHello);
@@ -32,7 +33,7 @@ ModuleHello::~ModuleHello()
 
 bool ModuleHello::Init()
 {
-	Tests();
+//	Tests();
     return(true);
 }
 
@@ -43,22 +44,9 @@ void ModuleHello::Tests()
 	TestJson2pbRepeatedFields();
 	TestCoroutinue();
 	TestCoroutinueAuto();
-	{
-//        m_RunClock.StartClock("TimeStr2time_t");
-//        uint32 time(0);
-//        for(int i = 0;i < 10000;++i)
-//        {
-//            time = util::TimeStr2time_t("2017-12-31 23:59:59");
-//        }
-//        m_RunClock.EndClock();
-//        LOG4_INFO("TimeStr2time_t 10000 times time(%u)",time);
-//			TimeStr2time_t 10000 times time(1514735999)
-//			10000 times EndClock() net::RunClock TimeStr2time_t use time(55.188000) ms
-//			10000 times EndClock() net::RunClock TimeStr2time_t use time(65.248001) ms (加上分配uint32 time的时间)
-	}
 }
 
-bool ModuleHello::AnyMessage(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
+bool ModuleHello::TestMsg(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
 	util::CJsonObject obj;
 	if (!obj.Parse(oInHttpMsg.body()))
@@ -341,6 +329,27 @@ bool ModuleHello::AnyMessage(const net::tagMsgShell& stMsgShell,const HttpMsg& o
 		LOG4_TRACE("no things to do");
 		Response(stMsgShell,oInHttpMsg,0);
 	}
+    return(true);
+}
+
+
+bool ModuleHello::AnyMessage(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
+{
+	LOG4_DEBUG("body %s oInHttpMsg %s url:%s",oInHttpMsg.body().c_str(),oInHttpMsg.DebugString().c_str(),oInHttpMsg.url().c_str());
+	std::string url = oInHttpMsg.url();
+	auto iter = std::find(url.begin(),url.end(),'?');
+	if (iter != url.end())
+	{
+		url = url.substr(iter - url.begin(),url.end() - iter);
+	}
+	std::map<std::string, std::string> mapParameters;
+	util::DecodeParameter(url,mapParameters);
+
+	for(auto p:mapParameters)
+	{
+		LOG4_DEBUG("p(%s,%s)",p.first.c_str(),p.second.c_str());
+	}
+	Response(stMsgShell,oInHttpMsg,0);
     return(true);
 }
 

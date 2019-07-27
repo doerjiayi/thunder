@@ -33,11 +33,8 @@
 
 #include <iostream>
 #include <vector>
-#include <unordered_map>
 #include "hiredis/hiredis.h"
-
 extern "C" {
-#include "hiredis/net.h"
 #include "sds.h"
 }
 
@@ -60,17 +57,17 @@ public:
 public:
     bool                    Initialize();
     bool                    AddServerUrl(const char *ip, const int port);
-    bool 					Reconnect(redisContext *&c);
     void                    SetRetry(const int count, const int delay);
     bool                    Lock(const char *resource, const int ttl, CLock &lock);
-    bool                    ContinueLock(const char *resource, const int ttl,CLock &lock,bool loose=false);
+    bool                    ContinueLock(const char *resource, const int ttl,
+                                         CLock &lock);
     bool                    Unlock(const CLock &lock);
     unsigned int 			RedisServerSize(){return m_redisServer.size();}
-    const vector<redisContext *>& RedisServers(){return m_redisServer;}
 private:
     bool                    LockInstance(redisContext *c, const char *resource,
                                          const char *val, const int ttl);
-    bool                    ContinueLockInstance(redisContext *c, const char *resource,const char *val, const int ttl,bool loose=false);
+    bool                    ContinueLockInstance(redisContext *c, const char *resource,
+                                                 const char *val, const int ttl);
     void                    UnlockInstance(redisContext *c, const char *resource,
                                            const char *val);
     sds                     GetUniqueLockId();
@@ -86,7 +83,6 @@ private:
     int                     m_quoRum;               // majority nums
     int                     m_fd;                   // rand file fd
     vector<redisContext *>  m_redisServer;          // redis master servers
-    unordered_map<redisContext *,pair<string,int>> 	m_addresses;
     CLock                   m_continueLock;         // 续锁
     sds                     m_continueLockScript;   // 续锁脚本
 };

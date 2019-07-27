@@ -2,7 +2,7 @@
  * Project:  GongyiLib
  * @file     StringCoder.hpp
  * @brief 
- * @author   bwarliao
+ * @author   chenjiayi
  * @date:    2017��3��18��
  * @note
  * Modify history:
@@ -35,7 +35,7 @@ std::string DecodeStringToHex(const std::string & sSrc);
 
 void EncodeParameter(const std::map<std::string, std::string>& mapParameters, std::string& strParameter);
 
-void DecodeParameter(const std::string& strParameter, std::map<std::string, std::string>& mapParameters);
+void DecodeParameter(const std::string& strParameter, std::map<std::string, std::string>& mapParameters,char filter = ' ');
 
 
 } /* namespace util */

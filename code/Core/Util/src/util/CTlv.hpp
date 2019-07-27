@@ -2,7 +2,7 @@
  * Project:  Util
  * @file     CTlv.hpp
  * @brief 
- * @author   bwarliao
+ * @author   chenjiayi
  * @date:    2014年8月21日
  * @note
  * Modify history:
@@ -19,7 +19,7 @@ namespace util
 
 /**
  * @brief TLV应用层通信协议类
- * @author  bwarliao
+ * @author  chenjiayi
  * @date    2014年8月21日
  * @note TLV应用层通信协议类
  */

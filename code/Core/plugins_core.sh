@@ -5,7 +5,7 @@ MAKE_PATH=`pwd`
 cd ${MAKE_PATH}
 RUN_PATH=${MAKE_PATH}/../../deploy
 
-command="all,clean,Access,DbAgentRead,DbAgentWrite,Center"
+command="all,clean,Hello,Center"
 
 if [ $# -lt 1 ]; then 
     echo "USAGE: $0 param1" 

@@ -90,3 +90,6 @@ cmd 系统指令\codec 系统指令\labor 工作者与管理者\protocol 服务�
     "custom":{}
 
 }
+
+# db 启动redis实例 #
+提供分布式锁、缓存等

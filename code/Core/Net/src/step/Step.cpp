@@ -2,7 +2,7 @@
  * Project:  Net
  * @file     Step.cpp
  * @brief 
- * @author   bwarliao
+ * @author   chenjiayi
  * @date:    2015年7月27日
  * @note
  * Modify history:

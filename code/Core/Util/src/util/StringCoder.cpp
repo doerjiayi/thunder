@@ -2,11 +2,12 @@
  * Project:  GongyiLib
  * @file     StringCoder.cpp
  * @brief 
- * @author   bwarliao
+ * @author   chenjiayi
  * @date:    2017��3��18��
  * @note
  * Modify history:
  ******************************************************************************/
+#include <algorithm>
 #include "StringCoder.hpp"
 
 namespace util
@@ -140,8 +141,18 @@ void EncodeParameter(const std::map<std::string, std::string>& mapParameters, st
     }
 }
 
-void DecodeParameter(const std::string& strParameter, std::map<std::string, std::string>& mapParameters)
+void DecodeParameter(const std::string& strUrl, std::map<std::string, std::string>& mapParameters,char filter)
 {
+	std::string strParameter = strUrl;
+	if (filter != ' ')
+	{
+		auto iter = std::find(strParameter.begin(),strParameter.end(),filter);
+		if (iter != strParameter.end())
+		{
+			++iter;
+			strParameter = strParameter.substr(iter - strParameter.begin(),strParameter.end() - iter);
+		}
+	}
     mapParameters.clear();
     std::string strKey;
     std::string strValue;

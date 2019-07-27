@@ -16,7 +16,7 @@
 
 namespace util
 {
-
+//lru缓存
 struct LRUCache {
     LRUCache(int capacity)
     {
@@ -62,6 +62,7 @@ private:
     int s;
 };
 
+//lfu缓存
 class LFUCache {
 public:
     LFUCache(int capacity) {

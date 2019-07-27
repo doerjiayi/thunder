@@ -1,0 +1,59 @@
+绑定单核
+[imdev@node3 deploy]$ ./restart_nodes.sh HelloServer
+Hello_dem
+kill 9163    Hello_demo
+target_server:Hello_demo
+target_server_tag:Hello_demo
+target_port:27138
+running_target_server_pid:
+process Hello_demo:2
+CPUs 6
+pid 18066's current affinity list: 0-5
+pid 18066's new affinity list: 1
+taskset -pc 1 18066 succ for process PID:18066
+pid 18070's current affinity list: 0-5
+pid 18070's new affinity list: 1
+taskset -pc 1 18070 succ for process PID:18070
+imdev    18066     1  0 14:29 ?        00:00:00 Hello_demo                                                                                                                     
+imdev    18070 18066  0 14:29 ?        00:00:00 Hello_demo_W0  
+
+Transactions:                  90000 hits
+Availability:                 100.00 %
+Elapsed time:                  11.00 secs
+Data transferred:               1.80 MB
+Response time:                  0.04 secs
+Transaction rate:            8181.82 trans/sec
+Throughput:                     0.16 MB/sec
+Concurrency:                  298.65
+Successful transactions:       90000
+Failed transactions:               0
+Longest transaction:            0.05
+Shortest transaction:           0.00
+
+不绑定
+Transactions:                  90000 hits
+Availability:                 100.00 %
+Elapsed time:                   7.72 secs
+Data transferred:               1.80 MB
+Response time:                  0.03 secs
+Transaction rate:           11658.03 trans/sec
+Throughput:                     0.23 MB/sec
+Concurrency:                  296.17
+Successful transactions:       90000
+Failed transactions:               0
+Longest transaction:            0.04
+Shortest transaction:           0.00
+
+均匀绑定
+Transactions:                  90000 hits
+Availability:                 100.00 %
+Elapsed time:                   7.41 secs
+Data transferred:               1.80 MB
+Response time:                  0.02 secs
+Transaction rate:           12145.75 trans/sec
+Throughput:                     0.24 MB/sec
+Concurrency:                  297.14
+Successful transactions:       90000
+Failed transactions:               0
+Longest transaction:            0.04
+Shortest transaction:           0.00

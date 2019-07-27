@@ -110,39 +110,8 @@ bool CRedLock::AddServerUrl(const char *ip, const int port) {
         m_redisServer.push_back(c);
     }
     m_quoRum = (int)m_redisServer.size() / 2 + 1;
-    m_addresses[c] = make_pair(string(ip),port);
     return true;
 }
-
-bool CRedLock::Reconnect(redisContext *&c) {
-	auto iter = m_addresses.find(c);
-	if (iter != m_addresses.end())
-	{
-		auto conn = iter->first;
-		auto pair =  iter->second;
-		struct timeval timeout = { 1, 500000 }; // 1.5 seconds
-		redisContext *tmpc = redisConnectWithTimeout(pair.first.c_str(), pair.second, timeout);
-		if (tmpc)
-		{
-			m_addresses.erase(iter);
-			for(auto it = m_redisServer.begin();it != m_redisServer.end();++it)
-			{
-				if (*it == conn)
-				{
-					m_redisServer.erase(it);
-					break;
-				}
-			}
-
-			m_addresses[tmpc] = pair;
-			m_redisServer.push_back(tmpc);
-			redisFree(c);
-			c = tmpc;
-		}
-	}
-	return false;
-}
-
 
 // ----------------
 // set retry
@@ -197,7 +166,7 @@ bool CRedLock::Lock(const char *resource, const int ttl, CLock &lock) {
 // ----------------
 // release resource
 // ----------------
-bool CRedLock::ContinueLock(const char *resource, const int ttl, CLock &lock,bool loose) {
+bool CRedLock::ContinueLock(const char *resource, const int ttl, CLock &lock) {
     sds val = GetUniqueLockId();
     if (!val) {
         return false;
@@ -214,9 +183,8 @@ bool CRedLock::ContinueLock(const char *resource, const int ttl, CLock &lock,boo
         int n = 0;
         int startTime = (int)time(NULL) * 1000;
         int slen = (int)m_redisServer.size();
-        printf("m_redisServer.size %d\n", slen);
         for (int i = 0; i < slen; i++) {
-            if (ContinueLockInstance(m_redisServer[i], resource, val, ttl,loose)) {
+            if (ContinueLockInstance(m_redisServer[i], resource, val, ttl)) {
                 n++;
             }
         }
@@ -228,7 +196,8 @@ bool CRedLock::ContinueLock(const char *resource, const int ttl, CLock &lock,boo
         //for small TTLs.
         int drift = (ttl * m_clockDriftFactor) + 2;
         int validityTime = ttl - ((int)time(NULL) * 1000 - startTime) - drift;
-        printf("The resource validty time is %d, n is %d, quo is %d\n",validityTime, n, m_quoRum);
+        printf("The resource validty time is %d, n is %d, quo is %d\n",
+               validityTime, n, m_quoRum);
         if (n >= m_quoRum && validityTime > 0) {
             lock.m_validityTime = validityTime;
             return true;
@@ -278,7 +247,8 @@ bool CRedLock::LockInstance(redisContext *c, const char *resource,
 // ----------------
 // 对redismaster续锁, 私有函数
 // ----------------
-bool CRedLock::ContinueLockInstance(redisContext *c, const char *resource,const char *val, const int ttl,bool loose) {
+bool CRedLock::ContinueLockInstance(redisContext *c, const char *resource,
+                                    const char *val, const int ttl) {
     int argc = 7;
     sds sdsTTL = sdsempty();
     sdsTTL = sdscatprintf(sdsTTL, "%d", ttl);
@@ -293,15 +263,6 @@ bool CRedLock::ContinueLockInstance(redisContext *c, const char *resource,const 
     sdsfree(sdsTTL);
     if (reply) {
         printf("Set return: %s [null == fail, OK == success]\n", reply->str);
-    }
-    else
-    {
-    	printf("Set return: null\n");
-    }
-    if (loose && !reply)//松懈投票，允许网络分区特殊情况的多主
-    {
-    	printf("loose and not reply\n");
-    	return true;
     }
     if (reply && reply->str && strcmp(reply->str, "OK") == 0) {
         freeReplyObject(reply);
@@ -334,7 +295,6 @@ void CRedLock::UnlockInstance(redisContext *c, const char *resource,
 // 对redismaster执行脚本命令
 // ----------------
 redisReply * CRedLock::RedisCommandArgv(redisContext *c, int argc, char **inargv) {
-	int reconn(1);
     char **argv;
     argv = convertToSds(argc, inargv);
     /* Setup argument length */
@@ -343,30 +303,10 @@ redisReply * CRedLock::RedisCommandArgv(redisContext *c, int argc, char **inargv
     for (int j = 0; j < argc; j++)
         argvlen[j] = sdslen(argv[j]);
     redisReply *reply = NULL;
-retryComm:
-	printf("try redisCommandArgv.c:%p fd(%d)\n",c,c->fd);
-	reply = (redisReply *)redisCommandArgv(c, argc, (const char **)argv, argvlen);
-	if (reply) {
-		printf("RedisCommandArgv return: %lld.c:%p\n", reply->integer,c);
-	}
-	else
-	{
-		printf("RedisCommandArgv reply null.c:%p err(%d,%s)\n",c,c->err,c->errstr);
-		if (c->err > 0)
-		{
-			printf("try Reconnect.c:%p fd(%d)\n",c,c->fd);
-			if (Reconnect(c))
-			{
-				printf("Reconnect ok.c:%p fd(%d)\n",c,c->fd);
-				if (reconn-- > 0) goto retryComm;
-			}
-			else
-			{
-				printf("Reconnect failed.c:%p err(%d,%s)\n",c,c->err,c->errstr);
-			}
-		}
-	}
-
+    reply = (redisReply *)redisCommandArgv(c, argc, (const char **)argv, argvlen);
+    if (reply) {
+        printf("RedisCommandArgv return: %lld\n", reply->integer);
+    }
     free(argvlen);
     sdsfreesplitres(argv, argc);
     return reply;
@@ -387,7 +327,7 @@ sds CRedLock::GetUniqueLockId() {
         return s;
     } else {
         //读取失败
-//        printf("Error: GetUniqueLockId %d\n", __LINE__);
+        printf("Error: GetUniqueLockId %d\n", __LINE__);
     }
     return NULL;
 }

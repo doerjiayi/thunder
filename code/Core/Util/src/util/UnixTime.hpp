@@ -2,7 +2,7 @@
 * Project:  DataAnalysis
 * File:     UnixTime.hpp
 * Description:   loss库time_t型时间处理API
-* Author:        bwarliao
+* Author:        chenjiayi
 * Created date:  2010-12-14
 * Modify history:
 *******************************************************************************/

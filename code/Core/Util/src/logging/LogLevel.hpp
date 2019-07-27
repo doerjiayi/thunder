@@ -2,7 +2,7 @@
 * Project:  DataAnalysis
 * File:     LogLevel.hpp
 * Description: 定义日志错误级别
-* Author:        bwarliao
+* Author:        chenjiayi
 * Created date:  2010-12-15
 * Modify history:
 *******************************************************************************/

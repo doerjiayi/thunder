@@ -4,7 +4,6 @@
  *  Created on: 2017年5月17日
  *      Author: chen
  */
-
 #include "Similarity.hpp"
 
 namespace util
@@ -80,6 +79,79 @@ int Levenshtein(const std::string& word1,const std::string& word2) {
 		}
 	}
 	return dp[size1][size2];
+}
+
+
+std::vector<int> KmpGetNext(const std::string &str)
+{
+	std::vector<int> next({-1});//以-1开始
+   for(int i=1;i<= str.size();i++)
+   {
+       int maxLen=0;
+//       std::string tmp = str.substr(0,i);//子串计算
+       for(int k = 1;k < i;++k)//计算前缀后缀的值
+       {
+           if(str.substr(0,k)==str.substr(i-k,k))//前缀后缀
+           {
+               maxLen=k;
+           }
+       }
+       next.push_back(maxLen);
+   }
+   next.pop_back();
+   return next;//ABCDABD    -1 0 0 0 0 1 2；
+}
+
+int KmpSearch(const std::string& s, const std::string& p)
+{
+    int sLen = s.size();
+    int pLen = p.size();
+    if (sLen == 0 || pLen == 0)return -1;
+    std::vector<int> next = KmpGetNext(p);
+    int i = 0;
+    int j = 0;
+    while (i < sLen && j < pLen)
+    {
+        ////j == -1,kmp匹配失败，跳过本字节，下字节开始继续匹配；
+        //j >= 0，本字节开始匹配，模式串调到j开始
+        if (j == -1 || s[i] == p[j])
+        {
+            i++;
+            j++;
+        }
+        else
+        {//从模式串的第几个字节失败则跳到指定位置继续尝试，如在第7字节失败，则跳到第三字节开始（下标为前面子串最大前后匹配长度）
+            j = next[j];//ABCDABD    -1 0 0 0 0 1 2；
+        }
+    }
+    if (j == pLen) return i - j;//返回第一个完全匹配位置
+
+    return -1;
+}
+
+/*
+输入:
+s = "aa"
+p = "a*"
+输出: true
+输入:
+s = "aab"
+p = "c*a*b"
+输出: true
+ * */
+bool SimpleRegExMatchDfs(const std::string& s,const std::string& p,int i,int j)
+{
+   if(j >= p.size()) return i == s.size();
+   bool j_match = i < s.size() && (s[i]==p[j] || p[j]=='.');
+   if(j + 1 < p.size() && p[j + 1]=='*'){
+	   return SimpleRegExMatchDfs(s,p,i,j+2)||(j_match && SimpleRegExMatchDfs(s,p,i+1,j));//匹配*，匹配0 个 或者  1个以上
+   }
+   return j_match && SimpleRegExMatchDfs(s,p,i+1,j+1);//匹配一个
+}
+
+bool SimpleRegExMatch(const std::string& str, const std::string& pattern)
+{
+	return SimpleRegExMatchDfs(str,pattern,0,0);
 }
 
 }

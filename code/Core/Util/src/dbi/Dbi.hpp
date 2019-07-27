@@ -2,7 +2,7 @@
 * Project:  DataAnalysis
 * File:     Dbi.hpp
 * Description: DB操作接口类
-* Author:        bwarliao
+* Author:        chenjiayi
 * Created date:  2010-12-21
 * Modify history:
 *******************************************************************************/

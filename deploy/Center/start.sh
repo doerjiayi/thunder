@@ -17,60 +17,81 @@ LOG_FILE="${SERVER_HOME}/log/${SCRIPT_NAME}.log"
 
 . ${SERVER_HOME}/scripts/script_func.sh
 
-server_bin_files=`ls ${SERVER_BIN}/`
-for server_bin in $server_bin_files
-do
-    if [ -f "${SERVER_CONF}/${server_bin}.json" ]
-    then
-    	echo "centerserver no 1"
-        target_server=`awk -F'"server_name"' '/server_name/{print $2}'  ${SERVER_CONF}/${server_bin}.json | sed 's/ //g' | awk -F'[:",]' '{print $3}'`
-        #echo "target_server:$target_server"
-        target_server_tag=`echo "$target_server" | awk '{print substr($0,0,20)}'`
-        #echo "target_server_tag:$target_server_tag"
-        target_port=`awk -F'"inner_port"' '/inner_port/{print $2}'  ${SERVER_CONF}/${server_bin}.json | sed 's/ //g' | awk -F'[:",]' '{print $2}'`
-        #echo "target_port:$target_port"
-        running_target_server_pid=`netstat -apn 2>>/dev/null | grep -w $target_port | grep $target_server_tag | awk -F/ '/^tcp/{print $1}' | awk '/LISTEN/{print $NF}'`
-        #echo "running_target_server_pid:$running_target_server_pid"
-        if [ -z "$running_target_server_pid" ]
-        then
-            ${SERVER_BIN}/$server_bin ${SERVER_CONF}/$server_bin.json
-            if [ $? -eq 0 ]
-            then
-                info_log "${SERVER_HOME}/bin/$server_bin start successfully."
-            else
-                error_log "failed to start $server_bin"
-            fi
-            ps -ef | awk -vpname=$target_server '{idx=index($8,pname); if (idx == 1)print}'
-        else
-            info_log "the server process for $server_bin was exist!"
-        fi
-    fi
-    
-    #热备份节点
-    if [ -f "${SERVER_CONF2}/${server_bin}.json" ]
-    then
-    	echo "centerserver no 2"
-        target_server=`awk -F'"server_name"' '/server_name/{print $2}'  ${SERVER_CONF2}/${server_bin}.json | sed 's/ //g' | awk -F'[:",]' '{print $3}'`
-        #echo "target_server:$target_server"
-        target_server_tag=`echo "$target_server" | awk '{print substr($0,0,20)}'`
-        #echo "target_server_tag:$target_server_tag"
-        target_port=`awk -F'"inner_port"' '/inner_port/{print $2}'  ${SERVER_CONF2}/${server_bin}.json | sed 's/ //g' | awk -F'[:",]' '{print $2}'`
-        #echo "target_port:$target_port"
-        running_target_server_pid=`netstat -apn 2>>/dev/null | grep -w $target_port | grep $target_server_tag | awk -F/ '/^tcp/{print $1}' | awk '/LISTEN/{print $NF}'`
-        #echo "running_target_server_pid:$running_target_server_pid"
-        if [ -z "$running_target_server_pid" ]
-        then
-            ${SERVER_BIN}/$server_bin ${SERVER_CONF2}/$server_bin.json
-            if [ $? -eq 0 ]
-            then
-                info_log "${SERVER_HOME}/bin/$server_bin start successfully."
-            else
-                error_log "failed to start $server_bin"
-            fi
-            ps -ef | awk -vpname=$target_server '{idx=index($8,pname); if (idx == 1)print}'
-        else
-            info_log "the server process for $server_bin was exist!"
-        fi
-    fi
-done
+function start_node1()
+{
+	server_bin_files=`ls ${SERVER_BIN}/`
+	for server_bin in $server_bin_files
+	do
+	    if [ -f "${SERVER_CONF}/${server_bin}.json" ]
+	    then
+	    	echo "centerserver no 1"
+	        target_server=`awk -F'"server_name"' '/server_name/{print $2}'  ${SERVER_CONF}/${server_bin}.json | sed 's/ //g' | awk -F'[:",]' '{print $3}'`
+	        #echo "target_server:$target_server"
+	        target_server_tag=`echo "$target_server" | awk '{print substr($0,0,20)}'`
+	        #echo "target_server_tag:$target_server_tag"
+	        target_port=`awk -F'"inner_port"' '/inner_port/{print $2}'  ${SERVER_CONF}/${server_bin}.json | sed 's/ //g' | awk -F'[:",]' '{print $2}'`
+	        #echo "target_port:$target_port"
+	        running_target_server_pid=`netstat -apn 2>>/dev/null | grep -w $target_port | grep $target_server_tag | awk -F/ '/^tcp/{print $1}' | awk '/LISTEN/{print $NF}'`
+	        #echo "running_target_server_pid:$running_target_server_pid"
+	        if [ -z "$running_target_server_pid" ]
+	        then
+	            ${SERVER_BIN}/$server_bin ${SERVER_CONF}/$server_bin.json
+	            if [ $? -eq 0 ]
+	            then
+	                info_log "${SERVER_HOME}/bin/$server_bin start successfully."
+	            else
+	                error_log "failed to start $server_bin"
+	            fi
+	            ps -ef | awk -vpname=$target_server '{idx=index($8,pname); if (idx == 1)print}'
+	        else
+	            info_log "the server process for $server_bin was exist!"
+	        fi
+	    fi
+	done
+}
+
+function start_node2()
+{
+	server_bin_files=`ls ${SERVER_BIN}/`
+	for server_bin in $server_bin_files
+	do
+	    #热备份节点
+	    if [ -f "${SERVER_CONF2}/${server_bin}.json" ]
+	    then
+	    	echo "centerserver no 2"
+	        target_server=`awk -F'"server_name"' '/server_name/{print $2}'  ${SERVER_CONF2}/${server_bin}.json | sed 's/ //g' | awk -F'[:",]' '{print $3}'`
+	        #echo "target_server:$target_server"
+	        target_server_tag=`echo "$target_server" | awk '{print substr($0,0,20)}'`
+	        #echo "target_server_tag:$target_server_tag"
+	        target_port=`awk -F'"inner_port"' '/inner_port/{print $2}'  ${SERVER_CONF2}/${server_bin}.json | sed 's/ //g' | awk -F'[:",]' '{print $2}'`
+	        #echo "target_port:$target_port"
+	        running_target_server_pid=`netstat -apn 2>>/dev/null | grep -w $target_port | grep $target_server_tag | awk -F/ '/^tcp/{print $1}' | awk '/LISTEN/{print $NF}'`
+	        #echo "running_target_server_pid:$running_target_server_pid"
+	        if [ -z "$running_target_server_pid" ]
+	        then
+	            ${SERVER_BIN}/$server_bin ${SERVER_CONF2}/$server_bin.json
+	            if [ $? -eq 0 ]
+	            then
+	                info_log "${SERVER_HOME}/bin/$server_bin start successfully."
+	            else
+	                error_log "failed to start $server_bin"
+	            fi
+	            ps -ef | awk -vpname=$target_server '{idx=index($8,pname); if (idx == 1)print}'
+	        else
+	            info_log "the server process for $server_bin was exist!"
+	        fi
+	    fi
+	done
+}
+
+if [ "$1"x == "1"x ];then
+	start_node1
+elif [ "$1"x == "2"x ];then
+	start_node2
+else
+	#默认启动单个中心节点
+	start_node1
+fi
+
+
 

@@ -33,6 +33,7 @@ public:
     virtual ~ModuleHello();
     virtual bool Init();
     void Tests();
+    bool TestMsg(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
     virtual bool AnyMessage(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHttpMsg);
 private:
     void Response(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHttpMsg,int iCode);

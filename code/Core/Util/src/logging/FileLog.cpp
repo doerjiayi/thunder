@@ -2,7 +2,7 @@
 * Project:  DataAnalysis
 * File:     Log.cpp
 * Description: 文件日志类，用于写日志文件
-* Author:        bwarliao
+* Author:        chenjiayi
 * Created date:  2010-12-20
 * Modify history:
 *******************************************************************************/

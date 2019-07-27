@@ -24,6 +24,8 @@ elif [ "$1"x == "install"x ];then
 elif [ "$1"x == "core"x ];then 
 	cd ./Core &&  ./core.sh all && cd ..
 elif [ "$1"x == "all"x ];then 
+	#准备工作
+	find ./ -maxdepth 5 -type f -name "*.sh"  |xargs -i chmod +x {}
 	#拷贝makefile模板到逻辑节点，使用core服务器库需要使用指定统一makefile模板
 	./Core/makefiles/makefilecopy.sh
 	#编译

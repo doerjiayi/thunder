@@ -3,23 +3,21 @@
         "center_inner_host":    "192.168.3.6",
         "center_inner_port":    27000
     }],
-    "gate": ["INTERFACE"],
+    "gate": [],
     "route":
     {
     	"route_brief":"优先使用auto则所有节点之间可以互发消息，否则使用node下的路由",
-    	"auto":["COLLECT","LOGQUEUE","PROXYSSDB","SESSION","USER","HELLO","PGAGENT","PGAGENT_ONLINE","PGAGENT_OFFLINE","PGAGENT_JOB"],
+    	"auto":["INTERFACE","LOGIC"],
     	"ipwhite":["192.168.3.6"],
 	    "node":{
-	    	"COLLECT":["PROXYSSDB","LOGQUEUE","STATISTICS","USER"],
-	    	"PGAGENT":[],
-	    	"LOGQUEUE":["PROXYSSDB"],
-	    	"PROXYSSDB":["DBAGENT_W","DBAGENT_R"],
-	    	"SESSION":["PROXYSSDB"],
-	    	"HELLO":["PROXYSSDB","DBAGENT_W","DBAGENT_R","PGAGENT"]
+			"INTERFACE":["LOGIC"],
+			"LOGIC":[]
 	    }
     },
-    "redlock":	 [{
-        "host":    "192.168.3.6",
+    "redlock_brief":"redlock为空列表则未开启center热备功能，否则需要启动3个redis实例",
+    "redlock_sample":	 [
+    {
+    	"host":    "192.168.3.6",
         "port":    16379
     },
     {
@@ -29,6 +27,7 @@
     {
         "host":    "192.168.3.6",
         "port":    16381
-    }]
+    }],
+    "redlock":[]
 }
  

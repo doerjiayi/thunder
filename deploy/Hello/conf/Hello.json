@@ -15,8 +15,8 @@
     "max_log_file_num":10,
     "max_log_file_size":20480000,
     "permission":{
-        "addr_permit":{"stat_interval":60.0, "permit_num":1000000},
-        "uin_permit":{"stat_interval":60.0, "permit_num":60}
+        "addr_permit":{"stat_interval":1.0, "permit_num":500},
+        "uin_permit":{"stat_interval":1.0, "permit_num":500}
     },
     "io_timeout":300.0,
     "step_timeout":5.0,

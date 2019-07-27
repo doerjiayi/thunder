@@ -2,7 +2,7 @@
  * Project:  Net
  * @file     Session.cpp
  * @brief 
- * @author   bwarliao
+ * @author   chenjiayi
  * @date:    2015年7月28日
  * @note
  * Modify history:

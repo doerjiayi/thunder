@@ -2,7 +2,7 @@
 * Project:  sdbl
 * File:     Iconv.hpp
 * Description: 字符集转换类
-* Author:   bwarliao
+* Author:   chenjiayi
 * Created date:  2009-6-12
 * Modify history:
 *******************************************************************************/
