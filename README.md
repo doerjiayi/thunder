@@ -39,10 +39,13 @@ cmd 系统指令\codec 系统指令\labor 工作者与管理者\protocol 服务�
 3party 第三方库
 Core  核心逻辑 ：服务发现 、网络、常用库
 
+# 新增功能
+用ccache 优化编译 ，增加了脚本支持发送信号热加载逻辑so
 
 #测试实例
 Interface  节点为接入层
 Logic  节点为逻辑层
 Hello  功能测试
 
+Interface 与 Logic的测试 说明参考test.md
 

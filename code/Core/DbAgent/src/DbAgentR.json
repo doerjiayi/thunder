@@ -1,0 +1,40 @@
+{
+	"node_type":	"DBAGENT_R",
+	"inner_host":	"192.168.18.78",
+	"inner_port":	17006,
+	"center":[
+        {"host":"192.168.18.78","port":"17000"}],
+	"server_name":	"DbAgentR_robot",
+	"process_num":	1,
+	"worker_capacity":	1000000,
+	"config_path":	"conf/",
+	"log_path":	"log/",
+	"max_log_file_num":	5,
+	"max_log_file_size":	504800000,
+	"io_timeout":	300,
+	"step_timeout":	5,
+	"log_levels":	{
+		"FATAL":	50000,
+		"ERROR":	40000,
+		"WARN":	30000,
+		"INFO":	20000,
+		"DEBUG":	10000,
+		"TRACE":	0
+	},
+	"log_level":	0,
+	"refresh_interval":	20,
+	"so":	[{
+			"cmd":	505,
+			"so_path":	"plugins/Agent/CmdDbOper.so",
+			"entrance_symbol":	"create",
+			"load":	true,
+			"version":	1
+		}, {
+			"cmd":	511,
+			"so_path":	"plugins/Agent/CmdLocateData.so",
+			"entrance_symbol":	"create",
+			"load":	true,
+			"version":	1
+		}]
+		,"custom":   {"sync":0}
+}

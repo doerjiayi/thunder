@@ -1,0 +1,269 @@
+{
+    "data_type": [
+        "attribute",
+        "log"
+    ],
+    "data_type_enum": {
+        "attribute": 1,
+        "log": 2
+    },
+    "section_factor": [
+        "userid",
+        "userset",
+        "string"
+    ],
+    "section_factor_enum": {
+        "userid": 1,
+        "userset": 2,
+        "string": 3
+    },
+    "factor_section": {
+        "userid": [
+            10000000,
+            20000000
+        ],
+        "userset": [
+            1000000,
+            2000000
+        ],
+        "string": [
+            4294967295
+        ]
+    },
+    "table": {
+        "tb_appkey": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_platform",
+            "table_num": 1
+        },
+        "tb_events": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_platform",
+            "table_num": 1
+        },
+	 "tb_event_conf": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_event_conf",
+            "table_num": 1
+        } ,
+        "tb_real_time_event_conf": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_event_conf",
+            "table_num": 1
+        } ,
+        "tb_event_funnel_conf": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_event_conf",
+            "table_num": 1
+        } ,
+        "tb_session_length_conf": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_event_conf",
+            "table_num": 1
+        } ,
+        "tb_session_num_conf": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_event_conf",
+            "table_num": 1
+        } ,
+        "tb_operators_conf": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_event_conf",
+            "table_num": 1
+        } 
+        
+        ,
+        "tb_event_statistics": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_event_statistics",
+            "table_num": 1
+        },
+        "tb_funnel_statistics": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_event_statistics",
+            "table_num": 1
+        }
+        
+        ,
+
+        "tb_realtime_statistics": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_daily_statistics",
+            "table_num": 1
+        },
+        "tb_day_session_length_seg": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_daily_statistics",
+            "table_num": 1
+        },
+        "tb_day_session_num_seg": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_daily_statistics",
+            "table_num": 1
+        },
+        "tb_page_view": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_daily_statistics",
+            "table_num": 1
+        },
+        "tb_event_route": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_daily_statistics",
+            "table_num": 1
+        },
+        "tb_new_retained_user": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_retain_statistics",
+            "table_num": 1
+        },
+        "tb_active_retained_user": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_retain_statistics",
+            "table_num": 1
+        },
+        "tb_new_user": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_retain_statistics",
+            "table_num": 1
+        },
+        "tb_active_user": {
+            "data_type": 1,
+            "section_factor": 3,
+            "db_name": "db_analysis2_retain_statistics",
+            "table_num": 1
+        }	
+    },
+    "cluster": {
+        "attribute": {
+            "userid": {
+                "LE_10000000": {
+                    "db_analysis2_platform": "robot_db_instance_1",
+                    "db_analysis2_event_conf": "robot_db_instance_1",
+                    "db_analysis2_event_statistics":"robot_db_instance_1",
+                    "db_analysis2_daily_statistics":"robot_db_instance_1",
+                    "db_analysis2_retain_statistics":"robot_db_instance_1"
+                },
+                "LE_20000000": {
+                    "db_analysis2_platform": "robot_db_instance_2",
+                    "db_analysis2_event_conf": "robot_db_instance_2",
+                    "db_analysis2_event_statistics":"robot_db_instance_2",
+                    "db_analysis2_daily_statistics":"robot_db_instance_2",
+                    "db_analysis2_retain_statistics":"robot_db_instance_2"
+                }
+            },
+            "userset": {
+                "LE_1000000": {
+                    "db_analysis2_platform": "robot_db_instance_1",
+                    "db_analysis2_event_conf": "robot_db_instance_1",
+                    "db_analysis2_event_statistics":"robot_db_instance_1",
+                    "db_analysis2_daily_statistics":"robot_db_instance_1",
+                    "db_analysis2_retain_statistics":"robot_db_instance_1"
+                },
+                "LE_2000000": {
+                    "db_analysis2_platform": "robot_db_instance_2",
+                    "db_analysis2_event_conf": "robot_db_instance_2",
+                    "db_analysis2_event_statistics":"robot_db_instance_2",
+                    "db_analysis2_daily_statistics":"robot_db_instance_2",
+                    "db_analysis2_retain_statistics":"robot_db_instance_2"
+                }
+            },
+            "string": {
+                "LE_4294967295": {
+                    "db_analysis2_platform": "robot_db_instance_1",
+                    "db_analysis2_event_conf": "robot_db_instance_1",
+                    "db_analysis2_event_statistics":"robot_db_instance_1",
+                    "db_analysis2_daily_statistics":"robot_db_instance_1",
+                    "db_analysis2_retain_statistics":"robot_db_instance_1"
+                }
+            }
+        },
+        "log": {
+            "userid": {
+                "LE_10000000": {
+                    "db_analysis2_platform": "robot_db_instance_1",
+                    "db_analysis2_event_conf": "robot_db_instance_1",
+                    "db_analysis2_event_statistics":"robot_db_instance_1",
+                    "db_analysis2_daily_statistics":"robot_db_instance_1",
+                    "db_analysis2_retain_statistics":"robot_db_instance_1"
+                },
+                "LE_20000000": {
+                    "db_analysis2_platform": "robot_db_instance_2",
+                    "db_analysis2_event_conf": "robot_db_instance_2",
+                    "db_analysis2_event_statistics":"robot_db_instance_2",
+                    "db_analysis2_daily_statistics":"robot_db_instance_2",
+                    "db_analysis2_retain_statistics":"robot_db_instance_2"
+                }
+            },
+            "userset": {
+                "LE_1000000": {
+                    "db_analysis2_platform": "robot_db_instance_1",
+                    "db_analysis2_event_conf": "robot_db_instance_1",
+                    "db_analysis2_event_statistics":"robot_db_instance_1",
+                    "db_analysis2_daily_statistics":"robot_db_instance_1",
+                    "db_analysis2_retain_statistics":"robot_db_instance_1"
+                },
+                "LE_2000000": {
+                    "db_analysis2_platform": "robot_db_instance_2",
+                    "db_analysis2_event_conf": "robot_db_instance_2",
+                    "db_analysis2_event_statistics":"robot_db_instance_2",
+                    "db_analysis2_daily_statistics":"robot_db_instance_2",
+                    "db_analysis2_retain_statistics":"robot_db_instance_2"
+                }
+            },
+            "string": {
+                "LE_4294967295": {
+                    "db_analysis2_platform": "robot_db_instance_1",
+                    "db_analysis2_event_conf": "robot_db_instance_1",
+                    "db_analysis2_event_statistics":"robot_db_instance_1",
+                    "db_analysis2_daily_statistics":"robot_db_instance_1",
+                    "db_analysis2_retain_statistics":"robot_db_instance_1"
+                }
+            }
+        }
+    },
+    "db_group": {
+    	"instance_brief":"每个实例为一个集群，包括副本集:cluster 和 主从集群:masterslave. 副本集 版本 为 支持 MariaDB Galera Cluster 的mariadb-10.2.11",
+        "robot_db_instance_1": {
+        	"use_group":"cluster",
+        	
+        	"cluster": ["192.168.18.68:3307","192.168.18.68:3308","192.168.18.68:3309"],
+        	"masterslave":{"master_host":"192.168.18.68:3306","slave_host":"192.168.18.68:3306"},
+
+            "user": "root",
+            "password": "123456",
+            "charset": "utf8",
+            "query_permit": 7,
+            "timeout": 3
+        },
+        "robot_db_instance_2": {
+        	"use_group":"cluster",
+        	
+        	"cluster": ["192.168.18.68:3307","192.168.18.68:3308","192.168.18.68:3309"],
+        	"masterslave":{"master_host":"192.168.18.68:3306","slave_host":"192.168.18.68:3306"},
+        	
+            "user": "root",
+            "password": "123456",
+            "charset": "utf8",
+            "query_permit": 7,
+            "timeout": 3
+        }
+    }
+}

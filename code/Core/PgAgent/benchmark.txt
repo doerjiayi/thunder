@@ -1,0 +1,59 @@
+[imdev@analysis78 test]$ ./siegeTest.sh testfile_PgAgentAddUp 100 100 
+length:
+0
+file testfile_PgAgentAddUp 100 100
+/usr/bin/siege -c 100 -r 100 http://192.168.18.78:17137/hello/hello POST {
+    "option": "PgAgentAddUp",
+    "id":1,
+    "name":"name1",
+    "sum":100
+}
+      done.
+
+Transactions:                  10000 hits
+Availability:                 100.00 %
+Elapsed time:                  62.47 secs
+Data transferred:               0.20 MB
+Response time:                  0.62 secs
+Transaction rate:             160.08 trans/sec
+Throughput:                     0.00 MB/sec
+Concurrency:                   99.51
+Successful transactions:       10000
+Failed transactions:               0
+Longest transaction:            0.83
+Shortest transaction:           0.03
+ 
+FILE: /work/imdev/siege.log
+You can disable this annoying message by editing
+the .siegerc file in your home directory; change
+the directive 'show-logfile' to false.
+CONNECTED:52
+
+./siegeTest.sh testfile_PgAgentGet 100 100 
+length:
+0
+file testfile_PgAgentGet 100 100
+/usr/bin/siege -c 100 -r 100 http://192.168.18.78:17137/hello/hello POST {
+    "option": "PgAgentGet",
+    "val":"1001"
+}
+      done.
+
+Transactions:                  10000 hits
+Availability:                 100.00 %
+Elapsed time:                   2.96 secs
+Data transferred:               0.20 MB
+Response time:                  0.03 secs
+Transaction rate:            3378.38 trans/sec
+Throughput:                     0.07 MB/sec
+Concurrency:                   98.90
+Successful transactions:       10000
+Failed transactions:               0
+Longest transaction:            0.04
+Shortest transaction:           0.00
+ 
+FILE: /work/imdev/siege.log
+You can disable this annoying message by editing
+the .siegerc file in your home directory; change
+the directive 'show-logfile' to false.
+CONNECTED:52

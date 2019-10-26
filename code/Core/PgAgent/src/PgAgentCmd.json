@@ -1,0 +1,17 @@
+{
+	"job_time":10,
+	
+	"buff_sql_check_time":	1,
+	"buff_sql_max_write_time":1000,
+	"buff_sql_max_write_count":1000,
+	
+	"bulk_sql_enable":	1,
+	"bulk_sql_max_sql_size":100000,
+	
+	"pipeline_sql_enable":1,
+	"pipeline_sql_max_num":100,
+	"pipeline_sql_max_size":100000,
+	
+	"tests":{"enable_test":0,"test_times":10,"test_count":10000,"sql":"INSERT INTO \"tb_test\" (name) VALUES ('name testing')",
+	"db":{"dbname":"db_test","pwd":"postgres","user":"postgres","host":"192.168.18.78","charset":"utf8","port":5432,"timeout":3}}
+}
