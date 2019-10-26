@@ -22,7 +22,7 @@ namespace util
 struct coroutine;
 // 协程调度器
 struct schedule {
-	char stack[STACK_SIZE];
+	char stack[STACK_SIZE];//共享栈空间（大小为1M）
 	ucontext_t main;// 正在running的协程在执行完后需切换到的上下文，由于是非对称协程，所以该上下文用来接管协程结束后的程序控制权
 	int nco; // 调度器中已保存的协程数量
 	int cap; // 调度器中协程的最大容量

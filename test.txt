@@ -1,3 +1,6 @@
+
+测试接入层和逻辑层简单交互：token服务，生成token和访问token
+
 查看服务
 lsof -Pni4 | grep LISTEN 
 请求生成token 和 key
