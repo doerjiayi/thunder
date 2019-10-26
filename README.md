@@ -77,7 +77,8 @@ docker化 核心服务（https://blog.csdn.net/q610376681/article/details/904835
 绑定性能测试（不同环境不同），参考 bindcpu_test.md
 
 
-
+#架构说明
+参考 architecture.pptx
 
 
 
