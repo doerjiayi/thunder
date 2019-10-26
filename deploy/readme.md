@@ -1,6 +1,6 @@
 # 数据恢复 #
 ## 数据目录 ##
-/app/analysis3/analysisServer/deploy/LogQueue/data/file
+/app/thunder/analysisServer/deploy/LogQueue/data/file
 ## 数据文件格式 ##
 包含数据头、数据体，分别是占一行的json格式数据，如下：
 {"index":{"_index":"db_page_trace","_type":"tb_page_trace","_id":"408577775029026449633516908916"}}

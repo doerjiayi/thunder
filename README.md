@@ -62,11 +62,21 @@ Interface  节点为接入层
 Logic  节点为逻辑层
 Hello  功能测试
 
-Interface 与 Logic的测试 说明参考test.md
+Interface 与 Logic的测试 说明参考node_test.md
 
 #todo
 自动构建 
 docker化 核心服务（https://blog.csdn.net/q610376681/article/details/90483576）
+
+
+#环境安装
+参考install.md
+
+
+#支持绑定cpu
+绑定性能测试（不同环境不同），参考 bindcpu_test.md
+
+
 
 
 

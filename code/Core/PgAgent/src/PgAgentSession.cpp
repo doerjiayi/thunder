@@ -405,7 +405,7 @@ int PgAgentSession::ConnectDb(const util::CJsonObject& oInstanceConf, pqxx::conn
 		LOG4_ERROR("SQL error: %s.Query was:%s",e.what());
 		return 1;
 	}
-	//options:dbname=db_analysis3_conf hostaddr=192.168.18.78 user=postgres password=postgres port=5402
+	//options:dbname=db_thunder_conf hostaddr=192.168.18.78 user=postgres password=postgres port=5402
 	LOG4_TRACE("Connection succesful!options:%s",pPgConn->options().c_str());
 	return 0;
 }

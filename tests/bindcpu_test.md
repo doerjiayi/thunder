@@ -17,20 +17,9 @@ taskset -pc 1 18070 succ for process PID:18070
 imdev    18066     1  0 14:29 ?        00:00:00 Hello_demo                                                                                                                     
 imdev    18070 18066  0 14:29 ?        00:00:00 Hello_demo_W0  
 
-Transactions:                  90000 hits
-Availability:                 100.00 %
-Elapsed time:                  11.00 secs
-Data transferred:               1.80 MB
-Response time:                  0.04 secs
-Transaction rate:            8181.82 trans/sec
-Throughput:                     0.16 MB/sec
-Concurrency:                  298.65
-Successful transactions:       90000
-Failed transactions:               0
-Longest transaction:            0.05
-Shortest transaction:           0.00
+ 
 
-不绑定
+不绑定cpu
 Transactions:                  90000 hits
 Availability:                 100.00 %
 Elapsed time:                   7.72 secs
@@ -44,7 +33,7 @@ Failed transactions:               0
 Longest transaction:            0.04
 Shortest transaction:           0.00
 
-均匀绑定
+均匀绑定cpu
 Transactions:                  90000 hits
 Availability:                 100.00 %
 Elapsed time:                   7.41 secs
@@ -57,3 +46,4 @@ Successful transactions:       90000
 Failed transactions:               0
 Longest transaction:            0.04
 Shortest transaction:           0.00
+

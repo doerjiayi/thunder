@@ -4,7 +4,7 @@
 	"inner_port":	27011,
 	"center":[
         {"host":"192.168.18.78","port":"27000"}],
-	"server_name":	"PgAgent_analysis3",
+	"server_name":	"PgAgent_thunder",
 	"process_num":	1,
 	"worker_capacity":	1000000,
 	"config_path":	"conf/",

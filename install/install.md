@@ -133,7 +133,7 @@ su - postgres -c "/usr/local/pgsql/bin/createdb test"
 sudo ln -s /usr/local/pgsql/bin/pg_config /usr/bin/pg_config
 
 安装默认控件
-cd /app/analysis3/db/postgresql/postgresql-10.5/contrib
+cd /app/thunder/db/postgresql/postgresql-10.5/contrib
 make && sudo make install
 
 需要安装的内置插件如下(如果执行默认安装插件指令则会直接都安装)
@@ -142,11 +142,11 @@ make && sudo make install
 create extension IF NOT EXISTS plpythonu;
 
 可选安装插件pg_trgm
-cd /app/analysis3/db/postgresql/postgresql-10.5/contrib/pg_trgm
+cd /app/thunder/db/postgresql/postgresql-10.5/contrib/pg_trgm
 make && sudo make install
 
 可选安装插件pg_stat_statements
-cd /app/analysis3/db/postgresql/postgresql-10.5/contrib/pg_stat_statements
+cd /app/thunder/db/postgresql/postgresql-10.5/contrib/pg_stat_statements
 make && sudo make install
 vim /data/pg/data/postgresql.conf
 shared_preload_libraries = 'pg_stat_statements'
@@ -199,8 +199,8 @@ pg_stat_statements.max = 1000
 pg_stat_statements.track = all
 
 9、安装数据表
-sh /app/analysis3/db/postgresql/tables/loadsql.sh cre
-sh /app/analysis3/db/postgresql/func/loadfunc/loadfunc.sh
+sh /app/thunder/db/postgresql/tables/loadsql.sh cre
+sh /app/thunder/db/postgresql/func/loadfunc/loadfunc.sh
 
 四、安装postgresql从库
 1、创建数据目录
@@ -262,58 +262,58 @@ su - postgres
 /usr/local/pgsql/bin/pg_ctl promote     -D/data/pg/data/
 /usr/local/pgsql/bin/pg_controldata     /data/pg/data/       #此时Database cluster state: Inproduction
 
-五、安装ssdb
+五、安装ssdb（如果是使用ssdb）
 sudo mkdir -p /data/ssdb /data/ssdb/log /data/ssdb/var1 /data/ssdb/var2
 
-cd /app/analysis3/db/ssdb
+cd /app/thunder/db/ssdb
 unzip ssdb.zip
 
 修改ssdb1.conf
-vim /app/analysis3/db/ssdb/ssdb/ssdb1.conf
+vim /app/thunder/db/ssdb/ssdb/ssdb1.conf
 host: 192.168.18.78
 work_dir = /data/ssdb/var1
 pidfile = /data/ssdb/var1/ssdb1.pid
 output: /data/ssdb/log/log1.txt
 
 修改ssdb2.conf
-vim /app/analysis3/db/ssdb/ssdb/ssdb2.conf
+vim /app/thunder/db/ssdb/ssdb/ssdb2.conf
 host: 192.168.18.78
 work_dir = /data/ssdb/var2
 pidfile = /data/ssdb/var2/ssdb2.pid
 output: /data/ssdb/log/log2.txt
 
 启动服务(root用户)
-chmod +x /app/analysis3/db/ssdb/ssdb/ssdb-server
-sudo /app/analysis3/db/ssdb/ssdb/ssdb-server -d /app/analysis3/db/ssdb/ssdb/ssdb1.conf 
-sudo /app/analysis3/db/ssdb/ssdb/ssdb-server -d /app/analysis3/db/ssdb/ssdb/ssdb2.conf 
+chmod +x /app/thunder/db/ssdb/ssdb/ssdb-server
+sudo /app/thunder/db/ssdb/ssdb/ssdb-server -d /app/thunder/db/ssdb/ssdb/ssdb1.conf 
+sudo /app/thunder/db/ssdb/ssdb/ssdb-server -d /app/thunder/db/ssdb/ssdb/ssdb2.conf 
 
 重启
-sudo /app/analysis3/db/ssdb/ssdb/ssdb-server -d /app/analysis3/db/ssdb/ssdb/ssdb1.conf -s restart
-sudo /app/analysis3/db/ssdb/ssdb/ssdb-server -d /app/analysis3/db/ssdb/ssdb/ssdb2.conf -s restart
+sudo /app/thunder/db/ssdb/ssdb/ssdb-server -d /app/thunder/db/ssdb/ssdb/ssdb1.conf -s restart
+sudo /app/thunder/db/ssdb/ssdb/ssdb-server -d /app/thunder/db/ssdb/ssdb/ssdb2.conf -s restart
 
 关闭
-sudo /app/analysis3/db/ssdb/ssdb/ssdb-server -d /app/analysis3/db/ssdb/ssdb/ssdb1.conf -s stop
-sudo /app/analysis3/db/ssdb/ssdb/ssdb-server -d /app/analysis3/db/ssdb/ssdb/ssdb2.conf -s stop
+sudo /app/thunder/db/ssdb/ssdb/ssdb-server -d /app/thunder/db/ssdb/ssdb/ssdb1.conf -s stop
+sudo /app/thunder/db/ssdb/ssdb/ssdb-server -d /app/thunder/db/ssdb/ssdb/ssdb2.conf -s stop
 
 六、修改服务器配置
 根据文档os.conf修改服务器配置
 
 七、安装代码
-拷贝analysis3到/app目录
+拷贝thunder到/app目录
 
 解压
-cd /app/analysis3/deploy
+cd /app/thunder/deploy
 unzip 3lib.zip
 
 编译
-cd /app/analysis3/code
+cd /app/thunder/code
 sh ./make.sh pre && ./make.sh all
 
 八、运行程序
-创建数据目录（修改QueueCmd.json配置 "datalog_path":	"/data/analysis3/file/"）
-sudo mkdir -p /data/analysis3/file && sudo chown -R dev:dev /data/analysis3
+创建数据目录（修改QueueCmd.json配置 "datalog_path":	"/data/thunder/file/"）
+sudo mkdir -p /data/thunder/file && sudo chown -R dev:dev /data/thunder
 
-cd /app/analysis3/deploy
+cd /app/thunder/deploy
 
 修改服务配置
 sh install.sh pre
