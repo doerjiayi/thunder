@@ -42,6 +42,18 @@ Core  核心逻辑 ：服务发现 、网络、常用库
 # 新增功能
 用ccache 优化编译 ，增加了脚本支持发送信号热加载逻辑so
 
+#mysql代理DbAgent
+多进程支持同步和异步
+
+#postgresql代理PgAgent
+多进程支持同步
+
+#DataProxy 缓存代理
+支持分组redis 主从
+支持分组redis cluster
+支持与持久化存储的数据同步
+支持网络分区和持久化存储异常情况下的数据补偿
+
 #测试实例
 Interface  节点为接入层
 Logic  节点为逻辑层

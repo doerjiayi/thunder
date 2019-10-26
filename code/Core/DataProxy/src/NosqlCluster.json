@@ -1,0 +1,139 @@
+{
+    "data_type": [
+        "attribute",
+        "log"
+    ],
+    "data_type_enum": {
+        "attribute": 1,
+        "log": 2
+    },
+    "section_factor": [
+        "userid",
+        "userset",
+        "string"
+    ],
+    "section_factor_enum": {
+        "userid": 1,
+        "userset": 2,
+        "string": 3
+    },
+    "factor_section": {
+        "userid": [
+            10000000,
+            20000000
+        ],
+        "userset": [
+            1000000,
+            2000000
+        ],
+        "string": [
+            4294967295
+        ]
+    },
+    "hash_algorithms": {
+        "hash_fnv1a_64": 0,
+        "hash_fnv1_64": 1,
+        "murmur3_32": 2
+    },
+    "hash_algorithm": 0,
+    "virtual_node_num": 256,
+    "cluster": {
+        "attribute": {
+            "userid": {
+                "LE_10000000": [
+                    "analysis_data_attribute_1"
+                ],
+                "LE_20000000": [
+                    "analysis_data_attribute_2"
+                ]
+            },
+            "userset": {
+                "LE_1000000": [
+                    "analysis_data_attribute_1"
+                ],
+                "LE_2000000": [
+                    "analysis_data_attribute_2"
+                ]
+            },
+            "string": {
+                "LE_4294967295": [
+                    "analysis_data_attribute_1"
+                ]
+            }
+        },
+        "log": {
+            "userid": {
+                "LE_10000000": [
+                    "analysis_data_log_1"
+                ],
+                "LE_20000000": [
+                    "analysis_data_log_2"
+                ]
+            },
+            "userset": {
+                "LE_1000000": [
+                    "analysis_data_log_1"
+                ],
+                "LE_2000000": [
+                    "analysis_data_log_2"
+                ]
+            },
+            "string": {
+                "LE_4294967295": [
+                    "analysis_data_log_1"
+                ]
+            }
+        }
+    },
+    "redis_group_brief":"指定需要使用的集群：redis主从 redis_group、redis集群 redis_cluster、ssdb集群 ssdb_group",
+    "group_use":"ssdb_group",
+    "ssdb_group_brief":"使用ssdb双主集群：master和slave互为主从，都为镜像服务",
+    "ssdb_group": {
+        "analysis_data_attribute_1": {
+            "master": "192.168.18.78:7000","slave": "192.168.18.78:7001"
+        },
+        "analysis_data_attribute_2": {
+            "master": "192.168.18.78:7000","slave": "192.168.18.78:7001"
+        },
+        "analysis_data_log_1": {
+            "master": "192.168.18.78:7000","slave": "192.168.18.78:7001"
+        },
+        "analysis_data_log_2": {
+            "master": "192.168.18.78:7000","slave": "192.168.18.78:7001"
+        }
+    },
+    "redis_group_brief":"master为单个服务器则表示主从，此时slave为master的从服务配置",
+    "redis_group": {
+        "analysis_data_attribute_1": {
+            "master": "192.168.18.78:36379","slave": "192.168.18.78:46379"
+        },
+        "analysis_data_attribute_2": {
+            "master": "192.168.18.78:36379","slave": "192.168.18.78:46379"
+        },
+        "analysis_data_log_1": {
+            "master": "192.168.18.78:36379","slave": "192.168.18.78:46379"
+        },
+        "analysis_data_log_2": {
+            "master": "192.168.18.78:36379","slave": "192.168.18.78:46379"
+        }
+    },
+    "redis_cluster_brief":"master为一个服务器列表则表示redis cluster集群,此时slave与master相同；",
+    "redis_cluster": {
+        "analysis_data_attribute_1": {
+            "master": "192.168.18.78:6000,192.168.18.78:6001,192.168.18.78:6002,192.168.18.78:6003,192.168.18.78:6004,192.168.18.78:6005",
+            "slave": "192.168.18.78:6000,192.168.18.78:6001,192.168.18.78:6002,192.168.18.78:6003,192.168.18.78:6004,192.168.18.78:6005"
+        },
+        "analysis_data_attribute_2": {
+            "master": "192.168.18.78:6000,192.168.18.78:6001,192.168.18.78:6002,192.168.18.78:6003,192.168.18.78:6004,192.168.18.78:6005",
+            "slave": "192.168.18.78:6000,192.168.18.78:6001,192.168.18.78:6002,192.168.18.78:6003,192.168.18.78:6004,192.168.18.78:6005"
+        },
+        "analysis_data_log_1": {
+            "master": "192.168.18.78:6000,192.168.18.78:6001,192.168.18.78:6002,192.168.18.78:6003,192.168.18.78:6004,192.168.18.78:6005",
+            "slave": "192.168.18.78:6000,192.168.18.78:6001,192.168.18.78:6002,192.168.18.78:6003,192.168.18.78:6004,192.168.18.78:6005"
+        },
+        "analysis_data_log_2": {
+            "master": "192.168.18.78:6000,192.168.18.78:6001,192.168.18.78:6002,192.168.18.78:6003,192.168.18.78:6004,192.168.18.78:6005",
+            "slave": "192.168.18.78:6000,192.168.18.78:6001,192.168.18.78:6002,192.168.18.78:6003,192.168.18.78:6004,192.168.18.78:6005"
+        }
+    }
+}

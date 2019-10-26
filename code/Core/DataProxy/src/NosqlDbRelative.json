@@ -1,0 +1,28 @@
+{
+    "brief":"redis数据结构与DB表对应关系",
+    "note":"所有数据结构都需要在此配置，即便是无对应的DB表。relative中的table表示redis数据结构与表无强关联关系或redis的hash",	
+    "ttlnote":"超时时间 ：0 永久  604800：7天   7776000：三个月     15552000：六个月",    
+    "reference":"robot数据库表结构和redis结构设计说明.docx",
+	"data_type":["attribute","log"],
+	"data_type_enum":{"attribute":1, "log":2},
+	"section_factor":["userid", "userset" ,"string"],
+	"section_factor_enum":{"userid":1, "userset":2 ,"string":3},
+    "relative":{"table":0, "dataset":1, "join":2},
+    "note_redis_struct":"key_field 为必须字段,join_fields为被连接保存字段 格式 fieldvalue1:fieldvalue2:fieldvalue3",
+    "redis_struct":{
+        "1":{"data_type":1, "section_factor":3, "ttl":0,"brief":"用户","table":"tb_attribute_user"},
+        "2":{"data_type":1, "section_factor":3, "ttl":0,"brief":"全局用户统计id"},
+        "3":{"data_type":1, "section_factor":3, "ttl":0,"brief":"用户ID映射"},
+        "4":{"data_type":1, "section_factor":3, "ttl":0,"brief":"设备","table":"tb_attribute_device"}
+    },
+    "note_tables":"数据表以及对应字段",
+    "tables":{
+        "tb_attribute_user":{"data_type":1, "section_factor":3,"cols":["appkey","app_id","user_id","gmid","device_id","platform","utm_source","utm_medium","utm_term","utm_campaign","utm_content","attributes","time","create_time","date"]},
+     	"tb_attribute_device":{"data_type":1, "section_factor":3,"cols":["appkey","app_id","user_id","gmid","device_id","platform","utm_source","utm_medium","utm_term","utm_campaign","utm_content","time","create_time","date"]}
+     }
+}
+
+ 
+
+
+
