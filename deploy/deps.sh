@@ -15,6 +15,66 @@ chmod u+x *.sh
 mkdir -p ${BUILD_PATH} >> /dev/null 2>&1
 
 DEPLOY_LOCAL=false 
+
+#
+#log4cplus-2.0.2
+cd ${BUILD_PATH}
+# install protobuf
+if ! $DEPLOY_LOCAL
+then
+    if [ -f jemalloc-5.2.1.tar.bz2 ]
+    then
+        echo "jemalloc-5.2.1.tar.bz2 exist, skip download."
+    else
+        wget -O https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2
+        if [ $? -ne 0 ]
+        then
+            echo "failed to download log4cplus!" >&2
+            exit 2
+        fi
+    fi
+
+    tar xvf  jemalloc-5.2.1.tar.bz2
+    cd jemalloc-5.2.1
+    ./configure --prefix=${BUILD_PATH}/deps
+    make -j$CPU_NUM
+    make install
+    if [ $? -ne 0 ]
+    then
+        echo "failed, teminated!" >&2
+        exit 2
+    fi
+fi
+
+
+#log4cplus-2.0.2
+cd ${BUILD_PATH}
+# install protobuf
+if ! $DEPLOY_LOCAL
+then
+    if [ -f log4cplus-2.0.4.tar.gz ]
+    then
+        echo "log4cplus-2.0.4.tar.gz exist, skip download."
+    else
+        wget -O https://github.com/log4cplus/log4cplus/releases/download/REL_2_0_4/log4cplus-2.0.4.tar.gz
+        if [ $? -ne 0 ]
+        then
+            echo "failed to download log4cplus!" >&2
+            exit 2
+        fi
+    fi
+
+    tar xvf log4cplus-2.0.4.tar.gz
+    cd log4cplus-2.0.4
+    ./configure --prefix=${BUILD_PATH}/deps
+    make -j$CPU_NUM
+    make install
+    if [ $? -ne 0 ]
+    then
+        echo "failed, teminated!" >&2
+        exit 2
+    fi
+fi
  
 cd ${BUILD_PATH}
 # install protobuf

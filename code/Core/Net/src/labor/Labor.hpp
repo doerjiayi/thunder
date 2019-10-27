@@ -374,6 +374,16 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
      */
     virtual bool SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
     /**
+	 * @brief 以一致性哈希方式选择发送到同一类型节点
+	 * @note 以取模方式选择发送到同一类型节点，实现简单有要求的负载均衡。
+	 * @param strNodeType 节点类型
+	 * @param uiModFactor 取模因子
+	 * @param oMsgHead 数据包头
+	 * @param oMsgBody 数据包体
+	 * @return 是否发送成功
+	 */
+    virtual bool SendToConHash(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
+    /**
      * @brief 发送到一种类型的节点
      * @note 发送到同一种类型除当前节点之外的所有节点。
      * @param strNodeType 节点类型

@@ -39,6 +39,7 @@
 #include "../../step/MysqlStep.hpp"
 #include "Attribution.hpp"
 
+#include "Hash/ConHash.hpp"
 #include "protocol/msg.pb.h"
 #include "protocol/oss_sys.pb.h"
 #include "labor/Labor.hpp"
@@ -143,6 +144,7 @@ public:
     bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
     bool SendToNext(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
     bool SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
+    bool SendToConHash(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
     bool SendToNodeType(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
     bool SendTo(const tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL);
     bool SentTo(const std::string& strHost, int iPort, const std::string& strUrlPath, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL);
@@ -310,6 +312,9 @@ private:
     std::unordered_map<std::string, tagMsgShell> m_mapMsgShell;            // key为Identify
     std::unordered_map<std::string, std::string> m_mapIdentifyNodeType;    // key为Identify，value为node_type
     T_MAP_NODE_TYPE_IDENTIFY m_mapNodeIdentify;
+
+    std::unordered_map<std::string,ChannelConHash> m_mapChannelConHash;
+
 
     //redis节点连接
     // std::unordered_map<std::string, std::set<std::string> > m_mapRedisNodeConf;        ///< redis节点配置，key为node_type，value为192.168.16.22:9988形式的IP+端口

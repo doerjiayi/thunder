@@ -2004,8 +2004,7 @@ void Worker::AddNodeIdentify(const std::string& strNodeType, const std::string& 
     std::unordered_map<std::string, std::string>::iterator iter = m_mapIdentifyNodeType.find(strIdentify);
     if (iter == m_mapIdentifyNodeType.end())
     {
-        m_mapIdentifyNodeType.insert(iter,
-                std::pair<std::string, std::string>(strIdentify, strNodeType));
+        m_mapIdentifyNodeType.insert(iter,std::pair<std::string, std::string>(strIdentify, strNodeType));
 
         T_MAP_NODE_TYPE_IDENTIFY::iterator node_type_iter;
         node_type_iter = m_mapNodeIdentify.find(strNodeType);
@@ -2014,9 +2013,10 @@ void Worker::AddNodeIdentify(const std::string& strNodeType, const std::string& 
             std::set<std::string,std::less<std::string> > setIdentify;
             setIdentify.insert(strIdentify);
             std::pair<T_MAP_NODE_TYPE_IDENTIFY::iterator, bool> insert_node_result;
-            insert_node_result = m_mapNodeIdentify.insert(std::pair< std::string,
-                            std::pair<std::set<std::string>::iterator,  std::set<std::string,std::less<std::string> > > >(
-                                            strNodeType, std::make_pair(setIdentify.begin(), setIdentify)));    //这里的setIdentify是临时变量，setIdentify.begin()将会成非法地址
+            insert_node_result = m_mapNodeIdentify.insert(
+				std::pair< std::string,std::pair<std::set<std::string>::iterator,std::set<std::string,std::less<std::string>>>>
+            (strNodeType, std::make_pair(setIdentify.begin(), setIdentify)));
+            //这里的setIdentify是临时变量，setIdentify.begin()将会成非法地址
             if (insert_node_result.second == false)
             {
                 return;
@@ -2033,6 +2033,21 @@ void Worker::AddNodeIdentify(const std::string& strNodeType, const std::string& 
             }
         }
     }
+    int iPosIpPortSeparator = strIdentify.find(':');//strHost:strPort
+	if (iPosIpPortSeparator == std::string::npos)
+	{
+		LOG4_ERROR("strIdentify error: %s", strIdentify.c_str());
+		return ;
+	}
+	std::string strHost = strIdentify.substr(0, iPosIpPortSeparator);
+	std::string strPort = strIdentify.substr(iPosIpPortSeparator + 1, std::string::npos);
+	int iPort = atoi(strPort.c_str());
+	if (iPort == 0)
+	{
+		LOG4_ERROR("strIdentify error: %s", strIdentify.c_str());
+		return ;
+	}
+    m_mapChannelConHash[strNodeType].addNode(ServerEntry(strIdentify,strHost,iPort));
 }
 
 void Worker::DelNodeIdentify(const std::string& strNodeType, const std::string& strIdentify)
@@ -2054,6 +2069,7 @@ void Worker::DelNodeIdentify(const std::string& strNodeType, const std::string& 
         }
         m_mapIdentifyNodeType.erase(identify_iter);
     }
+    m_mapChannelConHash[strNodeType].removeNode(strIdentify);
 }
 
 void Worker::GetNodeIdentifys(const std::string& strNodeType, std::vector<std::string>& strIdentifys)
@@ -2910,6 +2926,15 @@ bool Worker::SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, c
         }
     }
 }
+
+
+bool Worker::SendToConHash(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+{
+    std::string strIdentify =  m_mapChannelConHash[strNodeType].lookupNodeIdentify(uiModFactor);
+    LOG4_TRACE("%s(nody_type: %s, mod_factor: %u),strIdentify:%s", __FUNCTION__, strNodeType.c_str(), uiModFactor,strIdentify.c_str());
+    return SendTo(strIdentify, oMsgHead, oMsgBody);
+}
+
 
 bool Worker::SendToNodeType(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {

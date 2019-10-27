@@ -222,6 +222,18 @@ bool SendToNext(const std::string& strNodeType, const MsgHead& oMsgHead, const M
 bool SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
 
 /**
+ * @brief 以一致性哈希方式选择发送到同一类型节点
+ * @note 以取模方式选择发送到同一类型节点，实现简单有要求的负载均衡。
+ * @param strNodeType 节点类型
+ * @param uiModFactor 取模因子
+ * @param oMsgHead 数据包头
+ * @param oMsgBody 数据包体
+ * @return 是否发送成功
+ */
+bool SendToConHash(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
+
+
+/**
  * @brief 注册redis回调
  * @param strIdentify redis节点标识(192.168.16.22:9988形式的IP+端口)
  * @param pRedisStep redis步骤实例

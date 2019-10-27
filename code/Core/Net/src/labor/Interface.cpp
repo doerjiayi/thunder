@@ -132,6 +132,7 @@ bool SendTo(const net::tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const M
 bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendTo(strIdentify, oMsgHead, oMsgBody));}
 bool SendToNext(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendToNext(strNodeType, oMsgHead, oMsgBody));}
 bool SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendToWithMod(strNodeType, uiModFactor, oMsgHead, oMsgBody));}
+bool SendToConHash(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendToConHash(strNodeType, uiModFactor, oMsgHead, oMsgBody));}
 bool RegisterCallback(const std::string& strIdentify, net::RedisStep* pRedisStep){return(g_pLabor->RegisterCallback(strIdentify, pRedisStep));}
 bool RegisterCallback(const std::string& strHost, int iPort, net::RedisStep* pRedisStep){return(g_pLabor->RegisterCallback(strHost, iPort, pRedisStep));}
 void AddNodeIdentify(const std::string& strNodeType, const std::string& strIdentify){g_pLabor->AddNodeIdentify(strNodeType, strIdentify);}
