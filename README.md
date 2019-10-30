@@ -79,3 +79,6 @@ Interface 与 Logic的测试 说明参考node_test.md
 自动构建 
 docker化 核心服务（https://blog.csdn.net/q610376681/article/details/90483576）
 增加kafka组件支持（https://github.com/mfontanini/cppkafka）
+增加线程池，并使用libco实现对外部阻塞api的线程复用
+
+
