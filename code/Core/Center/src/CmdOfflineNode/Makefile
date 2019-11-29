@@ -54,7 +54,7 @@ LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
            -L$(3PARTY_PATH)/lib -llog4cplus \
            -L$(3PARTY_PATH)/lib -ljemalloc \
            -L$(SYSTEM_LIB_PATH) -lpthread \
-           -L$(SYSTEM_LIB_PATH) -ldl -lrt
+           -L$(SYSTEM_LIB_PATH) -ldl -lrt  -ltcmalloc
 
 CPP_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
 CC_SRCS = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cc))

@@ -106,7 +106,7 @@ public:
 
 	//一致性哈希列表
 	ConHash() :
-			hash_func_(NULL) {
+			hash_func_(__FNVHash) {
 	}
 	//删除服务器实节点和虚节点
 	~ConHash() {
@@ -233,6 +233,9 @@ public:
 	ServerInfoMap m_server_info_map;
 	ConHash m_ConHashProxy;
 	HashFunction hash_func_;
+	ChannelConHash() :
+			hash_func_(__FNVHash) {
+	}
 	~ChannelConHash() {
 		m_server_info_map.clear();
 	}
