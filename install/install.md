@@ -60,6 +60,8 @@ sudo cp sysctl.conf /etc/
 * hard nproc 1024000
 * soft nofile 1024000
 * hard nofile 1024000
+* soft core unlimited
+* hard core unlimited
 
 三、安装postgresql
 1、下载源代码并解压
