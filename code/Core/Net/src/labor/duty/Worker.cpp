@@ -1669,15 +1669,15 @@ bool Worker::Init(util::CJsonObject& oJsonConf)
         return(false);
     }
     StarshipCodec* pCodec = new ProtoCodec(util::CODEC_PROTOBUF);
-    m_mapCodec.insert(std::pair<util::E_CODEC_TYPE, StarshipCodec*>(util::CODEC_PROTOBUF, pCodec));
+    m_mapCodec.insert(std::make_pair(util::CODEC_PROTOBUF, pCodec));
     pCodec = new HttpCodec(util::CODEC_HTTP);
-    m_mapCodec.insert(std::pair<util::E_CODEC_TYPE, StarshipCodec*>(util::CODEC_HTTP, pCodec));
+    m_mapCodec.insert(std::make_pair(util::CODEC_HTTP, pCodec));
     pCodec = new ClientMsgCodec(util::CODEC_PRIVATE);
-    m_mapCodec.insert(std::pair<util::E_CODEC_TYPE, StarshipCodec*>(util::CODEC_PRIVATE, pCodec));
+    m_mapCodec.insert(std::make_pair(util::CODEC_PRIVATE, pCodec));
     pCodec = new CodecWebSocketJson(util::CODEC_WEBSOCKET_EX_JS);
-    m_mapCodec.insert(std::pair<util::E_CODEC_TYPE, StarshipCodec*>(util::CODEC_WEBSOCKET_EX_JS, pCodec));
+    m_mapCodec.insert(std::make_pair(util::CODEC_WEBSOCKET_EX_JS, pCodec));
     pCodec = new CodecWebSocketPb(util::CODEC_WEBSOCKET_EX_PB);
-    m_mapCodec.insert(std::pair<util::E_CODEC_TYPE, StarshipCodec*>(util::CODEC_WEBSOCKET_EX_PB, pCodec));
+    m_mapCodec.insert(std::make_pair(util::CODEC_WEBSOCKET_EX_PB, pCodec));
     m_pCmdConnect = new CmdConnectWorker();
     if (m_pCmdConnect == NULL)
     {
@@ -2720,7 +2720,7 @@ bool Worker::SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, cons
     	tagConnectionAttr* pConn = conn_iter->second;
         if (pConn->ulSeq == stMsgShell.ulSeq && pConn->iFd == stMsgShell.iFd)
         {
-            std::unordered_map<util::E_CODEC_TYPE, StarshipCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
+            auto codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
             if (codec_iter == m_mapCodec.end())
             {
                 LOG4_ERROR("no codec found for %d!", conn_iter->second->eCodecType);
@@ -2981,7 +2981,7 @@ bool Worker::SendTo(const tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg, Http
     	tagConnectionAttr* pConn = conn_iter->second;
         if (pConn->ulSeq == stMsgShell.ulSeq && pConn->iFd == stMsgShell.iFd)
         {
-            std::unordered_map<util::E_CODEC_TYPE, StarshipCodec*>::iterator codec_iter = m_mapCodec.find(pConn->eCodecType);
+            auto codec_iter = m_mapCodec.find(pConn->eCodecType);
             if (codec_iter == m_mapCodec.end())
             {
                 LOG4_ERROR("no codec found for %d!", pConn->eCodecType);
@@ -3237,7 +3237,7 @@ bool Worker::AutoSend(const std::string& strIdentify, const MsgHead& oMsgHead, c
                 DestroyConnect(conn_iter);
                 return(false);
             }
-            std::unordered_map<util::E_CODEC_TYPE, StarshipCodec*>::iterator codec_iter = m_mapCodec.find(pConn->eCodecType);
+            auto codec_iter = m_mapCodec.find(pConn->eCodecType);
             if (codec_iter == m_mapCodec.end())
             {
                 LOG4_ERROR("no codec found for %d!", conn_iter->second->eCodecType);
@@ -3330,7 +3330,7 @@ bool Worker::AutoSend(const std::string& strHost, int iPort, const std::string& 
                 DestroyConnect(conn_iter);
                 return(false);
             }
-            std::unordered_map<util::E_CODEC_TYPE, StarshipCodec*>::iterator codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
+            auto codec_iter = m_mapCodec.find(conn_iter->second->eCodecType);
             if (codec_iter == m_mapCodec.end())
             {
                 LOG4_ERROR("no codec found for %d!", conn_iter->second->eCodecType);

@@ -2,7 +2,7 @@
 #RUN_PATH=`dirname $0`
 RUN_PATH=`pwd`
 cd ${RUN_PATH}
-lib3_path=/app/analysis/analysisServer/deploy/3lib
+lib3_path=/app/thunder/deploy/3lib
 
 SRC_IP=18.78
 #不填则自动识别目标物理地址为本物理机地址
@@ -49,7 +49,6 @@ function change_config()
 function pre_process()
 {
 	find ./ -maxdepth 5 -type f -name "*.sh"  |xargs -i chmod +x {}
-	find ../tools -maxdepth 3 -type f -name "*.sh"  |xargs -i chmod +x {}
 	#3lib
 	test ! -d ./3lib  && test -d ${lib3_path} && ln -s ${lib3_path} ${RUN_PATH}/3lib  && echo "ln 3lib for deploy"
 	#config

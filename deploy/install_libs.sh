@@ -6,9 +6,9 @@ src_path="/lib"
 dest_path="/lib"
 config_file="server_dir.conf"
 
-proto_so=libanalysis_proto.so
-lib_so=libloss.so
-core_so=libstarship.so
+proto_so=libProto.so
+lib_so=libUtil.so
+core_so=libNet.so
 
 function list_server()
 {

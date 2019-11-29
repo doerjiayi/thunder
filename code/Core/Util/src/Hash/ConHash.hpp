@@ -6,7 +6,7 @@
 #include <list>
 
 //字符串哈希函数
-uint32_t FNVHash(const std::string &str) {
+inline uint32_t __FNVHash(const std::string &str) {
 	const uint32_t fnv_prime = 0x811C9DC5;
 	uint32_t hash = 0;
 	for (std::size_t i = 0; i < str.length(); i++) {
@@ -27,9 +27,10 @@ struct ServerEntry {
 	ServerEntry(int ID, const std::string &IP, int Port, int Inuse = 0) :
 			wdServerID(ID), pstrIP(IP), wdPort(Port), dwInuse(Inuse) {
 	}
-	ServerEntry(const std::string &ID, const std::string &IP, int Port, int Inuse = 0) :
-				wdServerID(FNVHash(ID)), pstrIP(IP), wdPort(Port), dwInuse(Inuse) {
-		}
+	ServerEntry(const std::string &ID, const std::string &IP, int Port,
+			int Inuse = 0) :
+			wdServerID(__FNVHash(ID)), pstrIP(IP), wdPort(Port), dwInuse(Inuse) {
+	}
 	std::string getAddrString() const {
 		return pstrIP + ":" + std::to_string(wdPort) + "#"
 				+ std::to_string(wdServerID);
@@ -47,16 +48,16 @@ struct ServerInfo {
 		return pstrIP + ":" + std::to_string(wdPort) + "#"
 				+ std::to_string(wdServerID);
 	}
-	std::string getIdentify() const {//strHost:strPort
+	std::string getIdentify() const { //strHost:strPort
 		return pstrIP + ":" + std::to_string(wdPort);
 	}
-	const std::string getServerID() {
+	int getServerID() {
 		return wdServerID;
 	}
 };
 
 struct ConNode {
-	static int kVirtualNodeDefault = 80;
+	static const int kVirtualNodeDefault = 80;
 	ConNode(const std::string &iden, uint32_t count, void *data) :
 			node_iden(iden), virtual_node_count(count), nodedata(data) {
 	}
@@ -78,10 +79,10 @@ struct ConVirtualNode {
 			node_iden(iden), virtual_node_count(count), nodedata(data) {
 	}
 	ConNode* getNode() const {
-		return nodedata;
+		return (ConNode*) nodedata;
 	}
 	uint32_t getHash() const {
-		return FNVHash(node_iden);
+		return __FNVHash(node_iden);
 	}
 	std::string node_iden;
 	uint32_t virtual_node_count;
@@ -99,8 +100,6 @@ public:
 	typedef std::list<ConNode*> NodeList;
 	typedef NodeList::const_iterator NodeList_CIT;
 	typedef NodeList::iterator NodeList_IT;
-
-	static int kVirtualNodeDefault = 80;
 
 	VNodeMap m_vnode_map;
 	NodeList m_node_list;
@@ -233,16 +232,13 @@ public:
 	typedef ServerInfoMap::value_type ServerInfoMap_VT;
 	ServerInfoMap m_server_info_map;
 	ConHash m_ConHashProxy;
-
+	HashFunction hash_func_;
 	~ChannelConHash() {
-		ServerInfoMap_IT it = m_server_info_map.begin();
-		for (; it != m_server_info_map.end(); ++it)
-			delete (it->second);
 		m_server_info_map.clear();
 	}
 	//频道哈希列表
 	void setHashFunc(HashFunction func) {
-		setHashFunc(&FNVHash); //设置哈希函数
+		hash_func_ = func;
 	}
 	//加入新服务器节点到哈希列表
 	int addNode(const ServerEntry &entry) {
@@ -256,14 +252,12 @@ public:
 		//加入服务器节点到列表 pnewinfo
 		m_server_info_map.insert(ServerInfoMap_VT(entry.wdServerID, entry));
 		return m_ConHashProxy.addNode(pnewinfo->getAddrString(),
-				ConHash::kVirtualNodeDefault, pnewinfo);
+				ConNode::kVirtualNodeDefault, pnewinfo);
 	}
 
 	//移除服务器对应的节点
-
-	int removeNode(const std::string &ID)
-	{
-		return removeNode(FNVHash(ID));
+	int removeNode(const std::string &ID) {
+		return removeNode(__FNVHash(ID));
 	}
 	int removeNode(uint16_t serverid) {
 		ServerInfoMap_IT it = m_server_info_map.find(serverid);
@@ -275,7 +269,6 @@ public:
 		if (status < 0)
 			return status;
 
-		delete (it->second);
 		m_server_info_map.erase(it);
 		return 0;
 	}
@@ -283,10 +276,6 @@ public:
 	//删除服务器列表信息
 	void clear() {
 		m_ConHashProxy.clear();
-
-		ServerInfoMap_IT it = m_server_info_map.begin();
-		for (; it != m_server_info_map.end(); ++it)
-			delete (it->second);
 		m_server_info_map.clear();
 	}
 	//由频道ID（缓存内容）哈希获取服务器ID

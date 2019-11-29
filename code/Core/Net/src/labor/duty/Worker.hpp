@@ -11,6 +11,7 @@
 #define Worker_HPP_
 
 #include <map>
+#include <unordered_map>
 #include <list>
 #include <dlfcn.h>
 #include <stdlib.h>
@@ -44,6 +45,7 @@
 #include "protocol/oss_sys.pb.h"
 #include "labor/Labor.hpp"
 #include "codec/StarshipCodec.hpp"
+#include "util/StreamCodec.hpp"
 
 namespace net
 {
@@ -294,7 +296,7 @@ private:
     struct ev_loop* m_loop;
     CmdConnectWorker* m_pCmdConnect;
 
-    std::unordered_map<util::E_CODEC_TYPE, StarshipCodec*> m_mapCodec;   ///< 编解码器
+    std::unordered_map<int, StarshipCodec*> m_mapCodec;   ///< 编解码器 util::E_CODEC_TYPE, StarshipCodec*
     std::unordered_map<int, tagConnectionAttr*> m_mapFdAttr;   ///< 连接的文件描述符属性
     std::unordered_map<int, uint32> m_mapInnerFd;              ///< 服务端之间连接的文件描述符（用于区分连接是服务内部还是外部客户端接入）
     std::unordered_map<uint32, int> m_mapSeq2WorkerIndex;      ///< 序列号对应的Worker进程编号（用于connect成功后，向对端Manager发送希望连接的Worker进程编号）

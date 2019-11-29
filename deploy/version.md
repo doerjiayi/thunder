@@ -38,6 +38,9 @@ libmariadb.so mysql同步、异步访问，可同时支持mariadb
 libprotobuf.so pb协议
 gcc 4.8.2 ，glibc  GLIBCXX_3.4.19（开发环境）
 
+#需要用到的运维工具
+yum -y install bc  ccache
+
 # 版本更新说明1.0 #
 ## 远程过程调用 ##
 1. 编译使用c++11特性的选项-std=c++11（开发环境使用gcc 4.8.2），并且已重新编译liblog4cplus到目录3lib，包括liblog4cplus.so\liblog4cplus-1.1.so.9.1.3\liblog4cplus-1.1.so.9

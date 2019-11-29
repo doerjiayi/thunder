@@ -54,7 +54,7 @@ PgAgentSession::~PgAgentSession()
 
 bool PgAgentSession::LoadConfig()
 {
-	if (!net::GetJsonConfigFile(net::GetConfigPath() + std::string("PgAgentCmd.json"),m_oCurrentConf))
+	if (!net::GetConfig(m_oCurrentConf,net::GetConfigPath() + std::string("PgAgentCmd.json")))
 	{
 		return (false);
 	}
@@ -81,7 +81,7 @@ bool PgAgentSession::LoadConfig()
 
 bool PgAgentSession::LoadPgConfig()
 {
-	if (!net::GetJsonConfigFile(net::GetConfigPath() + std::string("CmdPgCluster.json"),m_oDbConf))
+	if (!net::GetConfig(m_oDbConf,net::GetConfigPath() + std::string("CmdPgCluster.json")))
 	{
 		return (false);
 	}

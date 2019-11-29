@@ -59,7 +59,7 @@ bool DataProxySession::ReadNosqlClusterConf()
 {
     LOG4_DEBUG("%s()", __FUNCTION__);
     util::CJsonObject oConfJson;
-    if (!net::GetJsonConfigFile(net::GetConfigPath() + std::string("NosqlCluster.json"),oConfJson))
+    if (!net::GetConfig(oConfJson,net::GetConfigPath() + std::string("NosqlCluster.json")))
 	{
 		return false;
 	}
@@ -171,7 +171,7 @@ bool DataProxySession::ReadNosqlClusterConf()
 bool DataProxySession::ReadNosqlDbRelativeConf()
 {
     LOG4_DEBUG("%s()", __FUNCTION__);
-    if (!net::GetJsonConfigFile(net::GetConfigPath() + std::string("NosqlDbRelative.json"),m_oNosqlDbRelative))
+    if (!net::GetConfig(m_oNosqlDbRelative,net::GetConfigPath() + std::string("NosqlDbRelative.json")))
 	{
 		return false;
 	}
