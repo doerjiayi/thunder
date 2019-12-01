@@ -26,7 +26,8 @@
     "so":[
     ],
     "module":[
-    {"url_path":"/Interface/gentoken","so_path":"plugins/Interface/ModuleInterface.so","entrance_symbol":"create", "load":true, "version":1}
+    {"url_path":"/Interface/gentoken","so_path":"plugins/Interface/ModuleInterface.so","entrance_symbol":"create", "load":true, "version":1},
+	{"url_path":"/Echo","so_path":"plugins/Interface/ModuleEcho.so","entrance_symbol":"create", "load":true, "version":1}
     ]
 }
 

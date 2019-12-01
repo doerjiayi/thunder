@@ -30,7 +30,7 @@ bool ModuleHello::Init()
 {
     return(true);
 }
-
+//curl 'http://192.168.3.6:27008/Interface/gentoken'
 void ModuleHello::GenKey(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
 	std::string strToken = std::to_string(util::GetUniqueId(net::GetNodeId(),net::GetWorkerIndex()));
@@ -60,6 +60,8 @@ void ModuleHello::GenKey(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHt
 	}
 }
 
+//curl 'http://192.168.3.6:27008/Interface/gentoken?token=6718307704189747201&key=6718307704189747202'
+//curl 'http://192.168.3.6:27008/Interface/gentoken?test=echo'
 void ModuleHello::VerifyKey(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
 	std::map<std::string, std::string> mapParameters;
@@ -94,6 +96,35 @@ void ModuleHello::VerifyKey(const net::tagMsgShell& stMsgShell,const HttpMsg& oI
 	int64 mod = util::CalcKeyHash(address.c_str(),address.size());
 	net::SendToModCallback(new net::DataStep(stMsgShell,oInHttpMsg),GET_TOKEN_GEN,oJson.ToString(),callback,mod,"LOGIC");
 }
+
+//oInHttpMsg:type: 0
+//http_major: 1
+//http_minor: 1
+//method: 1
+//url: "/Interface/gentoken"
+//headers {
+//  header_name: "Host"
+//  header_value: "192.168.3.6:27008"
+//}
+//headers {
+//  header_name: "Accept"
+//  header_value: "*/*"
+//}
+//headers {
+//  header_name: "Accept-Encoding"
+//  header_value: "gzip;deflate"
+//}
+//headers {
+//  header_name: "User-Agent"
+//  header_value: "Mozilla/5.0 (redhat-x86_64-linux-gnu) Siege/4.0.2"
+//}
+//headers {
+//  header_name: "Connection"
+//  header_value: "close"
+//}
+//path: "/Interface/gentoken"
+//is_decoding: false
+
 
 bool ModuleHello::AnyMessage(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {

@@ -8,3 +8,5 @@ curl 'http://192.168.3.6:27008/Interface/gentoken'
 验证token 和 组合key
 curl 'http://192.168.3.6:27008/Interface/gentoken?token=6718307704189747201&key=6718307704189747202'
 
+echo
+curl 'http://192.168.3.6:27008/Interface/gentoken'

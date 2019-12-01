@@ -1,0 +1,84 @@
+环境个人 开发虚拟机：
+本结果为峰值性能，因linux环境影响，每次都差异较多
+
+测试场景。http echo 服务
+
+thunder:
+
+siege "http://192.168.3.6:27008/Echo" -r 100 -c 100
+** SIEGE 4.0.2
+** Preparing 100 concurrent users for battle.
+The server is now under siege...
+Transactions:                  10000 hits
+Availability:                 100.00 %
+Elapsed time:                   3.55 secs
+Data transferred:               0.22 MB
+Response time:                  0.02 secs
+Transaction rate:            2816.90 trans/sec
+Throughput:                     0.06 MB/sec
+Concurrency:                   65.05
+Successful transactions:       10000
+Failed transactions:               0
+Longest transaction:            0.48
+Shortest transaction:           0.00
+
+siege "http://192.168.3.6:27008/Echo" -r 300 -c 300
+** SIEGE 4.0.2
+** Preparing 300 concurrent users for battle.
+The server is now under siege...
+Transactions:                  90000 hits
+Availability:                 100.00 %
+Elapsed time:                  30.68 secs
+Data transferred:               1.97 MB
+Response time:                  0.09 secs
+Transaction rate:            2933.51 trans/sec
+Throughput:                     0.06 MB/sec
+Concurrency:                  267.60
+Successful transactions:       90000
+Failed transactions:               0
+Longest transaction:            3.32
+Shortest transaction:           0.00
+
+
+
+
+
+nebula:
+
+siege "http://192.168.3.6:16003/hello  POST   {\"name\": \"Nebula\", \"address\":\"https://github.com/Bwar/Nebula\"}" -r 100 -c 100
+** SIEGE 4.0.2
+** Preparing 100 concurrent users for battle.
+The server is now under siege...
+Transactions:                  10000 hits
+Availability:                 100.00 %
+Elapsed time:                   2.68 secs
+Data transferred:               0.31 MB
+Response time:                  0.02 secs
+Transaction rate:            3731.34 trans/sec
+Throughput:                     0.11 MB/sec
+Concurrency:                   85.62
+Successful transactions:       10000
+Failed transactions:               0
+Longest transaction:            0.54
+Shortest transaction:           0.00
+
+siege "http://192.168.3.6:16003/hello  POST   {\"name\": \"Nebula\", \"address\":\"https://github.com/Bwar/Nebula\"}" -r 300 -c 300
+** SIEGE 4.0.2
+** Preparing 300 concurrent users for battle.
+The server is now under siege...
+Transactions:                  90000 hits
+Availability:                 100.00 %
+Elapsed time:                  26.55 secs
+Data transferred:               2.75 MB
+Response time:                  0.08 secs
+Transaction rate:            3389.83 trans/sec
+Throughput:                     0.10 MB/sec
+Concurrency:                  274.15
+Successful transactions:       90000
+Failed transactions:               0
+Longest transaction:            3.36
+Shortest transaction:           0.00
+
+
+
+
