@@ -113,9 +113,6 @@ enum E_ERROR_NO
     ERR_NO_CUSTOMER_SERVICE_ONLINE           = 27004,    ///< 当前没有在线客服
     ERR_INVALID_SESSION                      = 27005,    ///< 无效会话
     ERR_NO_OPERATION_PERMISSIONS             = 27006,    ///< 没有操作权限
-    ERR_ALREADY_IN_SESSION                   = 27007,    ///< 已经在会话中
-    ERR_CUSTOMER_SERVICE_TEAM_NO_MEMBER      = 27008,    ///< 客服组
-    ERR_ALREADY_EVALUATED                    = 27009,    ///< 已经评价客服
 
     ///<28000~28999 服务器维护
     ERR_SERVER_CONFIG_EXIST                  =  28001,   ///< 相同更新配置已存在

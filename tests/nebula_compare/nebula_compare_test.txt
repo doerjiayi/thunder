@@ -1,6 +1,9 @@
 环境个人 开发虚拟机：
 本结果为峰值性能，因linux环境影响，每次都差异较多
 
+time_wait也有影响
+netstat -an|awk '/tcp/ {print $6}'|sort|uniq -c
+
 测试场景。http echo 服务
 
 thunder:
@@ -78,6 +81,12 @@ Successful transactions:       90000
 Failed transactions:               0
 Longest transaction:            3.36
 Shortest transaction:           0.00
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,42 @@
+
+ siege "http://192.168.11.66:16003/hello  POST   {\"name\": \"Nebula\", \"address\":\"https://github.com/Bwar/Nebula\"}" -r 100 -c 100
+** SIEGE 4.0.2
+** Preparing 100 concurrent users for battle.
+The server is now under siege...
+Transactions:                  10000 hits
+Availability:                 100.00 %
+Elapsed time:                  29.34 secs
+Data transferred:               0.31 MB
+Response time:                  0.00 secs
+Transaction rate:             340.83 trans/sec
+Throughput:                     0.01 MB/sec
+Concurrency:                    0.32
+Successful transactions:       10000
+Failed transactions:               0
+Longest transaction:            0.05
+Shortest transaction:           0.00
+ 
+[root@im1 NebulaBootstrap]# siege "http://192.168.11.66:16003/hello_nebula  POST   {\"name\": \"Nebula\", \"address\":\"https://github.com/Bwar/Nebula\"}" -r 100 -c 100
+** SIEGE 4.0.2
+** Preparing 100 concurrent users for battle.
+The server is now under siege...
+Transactions:                  10000 hits
+Availability:                 100.00 %
+Elapsed time:                  27.94 secs
+Data transferred:               0.14 MB
+Response time:                  0.00 secs
+Transaction rate:             357.91 trans/sec
+Throughput:                     0.01 MB/sec
+Concurrency:                    0.55
+Successful transactions:       10000
+Failed transactions:               0
+Longest transaction:            0.08
+Shortest transaction:           0.00
+
+
+
+thunder
+siege "http://192.168.11.66:27008/Echo" -r 100 -c 100
+
+
+

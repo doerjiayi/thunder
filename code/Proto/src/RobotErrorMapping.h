@@ -122,9 +122,6 @@ inline const char * robot_err_msg(int code)
         case ERR_NO_CUSTOMER_SERVICE_ONLINE:            return "当前没有客服在线[27004]";//当前没有客服在线
         case ERR_INVALID_SESSION:                       return "无效会话[27005]";//无效会话
         case ERR_NO_OPERATION_PERMISSIONS:              return "没有操作权限[27006]"; ///< 没有操作权限
-        case ERR_ALREADY_IN_SESSION:                    return "正在会话中[27007]";//用户下在会话中
-        case ERR_CUSTOMER_SERVICE_TEAM_NO_MEMBER:       return "客服组无成员[27008]";//
-        case ERR_ALREADY_EVALUATED:                     return "客服已评价[27009]";//
 
         case ERR_SERVER_CONFIG_EXIST:                   return "相同更新配置已存在[28001]";//相同更新配置已存在
         case ERR_SERVER_NODE_NO_EXIST:                  return "不存在该节点[28002]";//不存在该节点
