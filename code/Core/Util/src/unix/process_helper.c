@@ -1,115 +1,10 @@
 /*
  * process_helper.c
  *
- *  Created on: 2014骞�7鏈�26鏃�
  *      Author: cjy
  */
 
 #include "process_helper.h"
-
-//int send_fd(int fd, int fd_to_send)
-//{
-//    struct msghdr msg;
-//    msg.msg_name = NULL;
-//    msg.msg_namelen = 0;
-//
-//    struct cmsghdr *cmptr = NULL;
-//    char buffer[BUF_SIZE];
-//    struct iovec iov;
-//
-//    if (fd_to_send >= 0)
-//    {
-//        int cmsg_len = CMSG_LEN(sizeof(int));
-//        cmptr = malloc(cmsg_len);
-//
-//        cmptr->cmsg_level = SOL_SOCKET;
-//        cmptr->cmsg_type = SCM_RIGHTS;
-//        cmptr->cmsg_len = cmsg_len;
-//        *(int*)CMSG_DATA(cmptr) = fd_to_send;
-//
-//        msg.msg_control = cmptr;
-//        msg.msg_controllen = cmsg_len;
-//
-//        sprintf(buffer, "OK!");
-//    }
-//    else
-//    {
-//
-//        if (-1 == fd_to_send)
-//            sprintf(buffer, "cannot open file!");
-//        else
-//            sprintf(buffer, "wrong command!");
-//
-//        msg.msg_control = NULL;
-//        msg.msg_controllen = 0;
-//    }
-//
-//    msg.msg_iov = &iov;
-//    msg.msg_iovlen = 1;
-//    iov.iov_base = buffer;
-//    iov.iov_len = strlen(buffer);
-//
-//    sendmsg(fd, &msg, 0);
-//    if (cmptr)
-//        free(cmptr);
-//    return 0;
-//}
-//
-//int recv_fd(int fd, char *buffer, size_t size)
-//{
-//    struct cmsghdr *cmptr;
-//    int cmsg_len = CMSG_LEN(sizeof(int));
-//    cmptr = malloc(cmsg_len);
-//
-//    struct iovec iov;
-//    iov.iov_base = buffer;
-//    iov.iov_len = size;
-//
-//    struct msghdr msg;
-//    msg.msg_name = NULL;
-//    msg.msg_namelen = 0;
-//    msg.msg_iov = &iov;
-//    msg.msg_iovlen = 1;
-//    msg.msg_control = cmptr;
-//    msg.msg_controllen = cmsg_len;
-//
-//    int len = recvmsg(fd, &msg, 0);
-//    if (len < 0)
-//    {
-//        printf("receve message error!\n");
-//        exit(0);
-//    }
-//    else if (len == 0)
-//    {
-//        printf("connection closed by server!\n");
-//        exit(0);
-//    }
-//
-//    buffer[len] = '\0';
-//    int cfd = -1;
-//    if (cmptr->cmsg_type != 0)
-//        cfd = *(int*)CMSG_DATA(cmptr);
-//    free(cmptr);
-//    return cfd;
-//}
-
-//int daemonize()
-//{
-//    pid_t pid;
-//    if ((pid = fork()) < 0)
-//        return (-1);
-//    else if (pid != 0)
-//        exit(0); /* parent exit */
-//    /* child continues */
-//    setsid(); /* become session leader */
-//    chdir("/"); /* change working directory */
-//    umask(0); /* clear file mode creation mask */
-//    close(0); /* close stdin */
-//    close(1); /* close stdout */
-//    close(2); /* close stderr */
-//    return (0);
-//}
-
 
 void InstallSignal()
 {
@@ -258,8 +153,6 @@ int send_fd(int sock_fd, int send_fd)
 	sendmsg(sock_fd, &msg, 0);
 	int iErrno = errno;
 	return(iErrno);
-//	if (ret != 1)
-//		;//ERR_EXIT("sendmsg");
 }
 
 int recv_fd(const int sock_fd) {
@@ -311,7 +204,6 @@ int send_fd_with_attr(int sock_fd, int send_fd, void* addr, int addr_len, int se
     struct iovec vec[2];
     char cmsgbuf[CMSG_SPACE(sizeof(send_fd))];
     int *p_fds;
-//    char sendchar = 0;
     msg.msg_control = cmsgbuf;
     msg.msg_controllen = sizeof(cmsgbuf);
     p_cmsg = CMSG_FIRSTHDR(&msg);
@@ -329,9 +221,8 @@ int send_fd_with_attr(int sock_fd, int send_fd, void* addr, int addr_len, int se
     vec[0].iov_len = addr_len;
     vec[1].iov_base = &send_fd_attr;
     vec[1].iov_len = sizeof(send_fd_attr);
-//    ret = sendmsg(sock_fd, &msg, 0);
     while (1) {
-        int n = sendmsg(sock_fd, &msg, MSG_DONTWAIT|MSG_NOSIGNAL);
+        int n = sendmsg(sock_fd, &msg, MSG_DONTWAIT|MSG_NOSIGNAL);//    ret = sendmsg(sock_fd, &msg, 0);
         if (-1 == n) {
             if (EINPROGRESS == errno||EAGAIN == errno) {//EINTR == errno
                 continue;
@@ -346,7 +237,6 @@ int send_fd_with_attr(int sock_fd, int send_fd, void* addr, int addr_len, int se
 int recv_fd_with_attr(const int sock_fd, void* addr, int addr_len, int* send_fd_attr)
 {
     struct msghdr msg;
-//    char recvchar;
     struct iovec vec[2];
     int recv_fd;
     char cmsgbuf[CMSG_SPACE(sizeof(recv_fd))];
@@ -365,9 +255,8 @@ int recv_fd_with_attr(const int sock_fd, void* addr, int addr_len, int* send_fd_
     msg.msg_flags = 0;
     p_fd = (int*) CMSG_DATA(CMSG_FIRSTHDR(&msg));
     *p_fd = -1;
-//    ret = recvmsg(sock_fd, &msg, 0);
     while (1) {
-        int n = recvmsg(sock_fd, &msg, MSG_DONTWAIT|MSG_NOSIGNAL);
+        int n = recvmsg(sock_fd, &msg, MSG_DONTWAIT|MSG_NOSIGNAL);//    ret = recvmsg(sock_fd, &msg, 0);
         if (0 == n)
         {
             return 0;

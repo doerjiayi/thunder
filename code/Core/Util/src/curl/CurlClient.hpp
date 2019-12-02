@@ -1,8 +1,3 @@
-//使用libcurl开发Http客户端。主要包括同步的HTTP GET、HTTP POST、HTTPS GET、HTTPS POST。
-//其官方网站的地址是http://curl.haxx.se/，该网站主要提供了Curl和libcurl。
-//Curl用于完成FTP, FTPS, HTTP, HTTPS, GOPHER, TELNET, DICT, FILE 以及 LDAP的命令的请求及接收回馈。
-//提供给开发者，用于使用C++跨平台的开发各种网络协议的请求及响应。
-//下载libcurl包，如果使用Linux平台，建议下载源文件编译；如果使用Windows平台，建议下载Win32 - MSVC，下载地址是：http://curl.haxx.se/download.html
 #ifndef __CUSTOM_CURL_CLIENT_H__
 #define __CUSTOM_CURL_CLIENT_H__
 #include <string.h>
@@ -18,6 +13,12 @@ extern "C++" {
 #include <time.h>
 #include <sys/time.h>
 #include <functional>
+
+//使用libcurl开发Http客户端。主要包括同步的HTTP GET、HTTP POST、HTTPS GET、HTTPS POST。
+//其官方网站的地址是http://curl.haxx.se/，该网站主要提供了Curl和libcurl。
+//Curl用于完成FTP, FTPS, HTTP, HTTPS, GOPHER, TELNET, DICT, FILE 以及 LDAP的命令的请求及接收回馈。
+//提供给开发者，用于使用C++跨平台的开发各种网络协议的请求及响应。
+//下载libcurl包，如果使用Linux平台，建议下载源文件编译；如果使用Windows平台，建议下载Win32 - MSVC，下载地址是：http://curl.haxx.se/download.html
 
 namespace util
 {

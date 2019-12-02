@@ -164,9 +164,8 @@ public:
 		ConNode *pnode = *nodeit;
 
 		VNodeMap_IT it = m_vnode_map.begin();
-		while (it != m_vnode_map.end()) {
-			if (it->second->getNode() == pnode) //移除虚节点
-					{
+		while (it != m_vnode_map.end()) {//移除虚节点
+			if (it->second->getNode() == pnode){
 				delete (it->second);
 				m_vnode_map.erase(it++);
 			} else {
@@ -213,9 +212,8 @@ public:
 			ConNode *pnode = *nodecit;
 			std::ostringstream vnodess;
 
-			VNodeMap_CIT cit = m_vnode_map.begin();
-			for (; cit != m_vnode_map.end(); ++cit) //虚节点列表
-					{
+			VNodeMap_CIT cit = m_vnode_map.begin();//虚节点列表
+			for (; cit != m_vnode_map.end(); ++cit) {
 				if (cit->second->getNode() == pnode) {
 					vnodess << cit->second->getHash() << " ";
 				}

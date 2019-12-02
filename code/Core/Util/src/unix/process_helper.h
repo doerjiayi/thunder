@@ -26,9 +26,6 @@
 extern "C" {
 #endif
 
-
-//int send_fd(int fd, int fd_to_send);
-//int recv_fd(int fd, char *buffer, size_t size);
 void InstallSignal();
 int process_daemonize(const char *dir);
 int x_sock_set_block(int sock, int on);
