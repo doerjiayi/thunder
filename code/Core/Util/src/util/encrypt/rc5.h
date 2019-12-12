@@ -3,7 +3,7 @@
 * @file     rc5.h
 * @brief    rc5 Operations, Terminology and Notation
 * @author   cjy
-* @date:    2015年12月15日
+* @date:    2019年12月15日
 * @note     In summary, the cipher will be explained in terms of these
 operations:
                 RC5_Key_Create          - Create a key object.

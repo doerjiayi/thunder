@@ -3,7 +3,7 @@
  * @file     RedisCmd.hpp
  * @brief    redis命令生成
  * @author   cjy
- * @date:    2015年8月15日
+ * @date:    2019年8月15日
  * @note
  * Modify history:
  ******************************************************************************/

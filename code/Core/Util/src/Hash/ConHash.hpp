@@ -294,13 +294,13 @@ public:
 	}
 	std::string lookupNodeIdentify(uint32_t channelid) const {
 		if (channelid == 0)
-			return 0;
+			return "";
 		char channelidstr[32] = { 0 };
 		snprintf(channelidstr, sizeof(channelidstr) - 1, "%lu", channelid);
 
 		void *pnodedata = m_ConHashProxy.lookupNode(std::string(channelidstr));
 		if (pnodedata == NULL)
-			return 0;
+			return "";
 		ServerInfo *pinfo = static_cast<ServerInfo*>(pnodedata);
 		return pinfo->getIdentify();
 	}

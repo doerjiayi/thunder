@@ -3,7 +3,7 @@
  * @file     CmdConnectWorker.cpp
  * @brief 
  * @author   cjy
- * @date:    2015年8月6日
+ * @date:    2019年8月6日
  * @note
  * Modify history:
  ******************************************************************************/

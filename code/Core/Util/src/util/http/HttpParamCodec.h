@@ -3,7 +3,7 @@
  * @file     HttpParamCodec.h
  * @brief    http post参数编码/解码
  * @author   JiangJianyu
- * @date:    2015年12月21日
+ * @date:    2019年12月21日
  * @note
  * Modify history:
  ******************************************************************************/

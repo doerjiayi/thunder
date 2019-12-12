@@ -3,7 +3,7 @@
  * @file     StepNodeNotice.hpp
  * @brief    处理节点注册通知
  * @author   cjy
- * @date:    2015年9月16日
+ * @date:    2019年9月16日
  * @note      
  * Modify history:
  ******************************************************************************/

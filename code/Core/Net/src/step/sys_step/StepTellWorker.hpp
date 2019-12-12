@@ -3,7 +3,7 @@
  * @file     StepTellWorker.hpp
  * @brief    告知对端己方Worker进程信息
  * @author   cjy
- * @date:    2015年8月13日
+ * @date:    2019年8月13日
  * @note     在作为客户端发起对一个服务端的连接，当对端返回连接成功信息时，启动
  * StepTellWorker向对端发送己方Worker信息，并等待对端回复对方Worker信息回调。
  * Modify history:

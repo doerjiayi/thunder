@@ -3,7 +3,7 @@
  * @file     ClientMsgCodec.cpp
  * @brief 
  * @author   cjy
- * @date:    2015年10月9日
+ * @date:    2019年10月9日
  * @note
  * Modify history:
  ******************************************************************************/

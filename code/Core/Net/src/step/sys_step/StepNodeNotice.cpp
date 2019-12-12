@@ -3,7 +3,7 @@
  * @file     StepNodeNotice.cpp
  * @brief    告知对端己方Worker进程信息
  * @author   cjy
- * @date:    2015年8月13日
+ * @date:    2019年8月13日
  * @note
  * Modify history:
  ******************************************************************************/

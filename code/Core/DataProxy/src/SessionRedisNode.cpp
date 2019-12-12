@@ -153,7 +153,7 @@ std::cout << output << std::endl;
         */
         CryptoPP::Weak::MD5 oMd5;
         char szVirtualNodeIdentify[32] = {0};
-        byte szDigest[CryptoPP::Weak::MD5::DIGESTSIZE] = {0};
+        CryptoPP::byte szDigest[CryptoPP::Weak::MD5::DIGESTSIZE] = {0};
         int32 iPointPerHash = 4;
         tagRedisNodeAttr* pRedisNodeAttr = new tagRedisNodeAttr();
         pRedisNodeAttr->strMasterNodeIdentify = strMasterHostPort;
@@ -161,7 +161,7 @@ std::cout << output << std::endl;
         for (int i = 0; i < m_iVirtualNodeNum / iPointPerHash; ++i)     // distribution: ketama
         {
             snprintf(szVirtualNodeIdentify, 32, "%s#%d", strNodeIdentify.c_str(), i);
-            oMd5.CalculateDigest(szDigest, (const byte*)szVirtualNodeIdentify, strlen(szVirtualNodeIdentify));
+            oMd5.CalculateDigest(szDigest, (const CryptoPP::byte*)szVirtualNodeIdentify, strlen(szVirtualNodeIdentify));
 //            uiHashValue = *(uint32_t*)szDigest;
             for (int j = 0; j < iPointPerHash; ++j)
             {

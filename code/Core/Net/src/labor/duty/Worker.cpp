@@ -21,6 +21,7 @@ extern "C" {
 #endif
 #include "util/UnixTime.hpp"
 
+#include <sched.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/tcp.h>
@@ -1683,6 +1684,21 @@ bool Worker::Init(util::CJsonObject& oJsonConf)
     {
         return(false);
     }
+    bool bCpuAffinity = false;
+	oJsonConf.Get("cpu_affinity", bCpuAffinity);
+	if (bCpuAffinity)
+	{
+		/* get logical cpu number */
+		int iCpuNum = sysconf(_SC_NPROCESSORS_CONF);                        ///< cpu数量
+		cpu_set_t stCpuMask;                                                        ///< cpu set
+		CPU_ZERO(&stCpuMask);
+		CPU_SET(m_iWorkerIndex % iCpuNum, &stCpuMask);
+		LOG4_INFO("sched_setaffinity iCpuNum(%d) iWorkerIndex(%d).",iCpuNum,m_iWorkerIndex);
+		if (sched_setaffinity(0, sizeof(cpu_set_t), &stCpuMask) == -1)
+		{
+			LOG4_WARN("sched_setaffinity failed.");
+		}
+	}
     return(true);
 }
 
@@ -2855,6 +2871,29 @@ bool Worker::SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, con
     }
 }
 
+
+bool Worker::SendToAuto(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+{
+	if (oMsgBody.has_session_id())
+	{
+		return SendToWithMod(strNodeType, oMsgBody.session_id(), oMsgHead, oMsgBody);
+	}
+	else if (oMsgBody.has_session())
+	{
+		unsigned int uiSessionFactor = 0;
+		for (unsigned int i = 0; i < oMsgBody.session().size(); ++i)
+		{
+			uiSessionFactor += oMsgBody.session()[i];
+		}
+		return SendToWithMod(strNodeType, uiSessionFactor, oMsgHead, oMsgBody);
+	}
+	else
+	{
+		return SendToNext(strNodeType, oMsgHead, oMsgBody);
+	}
+}
+
+
 bool Worker::SendToNext(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s(node_type: %s)", __FUNCTION__, strNodeType.c_str());
@@ -2894,6 +2933,9 @@ bool Worker::SendToNext(const std::string& strNodeType, const MsgHead& oMsgHead,
 bool Worker::SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s(nody_type: %s, mod_factor: %u)", __FUNCTION__, strNodeType.c_str(), uiModFactor);
+#ifdef USE_CONHASH
+    return SendToConHash(strNodeType,uiModFactor,oMsgHead,oMsgBody);
+#endif
     std::unordered_map<std::string, std::pair<std::set<std::string>::iterator, std::set<std::string> > >::iterator node_type_iter;
     node_type_iter = m_mapNodeIdentify.find(strNodeType);
     if (node_type_iter == m_mapNodeIdentify.end())
@@ -2932,6 +2974,11 @@ bool Worker::SendToConHash(const std::string& strNodeType, uint32 uiModFactor, c
 {
     std::string strIdentify =  m_mapChannelConHash[strNodeType].lookupNodeIdentify(uiModFactor);
     LOG4_TRACE("%s(nody_type: %s, mod_factor: %u),strIdentify:%s", __FUNCTION__, strNodeType.c_str(), uiModFactor,strIdentify.c_str());
+    if (strIdentify.size() == 0)
+    {
+    	LOG4_ERROR("%s no strIdentify match %s!", __FUNCTION__,strIdentify.c_str());
+		return(false);
+    }
     return SendTo(strIdentify, oMsgHead, oMsgBody);
 }
 

@@ -130,6 +130,7 @@ Session* GetSession(const std::string& strSessionId, const std::string& strSessi
 bool SendTo(const net::tagMsgShell& stMsgShell){return(g_pLabor->SendTo(stMsgShell));}
 bool SendTo(const net::tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendTo(stMsgShell, oMsgHead, oMsgBody));}
 bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendTo(strIdentify, oMsgHead, oMsgBody));}
+bool SendToAuto(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendToAuto(strNodeType, oMsgHead, oMsgBody));}
 bool SendToNext(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendToNext(strNodeType, oMsgHead, oMsgBody));}
 bool SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendToWithMod(strNodeType, uiModFactor, oMsgHead, oMsgBody));}
 bool SendToConHash(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendToConHash(strNodeType, uiModFactor, oMsgHead, oMsgBody));}

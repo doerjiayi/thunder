@@ -3,7 +3,7 @@
  * @file     StarshipCodec.hpp
  * @brief    Starship编解码器
  * @author   cjy
- * @date:    2015年10月6日
+ * @date:    2019年10月6日
  * @note
  * Modify history:
  ******************************************************************************/

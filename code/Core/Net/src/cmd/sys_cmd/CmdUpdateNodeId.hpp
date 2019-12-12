@@ -3,7 +3,7 @@
  * @file     CmdUpdateNodeId.hpp
  * @brief    更新Worker的节点ID
  * @author   cjy
- * @date:    2015年9月18日
+ * @date:    2019年9月18日
  * @note
  * Modify history:
  ******************************************************************************/

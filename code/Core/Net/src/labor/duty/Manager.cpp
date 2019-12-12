@@ -1168,16 +1168,14 @@ bool Manager::Init()
     if (bind(m_iS2SListenFd, pAddrInner, addressLen) < 0)
     {
         LOG4_ERROR("error %d: %s", errno, strerror_r(errno, m_pErrBuff, 1024));
-        close(m_iS2SListenFd);
-        m_iS2SListenFd = -1;
+        CloseSocket(m_iS2SListenFd);
         int iErrno = errno;
         exit(iErrno);
     }
     if (listen(m_iS2SListenFd, queueLen) < 0)
     {
         LOG4_ERROR("error %d: %s", errno, strerror_r(errno, m_pErrBuff, 1024));
-        close(m_iS2SListenFd);
-        m_iS2SListenFd = -1;
+        CloseSocket(m_iS2SListenFd);
         int iErrno = errno;
         exit(iErrno);
     }

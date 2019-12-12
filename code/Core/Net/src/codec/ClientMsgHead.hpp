@@ -3,7 +3,7 @@
 * @file     ClientMsgHead.hpp
 * @brief    数据包头定义
 * @author   cjy
-* @date:    2015年10月8日
+* @date:    2019年10月8日
 * @note
 * Modify history:
 ******************************************************************************/

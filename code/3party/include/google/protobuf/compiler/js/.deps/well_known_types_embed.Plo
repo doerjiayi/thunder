@@ -1,8 +1,0 @@
-google/protobuf/compiler/js/well_known_types_embed.lo: \
- google/protobuf/compiler/js/well_known_types_embed.cc \
- google/protobuf/compiler/js/well_known_types_embed.h \
- /opt/rh/devtoolset-2/root/usr/lib/gcc/x86_64-redhat-linux/4.8.2/include/stddef.h
-
-google/protobuf/compiler/js/well_known_types_embed.h:
-
-/opt/rh/devtoolset-2/root/usr/lib/gcc/x86_64-redhat-linux/4.8.2/include/stddef.h:

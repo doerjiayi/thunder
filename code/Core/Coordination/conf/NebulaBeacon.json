@@ -1,0 +1,102 @@
+{
+    "node_type":"BEACON",
+    "//host":"系统内各Server之间通信绑定的IP（Server to Server）",
+    "host":"192.168.157.130",
+    "//port":"系统内各Server之间通信监听的端口",
+    "port":16000,
+    "//access_host":"对系统外提供服务绑定的IP（Client to Server），若不提供对外服务，则无需配置",
+    "access_host":"192.168.157.130",
+    "//access_port":"对系统外提供服务监听的端口",
+    "access_port":16088,
+    "//access_codec":"接入端编解码器，目前支持CODEC_PRIVATE(4),CODEC_HTTP(3),CODEC_PROTOBUF(2)",
+    "access_codec":3,
+    "gateway":"113.102.157.188",
+    "gateway_port":16088,
+    "//server_name":"异步事件驱动Server",
+    "server_name":"neb_Beacon",
+    "//worker_num":"进程数量",
+    "worker_num":1,
+    "//with_loader":"是否启动loader进程",
+    "with_loader":false,
+    "//cpu_affinity":"是否设置进程CPU亲和度（绑定CPU）",
+    "cpu_affinity":false,
+    "//worker_capacity":"子进程最大工作负荷",
+    "worker_capacity":1000000,
+    "//config_path":"配置文件路径（相对路径）",
+    "config_path":"conf/",
+    "beacon": [
+        { "host": "192.168.1.11", "port": 16000 },
+        { "host": "192.168.1.12", "port": 16000 }
+    ],
+    "//log_path":"日志文件路径（相对路径）",
+    "log_path":"log/",
+    "//max_log_file_num":"最大日志文件数量，用于日志文件滚动",
+    "max_log_file_num":5,
+    "//max_log_file_size":"单个日志文件大小限制",
+    "max_log_file_size":20480000,
+    "//io_timeout":"网络IO（连接）超时设置（单位：秒）小数点后面至少保留一位",
+    "io_timeout":300.0,
+    "//step_timeout":"步骤超时设置（单位：秒）小数点后面至少保留一位",
+    "step_timeout":1.5,
+    "log_levels": { "FATAL": 0, "CRITICAL": 1, "ERROR": 2, "NOTICE": 3, "WARNING": 4, "INFO": 5, "DEBUG": 6, "TRACE": 7 },
+    "log_level": 7,
+    "net_log_level": 6,
+    "//refresh_interval":"刷新Server配置，检查、加载插件动态库时间周期（周期时间长短视服务器忙闲而定）",
+    "refresh_interval":60,    
+    "dynamic_loading":{},
+    "permission":{
+        "addr_permit":{"stat_interval":60.0, "permit_num":1000},
+        "uin_permit":{"stat_interval":60.0, "permit_num":600}
+    },
+    "load_config":{
+        "manager":{
+        },
+        "worker":{
+            "boot_load":{
+                "cmd":[
+                    {"cmd":5, "class":"beacon::CmdNodeDisconnect"},
+                    {"cmd":101, "class":"beacon::CmdNodeReport"},
+                    {"cmd":103, "class":"beacon::CmdNodeRegister"},
+                    {"cmd":113, "class":"beacon::CmdElection"}
+                ],
+                "module":[
+                    {"path":"/admin", "class":"beacon::ModuleAdmin"}
+                ],
+                "session":[],
+                "step":[]
+            }
+        },
+        "loader":{
+        }
+    },
+    "//custom":"自定义配置，用于通过框架层带给业务",
+    "custom":{
+        "//config_choice":"db_config or local_config",
+        "config_choice":"local_config",
+        "db_config":{
+            "host":"192.168.157.130",
+            "port":3306,
+            "db_name":"db_beacon",
+            "user":"neb_beacon",
+            "password":"That's a cat!",
+            "charset":"utf8"
+        },
+        "local_config":{
+		    "ipwhite":["192.168.157.130"],
+            "//beacon":"注册节点配置，用于beacon节点间的热备",
+            "beacon":[],
+            "beacon_beat":2.5,
+		    "node_type":[
+		        {"level":0, "node_type":"BEACON", "subscribe":[]},
+		        {"level":1, "node_type":"ACCESS", "subscribe":["LOGIC", "LOGGER"]},
+		        {"level":2, "node_type":"LOGIC", "subscribe":["LOGIC", "MYDIS", "LOGGER"]},
+		        {"level":3, "node_type":"MYDIS", "subscribe":["DBAGENT_W", "DBAGENT_R", "LOGGER"]},
+		        {"level":4, "node_type":"DBAGENT_W", "subscribe":["LOGGER"]},
+		        {"level":4, "node_type":"DBAGENT_R", "subscribe":["LOGGER"]},
+		        {"level":1, "node_type":"INTERFACE", "subscribe":["LOGIC", "MYDIS", "LOGGER"]},
+		        {"level":1, "node_type":"ENTRANCE", "subscribe":["LOGIC", "MYDIS", "LOGGER"]},
+		        {"level":1, "node_type":"LOGGER", "subscribe":[]}
+		    ]
+	    }
+    }
+}

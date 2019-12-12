@@ -3,7 +3,7 @@
  * @file     CmdNodeNotice.cpp
  * @brief 
  * @author   cjy
- * @date:    2015年8月9日
+ * @date:    2019年8月9日
  * @note
  * Modify history:
  ******************************************************************************/

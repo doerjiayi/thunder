@@ -2,7 +2,7 @@
 分布式异步集群服务
 
 #  引擎使用说明 #
-在文件thunder引擎说明.pptx中
+在文件architecture.pptx中
 #  引擎使用说明 #
 目录结构说明：
 

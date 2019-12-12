@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package beacon;
+
+/**
+ * @brief BEACON节点间心跳
+ */
+message Election
+{
+    int32 is_leader                  = 1;    ///< 是否主节点
+    uint32 last_node_id              = 2;    ///< 上一个生成的节点ID
+    repeated uint32 added_node_id    = 3;    ///< 新增已使用的节点ID
+    repeated uint32 removed_node_id  = 4;    ///< 删除已废弃的节点ID
+}
+
