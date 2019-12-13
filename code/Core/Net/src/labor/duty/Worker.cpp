@@ -2871,6 +2871,23 @@ bool Worker::SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, con
     }
 }
 
+
+bool Worker::SendTo(const tagMsgShell& stMsgShell,uint32 cmd,uint32 seq,const std::string &strBody)
+{
+	MsgHead oOutMsgHead;
+	MsgBody oOutMsgBody;
+	oOutMsgBody.set_body(strBody);
+	oOutMsgHead.set_seq(seq);
+	oOutMsgHead.set_cmd(cmd);
+	oOutMsgHead.set_msgbody_len(oOutMsgBody.ByteSize());
+	if (!SendTo(stMsgShell, oOutMsgHead, oOutMsgBody))
+	{
+		LOG4_ERROR("send to tagMsgShell(fd %d, seq %u) error!", stInMsgShell.iFd, stInMsgShell.ulSeq);
+		return false;
+	}
+	return true;
+}
+
 bool Worker::SendToSession(const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
 	bool bSendResult = false;

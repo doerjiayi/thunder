@@ -13,7 +13,7 @@ namespace coor
 {
 
 StepNodeBroadcast::StepNodeBroadcast(const std::string& strNodeIdentity, int32 iCmd, const MsgBody& oMsgBody)
-    : m_strTargetNodeIdentity(strNodeIdentity), m_iCmd(iCmd), m_oMsgBody(oMsgBody)
+    : m_strTargetNodeIdentity(strNodeIdentity), m_iCmd(iCmd), m_strBody(oMsgBody)
 {
 }
 
@@ -21,15 +21,15 @@ StepNodeBroadcast::~StepNodeBroadcast()
 {
 }
 
-net::E_CMD_STATUS StepNodeBroadcast::Emit(int iErrno, const std::string& strErrMsg, void* data)
+net::E_CMD_STATUS StepNodeBroadcast::Emit(int iErrno, const std::string& strErrMsg, const std::string& strErrShow)
 {
-    if (SendTo(m_strTargetNodeIdentity, m_iCmd, GetSequence(), m_oMsgBody))
+    if (net::SendTo(m_strTargetNodeIdentity, m_iCmd, GetSequence(), m_strBody))
     {
-        return(net::CMD_STATUS_RUNNING);
+        return(net::STATUS_CMD_RUNNING);
     }
     else
     {
-        return(net::CMD_STATUS_FAULT);
+        return(net::STATUS_CMD_FAULT);
     }
 }
 
@@ -37,19 +37,19 @@ net::E_CMD_STATUS StepNodeBroadcast::Callback(const net::tagMsgShell& stMsgShell
 {
     if (net::ERR_OK == oInMsgBody.rsp_result().code())
     {
-        return(net::CMD_STATUS_COMPLETED);
+        return(net::STATUS_CMD_COMPLETED);
     }
     else
     {
-        LOG4_ERROR("error %d: %s!", oInMsgBody.rsp_result().code(), oInMsgBody.rsp_result().msg().c_str());
-        return(net::CMD_STATUS_FAULT);
+        LOG4_ERROR("error %d: %s!", oInMsgBody.DebugString().c_str());
+        return(net::STATUS_CMD_FAULT);
     }
 }
 
 net::E_CMD_STATUS StepNodeBroadcast::Timeout()
 {
     LOG4_ERROR("timeout!");
-    return(net::CMD_STATUS_FAULT);
+    return(net::STATUS_CMD_FAULT);
 }
 
 } /* namespace coor */

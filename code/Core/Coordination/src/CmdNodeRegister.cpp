@@ -24,7 +24,7 @@ CmdNodeRegister::~CmdNodeRegister()
 
 bool CmdNodeRegister::Init()
 {
-    util::CJsonObject oBeaconConf = GetCustomConf();
+    util::CJsonObject oBeaconConf = net::GetCustomConf();
 
     if (std::string("db_config") == oBeaconConf("config_choice"))
     {
@@ -51,11 +51,9 @@ bool CmdNodeRegister::InitFromLocal(const util::CJsonObject& oLocalConf)
     util::CJsonObject oBeacon = oLocalConf;
     double dSessionTimeout = 3.0;
     oBeacon.Get("beacon_beat", dSessionTimeout);
-    m_pSessionOnlineNodes = std::dynamic_pointer_cast<SessionOnlineNodes>(
-            MakeSharedSession("coor::SessionOnlineNodes", dSessionTimeout));
     if (m_pSessionOnlineNodes == nullptr)
     {
-        LOG4_ERROR("failed to new SessionOnlineNodes!");
+    	m_pSessionOnlineNodes = new coor::SessionOnlineNodes(dSessionTimeout);
     }
     m_pSessionOnlineNodes->InitElection(oBeacon["beacon"]);
     for (int i = 0; i < oBeacon["ipwhite"].GetArraySize(); ++i)
@@ -102,33 +100,28 @@ bool CmdNodeRegister::AnyMessage(
     MsgHead oOutMsgHead;
     MsgBody oOutMsgBody;
     util::CJsonObject oNodeInfo;
-    SendTo(stMsgShell, oMsgHead.cmd() + 1, oMsgHead.seq(), oOutMsgBody);
-    if (oNodeInfo.Parse(oMsgBody.data()))
+    util::CJsonObject oNodeId;
+    if (oNodeInfo.Parse(oMsgBody.body()))
     {
         uint16 unNodeId = m_pSessionOnlineNodes->AddNode(oNodeInfo);
         if (0 == unNodeId)
         {
-            oOutMsgBody.mutable_rsp_result()->set_code(net::ERR_NODE_NUM);
-            oOutMsgBody.mutable_rsp_result()->set_msg("there is no valid node_id in the system!");
+        	LOG4_ERROR("failed to AddNode !");
             return(false);
         }
         else
         {
-            util::CJsonObject oNodeId;
             oNodeId.Add("node_id", unNodeId);
-            oOutMsgBody.set_data(oNodeId.ToString());
-            oOutMsgBody.mutable_rsp_result()->set_code(net::ERR_OK);
-            oOutMsgBody.mutable_rsp_result()->set_msg("OK");
+            LOG4_INFO("AddNode node_id(%u)!",unNodeId);
             return(true);
         }
     }
     else
     {
         LOG4_ERROR("failed to parse node info json from MsgBody.data()!");
-        oOutMsgBody.mutable_rsp_result()->set_code(net::ERR_BODY_JSON);
-        oOutMsgBody.mutable_rsp_result()->set_msg("failed to parse node info json from MsgBody.data()!");
         return(false);
     }
+    net::SendTo(stMsgShell, oMsgHead.cmd() + 1, oMsgHead.seq(),oNodeId.ToString());
 }
 
 } /* namespace coor */

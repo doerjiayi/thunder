@@ -11,7 +11,7 @@
 #define SRC_CMDNODEREGISTER_HPP_
 
 #include "Comm.hpp"
-
+#include "SessionOnlineNodes.hpp"
 namespace coor
 {
 
@@ -31,7 +31,7 @@ protected:
     bool InitFromLocal(const util::CJsonObject& oLocalConf);
 
 private:
-    std::shared_ptr<SessionOnlineNodes> m_pSessionOnlineNodes;
+    SessionOnlineNodes* m_pSessionOnlineNodes = nullptr;
 };
 
 } /* namespace coor */

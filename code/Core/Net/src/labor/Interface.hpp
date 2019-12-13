@@ -204,6 +204,18 @@ bool SendTo(const net::tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const M
  */
 bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
 /**
+ * @brief 发送数据
+ * @note 指定连接标识符将数据发送。此函数先查找与strIdentify匹配的stMsgShell，如果找到就调用
+ * SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const std::string &strBody)
+ * 发送，如果未找到则调用SendToWithAutoConnect(const std::string& strIdentify,
+ * const MsgHead& oMsgHead, const MsgBody& oMsgBody)连接后再发送。
+ * @param strIdentify 连接标识符(IP:port.worker_index, e.g 192.168.11.12:3001.1)
+ * @param oMsgHead 数据包头
+ * @param oMsgBody 数据包体
+ * @return 是否发送成功
+ */
+bool SendTo(const net::tagMsgShell& stMsgShell,uint32 cmd,uint32 seq,const std::string &strBody);
+/**
  * @brief 根据路由id自动发送到指定的节点
  * @note 根据路由id自动发送到指定的节点
  * @param oMsgHead 数据包头

@@ -13,14 +13,7 @@ MUDULE_CREATE(core::CmdNodeDisconnect);
 
 namespace core
 {
-CmdNodeDisconnect::CmdNodeDisconnect():pSess(NULL),boInit(false)
-{
-}
 
-CmdNodeDisconnect::~CmdNodeDisconnect()
-{
-
-}
 bool CmdNodeDisconnect::Init()
 {
     if (boInit)

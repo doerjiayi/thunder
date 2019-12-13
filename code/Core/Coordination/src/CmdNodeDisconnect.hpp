@@ -11,6 +11,7 @@
 #define SRC_CMDNODEDISCONNECT_CMDNODEDISCONNECT_HPP_
 
 #include "Comm.hpp"
+#include "SessionOnlineNodes.hpp"
 
 namespace coor
 {
@@ -18,9 +19,8 @@ namespace coor
 class CmdNodeDisconnect: public net::Cmd
 {
 public:
-    CmdNodeDisconnect(int32 iCmd);
-    virtual ~CmdNodeDisconnect();
-
+    CmdNodeDisconnect() :m_pSessionOnlineNodes(nullptr){}
+    virtual ~CmdNodeDisconnect() = default;
     virtual bool Init();
     virtual bool AnyMessage(
                     const net::tagMsgShell& stMsgShell,
@@ -29,11 +29,11 @@ public:
 
     virtual std::string ObjectName() const
     {
-        return("coor::CmdNodeReport");
+        return("coor::CmdNodeDisconnect");
     }
 
 private:
-    std::shared_ptr<SessionOnlineNodes> m_pSessionOnlineNodes;
+    SessionOnlineNodes* m_pSessionOnlineNodes = nullptr;
 };
 
 } /* namespace coor */

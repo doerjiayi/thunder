@@ -26,8 +26,10 @@ namespace core
 class CmdNodeDisconnect : public net::Cmd
 {
 public:
-    CmdNodeDisconnect();
-    virtual ~CmdNodeDisconnect();
+    CmdNodeDisconnect():pSess(NULL),boInit(false)
+	{
+	}
+    virtual ~CmdNodeDisconnect(){}
     virtual bool Init();
     virtual bool AnyMessage(
                     const net::tagMsgShell& stMsgShell,

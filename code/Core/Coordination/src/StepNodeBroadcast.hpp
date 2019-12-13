@@ -23,9 +23,7 @@ public:
     virtual ~StepNodeBroadcast();
 
     virtual net::E_CMD_STATUS Emit(
-            int iErrno = 0,
-            const std::string& strErrMsg = "",
-            void* data = NULL);
+    		int iErrno = 0, const std::string& strErrMsg = "", const std::string& strErrShow = "");
 
     virtual net::E_CMD_STATUS Callback(
             const net::tagMsgShell& stMsgShell,
@@ -38,7 +36,7 @@ public:
 private:
     std::string m_strTargetNodeIdentity;
     int32 m_iCmd;
-    MsgBody m_oMsgBody;
+    std::string m_strBody;
 };
 
 } /* namespace coor */

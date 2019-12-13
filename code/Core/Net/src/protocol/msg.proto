@@ -1,6 +1,17 @@
 syntax = "proto2";
 
 /**
+ * @brief 请求响应
+ * @note 普通（简单、一般）响应，用于只返回错误码和错误信息的场景，错误码为0表示成功，其他错误码各自定义
+ */
+message OrdinaryResponse
+{
+    required int32 err_no           = 1;    	///< 错误码
+    optional bytes err_msg          = 2;    	///< 错误信息
+}
+
+
+/**
  * @brief 消息头
  */
 message MsgHead
@@ -19,21 +30,10 @@ message MsgHead
 message MsgBody
 {
     required bytes body         = 1;			///< 消息体主体
-    optional string sbody       = 2;        ///< 消息体主体(字符串类型,json)string sbody       			= 2;        ///< 消息体主体(字符串类型,json)
+    optional string sbody       = 2;       	 	///< 消息体主体(字符串类型,json)string sbody       			= 2;        ///< 消息体主体(字符串类型,json)
     optional uint32 session_id  = 3;			///< 会话ID（单聊消息为接收者uid，个人信息修改为uid，群聊消息为groupid，群管理为groupid）
     optional string session     = 4;			///< 会话ID（当session_id用整型无法表达时使用）
     optional bytes additional   = 5;			///< 接入层附加的数据（客户端无须理会）
-}
-
-
-/**
- * @brief 请求响应
- * @note 普通（简单、一般）响应，用于只返回错误码和错误信息的场景，错误码为0表示成功，其他错误码各自定义
- */
-message OrdinaryResponse
-{
-    required int32 err_no           = 1;    	///< 错误码
-    optional bytes err_msg          = 2;    	///< 错误信息
 }
 
 

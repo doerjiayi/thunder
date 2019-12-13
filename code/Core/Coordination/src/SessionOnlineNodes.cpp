@@ -7,10 +7,8 @@
  * @note
  * Modify history:
  ******************************************************************************/
-
-#include "Definition.hpp"
+#include "CW.hpp"
 #include "SessionOnlineNodes.hpp"
-#include <actor/cmd/CW.hpp>
 
 namespace coor
 {
@@ -32,7 +30,7 @@ net::E_CMD_STATUS SessionOnlineNodes::Timeout()
 {
     CheckLeader();
     SendBeaconBeat();
-    return(net::CMD_STATUS_RUNNING);
+    return(net::STATUS_CMD_RUNNING);
 }
 
 void SessionOnlineNodes::AddIpwhite(const std::string& strIpwhite)
@@ -203,9 +201,9 @@ void SessionOnlineNodes::GetIpWhite(util::CJsonObject& oIpWhite) const
      *     "192.168.157.138", "192.168.157.139", "192.168.157.175"
      * ]
      */
-    for (auto it = m_setIpwhite.begin(); it != m_setIpwhite.end(); ++it)
+    for (auto it :m_setIpwhite)
     {
-        oIpWhite.Add(*it);
+        oIpWhite.Add(it);
     }
 }
 
@@ -218,11 +216,11 @@ void SessionOnlineNodes::GetBeacon(util::CJsonObject& oBeacon) const
      *     {"identify":"192.168.157.177:16000.1", "leader":false, "online":true}
      * ]
      */
-    for (auto it = m_mapBeacon.begin(); it != m_mapBeacon.end(); ++it)
+    for (auto it :m_mapBeacon)
     {
         util::CJsonObject oNode;
-        oNode.Add("identify", it->first);
-        if (it->second & mc_uiLeader)
+        oNode.Add("identify", it.first);
+        if (it.second & mc_uiLeader)
         {
             oNode.Add("leader", "yes");
         }
@@ -230,7 +228,7 @@ void SessionOnlineNodes::GetBeacon(util::CJsonObject& oBeacon) const
         {
             oNode.Add("leader", "no");
         }
-        if (it->second & mc_uiAlive)
+        if (it.second & mc_uiAlive)
         {
             oNode.Add("online", "yes");
         }
@@ -384,9 +382,6 @@ bool SessionOnlineNodes::GetOnlineNode(const std::string& strNodeType, std::vect
 void SessionOnlineNodes::AddNodeBroadcast(const util::CJsonObject& oNodeInfo)
 {
     LOG4_TRACE("(%s)", oNodeInfo.ToString().c_str());
-    std::unordered_map<std::string, std::unordered_map<std::string, util::CJsonObject> >::iterator node_list_iter;
-    std::unordered_map<std::string, util::CJsonObject>::iterator node_iter;
-    std::unordered_set<std::string>::iterator node_type_iter;
     util::CJsonObject oSubcribeNodeInfo;
     util::CJsonObject oAddNodes;
     util::CJsonObject oAddedNodeInfo = oNodeInfo;
@@ -398,18 +393,18 @@ void SessionOnlineNodes::AddNodeBroadcast(const util::CJsonObject& oNodeInfo)
     for (auto sub_iter = m_mapPublisher.begin();
                     sub_iter != m_mapPublisher.end(); ++sub_iter)
     {
-        for (node_type_iter = sub_iter->second.begin(); node_type_iter != sub_iter->second.end(); ++node_type_iter)
+        for (auto node_type_iter = sub_iter->second.begin(); node_type_iter != sub_iter->second.end(); ++node_type_iter)
         {
             /* send this node info to subscriber */
             if (sub_iter->first == oNodeInfo("node_type"))
             {
-                node_list_iter = m_mapNode.find(*node_type_iter);
+                auto node_list_iter = m_mapNode.find(*node_type_iter);
                 if (node_list_iter != m_mapNode.end())
                 {
                     LOG4_TRACE("m_mapNode[%s].size() = %u", node_type_iter->c_str(), node_list_iter->second.size());
                     try
                     {
-                        for (node_iter = node_list_iter->second.begin(); node_iter != node_list_iter->second.end(); ++node_iter)
+                        for (auto node_iter = node_list_iter->second.begin(); node_iter != node_list_iter->second.end(); ++node_iter)
                         {
                             if (node_iter->second("node_id") == oNodeInfo("node_id"))
                             {
@@ -417,12 +412,8 @@ void SessionOnlineNodes::AddNodeBroadcast(const util::CJsonObject& oNodeInfo)
                             }
 
                             MsgBody oMsgBody;
-                            oMsgBody.set_data(oAddNodes.ToString());
-                            std::shared_ptr<net::Step> pStep = MakeSharedStep("coor::StepNodeBroadcast", node_iter->first, (int32)net::CMD_REQ_NODE_NOTICE, oMsgBody);
-                            if (nullptr != pStep)
-                            {
-                                pStep->Emit();
-                            }
+                            oMsgBody.set_body(oAddNodes.ToString());
+                            net::ExecStep(new coor::StepNodeBroadcast(node_iter->first, (int32)net::CMD_REQ_NODE_NOTICE, oMsgBody))
                         }
                     }
                     catch(std::bad_alloc& e)
@@ -435,10 +426,10 @@ void SessionOnlineNodes::AddNodeBroadcast(const util::CJsonObject& oNodeInfo)
             /* make subscribe node info */
             if ((*node_type_iter) == oNodeInfo("node_type"))
             {
-                node_list_iter = m_mapNode.find(sub_iter->first);
+                auto node_list_iter = m_mapNode.find(sub_iter->first);
                 if (node_list_iter != m_mapNode.end())
                 {
-                    for (node_iter = node_list_iter->second.begin(); node_iter != node_list_iter->second.end(); ++node_iter)
+                    for (auto node_iter = node_list_iter->second.begin(); node_iter != node_list_iter->second.end(); ++node_iter)
                     {
                         util::CJsonObject oExistNodeInfo = node_iter->second;
                         oExistNodeInfo.Delete("node");
@@ -454,23 +445,12 @@ void SessionOnlineNodes::AddNodeBroadcast(const util::CJsonObject& oNodeInfo)
     /* send subscribe node info to this node */
     if (oSubcribeNodeInfo["add_nodes"].GetArraySize() > 0)
     {
-        try
-        {
-            MsgBody oMsgBody;
-            char szThisNodeIdentity[32] = {0};
-            oMsgBody.set_body(oSubcribeNodeInfo.ToString());
-            snprintf(szThisNodeIdentity, sizeof(szThisNodeIdentity),
-                            "%s:%s", oNodeInfo("node_ip").c_str(), oNodeInfo("node_port").c_str());
-            std::shared_ptr<net::Step> pStep = MakeSharedStep("coor::StepNodeBroadcast", std::string(szThisNodeIdentity), (int32)net::CMD_REQ_NODE_NOTICE, oMsgBody);
-            if (nullptr != pStep)
-            {
-                pStep->Emit();
-            }
-        }
-        catch(std::bad_alloc& e)
-        {
-            LOG4_ERROR("new StepNodeBroadcast error: %s", e.what());
-        }
+		MsgBody oMsgBody;
+		char szThisNodeIdentity[32];
+		oMsgBody.set_body(oSubcribeNodeInfo.ToString());
+		snprintf(szThisNodeIdentity, sizeof(szThisNodeIdentity),
+						"%s:%s", oNodeInfo("node_ip").c_str(), oNodeInfo("node_port").c_str());
+		net::ExecStep(new coor::StepNodeBroadcast(szThisNodeIdentity,net::CMD_REQ_NODE_REG_NOTICE,oMsgBody));
     }
 }
 
@@ -500,12 +480,8 @@ void SessionOnlineNodes::RemoveNodeBroadcast(const util::CJsonObject& oNodeInfo)
                     for (node_iter = node_list_iter->second.begin(); node_iter != node_list_iter->second.end(); ++node_iter)
                     {
                         MsgBody oMsgBody;
-                        oMsgBody.set_data(oDelNodes.ToString());
-                        std::shared_ptr<net::Step> pStep = MakeSharedStep("coor::StepNodeBroadcast", node_iter->first, (int32)net::CMD_REQ_NODE_NOTICE, oMsgBody);
-                        if (nullptr != pStep)
-                        {
-                            pStep->Emit();
-                        }
+                        oMsgBody.set_body(oDelNodes.ToString());
+                        net::ExecStep(new coor::StepNodeBroadcast(node_iter->first,net::CMD_REQ_NODE_REG_NOTICE,oMsgBody));
                     }
                 }
             }
@@ -600,7 +576,7 @@ void SessionOnlineNodes::SendBeaconBeat()
     {
         if (GetNodeIdentify() != iter->first)
         {
-            SendTo(iter->first, net::CMD_REQ_LEADER_ELECTION, GetSequence(), oMsgBody);
+            net::SendTo(iter->first, net::CMD_REQ_LEADER_ELECTION, GetSequence(), oMsgBody);
         }
     }
 }

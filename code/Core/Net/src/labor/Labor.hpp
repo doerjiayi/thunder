@@ -320,6 +320,7 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
      */
     virtual bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
     virtual bool SentTo(const std::string& strHost, int iPort, const std::string& strUrlPath, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL){return(false);}
+    virtual bool SendTo(const tagMsgShell& stMsgShell,uint32 cmd,uint32 seq,const std::string &strBody){return(false);}
     virtual bool Host2Addr(const std::string & strHost,int iPort,struct sockaddr_in &stAddr,bool boRefresh=false){return false;}
     /*
      * @brief 服务器使用的发送到客户端接口

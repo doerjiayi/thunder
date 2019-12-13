@@ -11,6 +11,7 @@
 #define SRC_CMDNODEREPORT_CMDNODEREPORT_HPP_
 
 #include "Comm.hpp"
+#include "SessionOnlineNodes.hpp"
 
 namespace coor
 {
@@ -18,7 +19,7 @@ namespace coor
 class CmdNodeReport: public net::Cmd
 {
 public:
-    CmdNodeReport(int32 iCmd);
+    CmdNodeReport():m_pSessionOnlineNodes(nullptr){}
     virtual ~CmdNodeReport();
 
     virtual bool Init();
@@ -28,7 +29,7 @@ public:
                     const MsgBody& oMsgBody);
 
 private:
-    std::shared_ptr<SessionOnlineNodes> m_pSessionOnlineNodes;
+    SessionOnlineNodes* m_pSessionOnlineNodes;
 };
 
 } /* namespace coor */

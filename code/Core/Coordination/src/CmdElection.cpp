@@ -40,8 +40,7 @@ bool CmdElection::AnyMessage(const net::tagMsgShell& stMsgShell,const MsgHead& o
     }
     if (oElection.ParseFromString(oMsgBody.body()))
     {
-    	net::GetWorkerIdentify()
-        m_pSessionOnlineNodes->AddBeaconBeat(stMsgShell->GetIdentify(), oElection);
+        m_pSessionOnlineNodes->AddBeaconBeat(net::getstMsgShell->GetIdentify(), oElection);
         return(true);
     }
     else
