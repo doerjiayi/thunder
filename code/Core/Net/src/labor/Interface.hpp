@@ -35,7 +35,7 @@
 namespace net
 {
 
-#define USE_CONHASH
+//#define USE_CONHASH
 
 class Cmd;
 class Module;

@@ -75,7 +75,7 @@ struct ConNode {
 	void *nodedata;
 };
 struct ConVirtualNode {
-	ConVirtualNode(const std::string &iden, uint32_t count, void *data = NULL) :
+	ConVirtualNode(const std::string &iden, uint32_t count, void *data) :
 			node_iden(iden), virtual_node_count(count), nodedata(data) {
 	}
 	ConNode* getNode() const {
@@ -144,7 +144,7 @@ public:
 			snprintf(vstr, sizeof(vstr) - 1, "#%u", i);
 			std::string vnodestr = pnode->getNodeIden() + vstr;
 			uint32_t vhash = hash_func_(vnodestr); //哈希服务器虚节点
-			ConVirtualNode *vnode = new ConVirtualNode(node_iden, vhash); //pnode
+			ConVirtualNode *vnode = new ConVirtualNode(node_iden, vhash,pnode);
 			if (vnode == NULL)
 				return -1;
 			m_vnode_map.insert(VNodeMap_VT(vhash, vnode));

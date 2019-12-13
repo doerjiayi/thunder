@@ -1,12 +1,12 @@
 {
     "node_type":"WEB",
-    "access_host":"192.168.3.6",
+    "access_host":"192.168.11.66",
     "access_port":17037,
     "access_codec":3,
-    "inner_host":"192.168.3.6",
+    "inner_host":"192.168.11.66",
     "inner_port":17038,
     "center":[
-        {"host":"192.168.3.6","port":"17000"}],
+        {"host":"192.168.11.66","port":"17000"}],
     "server_name":"Web_demo",
     "process_num":1,
     "worker_capacity":1000000,

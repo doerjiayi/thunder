@@ -12,15 +12,8 @@
 #include "cmd/Cmd.hpp"
 #include "common.pb.h"
 #include "RobotError.h"
-#include "../LogicSession.h"
+#include "LogicSession.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-net::Cmd* create();
-#ifdef __cplusplus
-}
-#endif
 
 namespace robot
 {
@@ -28,8 +21,8 @@ namespace robot
 class CmdGetToken: public net::Cmd
 {
 public:
-    CmdGetToken();
-    virtual ~CmdGetToken();
+    CmdGetToken(){}
+    virtual ~CmdGetToken(){}
     bool Init();
     virtual bool AnyMessage(
                     const net::tagMsgShell& stMsgShell,

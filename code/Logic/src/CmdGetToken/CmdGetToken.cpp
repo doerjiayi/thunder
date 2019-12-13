@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Project:  LogicServer
- * @file     CmdRobotPreQuestion.cpp
+ * @file     CmdGetToken.cpp
  * @brief 
  * @author   cjy
  * @date:    2016年12月9日
@@ -9,20 +9,11 @@
  ******************************************************************************/
 #include "util/CommonUtils.hpp"
 #include "CmdGetToken.hpp"
-#include "LogicSession.h"
 
 MUDULE_CREATE(robot::CmdGetToken);
 
 namespace robot
 {
-
-CmdGetToken::CmdGetToken()
-{
-}
-
-CmdGetToken::~CmdGetToken()
-{
-}
 
 bool CmdGetToken::Init()
 {

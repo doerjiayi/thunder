@@ -30,7 +30,7 @@ bool ModuleHello::Init()
 {
     return(true);
 }
-//curl 'http://192.168.3.6:27008/Interface/gentoken'
+//curl 'http://192.168.3.6:27008/gentoken'
 void ModuleHello::GenKey(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
 	std::string strToken = std::to_string(util::GetUniqueId(net::GetNodeId(),net::GetWorkerIndex()));
@@ -60,8 +60,8 @@ void ModuleHello::GenKey(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHt
 	}
 }
 
-//curl 'http://192.168.3.6:27008/Interface/gentoken?token=6718307704189747201&key=6718307704189747202'
-//curl 'http://192.168.3.6:27008/Interface/gentoken?test=echo'
+//curl 'http://192.168.3.6:27008/gentoken?token=6718307704189747201&key=6718307704189747202'
+//curl 'http://192.168.3.6:27008/gentoken?test=echo'
 void ModuleHello::VerifyKey(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHttpMsg)
 {
 	std::map<std::string, std::string> mapParameters;
@@ -87,7 +87,7 @@ void ModuleHello::VerifyKey(const net::tagMsgShell& stMsgShell,const HttpMsg& oI
 		oJson.Parse(oInMsgBody.body());
 		int code(1);
 		oJson.Get("code",code);
-		pStep->SendToClient(oInMsgBody.body(), code == 0 ? 200 : 400);
+		pStep->SendToClient(oInMsgBody.body(), code == 0 ? 200 : 401);//https://www.runoob.com/http/http-status-codes.html
 	};
 	oJson.Add("verifykey", "1");
 	std::string address = g_pLabor->GetClientAddr(stMsgShell);

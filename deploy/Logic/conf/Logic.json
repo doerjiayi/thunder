@@ -1,10 +1,10 @@
 {
     "node_type":"LOGIC",
-    "inner_host":"192.168.3.6",
+    "inner_host":"192.168.11.66",
     "inner_port":16068,
     "center":[
-        {"host":"192.168.3.6","port":"27000"}],
-    "server_name":"Logic_robot",
+        {"host":"192.168.11.66","port":"27000"}],
+    "server_name":"Logic_im",
     "process_num":1,
     "//cpu_affinity":"是否设置进程CPU亲和度（绑定CPU）",
     "cpu_affinity":false,
@@ -22,7 +22,7 @@
     "log_level":20000,
     "load_so_interval":60.0,
     "so":[
-         {"cmd":10001, "so_path":"plugins/Logic/CmdGetToken.so", "entrance_symbol":"create","load":true, "version":1}
+         {"cmd":10001, "so_path":"plugins/CmdGetToken.so", "entrance_symbol":"create","load":true, "version":1}
     ],
     "module":[
     ]    

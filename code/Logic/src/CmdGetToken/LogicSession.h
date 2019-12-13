@@ -1,7 +1,7 @@
 /*
  * RobotSession.h
  *
- *  Created on: 2015年10月21日
+ *  Created on: 2019年10月21日
  *      Author: chen
  */
 #ifndef CODE_WEBSERVER_SRC_WEBSESSION_H_
@@ -57,6 +57,7 @@ public:
 		token.strToken = strToken;
 		token.strKey = strKey;
 		m_tokenM[strToken] = token;
+		LOG4_INFO("%s() token.strID:%s", __FUNCTION__,token.strID.c_str());
     }
     bool VerifyTokenPermutation(const std::string& strToken,const std::string& strKey)
     {

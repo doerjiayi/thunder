@@ -1,13 +1,13 @@
 {
     "node_type":"HELLO",
-    "access_host":"192.168.3.6",
+    "access_host":"192.168.11.66",
     "access_port":27006,
     "access_codec":3,
-    "inner_host":"192.168.3.6",
+    "inner_host":"192.168.11.66",
     "inner_port":27007,
     "center":[
-        {"host":"192.168.3.6","port":"27000"}],
-    "server_name":"Hello_robot",
+        {"host":"192.168.11.66","port":"27000"}],
+    "server_name":"Hello_im",
     "process_num":1,
     "//cpu_affinity":"是否设置进程CPU亲和度（绑定CPU）",
     "cpu_affinity":false,
@@ -26,12 +26,12 @@
     "log_level":10000,
     "load_so_interval":60.0,
     "so":[
-         {"cmd":20001, "so_path":"plugins/Hello/CmdHello.so", "entrance_symbol":"create","process_num":0, "load":false, "version":1}
+         {"cmd":20001, "so_path":"plugins/CmdHello.so", "entrance_symbol":"create","process_num":0, "load":false, "version":1}
     ],
     "module":[
-    {"url_path":"/hello/shake","so_path":"plugins/Hello/ModuleShake.so","entrance_symbol":"create", "load":true, "version":1},
-    {"url_path":"/hello/locatedata","so_path":"plugins/Hello/ModuleLocateData.so","entrance_symbol":"create", "load":true, "version":1},
-    {"url_path":"/hello/hello","so_path":"plugins/Hello/ModuleHello.so","entrance_symbol":"create", "load":true, "version":1}
+    {"url_path":"/hello/shake","so_path":"plugins/ModuleShake.so","entrance_symbol":"create", "load":true, "version":1},
+    {"url_path":"/hello/locatedata","so_path":"plugins/ModuleLocateData.so","entrance_symbol":"create", "load":true, "version":1},
+    {"url_path":"/hello/hello","so_path":"plugins/ModuleHello.so","entrance_symbol":"create", "load":true, "version":1}
     ]
 }
 

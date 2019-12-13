@@ -1,14 +1,14 @@
 {
     "center":	 [{
-        "center_inner_host":    "192.168.3.6",
+        "center_inner_host":    "192.168.11.66",
         "center_inner_port":    27000
     }],
     "gate": [],
     "route":
     {
     	"route_brief":"优先使用auto则所有节点之间可以互发消息，否则使用node下的路由",
-    	"auto":["INTERFACE","LOGIC"],
-    	"ipwhite":["192.168.3.6"],
+    	"auto":["INTERFACE","LOGIC","ACCESS"],
+    	"ipwhite":["192.168.11.66"],
 	    "node":{
 			"INTERFACE":["LOGIC"],
 			"LOGIC":[]
@@ -17,15 +17,15 @@
     "redlock_brief":"redlock为空列表则未开启center热备功能，否则需要启动3个redis实例",
     "redlock_sample":	 [
     {
-    	"host":    "192.168.3.6",
+    	"host":    "192.168.11.66",
         "port":    16379
     },
     {
-        "host":    "192.168.3.6",
+        "host":    "192.168.11.66",
         "port":    16380
     },
     {
-        "host":    "192.168.3.6",
+        "host":    "192.168.11.66",
         "port":    16381
     }],
     "redlock":[]

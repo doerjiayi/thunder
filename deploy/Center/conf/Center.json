@@ -1,9 +1,9 @@
 {
     "node_type":    "CENTER",
-    "inner_host":   "192.168.3.6",
+    "inner_host":   "192.168.11.66",
     "inner_port":   27000,
     "center":   [],
-    "server_name":  "Center_robot",
+    "server_name":  "Center_im",
     "process_num":  1,
     "worker_capacity":  1000000,
     "config_path":  "conf/",
@@ -17,37 +17,32 @@
     "refresh_interval": 20,
     "so":   [{
             "cmd":  11,
-            "so_path":  "plugins/Center/CmdNodeReport.so",
+            "so_path":  "plugins/CmdNodeReport.so",
             "entrance_symbol":  "create",
-            "process_num":  0,
             "load": true,
             "version":  4
         }, {
             "cmd":  13,
-            "so_path":  "plugins/Center/CmdNodeRegister.so",
+            "so_path":  "plugins/CmdNodeRegister.so",
             "entrance_symbol":  "create",
-            "process_num":  0,
             "load": true,
             "version":  1
         }, {
             "cmd":  19,
-            "so_path":  "plugins/Center/CmdNodeDisconnect.so",
+            "so_path":  "plugins/CmdNodeDisconnect.so",
             "entrance_symbol":  "create",
-            "process_num":  0,
             "load": true,
             "version":  1
         }, {
             "cmd":  23005,
-            "so_path":  "plugins/Center/CmdOfflineNode.so",
+            "so_path":  "plugins/CmdOfflineNode.so",
             "entrance_symbol":  "create",
-            "process_num":  0,
             "load": true,
             "version":  1
         }, {
             "cmd":  23007,
-            "so_path":  "plugins/Center/CmdOnlineNode.so",
+            "so_path":  "plugins/CmdOnlineNode.so",
             "entrance_symbol":  "create",
-            "process_num":  0,
             "load": true,
             "version":  6
         }]

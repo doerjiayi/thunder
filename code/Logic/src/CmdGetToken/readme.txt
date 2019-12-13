@@ -1,0 +1,1 @@
+CmdGetToken为测试指令

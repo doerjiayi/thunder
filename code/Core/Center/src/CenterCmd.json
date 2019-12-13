@@ -16,7 +16,7 @@
     	"db_brief":"本中心节点连接数据库的配置, dbuse 为0则不使用数据库",
     	"dbuse":0,
     	
-    	"dbip":	"192.168.3.6",
+    	"dbip":	"192.168.11.66",
 		"dbport":	3307,
 		"dbuser":	"root",
 		"dbpwd":	"123456",
@@ -24,7 +24,7 @@
 		"dbcharacterset":	"utf8"
     },
     "center":	 [{
-        "center_inner_host":    "192.168.3.6",
+        "center_inner_host":    "192.168.11.66",
         "center_inner_port":    27000
     }],
     "gate": ["INTERFACE"],
@@ -32,7 +32,7 @@
     {
     	"route_brief":"优先使用auto则所有节点之间可以互发消息，否则使用node下的路由",
     	"auto":["COLLECT","PGAGENT","LOGQUEUE","PROXYSSDB","HELLO"],
-    	"ipwhite":["192.168.3.6"],
+    	"ipwhite":["192.168.11.66"],
 	    "node":{
 	    	"COLLECT":["PROXYSSDB","LOGQUEUE","STATISTICS"],
 	    	"PGAGENT":[],
