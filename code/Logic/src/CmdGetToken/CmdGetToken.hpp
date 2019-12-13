@@ -21,8 +21,8 @@ namespace im
 class CmdGetToken: public net::Cmd
 {
 public:
-    CmdGetToken(){}
-    virtual ~CmdGetToken(){}
+    CmdGetToken() = default;
+    virtual ~CmdGetToken() = default;
     bool Init();
     virtual bool AnyMessage(
                     const net::tagMsgShell& stMsgShell,

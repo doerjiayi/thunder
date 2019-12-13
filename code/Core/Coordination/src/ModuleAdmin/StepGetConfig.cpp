@@ -21,7 +21,7 @@ StepGetConfig::StepGetConfig(
         const std::string& strNodeIdentify,
         const std::string& strConfigFileRelativePath,
         const std::string& strConfigFileName)
-    : m_pChannel(stMsgShell),
+    : m_tagMsgShell(stMsgShell),
       m_iHttpMajor(iHttpMajor), m_iHttpMinor(iHttpMinor),
       m_iCmd(iCmd), m_strNodeIdentify(strNodeIdentify),
       m_strConfigFileRelativePath(strConfigFileRelativePath),
@@ -39,7 +39,7 @@ net::E_CMD_STATUS StepGetConfig::Emit(int iErrno, const std::string& strErrMsg, 
     net::ConfigInfo oConfigFileInfo;
     oConfigFileInfo.set_file_name(m_strConfigFileName);
     oConfigFileInfo.set_file_path(m_strConfigFileRelativePath);
-    oMsgBody.set_data(oConfigFileInfo.SerializeAsString());
+    oMsgBody.set_body(oConfigFileInfo.SerializeAsString());
     if (SendTo(m_strNodeIdentify, m_iCmd, GetSequence(), oMsgBody))
     {
         return(net::CMD_STATUS_RUNNING);

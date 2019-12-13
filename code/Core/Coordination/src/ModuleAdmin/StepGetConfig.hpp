@@ -12,17 +12,12 @@
 
 #include <util/http/http_parser.h>
 #include <util/json/CJsonObject.hpp>
-#include <pb/neb_sys.pb.h>
-#include <actor/step/PbStep.hpp>
+#include "Step.hpp"
 
 namespace coor
 {
 
-class StepGetConfig: public net::PbStep,
-    public net::DynamicCreator<StepGetConfig,
-                               std::shared_ptr<net::SocketChannel>,
-                               int32, int32, int32,
-                               std::string, std::string, std::string>
+class StepGetConfig: public net::Step
 {
 public:
     StepGetConfig(
@@ -49,7 +44,7 @@ public:
     virtual net::E_CMD_STATUS Timeout();
 
 private:
-    std::shared_ptr<net::SocketChannel> m_pChannel;
+    net::tagMsgShell m_tagMsgShell;
     int32 m_iHttpMajor;
     int32 m_iHttpMinor;
     int32 m_iCmd;

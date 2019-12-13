@@ -1,46 +1,33 @@
 {
-    "status":
-    {
-	    "deleteofflinenode_timeinterval":	86400,
-		"nodeloadlog_timeinterval":	60,
-		"nodeloadlog_overdue":	5184000,
-		"nodeloadstatistics_timeinterval":	302,
-		"nodeloadstatistics_overdue":	5184001,
-		"nodeloadcheck_timeinterval":	86400,
-		"serverdataloadstatuslog_overdue":	5184000,
-		"serverdataloadstatuslogcheck_timeinterval":	60
-	},
-    
-    "db":
-    {
-    	"db_brief":"本中心节点连接数据库的配置, dbuse 为0则不使用数据库",
-    	"dbuse":0,
-    	
-    	"dbip":	"192.168.11.66",
-		"dbport":	3307,
-		"dbuser":	"root",
-		"dbpwd":	"123456",
-		"dbname":	"db_analysis2_center",
-		"dbcharacterset":	"utf8"
-    },
     "center":	 [{
         "center_inner_host":    "192.168.11.66",
         "center_inner_port":    27000
     }],
-    "gate": ["INTERFACE"],
+    "gate": [],
     "route":
     {
     	"route_brief":"优先使用auto则所有节点之间可以互发消息，否则使用node下的路由",
-    	"auto":["COLLECT","PGAGENT","LOGQUEUE","PROXYSSDB","HELLO"],
+    	"auto":["INTERFACE","LOGIC","ACCESS"],
     	"ipwhite":["192.168.11.66"],
 	    "node":{
-	    	"COLLECT":["PROXYSSDB","LOGQUEUE","STATISTICS"],
-	    	"PGAGENT":[],
-	    	"LOGQUEUE":["PROXYSSDB"],
-	    	"PROXYSSDB":["PGAGENT"],
-	    	"STATISTICS":["PROXY"],
-	    	"HELLO":["PROXYSSDB","PGAGENT"]
+			"INTERFACE":["LOGIC"],
+			"LOGIC":[]
 	    }
-    }
+    },
+    "redlock_brief":"redlock为空列表则未开启center热备功能，否则需要启动3个redis实例",
+    "redlock_sample":	 [
+    {
+    	"host":    "192.168.11.66",
+        "port":    16379
+    },
+    {
+        "host":    "192.168.11.66",
+        "port":    16380
+    },
+    {
+        "host":    "192.168.11.66",
+        "port":    16381
+    }],
+    "redlock":[]
 }
  

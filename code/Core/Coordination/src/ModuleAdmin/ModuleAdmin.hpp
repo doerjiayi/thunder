@@ -9,10 +9,12 @@
  ******************************************************************************/
 #ifndef MODULEADMIN_HPP
 #define MODULEADMIN_HPP
-#include "Comm.hpp"
 #include <string>
-#include <util/json/CJsonObject.hpp>
+#include "util/json/CJsonObject.hpp"
+#include "util/http/http_parser.h"
 #include "SessionOnlineNodes.hpp"
+#include "BeaconError.hpp"
+#include "StepGetConfig.hpp"
 
 namespace coor
 {

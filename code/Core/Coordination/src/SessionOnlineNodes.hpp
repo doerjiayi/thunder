@@ -10,7 +10,7 @@
 #ifndef SRC_SESSIONNODESHOLDER_HPP_
 #define SRC_SESSIONNODESHOLDER_HPP_
 
-#include "Comm.hpp"
+#include <unordered_set>
 #include "StepNodeBroadcast.hpp"
 
 namespace coor

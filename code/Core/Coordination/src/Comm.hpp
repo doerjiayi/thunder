@@ -17,21 +17,8 @@
 #include "NetError.hpp"
 #include "NetDefine.hpp"
 #include "labor/Labor.hpp"
-#include "beacon.pb.h"
-#include <cstring>
-#include <string>
-#include <unordered_set>
-#include <unordered_map>
-#include "Session.hpp"
-#include "BeaconError.hpp"
-#include "StepNodeBroadcast.hpp"
 
 DEFINE_INT
 
-namespace core
-{
-
-
-} /* namespace core */
 
 #endif /* SRC_NODEREG_COMM_HPP_ */

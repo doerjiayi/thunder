@@ -49,19 +49,19 @@ bool ModuleAdmin::AnyMessage(
         oResponseData.Add("code", net::ERR_BODY_JSON);
         oResponseData.Add("msg", "error json format!");
         oHttpMsg.set_body(oResponseData.ToFormattedString());
-        SendTo(stMsgShell, oHttpMsg);
+        net::SendTo(stMsgShell, oHttpMsg);
         return(false);
     }
     if (nullptr == m_pSessionOnlineNodes)
     {
-        m_pSessionOnlineNodes = std::dynamic_pointer_cast<SessionOnlineNodes>(GetSession("coor::SessionOnlineNodes"));
+        m_pSessionOnlineNodes = net::GetSession("coor::SessionOnlineNodes");
         if (nullptr == m_pSessionOnlineNodes)
         {
             LOG4_ERROR("no session node found!");
             oResponseData.Add("code", ERR_SERVICE);
             oResponseData.Add("msg", "no session node found!");
             oHttpMsg.set_body(oResponseData.ToFormattedString());
-            SendTo(stMsgShell, oHttpMsg);
+            net::SendTo(stMsgShell, oHttpMsg);
             return(false);
         }
     }
@@ -81,8 +81,7 @@ bool ModuleAdmin::AnyMessage(
     else
     {
         oResponseData.Add("code", ERR_INVALID_CMD);
-        oResponseData.Add("msg",
-                std::string("invalid cmd \"") + oCmdJson("cmd") + std::string("\" !"));
+        oResponseData.Add("msg", std::string("invalid cmd \"") + oCmdJson("cmd") + std::string("\" !"));
     }
 
     if (oResponseData.IsEmpty())
@@ -228,8 +227,8 @@ void ModuleAdmin::Get(const net::tagMsgShell& stMsgShell,
     {
         if (oCmdJson["args"].GetArraySize() == 2)
         {
-            std::shared_ptr<net::Step> pStep = MakeSharedStep(
-                    "coor::StepGetConfig", stMsgShell, iHttpMajor, iHttpMinor,
+            std::shared_ptr<net::Step> pStep = new StepGetConfig(
+                    stMsgShell, iHttpMajor, iHttpMinor,
                     (int32)net::CMD_REQ_GET_NODE_CONFIG,
                     oCmdJson["args"](1), std::string(""), std::string(""));
             if (nullptr == pStep)
