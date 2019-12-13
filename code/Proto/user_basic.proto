@@ -1,5 +1,15 @@
 syntax = "proto3";
 
+enum E_PROHIBIT
+{
+	BAN_NO								= 0;	///< 没有禁止
+	BAN_TALK							= 1;	///< 禁言
+	BAN_COMMUNITY						= 2;	///< 禁止你我圈发说说、评论、回复、点赞
+	BAN_CREATE_GROUP					= 4;	///< 禁止创建群
+	BAN_ATENTION						= 8;	///< 禁止关注
+	BAN_LOGIN							= 16;	///< 禁止登录
+}
+
 message user_basic
 {
     uint32 appid               = 1; ///< appid
@@ -14,4 +24,7 @@ message user_basic
 	uint32 login_client_type   = 10;///< 客户登录客户端类型 0:未定义1:安卓2 安卓平板 3:IOS 4:IPAD 5:网页
 	string login_ip			   = 11;///< 客户端IP地址（通过OssWorker的GetClientAddr()函数可以获得）
     uint64 user_identity	   = 12;///< 用户身份
+    uint32 prohibit			   = 13;	///< 被禁止项（按位存储见E_PROHIBIT，最低位为禁言，暂无其他位设置）
 }
+
+ 

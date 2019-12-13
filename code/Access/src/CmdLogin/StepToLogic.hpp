@@ -11,8 +11,6 @@
 #ifndef SRC_STEP_TO_LOGIC_HPP_
 #define SRC_STEP_TO_LOGIC_HPP_
 
-#include "user.pb.h"
-#include "step/Step.hpp"
 #include "StepGetOfflineMsg.hpp"
 
 namespace im

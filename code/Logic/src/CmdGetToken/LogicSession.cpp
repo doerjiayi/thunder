@@ -8,7 +8,7 @@
 #include "LogicSession.h"
 #include "util/json/CJsonObject.hpp"
 
-namespace robot
+namespace im
 {
 
 LogicSession* g_pLogicSession = NULL;
@@ -51,7 +51,7 @@ LogicSession* GetLogicSession()
     	LOG4_ERROR("Open conf (%s) error!",strConfigPath.c_str());
     	return NULL;
     }
-    return (g_pLogicSession = net::MakeSession<LogicSession>(ROBOT_SESSIN_ID,std::string("robot::LogicSession"),1.0,oCurrentConf));
+    return (g_pLogicSession = net::MakeSession<LogicSession>(ROBOT_SESSIN_ID,std::string("im::LogicSession"),1.0,oCurrentConf));
 }
 
 

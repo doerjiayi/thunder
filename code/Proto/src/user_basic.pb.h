@@ -29,6 +29,7 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 #define PROTOBUF_INTERNAL_EXPORT_protobuf_user_5fbasic_2eproto 
@@ -54,6 +55,31 @@ template<> ::user_basic* Arena::CreateMaybeMessage<::user_basic>(Arena*);
 }  // namespace protobuf
 }  // namespace google
 
+enum E_PROHIBIT {
+  BAN_NO = 0,
+  BAN_TALK = 1,
+  BAN_COMMUNITY = 2,
+  BAN_CREATE_GROUP = 4,
+  BAN_ATENTION = 8,
+  BAN_LOGIN = 16,
+  E_PROHIBIT_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  E_PROHIBIT_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool E_PROHIBIT_IsValid(int value);
+const E_PROHIBIT E_PROHIBIT_MIN = BAN_NO;
+const E_PROHIBIT E_PROHIBIT_MAX = BAN_LOGIN;
+const int E_PROHIBIT_ARRAYSIZE = E_PROHIBIT_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* E_PROHIBIT_descriptor();
+inline const ::std::string& E_PROHIBIT_Name(E_PROHIBIT value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    E_PROHIBIT_descriptor(), value);
+}
+inline bool E_PROHIBIT_Parse(
+    const ::std::string& name, E_PROHIBIT* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<E_PROHIBIT>(
+    E_PROHIBIT_descriptor(), name, value);
+}
 // ===================================================================
 
 class user_basic : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:user_basic) */ {
@@ -263,6 +289,12 @@ class user_basic : public ::google::protobuf::Message /* @@protoc_insertion_poin
   ::google::protobuf::uint64 user_identity() const;
   void set_user_identity(::google::protobuf::uint64 value);
 
+  // uint32 prohibit = 13;
+  void clear_prohibit();
+  static const int kProhibitFieldNumber = 13;
+  ::google::protobuf::uint32 prohibit() const;
+  void set_prohibit(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:user_basic)
  private:
 
@@ -279,6 +311,7 @@ class user_basic : public ::google::protobuf::Message /* @@protoc_insertion_poin
   ::google::protobuf::uint32 user_type_;
   ::google::protobuf::uint32 login_client_type_;
   ::google::protobuf::uint64 user_identity_;
+  ::google::protobuf::uint32 prohibit_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_user_5fbasic_2eproto::TableStruct;
 };
@@ -695,12 +728,38 @@ inline void user_basic::set_user_identity(::google::protobuf::uint64 value) {
   // @@protoc_insertion_point(field_set:user_basic.user_identity)
 }
 
+// uint32 prohibit = 13;
+inline void user_basic::clear_prohibit() {
+  prohibit_ = 0u;
+}
+inline ::google::protobuf::uint32 user_basic::prohibit() const {
+  // @@protoc_insertion_point(field_get:user_basic.prohibit)
+  return prohibit_;
+}
+inline void user_basic::set_prohibit(::google::protobuf::uint32 value) {
+  
+  prohibit_ = value;
+  // @@protoc_insertion_point(field_set:user_basic.prohibit)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
 
 // @@protoc_insertion_point(namespace_scope)
 
+
+namespace google {
+namespace protobuf {
+
+template <> struct is_proto_enum< ::E_PROHIBIT> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::E_PROHIBIT>() {
+  return ::E_PROHIBIT_descriptor();
+}
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 

@@ -7,7 +7,7 @@
     "server_name":"Logic_im",
     "process_num":1,
     "//cpu_affinity":"是否设置进程CPU亲和度（绑定CPU）",
-    "cpu_affinity":false,
+    "cpu_affinity":true,
     "worker_capacity":1000000,
     "config_path":"conf/",
     "log_path":"log/",

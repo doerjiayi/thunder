@@ -10,7 +10,7 @@
 #ifndef SRC_ROBOTTABLENAME_H_
 #define SRC_ROBOTTABLENAME_H_
 
-namespace robot
+namespace im
 {
 
 #define STR_TABLE_ACCOUNT             "tb_account"

@@ -20,11 +20,11 @@
 #include "cmd/Cmd.hpp"
 #include "step/Step.hpp"
 #include "step/HttpStep.hpp"
-#include "RobotError.h"
+#include "ImError.h"
 #include "../InterfaceSession.h"
 #include "util/CommonUtils.hpp"
 
-namespace robot
+namespace im
 {
 
 #define GET_TOKEN_GEN (10001)

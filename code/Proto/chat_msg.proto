@@ -1,0 +1,171 @@
+syntax = "proto2";
+
+import "common.proto";
+package chat_msg;
+
+//发送单聊天消息(客户端->服务器)
+message msg_p2p_send
+{
+	required uint32 recv_id               = 1; ///< 消息接收者ID
+	required uint32 msg_type = 2; ///< 消息类型，EnumDefinition.E_CHAT_TYPE
+	required common.msg_content msg      = 3; ///< 消息内容
+	optional  uint32 receiver_type       = 4; ///< 原始接收的客服类型,由客户端填写，服务器全程不关心这个字段，只负责转发.由于没有空闲的客户在线，转到总台用来区分原本是要发给钱小二、尽调小助手
+}
+
+//发送/接收单聊天消息回执
+message msg_p2p_ack
+{
+	required  common.errorinfo error = 1; ///< 应答信息
+	optional  uint64 msg_id          = 2; ///< 消息ID(微秒级时间戳)
+	optional  uint64 send_time       = 3; ///< 发送时间(从1970年开始到现在的秒数，需要换算成现实时间)
+	optional common.msg_content msg  = 4; ///< 敏感词过滤后的消息内容，若消息中无敏感词，则响应包无msg_content
+}
+
+//接收聊天消息(服务器->客户端)
+message msg_p2p_recv
+{
+	required uint32 send_id                        = 1; ///< 消息发送者ID
+	required uint32 user_type                      = 2; ///<用户类型，EnumDefinition.E_USER_TYPE
+	required uint64 msg_id                         = 3; ///< 消息ID(微秒级时间戳)
+	required uint64 send_time                      = 4; ///< 发送时间(从1970年开始到现在的秒数，需要换算成现实时间)
+	optional  bytes send_nickname                  = 5; ///< 消息发送者昵称
+    optional  bytes send_avatar                    = 6; ///< 消息发送者头像
+	required uint32 msg_type                       = 7; ///< 消息类型，EnumDefinition.E_CHAT_TYPE
+	required common.msg_content msg                = 8; ///< 消息内容
+	optional  uint32 receiver_type                 = 9; ///< 原始接收的客服类型,由客户端填写，服务器全程不关心这个字段。由于没有空闲的客户在线，转到总台用来区分原本是要发给钱小二、尽调小助手
+	optional uint32 receiver_id	    			   = 10; ///< 消息接收者ID
+}
+
+//发送群聊消息(客户端->服务器)
+message msg_group_send
+{
+	required uint32 group_id              = 1; ///< 群组ID
+	required uint32              msg_type = 2; ///< 消息类型EnumDefinition.E_CHAT_TYPE
+	required common.msg_content msg      = 3; ///< 消息内容
+}
+
+//发送群聊消息回执
+message msg_group_send_ack
+{
+	required common.errorinfo error  = 1; ///< 应答信息
+	optional uint64 msg_id           = 2; ///< 消息ID(微秒级时间戳)
+	optional uint64 send_time        = 3; ///< 发送时间(从1970年开始到现在的秒数，需要换算成现实时间)
+	optional common.msg_content msg  = 4; ///< 敏感词过滤后的消息内容，若消息中无敏感词，则响应包无msg_content
+}
+
+//接收群聊消息(服务器->客户端)
+message msg_group_recv
+{
+	required uint32 group_id                         = 1; ///< 群组ID
+	required uint32 group_type 						 = 2; ///<EnumDefinition.E_GROUP_TYPE
+	required uint32 send_id                          = 3; ///< 消息发送者ID
+	required uint64 msg_id                           = 4; ///< 消息ID(微秒级时间戳)
+	required uint64 send_time                        = 5; ///< 发送时间(从1970年开始到现在的秒数，需要换算成现实时间)
+	required uint32 msg_type                         = 6; ///< 消息类型 EnumDefinition.E_CHAT_TYPE
+	required common.msg_content msg                  = 7; ///< 消息内容
+}
+
+//接收群聊消息回执
+message msg_group_recv_ack
+{
+	required common.errorinfo error = 1; ///< 应答信息
+	optional uint64 msg_id           = 2; ///< 消息ID(微秒级时间戳)
+	optional uint32 group_id         = 3; ///< 群组ID
+}
+
+//请求单聊离线消息
+message offline_msg_p2p_req
+{
+	optional uint32 msg_count   = 1; ///< 获取消息个数
+	optional uint32 send_id     = 2; ///< 消息发送者ID
+	optional uint64 msg_id      = 3; ///< 消息ID(微秒级时间戳)
+	optional string msg_tag     = 4; ///< 客户端消息标识
+}
+
+//请求单聊离线消息回执
+message offline_msg_p2p_req_ack
+{
+	required common.errorinfo error = 1; ///< 应答信息
+	optional uint32 send_id = 2; ///< 消息发送者ID
+	optional uint64 msg_id           = 3; ///< 消息ID(微秒级时间戳)
+}
+
+//单聊离线消息推送(服务器->客户端)
+message offline_msg_p2p_rsp
+{
+	repeated msg_p2p_recv msg_list  = 1; ///< 消息内容
+	optional uint32 total           = 2; ///< 离线消息总条数
+	optional string msg_tag         = 3; ///< 客户端消息标识
+}
+
+//单聊离线消息推送回执
+message offline_msg_p2p_rsp_ack
+{
+	required common.errorinfo error	= 1; ///< 应答信息
+	repeated uint64 msg_id           = 2; ///< 消息ID列表(微秒级时间戳)
+}
+
+//请求群聊离线消息
+message offline_msg_group_req
+{
+	required uint32 msg_count    = 1; ///< 获取消息个数
+	optional uint32 group_id     = 2; ///< 群组ID
+	optional uint64 msg_id       = 3; ///< 消息ID(微秒级时间戳)
+	optional string msg_tag      = 4; ///< 客户端消息标识
+}
+
+//请求群聊离线消息回执
+message offline_msg_group_ack
+{
+	required common.errorinfo error = 1; ///< 应答信息
+	optional uint32 group_id         = 2; ///< 群组ID
+	optional uint64 msg_id           = 3; ///< 消息ID(微秒级时间戳)
+}
+
+//群聊离线消息推送(服务器->客户端)
+message offline_msg_group_rsp
+{
+	repeated msg_group_recv msg_list = 1; ///< 消息列表内容
+	optional uint32 group_id          = 2; ///< 群组ID
+	optional uint32 total             = 3; //列表总数是多少
+	optional string msg_tag           = 4; ///< 客户端消息标识
+}
+
+//群聊离线消息推送回执
+message offline_msg_group_rsp_ack
+{
+	required common.errorinfo error	= 1; ///< 应答信息
+	repeated uint64 msg_id           = 2; ///< 消息ID列表(微秒级时间戳)
+	optional uint32 group_id         = 3; ///< 群组ID
+}
+
+
+//钱小二控制、移交消息(钱小二->服务器)
+message service_control
+{
+	optional uint32 send_id          = 1; ///< 消息发送者ID
+	optional uint32 recv_id          = 2; ///< 消息接收者ID
+	optional bytes msg              = 3; ///< 消息内容
+	optional uint32 c_id             = 4; ///<移交给xxx的那个钱小二\尽调小助手id
+	optional common.errorinfo error = 5; ///<错误信息
+	optional uint32 transfer_object  = 6; ///<移交后的用户角色(2:是钱小二,12:小助手)
+}
+
+//钱小二控制、移交消息回执
+message service_control_ack
+{
+	required common.errorinfo error	= 1; ///< 应答信息
+	optional uint64 msg_serial       = 2; ///< 时间，毫秒
+}
+
+//S2S离线个人通知推送协议
+message personal_notify
+{
+	optional uint32         imid 	= 1;   //用户id
+}
+
+//S2S离线群通知推送协议
+message group_notify
+{
+	optional uint32         imid 	= 1;  //用户id
+}

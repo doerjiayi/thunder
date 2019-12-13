@@ -2,3 +2,7 @@
 curl -H "Content-Type:application/json" -X POST -d '{"name": "Nebula", "address":"https://github.com/Bwar/Nebula"}' http://192.168.11.66:16003/hello
 
 curl -H "Content-Type:application/json" -X POST -d '{"name": "Nebula", "address":"https://github.com/Bwar/Nebula"}' http://192.168.11.66:16003/hello_nebula
+
+
+
+curl -H "Content-Type:application/json"  "http://192.168.11.66:27008/gentoken?token=6718307704189747201&key=6718307704189747202"

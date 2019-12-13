@@ -13,9 +13,9 @@
 #include "util/StringCoder.hpp"
 #include "ModuleInterface.hpp"
 
-MUDULE_CREATE(robot::ModuleHello);
+MUDULE_CREATE(im::ModuleHello);
 
-namespace robot
+namespace im
 {
 
 ModuleHello::ModuleHello()

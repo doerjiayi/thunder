@@ -3,7 +3,7 @@
 * @file     RedisData.hpp
 * @brief    Redis数据结构定义
 * @author   cjy
-* @date:    2015年11月11日
+* @date:    2019年11月11日
 * @note
 * Modify history:
 ******************************************************************************/

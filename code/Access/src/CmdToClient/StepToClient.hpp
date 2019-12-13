@@ -10,7 +10,7 @@
 #ifndef SRC_CMDTOCLIENT_STEPTOCLIENT_HPP_
 #define SRC_CMDTOCLIENT_STEPTOCLIENT_HPP_
 
-#include "RobotError.h"
+#include "ImError.h"
 #include "step/Step.hpp"
 
 namespace im

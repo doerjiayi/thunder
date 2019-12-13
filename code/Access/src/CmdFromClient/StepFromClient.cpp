@@ -28,7 +28,7 @@ net::E_CMD_STATUS StepFromClient::Emit(int iErrno, const std::string& strErrMsg,
 {
     MsgHead oOutMsgHead = m_oReqMsgHead;
     oOutMsgHead.set_seq(GetSequence());     // 更换消息头的seq后直接转发
-    net::SendToAuto("LOGIC", oOutMsgHead, m_oReqMsgBody);
+    net::SendToSession("LOGIC", oOutMsgHead, m_oReqMsgBody);//如果有session_id， 需要设置oMsgBody.session_id()
     return(net::STATUS_CMD_RUNNING);
 }
 
@@ -46,15 +46,10 @@ net::E_CMD_STATUS StepFromClient::Callback(
 
 net::E_CMD_STATUS StepFromClient::Timeout()
 {
-//    MsgHead oOutMsgHead = m_oMsgHead;
-//    MsgBody oOutMsgBody;
-//    OrdinaryResponse oRes;
-//    oRes.set_err_no(ERR_LOGIC_SERVER_TIMEOUT);
-//    oRes.set_err_msg("logic timeout!");
-//    oOutMsgBody.set_body(oRes.SerializeAsString());
-//    oOutMsgHead.set_cmd(m_oMsgHead.cmd() + 1);
-//    oOutMsgHead.set_msgbody_len(oOutMsgBody.ByteSize());
-//    net::SendTo(m_stMsgShell, oOutMsgHead, oOutMsgBody);
+    OrdinaryResponse oRes;
+    oRes.set_err_no(im::ERR_LOGIC_SERVER_TIMEOUT);
+    oRes.set_err_msg("logic timeout!");
+	net::SendToClient(m_stReqMsgShell, m_oReqMsgHead, oRes.SerializeAsString());
     LOG4_WARN( "cmd %u, seq %lu, logic timeout!", m_oReqMsgHead.cmd(), m_oReqMsgHead.seq());
     return(net::STATUS_CMD_FAULT);
 }

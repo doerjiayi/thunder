@@ -2,6 +2,7 @@
 #define CON_HASH_
 #include <stdint.h>
 #include <string>
+#include <unordered_map>
 #include <map>
 #include <list>
 
@@ -20,43 +21,34 @@ inline uint32_t __FNVHash(const std::string &str) {
 typedef uint32_t (*HashFunction)(const std::string &str);
 
 struct ServerEntry {
-	int wdServerID;
 	std::string pstrIP;
 	int wdPort;
+	std::string strIdentify;
 	int dwInuse;
-	ServerEntry(int ID, const std::string &IP, int Port, int Inuse = 0) :
-			wdServerID(ID), pstrIP(IP), wdPort(Port), dwInuse(Inuse) {
-	}
-	ServerEntry(const std::string &ID, const std::string &IP, int Port,
-			int Inuse = 0) :
-			wdServerID(__FNVHash(ID)), pstrIP(IP), wdPort(Port), dwInuse(Inuse) {
+	ServerEntry(const std::string &identify, const std::string &IP, int Port,int Inuse = 0) :
+			pstrIP(IP), wdPort(Port), strIdentify(identify),dwInuse(Inuse) {
 	}
 	std::string getAddrString() const {
-		return pstrIP + ":" + std::to_string(wdPort) + "#"
-				+ std::to_string(wdServerID);
+		return strIdentify;//pstrIP + ":" + std::to_string(wdPort) + "#" + std::to_string(wdServerID);
 	}
 };
 
 struct ServerInfo {
-	int wdServerID;
 	std::string pstrIP;
 	int wdPort;
-	ServerInfo(int ID, const std::string &IP, int Port) :
-			wdServerID(ID), pstrIP(IP), wdPort(Port) {
+	std::string strIdentify;
+	ServerInfo(const std::string &identify, const std::string &IP, int Port) :
+		pstrIP(IP), wdPort(Port),strIdentify(identify){
 	}
-	std::string getAddrString() const {
-		return pstrIP + ":" + std::to_string(wdPort) + "#"
-				+ std::to_string(wdServerID);
-	}
-	std::string getIdentify() const { //strHost:strPort
+	std::string getAddrString() const {//传输地址
 		return pstrIP + ":" + std::to_string(wdPort);
 	}
-	int getServerID() {
-		return wdServerID;
+	std::string getIdentify() const {
+		return strIdentify;
 	}
 };
 
-struct ConNode {
+struct ConNode {//实节点
 	static const int kVirtualNodeDefault = 80;
 	ConNode(const std::string &iden, uint32_t count, void *data) :
 			node_iden(iden), virtual_node_count(count), nodedata(data) {
@@ -64,7 +56,7 @@ struct ConNode {
 	int getVNodeCount() const {
 		return ConNode::kVirtualNodeDefault;
 	}
-	const std::string& getNodeIden() const {
+	const std::string& getNodeIden() const {//传输地址
 		return node_iden;
 	}
 	void* getData() {
@@ -74,7 +66,7 @@ struct ConNode {
 	uint32_t virtual_node_count;
 	void *nodedata;
 };
-struct ConVirtualNode {
+struct ConVirtualNode {//虚节点
 	ConVirtualNode(const std::string &iden, uint32_t count, void *data) :
 			node_iden(iden), virtual_node_count(count), nodedata(data) {
 	}
@@ -105,8 +97,7 @@ public:
 	NodeList m_node_list;
 
 	//一致性哈希列表
-	ConHash() :
-			hash_func_(__FNVHash) {
+	ConHash() : hash_func_(__FNVHash) {
 	}
 	//删除服务器实节点和虚节点
 	~ConHash() {
@@ -129,40 +120,33 @@ public:
 	}
 
 	//添加节点（传输地址、虚节点数量、实节点）
-	int addNode(const std::string &node_iden, uint32_t virtual_node_count,
-			void *nodedata) {
+	int addNode(const std::string &node_iden, uint32_t virtual_node_count,void *nodedata) {
 		//    debug("%s(iden=%s, vcount=%u)", __FUNCTION__, node_iden.c_str(), virtual_node_count);
-		if (node_iden == "" || virtual_node_count == 0)
-			return -1;
+		if (node_iden.size() == 0 || virtual_node_count == 0) return -1;
 		ConNode *pnode = new ConNode(node_iden, virtual_node_count, nodedata);
-		if (pnode == NULL)
-			return -1;
+		if (pnode == NULL) return -1;
 		m_node_list.push_back(pnode);
-
 		for (uint32_t i = 0; i < pnode->getVNodeCount(); i++) {
 			char vstr[16] = { 0 };
 			snprintf(vstr, sizeof(vstr) - 1, "#%u", i);
 			std::string vnodestr = pnode->getNodeIden() + vstr;
 			uint32_t vhash = hash_func_(vnodestr); //哈希服务器虚节点
 			ConVirtualNode *vnode = new ConVirtualNode(node_iden, vhash,pnode);
-			if (vnode == NULL)
-				return -1;
+			if (vnode == NULL)return -1;
 			m_vnode_map.insert(VNodeMap_VT(vhash, vnode));
 		}
 		return 0;
 	}
 
 	//移除节点
-	int removeNode(const std::string &node_iden) {
+	int removeNode(const std::string &strIpPort) {
 		NodeList_IT nodeit = m_node_list.begin();
 		for (; nodeit != m_node_list.end(); ++nodeit) {
-			if ((*nodeit)->getNodeIden() == node_iden) //移除实节点
+			if ((*nodeit)->getNodeIden() == strIpPort) //移除实节点
 				break;
 		}
-		if (nodeit == m_node_list.end())
-			return 0;
+		if (nodeit == m_node_list.end()) return 0;
 		ConNode *pnode = *nodeit;
-
 		VNodeMap_IT it = m_vnode_map.begin();
 		while (it != m_vnode_map.end()) {//移除虚节点
 			if (it->second->getNode() == pnode){
@@ -174,10 +158,10 @@ public:
 		}
 		delete pnode;
 		m_node_list.erase(nodeit);
-		return 0;
+		return 1;
 	}
 
-//移除所有实节点和虚节点
+	//移除所有实节点和虚节点
 	void clear() {
 		VNodeMap_IT it = m_vnode_map.begin();
 		for (; it != m_vnode_map.end(); ++it) {
@@ -193,14 +177,12 @@ public:
 	}
 
 //根据缓存内容（频道ID）获取最相近的服务器哈希值
-	void* lookupNode(const std::string &object) const {
-		if (m_vnode_map.empty())
-			return NULL;
-		uint32_t objecthash = hash_func_(object);
-		VNodeMap_CIT cit = m_vnode_map.lower_bound(objecthash);
-		if (cit == m_vnode_map.end())
-			cit = m_vnode_map.begin();
-//    debug("%s(%s)-->hash=%u->%s", __FUNCTION__,object.c_str(), objecthash, cit->second->getNode()->getNodeIden().c_str());
+	void* lookupNode(const std::string &strModFactor) const {
+		if (m_vnode_map.empty()) return NULL;
+		uint32_t uiModFactorhash = hash_func_(strModFactor);
+		VNodeMap_CIT cit = m_vnode_map.lower_bound(uiModFactorhash);
+		if (cit == m_vnode_map.end()) cit = m_vnode_map.begin();
+		//    debug("%s(%s)-->hash=%u->%s", __FUNCTION__,object.c_str(), objecthash, cit->second->getNode()->getNodeIden().c_str());
 		return cit->second->getNode()->getData();
 	}
 
@@ -218,13 +200,13 @@ public:
 					vnodess << cit->second->getHash() << " ";
 				}
 			}
-//        debug("[node]%s--[vnodecount=%u]:%s", pnode->getNodeIden().c_str(), pnode->getVNodeCount(),vnodess.str().c_str());
+			//        debug("[node]%s--[vnodecount=%u]:%s", pnode->getNodeIden().c_str(), pnode->getVNodeCount(),vnodess.str().c_str());
 		}
 	}
 };
 class ChannelConHash {
 public:
-	typedef std::map<int, ServerEntry> ServerInfoMap;
+	typedef std::unordered_map<std::string, ServerEntry> ServerInfoMap;
 	typedef ServerInfoMap::const_iterator ServerInfoMap_CIT;
 	typedef ServerInfoMap::iterator ServerInfoMap_IT;
 	typedef ServerInfoMap::value_type ServerInfoMap_VT;
@@ -243,33 +225,22 @@ public:
 	}
 	//加入新服务器节点到哈希列表
 	int addNode(const ServerEntry &entry) {
-		if (entry.dwInuse == 1)
-			return -1;
+		if (entry.dwInuse == 1) return -1;
 		// 服务器信息
-		ServerInfo *pnewinfo = new ServerInfo(entry.wdServerID, entry.pstrIP,
-				entry.wdPort);
-		if (pnewinfo == NULL)
-			return -1;
+		ServerInfo *pnewinfo = new ServerInfo(entry.strIdentify, entry.pstrIP,entry.wdPort);
+		if (pnewinfo == NULL) return -1;
 		//加入服务器节点到列表 pnewinfo
-		m_server_info_map.insert(ServerInfoMap_VT(entry.wdServerID, entry));
-		return m_ConHashProxy.addNode(pnewinfo->getAddrString(),
-				ConNode::kVirtualNodeDefault, pnewinfo);
+		m_server_info_map.insert(ServerInfoMap_VT(entry.strIdentify, entry));
+		return m_ConHashProxy.addNode(pnewinfo->getAddrString(),ConNode::kVirtualNodeDefault, pnewinfo);
 	}
 
 	//移除服务器对应的节点
-	int removeNode(const std::string &ID) {
-		return removeNode(__FNVHash(ID));
-	}
-	int removeNode(uint16_t serverid) {
-		ServerInfoMap_IT it = m_server_info_map.find(serverid);
-		if (it == m_server_info_map.end())
-			return 0;
-		std::string serveripstring = it->second.getAddrString();
-
-		int status = m_ConHashProxy.removeNode(serveripstring);
-		if (status < 0)
-			return status;
-
+	int removeNode(const std::string &strIdentify) {
+		ServerInfoMap_IT it = m_server_info_map.find(strIdentify);
+		if (it == m_server_info_map.end()) return 0;
+		std::string strIpPort = it->second.getAddrString();
+		int status = m_ConHashProxy.removeNode(strIpPort);
+		if (status == 0) return status;
 		m_server_info_map.erase(it);
 		return 0;
 	}
@@ -279,33 +250,16 @@ public:
 		m_ConHashProxy.clear();
 		m_server_info_map.clear();
 	}
-	//由频道ID（缓存内容）哈希获取服务器ID
-	uint16_t lookupNode(uint32_t channelid) const {
-		if (channelid == 0)
-			return 0;
-		char channelidstr[32] = { 0 };
-		snprintf(channelidstr, sizeof(channelidstr) - 1, "%lu", channelid);
-
-		void *pnodedata = m_ConHashProxy.lookupNode(std::string(channelidstr));
-		if (pnodedata == NULL)
-			return 0;
-		ServerInfo *pinfo = static_cast<ServerInfo*>(pnodedata);
-		return pinfo->getServerID();
-	}
-	std::string lookupNodeIdentify(uint32_t channelid) const {
-		if (channelid == 0)
-			return "";
-		char channelidstr[32] = { 0 };
-		snprintf(channelidstr, sizeof(channelidstr) - 1, "%lu", channelid);
-
-		void *pnodedata = m_ConHashProxy.lookupNode(std::string(channelidstr));
-		if (pnodedata == NULL)
-			return "";
+	//获取strIdentify
+	std::string lookupNodeIdentify(uint32_t uiModFactor) const {
+		if (uiModFactor == 0) return "";
+		void *pnodedata = m_ConHashProxy.lookupNode(std::to_string(uiModFactor));
+		if (pnodedata == NULL) return "";
 		ServerInfo *pinfo = static_cast<ServerInfo*>(pnodedata);
 		return pinfo->getIdentify();
 	}
-	//获取服务器ID列表
-	uint32_t getServerIDList(std::list<uint16_t> &idlist) const {
+	//获取strIdentify列表
+	uint32_t getIdentifyList(std::list<std::string> &idlist) const {
 		ServerInfoMap_CIT cit = m_server_info_map.begin();
 		for (; cit != m_server_info_map.end(); ++cit) {
 			idlist.push_back(cit->first);

@@ -2871,8 +2871,27 @@ bool Worker::SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, con
     }
 }
 
+bool Worker::SendToSession(const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+{
+	bool bSendResult = false;
+	if (oMsgBody.has_session_id())
+	{
+		char szIdentify[32] = {0};
+		snprintf(szIdentify, sizeof(szIdentify), "%u", oMsgBody.session_id());
+		bSendResult = SendTo(szIdentify, oOutMsgHead, m_oReqMsgBody);
+	}
+	else if (oMsgBody.has_session())
+	{
+		bSendResult = SendTo(oMsgBody.session(), oMsgHead, oMsgBody);
+	}
+	else
+	{
+		LOG4_WARN("no session id");
+	}
+	return bSendResult;
+}
 
-bool Worker::SendToAuto(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+bool Worker::SendToSession(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
 	if (oMsgBody.has_session_id())
 	{
@@ -2932,7 +2951,7 @@ bool Worker::SendToNext(const std::string& strNodeType, const MsgHead& oMsgHead,
 
 bool Worker::SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
-    LOG4_TRACE("%s(nody_type: %s, mod_factor: %u)", __FUNCTION__, strNodeType.c_str(), uiModFactor);
+	LOG4_TRACE("%s(nody_type: %s, mod_factor: %u)", __FUNCTION__, strNodeType.c_str(), uiModFactor);
 #ifdef USE_CONHASH
     return SendToConHash(strNodeType,uiModFactor,oMsgHead,oMsgBody);
 #endif
@@ -2961,7 +2980,7 @@ bool Worker::SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, c
             {
                 if (i == target_identify && id_iter != node_type_iter->second.second.end())
                 {
-                    return(SendTo(*id_iter, oMsgHead, oMsgBody));
+                    return(SendTo(*id_iter, oMsgHead, oMsgBody));// SendTo(identify: 192.168.11.66:16068.0)
                 }
             }
             return(false);

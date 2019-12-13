@@ -41,6 +41,24 @@ Failed transactions:               0
 Longest transaction:            0.08
 Shortest transaction:           0.00
 
+一致性哈希
+siege "http://192.168.11.66:27008/gentoken?token=6718307704189747201&key=6718307704189747202" -r 300 -c 100
+** SIEGE 4.0.2
+** Preparing 100 concurrent users for battle.
+The server is now under siege...
+Transactions:                  30000 hits
+Availability:                 100.00 %
+Elapsed time:                   7.00 secs
+Data transferred:               0.29 MB
+Response time:                  0.02 secs
+Transaction rate:            4285.71 trans/sec
+Throughput:                     0.04 MB/sec
+Concurrency:                   98.07
+Successful transactions:           0
+Failed transactions:               0
+Longest transaction:            0.07
+Shortest transaction:           0.00
+
 nebula:
 siege "http://192.168.11.66:16003/hello  POST   {\"name\": \"Nebula\", \"address\":\"https://github.com/Bwar/Nebula\"}" -r 300 -c 100
 ** SIEGE 4.0.2

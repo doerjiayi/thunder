@@ -14,9 +14,9 @@
 #include "util/HashCalc.hpp"
 #include "util/StringCoder.hpp"
 
-MUDULE_CREATE(robot::ModuleEcho);
+MUDULE_CREATE(im::ModuleEcho);
 
-namespace robot
+namespace im
 {
 
 ModuleEcho::ModuleEcho()

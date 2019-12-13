@@ -11,11 +11,11 @@
 #define SRC_CMD_GEN_TOKEN_HPP_
 #include "cmd/Cmd.hpp"
 #include "common.pb.h"
-#include "RobotError.h"
+#include "ImError.h"
 #include "LogicSession.h"
 
 
-namespace robot
+namespace im
 {
 
 class CmdGetToken: public net::Cmd
@@ -32,6 +32,6 @@ public:
 }
 ;
 
-} /* namespace robot */
+} /* namespace im */
 
 #endif /* SRC_CMD_GEN_TOKEN_HPP_ */

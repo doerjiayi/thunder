@@ -12,7 +12,8 @@
 #include "common.pb.h"
 #include "user_basic.pb.h"
 #include "ImCw.h"
-#include "RobotError.h"
+#include "ImError.h"
+
 namespace im
 {
 
@@ -28,24 +29,27 @@ StepUpdateAdditional::~StepUpdateAdditional()
 net::E_CMD_STATUS StepUpdateAdditional::Emit(int iErrno, const std::string& strErrMsg,const std::string& strErrShow)
 {
 	LOG4_DEBUG("%s()", __FUNCTION__);
-	if (m_oInMsgBody.has_additional()&&m_basicinfo.ParseFromString(m_oInMsgBody.additional()))
+	if (m_oInMsgBody.has_additional() && m_basicinfo.ParseFromString(m_oInMsgBody.additional()))
 	{
-		LOG4_DEBUG("StepUpdateAdditional::Emit m_basicinfo[%s]",m_basicinfo.DebugString().c_str());
+		LOG4_DEBUG("basicinfo[%s]",m_basicinfo.DebugString().c_str());
 		char szIdentify[32] = {0};
 		snprintf(szIdentify, sizeof(szIdentify), "%u", m_oInMsgBody.session_id());
-		g_pLabor->GetMsgShell(szIdentify,m_stMsgShell);
-
-		util::CBuffer oBuff;
-		oBuff.Write(m_basicinfo.SerializeAsString().c_str(),m_basicinfo.ByteSize());
-		//设置客户端数据
-		g_pLabor->SetClientData(m_stMsgShell,&oBuff);
-		if (m_basicinfo.prohibit()&BAN_LOGIN)
+		if (m_basicinfo.prohibit() & BAN_LOGIN)
 		{
-			if(m_stMsgShell.iFd>0)
+			LOG4_DEBUG("BAN_LOGIN:userid(%u)",m_basicinfo.userid());
+			if(m_stMsgShell.iFd > 0)
 			{	
 				g_pLabor->AbandonConnect(szIdentify);
 				g_pLabor->Disconnect(m_stMsgShell,false);
 			}
+		}
+		else
+		{
+			LOG4_DEBUG("SetClientData:userid(%u)",m_basicinfo.userid());
+			g_pLabor->GetMsgShell(szIdentify,m_stMsgShell);
+			util::CBuffer oBuff;
+			oBuff.Write(m_basicinfo.SerializeAsString().c_str(),m_basicinfo.ByteSize());
+			g_pLabor->SetClientData(m_stMsgShell,&oBuff);//设置客户端数据
 		}
 	}
 	else

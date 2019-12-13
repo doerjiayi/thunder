@@ -9,10 +9,10 @@
 #include <string>
 #include <map>
 #include <sys/time.h>
-#include "RobotErrorMapping.h"
+#include "ImErrorMapping.h"
 #include "session/Session.hpp"
 #include "NetError.hpp"
-#include "RobotError.h"
+#include "ImError.h"
 #include "step/Step.hpp"
 #include "cmd/Cmd.hpp"
 #include "Define.h"
@@ -21,7 +21,7 @@
 
 #define ROBOT_SESSIN_ID (1000)
 
-namespace robot
+namespace im
 {
 
 struct Token

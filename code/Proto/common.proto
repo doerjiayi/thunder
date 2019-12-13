@@ -1,22 +1,214 @@
-syntax = "proto3";
+syntax = "proto2";
 package common;
+//////////////////////////////////////////////////////////////////////////////////
+//公共的数据结构
+
+//消息内容结构
+message msg_content
+{
+    optional TEXT_CONTENT text           = 1;    // 文本内容
+    optional PICTURE_CONTENT picture     = 2;    // 图片
+    optional VOICE_CONTENT voice         = 3;    // 语音
+    optional BUSI_CARD_CONTENT card      = 4;    // 名片
+    optional LOCATION_CONTENT location   = 5;    // 位置
+    optional RED_PKT_CONTENT redpkt      = 6;    // 红包
+    optional SHARE_CONTENT share         = 7;    // 各种消息分享
+    optional JSON_CONTENT  json          = 8;    //通用JSON包体
+    optional RISK_WARNING  waring        = 9;    //风险提示内容
+}
+
+message TEXT_CONTENT
+{
+		required bytes msg                   = 1; // 内容
+		repeated uint32 remind_user_list   = 2;//需要@的用户列表
+}
+
+message PICTURE_CONTENT
+{
+		required bytes picture_url   = 1; // 原始图片链接
+		required bytes  thumb_pic     = 2; // 缩略图片
+		required uint32 thumb_width  = 3; // 图片消息缩略图宽度
+	    required uint32 thumb_hight  = 4; // 图片消息缩略图高度
+}
+
+message VOICE_CONTENT
+{
+		required uint32 voice_len    = 1; // 语音长度
+		required bytes  voice_url     = 2; // 语音链接
+}
+message BUSI_CARD_CONTENT
+{
+		required uint32 card_user_id     = 1; // 名片对象用户ID
+		required bytes card_user_name    = 2; // 名片对象用户昵称
+		required bytes card_user_url     = 3; // 名片对象用户头像地址
+}
+
+message LOCATION_CONTENT
+{
+		required bytes location_pic_url   = 1; // 位置截图地址
+		required double longitude         = 2; // 经度
+		required double latitude          = 3; // 纬度
+		required bytes location_addr      = 4; // 位置
+}
+
+message RED_PKT_CONTENT
+{
+		required uint32 red_pkg_id       = 1; // 红包ID
+		required bytes red_pkg_message   = 2; // 红包留言
+}
+
+message SHARE_CONTENT
+{
+	    required uint32              msg_share_type = 1;//分享内容类型，用枚举 EnumDefinition.E_MSG_SHARE_TYPE
+		required bytes               json_msgbody   = 2;//json包内容
+}
+
+message JSON_CONTENT
+{
+	    optional uint32              json_type      = 1;//json来源1:公众号消息
+	    required bytes               json_body      = 2;//json包内容
+}
+
+message RISK_WARNING
+{
+		required bytes  msg                   = 1;//风险提示语
+		required uint32 warning_type          = 2;//风险类型
+}
 
 //错误码
 message errorinfo
 {
-	 int32 error_code	=1;//错误码
-	 bytes error_info	=2;//错误描述信息
-	 bytes error_client_show	=3;//客户端展示信息
+	required  int32 error_code	=1;//错误码
+	optional  bytes error_info	=2;//错误描述信息
+	optional  bytes error_client_show	=3;//客户端展示信息
 }
+
+
 
 //用户信息
 message user_info
 {
-     uint32  userid                 = 1; //用户id
-     bytes   nickname                = 2; //昵称
-     bytes   avatar_url              = 3; //头像
-     bytes   introduction            = 5; //用户介绍
-     uint32  sex                     = 6; //性别
-     uint64  user_identity           = 7; //用户身份（见EnumDefinition.proto enum E_USER_IDENTITY_POSITION）
+    required  uint32  imid                    = 1; //用户id
+    optional  bytes   nickname                = 2; //昵称 todo
+    optional  bytes   avatar_url              = 3; //头像
+    optional  bytes   guid					  = 4; //业务id   不要
+    optional  bytes   introduction            = 5; //用户介绍
+    optional  uint32  sex                     = 6; //性别
+    required  uint64  user_identity           = 7; //用户的身份（见EnumDefinition.proto enum E_USER_IDENTITY_POSITION）
 }
+
+//自动关注手机通讯录用户
+message auto_attention_friend_info
+{
+    required uint32 imid     = 1; //用户自己的 uid
+    required bytes remark   = 2; //备注
+}
+
+
+//好友用户信息
+message friend_info
+{
+	required  uint32  imid                    = 1; //用户id
+    optional  bytes   nickname                = 2; //昵称 todo
+    optional  bytes   avatar_url              = 3; //头像
+    optional  bytes   remark                  = 4; //备注
+    optional  uint32  relation                = 5; //用户关系
+	optional  bytes   guid                    = 6; //用户业务id
+}
+
+//群信息
+message group_info
+{
+	required  uint32       group_id		                    = 1; //群id
+	optional  bytes        group_name		                = 2; //群名称(项目群：我自己的项目群显示名称(命名规则：借款人姓名[群成立日期]如果自己是借款人看到自己的群，姓名用“我自己”)
+	optional  bytes        avatar_url		                = 3; //群头像
+	optional  uint32       group_type		= 4; //群类型 1项目群，2普通群，3讨论组  EnumDefinition.E_GROUP_TYPE
+	optional  bytes        group_theme		                = 5; //群主题
+	optional  bytes	       introduce		                = 6; //群介绍
+	optional  uint32       is_valid			                = 7; //群是否有效 1 有效 0失效'
+	optional  uint32       group_scale		                = 8; //群规模
+	optional  uint32       is_public		                = 9; //群公开：1不允许游客访问 2允许游客访问
+	optional  uint32       join_verify_type                 = 10; //加群验证 EnumDefinition.E_JOIN_TYPE
+	optional  bytes        group_location		            = 11; //群地点
+	optional  bytes		   project_id                       = 12; //项目id(项目群时必填)
+	repeated  common.group_tag	    tag_list	            = 13; //群标签
+	optional  uint32	   group_member_num                 = 14; //群成员数量;
+	required  uint32       owner_id		                    = 15; //群主id
+	required  bytes        guid                             = 16; //群主guid/业务ID
+    optional  bytes		   create_time                      = 17; //群成员数量;
+}
+
+//以成员角度看用户在群里的信息摘要
+message user_group_summary
+{
+    required  uint32       group_id		                             = 1; //群id
+	required  bytes        group_name		                         = 2; //群名称(项目群：我自己的项目群显示名称(命名规则：借款人姓名[群成立日期]如果自己是借款人看到自己的群，姓名用“我自己”)
+	required  uint32       group_type		                         = 3; //群类型1，业务群(业务发起)，2普通群(app发起)，3讨论组; 非空字段，默认值为0 EnumDefinition.E_GROUP_TYPE
+	required  bytes        group_avatar_url		                     = 4; //群头像                               = 1; //用户加入的群的信息
+	required  uint32       in_group_role                             = 5; //用户在群里面的群角色 EnumDefinition.E_MEMBER_TYPE
+	optional  uint32       in_project_role                           = 6; //用户在项目里面的业务角色 EnumDefinition.E_PROJECT_ROLE_TYPE
+	required  uint32       block_type                                = 7; //是否屏蔽群消息  1屏蔽， 2不屏蔽；非空字段，默认值(只有在用户拥有的群时才写入) EnumDefinition.E_MSG_BLOCK_TYPE
+    required  uint32	   group_member_num                          = 8; //群成员数量;
+    optional  bytes        record_time                               = 10;//该条记录的生成时间
+    optional  bytes		   project_id                                = 11; //项目id(项目群时必填)
+}
+
+message group_member_info
+{
+	required   uint32         group_id       = 1; // 群id
+	required   uint32         imid 			 = 2; //群成员信息
+	required   bytes          guid           = 3; //群成员业务id
+	optional   bytes	      nick_name 	 = 4; //在群中的别名
+	optional   bytes          avatar         = 5;  //群成员图像
+	optional   bytes          join_time      = 6;  //加群时间
+	optional   uint32         group_role 	 = 7; //群角色类型 EnumDefinition.E_MEMBER_TYPE
+	optional   uint32         block_type 	 = 8; //群消息屏蔽标志位, 1表示开启, 2表示关闭 EnumDefinition.E_MSG_BLOCK_TYPE
+	optional   uint32         project_role   = 9; //项目角色 EnumDefinition.E_PROJECT_ROLE_TYPE
+	optional   uint32         liveness       = 10; //活跃度
+	optional   uint32         member_status  = 11; //1正常，2无效，3表示已经删除
+	optional   string         update_time    = 12; //最后更新时间
+}
+
+message project_group_member_info
+{
+	required   uint32         imid 			= 1; //群成员信息
+	required   bytes          guid      = 2; //群成员业务id
+	optional   uint32         project_role   = 9; //项目角色 EnumDefinition.E_PROJECT_ROLE_TYPE
+}
+
+
+
+
+//标签
+message group_tag
+{
+	optional uint32 groupId     = 1; //群组id
+	optional bytes tag_name     = 2;  //群标签
+	optional uint32 group_sum   = 3; //多少群拥有类似的标签
+}
+
+
+
+
+
+//红包信息
+message red_packet_info
+{
+    optional  int64 red_packet_id       = 1; //红包id
+}
+
+//项目信息
+message project_info
+{
+	optional  bytes	project_id      = 1; //业务群id
+	optional  bytes	project_name    = 2; //项目名称
+}
+
+//业务好友信息
+message project_friend
+{
+	optional uint32   type		= 1; //业务类型 EnumDefinition.E_PROJECT_ROLE_TYPE
+	required user_info user		= 2; //用户信息
+}
+
 

@@ -32,152 +32,105 @@ net::E_CMD_STATUS StepGetOfflineMsg::Emit(int iErrno, const std::string& strErrM
 	LOG4_DEBUG("%s()", __FUNCTION__);
 
 	Emit_Begin:
-	if (m_iTimeoutNum==0)
+	if (m_iTimeoutNum==0)//个人通知离线
 	{
-		//个人通知离线
 		Emit_personal_notify();
 	}
-	else if(m_iTimeoutNum==1)
+	else if(m_iTimeoutNum==1)//单聊离线
 	{
-		//push_chat_msg字段为0则不推送
-		if (m_oInAsk.has_push_chat_msg()&&m_oInAsk.push_chat_msg()==0)
+		if (m_oInAsk.has_push_chat_msg()&&m_oInAsk.push_chat_msg()==0)//push_chat_msg字段为0则不推送
 		{
 			m_iTimeoutNum++;
 			goto Emit_Begin;
 		}
-		
-		//单聊离线
 		Emit_offline_msg_p2p_req();
 	}
-	else if(m_iTimeoutNum==2)
+	else if(m_iTimeoutNum==2)//群通知离线
 	{
-		//群通知离线
 		Emit_group_notify();
 	}
-	else if(m_iTimeoutNum==3)
+	else if(m_iTimeoutNum==3)//群聊离线
 	{
-		//push_chat_msg字段为0则不推送
-		if (m_oInAsk.has_push_chat_msg()&&m_oInAsk.push_chat_msg()==0)
+		if (m_oInAsk.has_push_chat_msg()&&m_oInAsk.push_chat_msg()==0)//push_chat_msg字段为0则不推送
 		{
 			m_iTimeoutNum++;
 			goto Emit_Begin;
 		}
-		//群聊离线
 		Emit_offline_msg_group_req();
 	}
-	else if(m_iTimeoutNum==4)
+	else if(m_iTimeoutNum==4)//指定公众消息离线
 	{
-		//指定公众消息离线
 		Emit_offical_specified_notify();
 	}
-	else if(m_iTimeoutNum==5)
+	else if(m_iTimeoutNum==5)//分组公众消息离线
 	{
-		//分组公众消息离线
 		Emit_offical_userset_notify();
 	}
 	else 
 	{
 		return(net::STATUS_CMD_COMPLETED);
 	}
-  
-    if (m_oOutMsgBody.has_session_id())
-    {
-        net::SendToWithMod("LOGIC", m_oOutMsgBody.session_id(), m_oOutMsgHead, m_oOutMsgBody);
-    }
-    else if (m_oOutMsgBody.has_session())
-    {
-        unsigned int uiSessionFactor = 0;
-        for (unsigned int i = 0; i < m_oOutMsgBody.session().size(); ++i)
-        {
-            uiSessionFactor += m_oOutMsgBody.session()[i];
-        }
-        net::SendToWithMod("LOGIC", uiSessionFactor, m_oOutMsgHead, m_oOutMsgBody);
-    }
-    else
-    {
-        net::SendToNext("LOGIC", m_oOutMsgHead, m_oOutMsgBody);
-    }
-
+	net::SendToSession("LOGIC",m_oOutMsgHead, m_oOutMsgBody);
     return(net::STATUS_CMD_RUNNING);
 }
 
 //个人通知离线
-net::E_CMD_STATUS StepGetOfflineMsg::Emit_personal_notify()
+void StepGetOfflineMsg::Emit_personal_notify()
 {
 	LOG4_DEBUG("%s()", __FUNCTION__);
-
 	chat_msg::personal_notify oOutAsk;
 	oOutAsk.set_imid(m_ulimid);
 	m_oOutMsgBody.set_body(oOutAsk.SerializeAsString());
 	m_oOutMsgHead.set_msgbody_len(m_oOutMsgBody.ByteSize());
-	//设置命令字
-	m_oOutMsgHead.set_cmd(64001);
-	//往后面发数据需要另设Sequence
-	m_oOutMsgHead.set_seq(GetSequence());
+	m_oOutMsgHead.set_cmd(64001);//设置命令字
+	m_oOutMsgHead.set_seq(GetSequence());//往后面发数据需要另设Sequence
 	LOG4_DEBUG("seq[%llu] offical_userset_notify oOutAsk[%s]", m_oOutMsgHead.seq(),oOutAsk.DebugString().c_str());
-
-	return(net::STATUS_CMD_COMPLETED);
 }
 
 //单聊离线
-net::E_CMD_STATUS StepGetOfflineMsg::Emit_offline_msg_p2p_req()
+void StepGetOfflineMsg::Emit_offline_msg_p2p_req()
 {
 	LOG4_DEBUG("%s()", __FUNCTION__);
-
 	chat_msg::offline_msg_p2p_req oOutAsk;
 	oOutAsk.set_send_id(m_ulimid);
 	oOutAsk.set_msg_count(0);
 	m_oOutMsgBody.set_body(oOutAsk.SerializeAsString());
 	m_oOutMsgHead.set_msgbody_len(m_oOutMsgBody.ByteSize());
-	//设置命令字
-	m_oOutMsgHead.set_cmd(4009);
-	//往后面发数据需要另设Sequence
-	m_oOutMsgHead.set_seq(GetSequence());
+	m_oOutMsgHead.set_cmd(4009);//设置命令字
+	m_oOutMsgHead.set_seq(GetSequence());//往后面发数据需要另设Sequence
 	LOG4_DEBUG("seq[%llu] Emit_offline_msg_p2p_req[%s]", m_oOutMsgHead.seq(),oOutAsk.DebugString().c_str());
-	
-	return(net::STATUS_CMD_COMPLETED);
 }
 
 //群通知离线
-net::E_CMD_STATUS StepGetOfflineMsg::Emit_group_notify()
+void StepGetOfflineMsg::Emit_group_notify()
 {
 	LOG4_DEBUG("%s()", __FUNCTION__);
-
 	chat_msg::group_notify oOutAsk;
 	oOutAsk.set_imid(m_ulimid);
 	m_oOutMsgBody.set_body(oOutAsk.SerializeAsString());
 	m_oOutMsgHead.set_msgbody_len(m_oOutMsgBody.ByteSize());
-	//设置命令字
-	m_oOutMsgHead.set_cmd(64003);
-	//往后面发数据需要另设Sequence
-	m_oOutMsgHead.set_seq(GetSequence());
+	m_oOutMsgHead.set_cmd(64003);//设置命令字
+	m_oOutMsgHead.set_seq(GetSequence());//往后面发数据需要另设Sequence
 	LOG4_DEBUG("seq[%llu] chat_msg::group_notify oOutAsk[%s]", m_oOutMsgHead.seq(),oOutAsk.DebugString().c_str());
-
-	return(net::STATUS_CMD_COMPLETED);
 }
 
 //群聊离线
-net::E_CMD_STATUS StepGetOfflineMsg::Emit_offline_msg_group_req()
+void StepGetOfflineMsg::Emit_offline_msg_group_req()
 {
 	LOG4_DEBUG("%s()", __FUNCTION__);
-
 	chat_msg::offline_msg_group_req oOutAsk;
 	oOutAsk.Clear();
 	oOutAsk.set_group_id(0);
 	oOutAsk.set_msg_count(0);
 	m_oOutMsgBody.set_body(oOutAsk.SerializeAsString());
 	m_oOutMsgHead.set_msgbody_len(m_oOutMsgBody.ByteSize());
-	//设置命令字
-	m_oOutMsgHead.set_cmd(4011);
-	//往后面发数据需要另设Sequence
-	m_oOutMsgHead.set_seq(GetSequence());
+	m_oOutMsgHead.set_cmd(4011);//设置命令字
+	m_oOutMsgHead.set_seq(GetSequence());//往后面发数据需要另设Sequence
 	LOG4_DEBUG("seq[%llu] chat_msg::offline_msg_group_req oOutAsk[%s]", m_oOutMsgHead.seq(),oOutAsk.DebugString().c_str());
-
-	return(net::STATUS_CMD_COMPLETED);
 }
 
 //指定公众消息离线
-net::E_CMD_STATUS StepGetOfflineMsg::Emit_offical_specified_notify()
+void StepGetOfflineMsg::Emit_offical_specified_notify()
 {
 	LOG4_DEBUG("%s()", __FUNCTION__);
 
@@ -190,26 +143,19 @@ net::E_CMD_STATUS StepGetOfflineMsg::Emit_offical_specified_notify()
 	//往后面发数据需要另设Sequence
 	m_oOutMsgHead.set_seq(GetSequence());
 	LOG4_DEBUG("seq[%llu] offical_specified_notify oOutAsk[%s]", m_oOutMsgHead.seq(),oOutAsk.DebugString().c_str());
-
-	return(net::STATUS_CMD_COMPLETED);
 }
 
 //分组公众消息离线
-net::E_CMD_STATUS StepGetOfflineMsg::Emit_offical_userset_notify()
+void StepGetOfflineMsg::Emit_offical_userset_notify()
 {
 	LOG4_DEBUG("%s()", __FUNCTION__);
-
 	offical_userset_notify oOutAsk;
 	oOutAsk.set_imid(m_ulimid);
 	m_oOutMsgBody.set_body(oOutAsk.SerializeAsString());
 	m_oOutMsgHead.set_msgbody_len(m_oOutMsgBody.ByteSize());
-	//设置命令字
-	m_oOutMsgHead.set_cmd(64005);
-	//往后面发数据需要另设Sequence
-	m_oOutMsgHead.set_seq(GetSequence());
+	m_oOutMsgHead.set_cmd(64005);//设置命令字
+	m_oOutMsgHead.set_seq(GetSequence());//往后面发数据需要另设Sequence
 	LOG4_DEBUG("seq[%llu] offical_userset_notify oOutAsk[%s]", m_oOutMsgHead.seq(),oOutAsk.DebugString().c_str());
-
-	return(net::STATUS_CMD_COMPLETED);
 }
 
 net::E_CMD_STATUS StepGetOfflineMsg::Callback(
@@ -219,6 +165,7 @@ net::E_CMD_STATUS StepGetOfflineMsg::Callback(
                     void* data)
 {
     LOG4_DEBUG("seq[%llu] StepGetOfflineMsg::Callback ok!", oInMsgHead.seq());
+    net::SendToClient(stMsgShell,oInMsgHead,oInMsgBody);//返回客户端
 	return(net::STATUS_CMD_RUNNING);
 }
 

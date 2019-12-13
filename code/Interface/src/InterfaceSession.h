@@ -17,11 +17,11 @@
 #include "NetError.hpp"
 #include "step/Step.hpp"
 #include "cmd/Cmd.hpp"
-#include "RobotError.h"
+#include "ImError.h"
 
 #define HELLO_SESSIN_ID (20000)
 
-namespace robot
+namespace im
 {
 
 class InterfaceSession: public net::Session

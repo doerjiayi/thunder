@@ -355,6 +355,14 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
             const std::string& strCaPath= "",int iPort = 0){return(false);}
     virtual bool AutoConnect(const std::string& strIdentify){return(false);}
     /**
+	 * @brief 根据路由id自动发送到指定的节点
+	 * @note 根据路由id自动发送到指定的节点
+	 * @param oMsgHead 数据包头
+	 * @param oMsgBody 数据包体
+	 * @return 是否发送成功
+	 */
+    virtual bool SendToSession(const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
+    /**
 	 * @brief 根据路由id自动发送到同一类型的节点
 	 * @note 根据路由id自动发送到同一类型的节点
 	 * @param strNodeType 节点类型
@@ -362,7 +370,7 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
 	 * @param oMsgBody 数据包体
 	 * @return 是否发送成功
 	 */
-	virtual bool SendToAuto(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
+	virtual bool SendToSession(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
     /**
      * @brief 发送到下一个同一类型的节点
      * @note 发送到下一个同一类型的节点，适用于对同一类型节点做轮询方式发送以达到简单的负载均衡。

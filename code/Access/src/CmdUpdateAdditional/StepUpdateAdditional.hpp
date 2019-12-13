@@ -11,7 +11,7 @@
 #define SRC_STEP_UPDATE_ADDITIONAL_HPP_
 #include "protocol/oss_sys.pb.h"
 #include "step/Step.hpp"
-#include "RobotError.h"
+#include "ImError.h"
 #include "user_basic.pb.h"
 namespace im
 {

@@ -9,17 +9,20 @@
 #ifndef SRC_STEP_GET_P2P_OFFLINEMSG_HPP_
 #define SRC_STEP_GET_P2P_OFFLINEMSG_HPP_
 
-#include "step/Step.hpp"
+
 #include "chat_msg.pb.h"
 #include "user.pb.h"
 #include "common.pb.h"
+//#include "msg.pb.h"
 #include "user_basic.pb.h"
 #include "server_internal.pb.h"
-#include "RobotError.h"
+#include "ImError.h"
+
+#include "step/Step.hpp"
 
 namespace im
 {
-
+//拉取离线数据
 class StepGetOfflineMsg : public net::Step
 {
 public:
@@ -34,17 +37,17 @@ public:
                     void* data = NULL);
     virtual net::E_CMD_STATUS Timeout();
 	//个人通知离线
-	net::E_CMD_STATUS Emit_personal_notify();
+	void Emit_personal_notify();
 	//单聊离线
-	net::E_CMD_STATUS Emit_offline_msg_p2p_req();
+	void Emit_offline_msg_p2p_req();
 	//群通知离线
-	net::E_CMD_STATUS Emit_group_notify();
+	void Emit_group_notify();
 	//群聊离线
-	net::E_CMD_STATUS Emit_offline_msg_group_req();
+	void Emit_offline_msg_group_req();
 	//指定公众消息离线
-	net::E_CMD_STATUS Emit_offical_specified_notify();
+	void Emit_offical_specified_notify();
 	//分组公众消息离线
-	net::E_CMD_STATUS Emit_offical_userset_notify();
+	void Emit_offical_userset_notify();
 private:
     int m_iTimeoutNum;          ///< 超时次数
 	im_user::ulogin m_oInAsk;

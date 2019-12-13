@@ -144,7 +144,8 @@ public:
     bool SendTo(const tagMsgShell& stMsgShell);
     bool SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
     bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
-    bool SendToAuto(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
+    bool SendToSession(const MsgHead& oMsgHead, const MsgBody& oMsgBody);
+    bool SendToSession(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
     bool SendToNext(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
     bool SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
     bool SendToConHash(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody);

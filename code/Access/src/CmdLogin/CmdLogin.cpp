@@ -10,8 +10,7 @@
 #include "CmdLogin.hpp"
 #include "user.pb.h"
 #include "common.pb.h"
-#include "RobotError.h"
-#include "RobotError.h"
+#include "ImError.h"
 
 MUDULE_CREATE(im::CmdLogin);
 

@@ -44,6 +44,7 @@ void InitDefaults() {
 }
 
 ::google::protobuf::Metadata file_level_metadata[1];
+const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors[1];
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
@@ -63,6 +64,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::user_basic, login_client_type_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::user_basic, login_ip_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::user_basic, user_identity_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::user_basic, prohibit_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::user_basic)},
@@ -76,7 +78,7 @@ void protobuf_AssignDescriptors() {
   AddDescriptors();
   AssignDescriptors(
       "user_basic.proto", schemas, file_default_instances, TableStruct::offsets,
-      file_level_metadata, NULL, NULL);
+      file_level_metadata, file_level_enum_descriptors, NULL);
 }
 
 void protobuf_AssignDescriptorsOnce() {
@@ -93,16 +95,19 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\020user_basic.proto\"\356\001\n\nuser_basic\022\r\n\005app"
+      "\n\020user_basic.proto\"\200\002\n\nuser_basic\022\r\n\005app"
       "id\030\001 \001(\r\022\017\n\007appguid\030\002 \001(\014\022\021\n\tappsecret\030\003"
       " \001(\014\022\023\n\013login_token\030\004 \001(\004\022\016\n\006userid\030\005 \001("
       "\r\022\017\n\007account\030\006 \001(\014\022\020\n\010nickname\030\007 \001(\014\022\016\n\006"
       "avatar\030\010 \001(\014\022\021\n\tuser_type\030\t \001(\r\022\031\n\021login"
       "_client_type\030\n \001(\r\022\020\n\010login_ip\030\013 \001(\t\022\025\n\r"
-      "user_identity\030\014 \001(\004b\006proto3"
+      "user_identity\030\014 \001(\004\022\020\n\010prohibit\030\r \001(\r*p\n"
+      "\nE_PROHIBIT\022\n\n\006BAN_NO\020\000\022\014\n\010BAN_TALK\020\001\022\021\n"
+      "\rBAN_COMMUNITY\020\002\022\024\n\020BAN_CREATE_GROUP\020\004\022\020"
+      "\n\014BAN_ATENTION\020\010\022\r\n\tBAN_LOGIN\020\020b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 267);
+      descriptor, 399);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "user_basic.proto", &protobuf_RegisterTypes);
 }
@@ -118,6 +123,24 @@ struct StaticDescriptorInitializer {
   }
 } static_descriptor_initializer;
 }  // namespace protobuf_user_5fbasic_2eproto
+const ::google::protobuf::EnumDescriptor* E_PROHIBIT_descriptor() {
+  protobuf_user_5fbasic_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_user_5fbasic_2eproto::file_level_enum_descriptors[0];
+}
+bool E_PROHIBIT_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 4:
+    case 8:
+    case 16:
+      return true;
+    default:
+      return false;
+  }
+}
+
 
 // ===================================================================
 
@@ -136,6 +159,7 @@ const int user_basic::kUserTypeFieldNumber;
 const int user_basic::kLoginClientTypeFieldNumber;
 const int user_basic::kLoginIpFieldNumber;
 const int user_basic::kUserIdentityFieldNumber;
+const int user_basic::kProhibitFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 user_basic::user_basic()
@@ -174,8 +198,8 @@ user_basic::user_basic(const user_basic& from)
     login_ip_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.login_ip_);
   }
   ::memcpy(&appid_, &from.appid_,
-    static_cast<size_t>(reinterpret_cast<char*>(&user_identity_) -
-    reinterpret_cast<char*>(&appid_)) + sizeof(user_identity_));
+    static_cast<size_t>(reinterpret_cast<char*>(&prohibit_) -
+    reinterpret_cast<char*>(&appid_)) + sizeof(prohibit_));
   // @@protoc_insertion_point(copy_constructor:user_basic)
 }
 
@@ -187,8 +211,8 @@ void user_basic::SharedCtor() {
   avatar_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   login_ip_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&appid_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&user_identity_) -
-      reinterpret_cast<char*>(&appid_)) + sizeof(user_identity_));
+      reinterpret_cast<char*>(&prohibit_) -
+      reinterpret_cast<char*>(&appid_)) + sizeof(prohibit_));
 }
 
 user_basic::~user_basic() {
@@ -232,8 +256,8 @@ void user_basic::Clear() {
   avatar_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   login_ip_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&appid_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&user_identity_) -
-      reinterpret_cast<char*>(&appid_)) + sizeof(user_identity_));
+      reinterpret_cast<char*>(&prohibit_) -
+      reinterpret_cast<char*>(&appid_)) + sizeof(prohibit_));
   _internal_metadata_.Clear();
 }
 
@@ -407,6 +431,20 @@ bool user_basic::MergePartialFromCodedStream(
         break;
       }
 
+      // uint32 prohibit = 13;
+      case 13: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(104u /* 104 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &prohibit_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -503,6 +541,11 @@ void user_basic::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt64(12, this->user_identity(), output);
   }
 
+  // uint32 prohibit = 13;
+  if (this->prohibit() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(13, this->prohibit(), output);
+  }
+
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
@@ -591,6 +634,11 @@ void user_basic::SerializeWithCachedSizes(
   // uint64 user_identity = 12;
   if (this->user_identity() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(12, this->user_identity(), target);
+  }
+
+  // uint32 prohibit = 13;
+  if (this->prohibit() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(13, this->prohibit(), target);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -694,6 +742,13 @@ size_t user_basic::ByteSizeLong() const {
         this->user_identity());
   }
 
+  // uint32 prohibit = 13;
+  if (this->prohibit() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->prohibit());
+  }
+
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
@@ -763,6 +818,9 @@ void user_basic::MergeFrom(const user_basic& from) {
   if (from.user_identity() != 0) {
     set_user_identity(from.user_identity());
   }
+  if (from.prohibit() != 0) {
+    set_prohibit(from.prohibit());
+  }
 }
 
 void user_basic::CopyFrom(const ::google::protobuf::Message& from) {
@@ -807,6 +865,7 @@ void user_basic::InternalSwap(user_basic* other) {
   swap(user_type_, other->user_type_);
   swap(login_client_type_, other->login_client_type_);
   swap(user_identity_, other->user_identity_);
+  swap(prohibit_, other->prohibit_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
 

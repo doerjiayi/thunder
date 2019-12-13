@@ -10,9 +10,9 @@
 #include "util/CommonUtils.hpp"
 #include "CmdGetToken.hpp"
 
-MUDULE_CREATE(robot::CmdGetToken);
+MUDULE_CREATE(im::CmdGetToken);
 
-namespace robot
+namespace im
 {
 
 bool CmdGetToken::Init()
@@ -82,4 +82,4 @@ void CmdGetToken::Response(const net::tagMsgShell& stMsgShell,const MsgHead& oIn
 }
 
 
-} /* namespace robot */
+} /* namespace im */

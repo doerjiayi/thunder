@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Project:  proto
-* @file     RobotErrorMapping.h
+* @file     ImErrorMapping.h
 * @brief    IM错误与系统错误映射
 * @author   cjy
 * @date:    2016年4月9日
@@ -11,9 +11,9 @@
 #define SRC_IMERRORMAPPING_H_
 
 #include "NetError.hpp"
-#include "RobotError.h"
+#include "ImError.h"
 
-namespace robot
+namespace im
 {
 
 inline int robot_err_code(int code)

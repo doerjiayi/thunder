@@ -1,116 +1,64 @@
-syntax = "proto3";
-package user;
+syntax = "proto2";
+
+package im_user;
 import "common.proto"; 
+//用户类，用户登录，注销等
 
-//C2S用户请求注册账户（1001/1002）
-message user_register_req
+//客户端拿验证token来登陆AccessServer
+message ulogin
 {
-    bytes domain           = 1;//域名
-    bytes account         = 2; // 用户账号
-    uint32 user_type       = 3;// 用户类型 1:游客，2：企业用户，3：客服，4：管理员，5：超级管理员
-    bytes nickname         = 4;// 昵称
-    bytes avatar           = 5;// 头像
-    string mobile          = 6;// 手机号
-    string mail            = 7;// 邮件
-    bytes introduction     = 8;// 简介
-    uint32 gender          = 9;// 性别
-    uint64 identity        = 10;// 身份
-    bytes company          = 11;// 公司
-    bytes occupation       = 12;// 职位
-    bytes industry         = 13;// 行业
-    bytes area             = 14;// 地区
-    bytes password         = 15;// 密码
+	required uint32 imid		= 1; //用户UID
+	required bytes imToken	= 2;//用户imToken
+	optional uint32  clienttype	= 3;//客户端类型 EnumDefinition.E_CLIENT_TYPE
+	optional bytes  deviceInfo	= 4;//手机设备信息
+	optional uint32  app_version	= 5;//客户端版本号
+	optional bytes  clientip	= 6;//客户端的IP地址ipv4/ipv6:192.168.18.80/2001:db8:1a:1:eeb1:d7ff:fe84:1145/64
+	optional bytes  serv_nodeIdentify	= 7;//登录的AccessServer节点信息(AccessServer填写)，客户端不需要填写
+	optional uint32  push_chat_msg	= 8;//是否推送单聊，群聊消息，0不推送，1或者无此字段后台推送
 }
 
-//注册账户回应
-message user_register_ack
+// 登陆回应
+message ulogin_ack
 {
-    common.errorinfo  error = 1; ///< 错误代码
-    bytes account         = 2;  // 用户账号
-    uint32 userid          = 3;  ///< 生成的用户ID
-    bytes password         = 4;// 密码（没有设置密码的返回默认密码）
+	optional common.errorinfo error = 1;//错误码以及错误描述信息
+	optional uint32 beat_time	= 2; //客户端心跳时间
+	optional uint32 login_prompt = 3;//登录提示 0:正常,1:不是常用设备登录,2:IP异地登录异常
 }
 
-//C2S用户请求更新用户信息（1003/1004）
-message user_update_req
+//异常登陆客户端确认
+message ulogin_comfirm
 {
-    uint32 userid          = 1;//被更新用户id
-    bytes nickname         = 2;// 昵称
-    bytes realname         = 3;// 真实名称
-    bytes avatar           = 4;// 头像
-    string mobile          = 5;// 手机号
-    string mail            = 6;// 邮件
-    bytes introduction     = 7;// 简介
-    uint32 gender          = 8;// 性别
-    uint64 add_identity    = 9;// 增加身份
-    uint64 del_identity    = 10;// 删除身份
-    bytes company          = 11;// 公司
-    bytes occupation       = 12;// 职位
-    bytes industry         = 13;// 行业
-    bytes location         = 14;// 地址
-    bytes last_device_info = 15;//最后的来源终端
-    bytes last_page_source = 16;//最后的页面来源
-    uint32 client_page     = 17;//只有客户端使用（客户端页面）
+	optional bytes  deviceInfo	= 1;//手机设备信息(把当前设置更新为常用设备)
 }
-//更新用户信息回应
-message user_update_ack
+//异常登陆确认,服务端回应
+message ulogin_comfirm_ack
 {
-    common.errorinfo  error = 1;///< 错误代码
-    uint32 client_page      = 2;   //只有客户端使用（客户端页面）
+	optional common.errorinfo error = 1;//错误码以及错误描述信息
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+//客户端退出IM
+message ulogout
+{
+	required uint32 imid = 1; //用户UID
 }
 
-//客户端请求获取用户信息
-message query_user_info_req
+
+//客户端退出IM响应
+message ulogout_ack
 {
-    uint32 userid          = 1;//被获取用户id
-    uint32 client_page     = 2;//只有客户端使用（客户端页面）
+	optional common.errorinfo error = 1;//错误码以及错误描述信息
 }
 
-//获取用户信息回应
-message query_user_info_ack
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+//被迫下线通知
+message forced_offline_ntf
 {
-    common.errorinfo  error = 1;///< 错误代码
-    uint32 userid          = 2;//被获取用户id
-    bytes nickname         = 3;// 昵称
-    bytes realname         = 4;// 真实名称
-    bytes avatar           = 5;// 头像
-    string mobile          = 6;// 手机号
-    string mail            = 7;// 邮件
-    bytes introduction     = 8;// 简介
-    uint32 gender          = 9;// 性别
-    uint64 identity        = 10;// 身份
-    bytes company          = 11;// 公司
-    bytes occupation       = 12;// 职位
-    bytes industry         = 13;// 行业
-    bytes location         = 14;// 地址
-    bytes last_device_info = 15;//最后的来源终端
-    bytes last_page_source = 16;//最后的页面来源
-    uint32 client_page     = 17;//只有客户端使用（客户端页面）
+	optional common.errorinfo error = 1;//错误码以及错误描述信息
 }
 
-//设置个人密码请求
-message  set_personal_password_req
-{
-    bytes old_password= 1;//个人原密码
-    bytes new_password= 2;//个人新密码
-    bytes confirm_new_password= 3;//确认个人新密码
-}
 
-//设置个人密码响应
-message set_personal_password_ack
-{
-    common.errorinfo error = 1;//错误码以及错误描述信息
-}
 
-//客户端请求注销用户信息
-message user_unregister_req
-{
-    bytes domain         = 1;//域名,如http://niwojinrong.niwokf.com
-    bytes account        = 2; // 用户账号
-    bytes password       = 3; // 密码
-}
-//注销账户回应
-message user_unregister_ack
-{
-    common.errorinfo  error = 1; ///< 错误代码
-}
+
+

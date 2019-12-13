@@ -39,81 +39,69 @@ namespace protobuf_user_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[10];
+  static const ::google::protobuf::internal::ParseTable schema[7];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
 void AddDescriptors();
 }  // namespace protobuf_user_2eproto
-namespace user {
-class query_user_info_ack;
-class query_user_info_ackDefaultTypeInternal;
-extern query_user_info_ackDefaultTypeInternal _query_user_info_ack_default_instance_;
-class query_user_info_req;
-class query_user_info_reqDefaultTypeInternal;
-extern query_user_info_reqDefaultTypeInternal _query_user_info_req_default_instance_;
-class set_personal_password_ack;
-class set_personal_password_ackDefaultTypeInternal;
-extern set_personal_password_ackDefaultTypeInternal _set_personal_password_ack_default_instance_;
-class set_personal_password_req;
-class set_personal_password_reqDefaultTypeInternal;
-extern set_personal_password_reqDefaultTypeInternal _set_personal_password_req_default_instance_;
-class user_register_ack;
-class user_register_ackDefaultTypeInternal;
-extern user_register_ackDefaultTypeInternal _user_register_ack_default_instance_;
-class user_register_req;
-class user_register_reqDefaultTypeInternal;
-extern user_register_reqDefaultTypeInternal _user_register_req_default_instance_;
-class user_unregister_ack;
-class user_unregister_ackDefaultTypeInternal;
-extern user_unregister_ackDefaultTypeInternal _user_unregister_ack_default_instance_;
-class user_unregister_req;
-class user_unregister_reqDefaultTypeInternal;
-extern user_unregister_reqDefaultTypeInternal _user_unregister_req_default_instance_;
-class user_update_ack;
-class user_update_ackDefaultTypeInternal;
-extern user_update_ackDefaultTypeInternal _user_update_ack_default_instance_;
-class user_update_req;
-class user_update_reqDefaultTypeInternal;
-extern user_update_reqDefaultTypeInternal _user_update_req_default_instance_;
-}  // namespace user
+namespace im_user {
+class forced_offline_ntf;
+class forced_offline_ntfDefaultTypeInternal;
+extern forced_offline_ntfDefaultTypeInternal _forced_offline_ntf_default_instance_;
+class ulogin;
+class uloginDefaultTypeInternal;
+extern uloginDefaultTypeInternal _ulogin_default_instance_;
+class ulogin_ack;
+class ulogin_ackDefaultTypeInternal;
+extern ulogin_ackDefaultTypeInternal _ulogin_ack_default_instance_;
+class ulogin_comfirm;
+class ulogin_comfirmDefaultTypeInternal;
+extern ulogin_comfirmDefaultTypeInternal _ulogin_comfirm_default_instance_;
+class ulogin_comfirm_ack;
+class ulogin_comfirm_ackDefaultTypeInternal;
+extern ulogin_comfirm_ackDefaultTypeInternal _ulogin_comfirm_ack_default_instance_;
+class ulogout;
+class ulogoutDefaultTypeInternal;
+extern ulogoutDefaultTypeInternal _ulogout_default_instance_;
+class ulogout_ack;
+class ulogout_ackDefaultTypeInternal;
+extern ulogout_ackDefaultTypeInternal _ulogout_ack_default_instance_;
+}  // namespace im_user
 namespace google {
 namespace protobuf {
-template<> ::user::query_user_info_ack* Arena::CreateMaybeMessage<::user::query_user_info_ack>(Arena*);
-template<> ::user::query_user_info_req* Arena::CreateMaybeMessage<::user::query_user_info_req>(Arena*);
-template<> ::user::set_personal_password_ack* Arena::CreateMaybeMessage<::user::set_personal_password_ack>(Arena*);
-template<> ::user::set_personal_password_req* Arena::CreateMaybeMessage<::user::set_personal_password_req>(Arena*);
-template<> ::user::user_register_ack* Arena::CreateMaybeMessage<::user::user_register_ack>(Arena*);
-template<> ::user::user_register_req* Arena::CreateMaybeMessage<::user::user_register_req>(Arena*);
-template<> ::user::user_unregister_ack* Arena::CreateMaybeMessage<::user::user_unregister_ack>(Arena*);
-template<> ::user::user_unregister_req* Arena::CreateMaybeMessage<::user::user_unregister_req>(Arena*);
-template<> ::user::user_update_ack* Arena::CreateMaybeMessage<::user::user_update_ack>(Arena*);
-template<> ::user::user_update_req* Arena::CreateMaybeMessage<::user::user_update_req>(Arena*);
+template<> ::im_user::forced_offline_ntf* Arena::CreateMaybeMessage<::im_user::forced_offline_ntf>(Arena*);
+template<> ::im_user::ulogin* Arena::CreateMaybeMessage<::im_user::ulogin>(Arena*);
+template<> ::im_user::ulogin_ack* Arena::CreateMaybeMessage<::im_user::ulogin_ack>(Arena*);
+template<> ::im_user::ulogin_comfirm* Arena::CreateMaybeMessage<::im_user::ulogin_comfirm>(Arena*);
+template<> ::im_user::ulogin_comfirm_ack* Arena::CreateMaybeMessage<::im_user::ulogin_comfirm_ack>(Arena*);
+template<> ::im_user::ulogout* Arena::CreateMaybeMessage<::im_user::ulogout>(Arena*);
+template<> ::im_user::ulogout_ack* Arena::CreateMaybeMessage<::im_user::ulogout_ack>(Arena*);
 }  // namespace protobuf
 }  // namespace google
-namespace user {
+namespace im_user {
 
 // ===================================================================
 
-class user_register_req : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:user.user_register_req) */ {
+class ulogin : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:im_user.ulogin) */ {
  public:
-  user_register_req();
-  virtual ~user_register_req();
+  ulogin();
+  virtual ~ulogin();
 
-  user_register_req(const user_register_req& from);
+  ulogin(const ulogin& from);
 
-  inline user_register_req& operator=(const user_register_req& from) {
+  inline ulogin& operator=(const ulogin& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  user_register_req(user_register_req&& from) noexcept
-    : user_register_req() {
+  ulogin(ulogin&& from) noexcept
+    : ulogin() {
     *this = ::std::move(from);
   }
 
-  inline user_register_req& operator=(user_register_req&& from) noexcept {
+  inline ulogin& operator=(ulogin&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -122,35 +110,42 @@ class user_register_req : public ::google::protobuf::Message /* @@protoc_inserti
     return *this;
   }
   #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
   static const ::google::protobuf::Descriptor* descriptor();
-  static const user_register_req& default_instance();
+  static const ulogin& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const user_register_req* internal_default_instance() {
-    return reinterpret_cast<const user_register_req*>(
-               &_user_register_req_default_instance_);
+  static inline const ulogin* internal_default_instance() {
+    return reinterpret_cast<const ulogin*>(
+               &_ulogin_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     0;
 
-  void Swap(user_register_req* other);
-  friend void swap(user_register_req& a, user_register_req& b) {
+  void Swap(ulogin* other);
+  friend void swap(ulogin& a, ulogin& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline user_register_req* New() const final {
-    return CreateMaybeMessage<user_register_req>(NULL);
+  inline ulogin* New() const final {
+    return CreateMaybeMessage<ulogin>(NULL);
   }
 
-  user_register_req* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<user_register_req>(arena);
+  ulogin* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<ulogin>(arena);
   }
   void CopyFrom(const ::google::protobuf::Message& from) final;
   void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const user_register_req& from);
-  void MergeFrom(const user_register_req& from);
+  void CopyFrom(const ulogin& from);
+  void MergeFrom(const ulogin& from);
   void Clear() final;
   bool IsInitialized() const final;
 
@@ -167,7 +162,7 @@ class user_register_req : public ::google::protobuf::Message /* @@protoc_inserti
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(user_register_req* other);
+  void InternalSwap(ulogin* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -183,234 +178,149 @@ class user_register_req : public ::google::protobuf::Message /* @@protoc_inserti
 
   // accessors -------------------------------------------------------
 
-  // bytes domain = 1;
-  void clear_domain();
-  static const int kDomainFieldNumber = 1;
-  const ::std::string& domain() const;
-  void set_domain(const ::std::string& value);
+  // required bytes imToken = 2;
+  bool has_imtoken() const;
+  void clear_imtoken();
+  static const int kImTokenFieldNumber = 2;
+  const ::std::string& imtoken() const;
+  void set_imtoken(const ::std::string& value);
   #if LANG_CXX11
-  void set_domain(::std::string&& value);
+  void set_imtoken(::std::string&& value);
   #endif
-  void set_domain(const char* value);
-  void set_domain(const void* value, size_t size);
-  ::std::string* mutable_domain();
-  ::std::string* release_domain();
-  void set_allocated_domain(::std::string* domain);
+  void set_imtoken(const char* value);
+  void set_imtoken(const void* value, size_t size);
+  ::std::string* mutable_imtoken();
+  ::std::string* release_imtoken();
+  void set_allocated_imtoken(::std::string* imtoken);
 
-  // bytes account = 2;
-  void clear_account();
-  static const int kAccountFieldNumber = 2;
-  const ::std::string& account() const;
-  void set_account(const ::std::string& value);
+  // optional bytes deviceInfo = 4;
+  bool has_deviceinfo() const;
+  void clear_deviceinfo();
+  static const int kDeviceInfoFieldNumber = 4;
+  const ::std::string& deviceinfo() const;
+  void set_deviceinfo(const ::std::string& value);
   #if LANG_CXX11
-  void set_account(::std::string&& value);
+  void set_deviceinfo(::std::string&& value);
   #endif
-  void set_account(const char* value);
-  void set_account(const void* value, size_t size);
-  ::std::string* mutable_account();
-  ::std::string* release_account();
-  void set_allocated_account(::std::string* account);
+  void set_deviceinfo(const char* value);
+  void set_deviceinfo(const void* value, size_t size);
+  ::std::string* mutable_deviceinfo();
+  ::std::string* release_deviceinfo();
+  void set_allocated_deviceinfo(::std::string* deviceinfo);
 
-  // bytes nickname = 4;
-  void clear_nickname();
-  static const int kNicknameFieldNumber = 4;
-  const ::std::string& nickname() const;
-  void set_nickname(const ::std::string& value);
+  // optional bytes clientip = 6;
+  bool has_clientip() const;
+  void clear_clientip();
+  static const int kClientipFieldNumber = 6;
+  const ::std::string& clientip() const;
+  void set_clientip(const ::std::string& value);
   #if LANG_CXX11
-  void set_nickname(::std::string&& value);
+  void set_clientip(::std::string&& value);
   #endif
-  void set_nickname(const char* value);
-  void set_nickname(const void* value, size_t size);
-  ::std::string* mutable_nickname();
-  ::std::string* release_nickname();
-  void set_allocated_nickname(::std::string* nickname);
+  void set_clientip(const char* value);
+  void set_clientip(const void* value, size_t size);
+  ::std::string* mutable_clientip();
+  ::std::string* release_clientip();
+  void set_allocated_clientip(::std::string* clientip);
 
-  // bytes avatar = 5;
-  void clear_avatar();
-  static const int kAvatarFieldNumber = 5;
-  const ::std::string& avatar() const;
-  void set_avatar(const ::std::string& value);
+  // optional bytes serv_nodeIdentify = 7;
+  bool has_serv_nodeidentify() const;
+  void clear_serv_nodeidentify();
+  static const int kServNodeIdentifyFieldNumber = 7;
+  const ::std::string& serv_nodeidentify() const;
+  void set_serv_nodeidentify(const ::std::string& value);
   #if LANG_CXX11
-  void set_avatar(::std::string&& value);
+  void set_serv_nodeidentify(::std::string&& value);
   #endif
-  void set_avatar(const char* value);
-  void set_avatar(const void* value, size_t size);
-  ::std::string* mutable_avatar();
-  ::std::string* release_avatar();
-  void set_allocated_avatar(::std::string* avatar);
+  void set_serv_nodeidentify(const char* value);
+  void set_serv_nodeidentify(const void* value, size_t size);
+  ::std::string* mutable_serv_nodeidentify();
+  ::std::string* release_serv_nodeidentify();
+  void set_allocated_serv_nodeidentify(::std::string* serv_nodeidentify);
 
-  // string mobile = 6;
-  void clear_mobile();
-  static const int kMobileFieldNumber = 6;
-  const ::std::string& mobile() const;
-  void set_mobile(const ::std::string& value);
-  #if LANG_CXX11
-  void set_mobile(::std::string&& value);
-  #endif
-  void set_mobile(const char* value);
-  void set_mobile(const char* value, size_t size);
-  ::std::string* mutable_mobile();
-  ::std::string* release_mobile();
-  void set_allocated_mobile(::std::string* mobile);
+  // required uint32 imid = 1;
+  bool has_imid() const;
+  void clear_imid();
+  static const int kImidFieldNumber = 1;
+  ::google::protobuf::uint32 imid() const;
+  void set_imid(::google::protobuf::uint32 value);
 
-  // string mail = 7;
-  void clear_mail();
-  static const int kMailFieldNumber = 7;
-  const ::std::string& mail() const;
-  void set_mail(const ::std::string& value);
-  #if LANG_CXX11
-  void set_mail(::std::string&& value);
-  #endif
-  void set_mail(const char* value);
-  void set_mail(const char* value, size_t size);
-  ::std::string* mutable_mail();
-  ::std::string* release_mail();
-  void set_allocated_mail(::std::string* mail);
+  // optional uint32 clienttype = 3;
+  bool has_clienttype() const;
+  void clear_clienttype();
+  static const int kClienttypeFieldNumber = 3;
+  ::google::protobuf::uint32 clienttype() const;
+  void set_clienttype(::google::protobuf::uint32 value);
 
-  // bytes introduction = 8;
-  void clear_introduction();
-  static const int kIntroductionFieldNumber = 8;
-  const ::std::string& introduction() const;
-  void set_introduction(const ::std::string& value);
-  #if LANG_CXX11
-  void set_introduction(::std::string&& value);
-  #endif
-  void set_introduction(const char* value);
-  void set_introduction(const void* value, size_t size);
-  ::std::string* mutable_introduction();
-  ::std::string* release_introduction();
-  void set_allocated_introduction(::std::string* introduction);
+  // optional uint32 app_version = 5;
+  bool has_app_version() const;
+  void clear_app_version();
+  static const int kAppVersionFieldNumber = 5;
+  ::google::protobuf::uint32 app_version() const;
+  void set_app_version(::google::protobuf::uint32 value);
 
-  // bytes company = 11;
-  void clear_company();
-  static const int kCompanyFieldNumber = 11;
-  const ::std::string& company() const;
-  void set_company(const ::std::string& value);
-  #if LANG_CXX11
-  void set_company(::std::string&& value);
-  #endif
-  void set_company(const char* value);
-  void set_company(const void* value, size_t size);
-  ::std::string* mutable_company();
-  ::std::string* release_company();
-  void set_allocated_company(::std::string* company);
+  // optional uint32 push_chat_msg = 8;
+  bool has_push_chat_msg() const;
+  void clear_push_chat_msg();
+  static const int kPushChatMsgFieldNumber = 8;
+  ::google::protobuf::uint32 push_chat_msg() const;
+  void set_push_chat_msg(::google::protobuf::uint32 value);
 
-  // bytes occupation = 12;
-  void clear_occupation();
-  static const int kOccupationFieldNumber = 12;
-  const ::std::string& occupation() const;
-  void set_occupation(const ::std::string& value);
-  #if LANG_CXX11
-  void set_occupation(::std::string&& value);
-  #endif
-  void set_occupation(const char* value);
-  void set_occupation(const void* value, size_t size);
-  ::std::string* mutable_occupation();
-  ::std::string* release_occupation();
-  void set_allocated_occupation(::std::string* occupation);
-
-  // bytes industry = 13;
-  void clear_industry();
-  static const int kIndustryFieldNumber = 13;
-  const ::std::string& industry() const;
-  void set_industry(const ::std::string& value);
-  #if LANG_CXX11
-  void set_industry(::std::string&& value);
-  #endif
-  void set_industry(const char* value);
-  void set_industry(const void* value, size_t size);
-  ::std::string* mutable_industry();
-  ::std::string* release_industry();
-  void set_allocated_industry(::std::string* industry);
-
-  // bytes area = 14;
-  void clear_area();
-  static const int kAreaFieldNumber = 14;
-  const ::std::string& area() const;
-  void set_area(const ::std::string& value);
-  #if LANG_CXX11
-  void set_area(::std::string&& value);
-  #endif
-  void set_area(const char* value);
-  void set_area(const void* value, size_t size);
-  ::std::string* mutable_area();
-  ::std::string* release_area();
-  void set_allocated_area(::std::string* area);
-
-  // bytes password = 15;
-  void clear_password();
-  static const int kPasswordFieldNumber = 15;
-  const ::std::string& password() const;
-  void set_password(const ::std::string& value);
-  #if LANG_CXX11
-  void set_password(::std::string&& value);
-  #endif
-  void set_password(const char* value);
-  void set_password(const void* value, size_t size);
-  ::std::string* mutable_password();
-  ::std::string* release_password();
-  void set_allocated_password(::std::string* password);
-
-  // uint32 user_type = 3;
-  void clear_user_type();
-  static const int kUserTypeFieldNumber = 3;
-  ::google::protobuf::uint32 user_type() const;
-  void set_user_type(::google::protobuf::uint32 value);
-
-  // uint32 gender = 9;
-  void clear_gender();
-  static const int kGenderFieldNumber = 9;
-  ::google::protobuf::uint32 gender() const;
-  void set_gender(::google::protobuf::uint32 value);
-
-  // uint64 identity = 10;
-  void clear_identity();
-  static const int kIdentityFieldNumber = 10;
-  ::google::protobuf::uint64 identity() const;
-  void set_identity(::google::protobuf::uint64 value);
-
-  // @@protoc_insertion_point(class_scope:user.user_register_req)
+  // @@protoc_insertion_point(class_scope:im_user.ulogin)
  private:
+  void set_has_imid();
+  void clear_has_imid();
+  void set_has_imtoken();
+  void clear_has_imtoken();
+  void set_has_clienttype();
+  void clear_has_clienttype();
+  void set_has_deviceinfo();
+  void clear_has_deviceinfo();
+  void set_has_app_version();
+  void clear_has_app_version();
+  void set_has_clientip();
+  void clear_has_clientip();
+  void set_has_serv_nodeidentify();
+  void clear_has_serv_nodeidentify();
+  void set_has_push_chat_msg();
+  void clear_has_push_chat_msg();
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr domain_;
-  ::google::protobuf::internal::ArenaStringPtr account_;
-  ::google::protobuf::internal::ArenaStringPtr nickname_;
-  ::google::protobuf::internal::ArenaStringPtr avatar_;
-  ::google::protobuf::internal::ArenaStringPtr mobile_;
-  ::google::protobuf::internal::ArenaStringPtr mail_;
-  ::google::protobuf::internal::ArenaStringPtr introduction_;
-  ::google::protobuf::internal::ArenaStringPtr company_;
-  ::google::protobuf::internal::ArenaStringPtr occupation_;
-  ::google::protobuf::internal::ArenaStringPtr industry_;
-  ::google::protobuf::internal::ArenaStringPtr area_;
-  ::google::protobuf::internal::ArenaStringPtr password_;
-  ::google::protobuf::uint32 user_type_;
-  ::google::protobuf::uint32 gender_;
-  ::google::protobuf::uint64 identity_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::internal::ArenaStringPtr imtoken_;
+  ::google::protobuf::internal::ArenaStringPtr deviceinfo_;
+  ::google::protobuf::internal::ArenaStringPtr clientip_;
+  ::google::protobuf::internal::ArenaStringPtr serv_nodeidentify_;
+  ::google::protobuf::uint32 imid_;
+  ::google::protobuf::uint32 clienttype_;
+  ::google::protobuf::uint32 app_version_;
+  ::google::protobuf::uint32 push_chat_msg_;
   friend struct ::protobuf_user_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
 
-class user_register_ack : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:user.user_register_ack) */ {
+class ulogin_ack : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:im_user.ulogin_ack) */ {
  public:
-  user_register_ack();
-  virtual ~user_register_ack();
+  ulogin_ack();
+  virtual ~ulogin_ack();
 
-  user_register_ack(const user_register_ack& from);
+  ulogin_ack(const ulogin_ack& from);
 
-  inline user_register_ack& operator=(const user_register_ack& from) {
+  inline ulogin_ack& operator=(const ulogin_ack& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  user_register_ack(user_register_ack&& from) noexcept
-    : user_register_ack() {
+  ulogin_ack(ulogin_ack&& from) noexcept
+    : ulogin_ack() {
     *this = ::std::move(from);
   }
 
-  inline user_register_ack& operator=(user_register_ack&& from) noexcept {
+  inline ulogin_ack& operator=(ulogin_ack&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -419,35 +329,42 @@ class user_register_ack : public ::google::protobuf::Message /* @@protoc_inserti
     return *this;
   }
   #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
   static const ::google::protobuf::Descriptor* descriptor();
-  static const user_register_ack& default_instance();
+  static const ulogin_ack& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const user_register_ack* internal_default_instance() {
-    return reinterpret_cast<const user_register_ack*>(
-               &_user_register_ack_default_instance_);
+  static inline const ulogin_ack* internal_default_instance() {
+    return reinterpret_cast<const ulogin_ack*>(
+               &_ulogin_ack_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     1;
 
-  void Swap(user_register_ack* other);
-  friend void swap(user_register_ack& a, user_register_ack& b) {
+  void Swap(ulogin_ack* other);
+  friend void swap(ulogin_ack& a, ulogin_ack& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline user_register_ack* New() const final {
-    return CreateMaybeMessage<user_register_ack>(NULL);
+  inline ulogin_ack* New() const final {
+    return CreateMaybeMessage<ulogin_ack>(NULL);
   }
 
-  user_register_ack* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<user_register_ack>(arena);
+  ulogin_ack* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<ulogin_ack>(arena);
   }
   void CopyFrom(const ::google::protobuf::Message& from) final;
   void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const user_register_ack& from);
-  void MergeFrom(const user_register_ack& from);
+  void CopyFrom(const ulogin_ack& from);
+  void MergeFrom(const ulogin_ack& from);
   void Clear() final;
   bool IsInitialized() const final;
 
@@ -464,7 +381,7 @@ class user_register_ack : public ::google::protobuf::Message /* @@protoc_inserti
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(user_register_ack* other);
+  void InternalSwap(ulogin_ack* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -480,35 +397,7 @@ class user_register_ack : public ::google::protobuf::Message /* @@protoc_inserti
 
   // accessors -------------------------------------------------------
 
-  // bytes account = 2;
-  void clear_account();
-  static const int kAccountFieldNumber = 2;
-  const ::std::string& account() const;
-  void set_account(const ::std::string& value);
-  #if LANG_CXX11
-  void set_account(::std::string&& value);
-  #endif
-  void set_account(const char* value);
-  void set_account(const void* value, size_t size);
-  ::std::string* mutable_account();
-  ::std::string* release_account();
-  void set_allocated_account(::std::string* account);
-
-  // bytes password = 4;
-  void clear_password();
-  static const int kPasswordFieldNumber = 4;
-  const ::std::string& password() const;
-  void set_password(const ::std::string& value);
-  #if LANG_CXX11
-  void set_password(::std::string&& value);
-  #endif
-  void set_password(const char* value);
-  void set_password(const void* value, size_t size);
-  ::std::string* mutable_password();
-  ::std::string* release_password();
-  void set_allocated_password(::std::string* password);
-
-  // .common.errorinfo error = 1;
+  // optional .common.errorinfo error = 1;
   bool has_error() const;
   void clear_error();
   static const int kErrorFieldNumber = 1;
@@ -520,43 +409,57 @@ class user_register_ack : public ::google::protobuf::Message /* @@protoc_inserti
   ::common::errorinfo* mutable_error();
   void set_allocated_error(::common::errorinfo* error);
 
-  // uint32 userid = 3;
-  void clear_userid();
-  static const int kUseridFieldNumber = 3;
-  ::google::protobuf::uint32 userid() const;
-  void set_userid(::google::protobuf::uint32 value);
+  // optional uint32 beat_time = 2;
+  bool has_beat_time() const;
+  void clear_beat_time();
+  static const int kBeatTimeFieldNumber = 2;
+  ::google::protobuf::uint32 beat_time() const;
+  void set_beat_time(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:user.user_register_ack)
+  // optional uint32 login_prompt = 3;
+  bool has_login_prompt() const;
+  void clear_login_prompt();
+  static const int kLoginPromptFieldNumber = 3;
+  ::google::protobuf::uint32 login_prompt() const;
+  void set_login_prompt(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:im_user.ulogin_ack)
  private:
+  void set_has_error();
+  void clear_has_error();
+  void set_has_beat_time();
+  void clear_has_beat_time();
+  void set_has_login_prompt();
+  void clear_has_login_prompt();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr account_;
-  ::google::protobuf::internal::ArenaStringPtr password_;
-  ::common::errorinfo* error_;
-  ::google::protobuf::uint32 userid_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::common::errorinfo* error_;
+  ::google::protobuf::uint32 beat_time_;
+  ::google::protobuf::uint32 login_prompt_;
   friend struct ::protobuf_user_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
 
-class user_update_req : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:user.user_update_req) */ {
+class ulogin_comfirm : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:im_user.ulogin_comfirm) */ {
  public:
-  user_update_req();
-  virtual ~user_update_req();
+  ulogin_comfirm();
+  virtual ~ulogin_comfirm();
 
-  user_update_req(const user_update_req& from);
+  ulogin_comfirm(const ulogin_comfirm& from);
 
-  inline user_update_req& operator=(const user_update_req& from) {
+  inline ulogin_comfirm& operator=(const ulogin_comfirm& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  user_update_req(user_update_req&& from) noexcept
-    : user_update_req() {
+  ulogin_comfirm(ulogin_comfirm&& from) noexcept
+    : ulogin_comfirm() {
     *this = ::std::move(from);
   }
 
-  inline user_update_req& operator=(user_update_req&& from) noexcept {
+  inline ulogin_comfirm& operator=(ulogin_comfirm&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -565,35 +468,42 @@ class user_update_req : public ::google::protobuf::Message /* @@protoc_insertion
     return *this;
   }
   #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
   static const ::google::protobuf::Descriptor* descriptor();
-  static const user_update_req& default_instance();
+  static const ulogin_comfirm& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const user_update_req* internal_default_instance() {
-    return reinterpret_cast<const user_update_req*>(
-               &_user_update_req_default_instance_);
+  static inline const ulogin_comfirm* internal_default_instance() {
+    return reinterpret_cast<const ulogin_comfirm*>(
+               &_ulogin_comfirm_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     2;
 
-  void Swap(user_update_req* other);
-  friend void swap(user_update_req& a, user_update_req& b) {
+  void Swap(ulogin_comfirm* other);
+  friend void swap(ulogin_comfirm& a, ulogin_comfirm& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline user_update_req* New() const final {
-    return CreateMaybeMessage<user_update_req>(NULL);
+  inline ulogin_comfirm* New() const final {
+    return CreateMaybeMessage<ulogin_comfirm>(NULL);
   }
 
-  user_update_req* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<user_update_req>(arena);
+  ulogin_comfirm* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<ulogin_comfirm>(arena);
   }
   void CopyFrom(const ::google::protobuf::Message& from) final;
   void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const user_update_req& from);
-  void MergeFrom(const user_update_req& from);
+  void CopyFrom(const ulogin_comfirm& from);
+  void MergeFrom(const ulogin_comfirm& from);
   void Clear() final;
   bool IsInitialized() const final;
 
@@ -610,7 +520,7 @@ class user_update_req : public ::google::protobuf::Message /* @@protoc_insertion
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(user_update_req* other);
+  void InternalSwap(ulogin_comfirm* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -626,248 +536,52 @@ class user_update_req : public ::google::protobuf::Message /* @@protoc_insertion
 
   // accessors -------------------------------------------------------
 
-  // bytes nickname = 2;
-  void clear_nickname();
-  static const int kNicknameFieldNumber = 2;
-  const ::std::string& nickname() const;
-  void set_nickname(const ::std::string& value);
+  // optional bytes deviceInfo = 1;
+  bool has_deviceinfo() const;
+  void clear_deviceinfo();
+  static const int kDeviceInfoFieldNumber = 1;
+  const ::std::string& deviceinfo() const;
+  void set_deviceinfo(const ::std::string& value);
   #if LANG_CXX11
-  void set_nickname(::std::string&& value);
+  void set_deviceinfo(::std::string&& value);
   #endif
-  void set_nickname(const char* value);
-  void set_nickname(const void* value, size_t size);
-  ::std::string* mutable_nickname();
-  ::std::string* release_nickname();
-  void set_allocated_nickname(::std::string* nickname);
+  void set_deviceinfo(const char* value);
+  void set_deviceinfo(const void* value, size_t size);
+  ::std::string* mutable_deviceinfo();
+  ::std::string* release_deviceinfo();
+  void set_allocated_deviceinfo(::std::string* deviceinfo);
 
-  // bytes realname = 3;
-  void clear_realname();
-  static const int kRealnameFieldNumber = 3;
-  const ::std::string& realname() const;
-  void set_realname(const ::std::string& value);
-  #if LANG_CXX11
-  void set_realname(::std::string&& value);
-  #endif
-  void set_realname(const char* value);
-  void set_realname(const void* value, size_t size);
-  ::std::string* mutable_realname();
-  ::std::string* release_realname();
-  void set_allocated_realname(::std::string* realname);
-
-  // bytes avatar = 4;
-  void clear_avatar();
-  static const int kAvatarFieldNumber = 4;
-  const ::std::string& avatar() const;
-  void set_avatar(const ::std::string& value);
-  #if LANG_CXX11
-  void set_avatar(::std::string&& value);
-  #endif
-  void set_avatar(const char* value);
-  void set_avatar(const void* value, size_t size);
-  ::std::string* mutable_avatar();
-  ::std::string* release_avatar();
-  void set_allocated_avatar(::std::string* avatar);
-
-  // string mobile = 5;
-  void clear_mobile();
-  static const int kMobileFieldNumber = 5;
-  const ::std::string& mobile() const;
-  void set_mobile(const ::std::string& value);
-  #if LANG_CXX11
-  void set_mobile(::std::string&& value);
-  #endif
-  void set_mobile(const char* value);
-  void set_mobile(const char* value, size_t size);
-  ::std::string* mutable_mobile();
-  ::std::string* release_mobile();
-  void set_allocated_mobile(::std::string* mobile);
-
-  // string mail = 6;
-  void clear_mail();
-  static const int kMailFieldNumber = 6;
-  const ::std::string& mail() const;
-  void set_mail(const ::std::string& value);
-  #if LANG_CXX11
-  void set_mail(::std::string&& value);
-  #endif
-  void set_mail(const char* value);
-  void set_mail(const char* value, size_t size);
-  ::std::string* mutable_mail();
-  ::std::string* release_mail();
-  void set_allocated_mail(::std::string* mail);
-
-  // bytes introduction = 7;
-  void clear_introduction();
-  static const int kIntroductionFieldNumber = 7;
-  const ::std::string& introduction() const;
-  void set_introduction(const ::std::string& value);
-  #if LANG_CXX11
-  void set_introduction(::std::string&& value);
-  #endif
-  void set_introduction(const char* value);
-  void set_introduction(const void* value, size_t size);
-  ::std::string* mutable_introduction();
-  ::std::string* release_introduction();
-  void set_allocated_introduction(::std::string* introduction);
-
-  // bytes company = 11;
-  void clear_company();
-  static const int kCompanyFieldNumber = 11;
-  const ::std::string& company() const;
-  void set_company(const ::std::string& value);
-  #if LANG_CXX11
-  void set_company(::std::string&& value);
-  #endif
-  void set_company(const char* value);
-  void set_company(const void* value, size_t size);
-  ::std::string* mutable_company();
-  ::std::string* release_company();
-  void set_allocated_company(::std::string* company);
-
-  // bytes occupation = 12;
-  void clear_occupation();
-  static const int kOccupationFieldNumber = 12;
-  const ::std::string& occupation() const;
-  void set_occupation(const ::std::string& value);
-  #if LANG_CXX11
-  void set_occupation(::std::string&& value);
-  #endif
-  void set_occupation(const char* value);
-  void set_occupation(const void* value, size_t size);
-  ::std::string* mutable_occupation();
-  ::std::string* release_occupation();
-  void set_allocated_occupation(::std::string* occupation);
-
-  // bytes industry = 13;
-  void clear_industry();
-  static const int kIndustryFieldNumber = 13;
-  const ::std::string& industry() const;
-  void set_industry(const ::std::string& value);
-  #if LANG_CXX11
-  void set_industry(::std::string&& value);
-  #endif
-  void set_industry(const char* value);
-  void set_industry(const void* value, size_t size);
-  ::std::string* mutable_industry();
-  ::std::string* release_industry();
-  void set_allocated_industry(::std::string* industry);
-
-  // bytes location = 14;
-  void clear_location();
-  static const int kLocationFieldNumber = 14;
-  const ::std::string& location() const;
-  void set_location(const ::std::string& value);
-  #if LANG_CXX11
-  void set_location(::std::string&& value);
-  #endif
-  void set_location(const char* value);
-  void set_location(const void* value, size_t size);
-  ::std::string* mutable_location();
-  ::std::string* release_location();
-  void set_allocated_location(::std::string* location);
-
-  // bytes last_device_info = 15;
-  void clear_last_device_info();
-  static const int kLastDeviceInfoFieldNumber = 15;
-  const ::std::string& last_device_info() const;
-  void set_last_device_info(const ::std::string& value);
-  #if LANG_CXX11
-  void set_last_device_info(::std::string&& value);
-  #endif
-  void set_last_device_info(const char* value);
-  void set_last_device_info(const void* value, size_t size);
-  ::std::string* mutable_last_device_info();
-  ::std::string* release_last_device_info();
-  void set_allocated_last_device_info(::std::string* last_device_info);
-
-  // bytes last_page_source = 16;
-  void clear_last_page_source();
-  static const int kLastPageSourceFieldNumber = 16;
-  const ::std::string& last_page_source() const;
-  void set_last_page_source(const ::std::string& value);
-  #if LANG_CXX11
-  void set_last_page_source(::std::string&& value);
-  #endif
-  void set_last_page_source(const char* value);
-  void set_last_page_source(const void* value, size_t size);
-  ::std::string* mutable_last_page_source();
-  ::std::string* release_last_page_source();
-  void set_allocated_last_page_source(::std::string* last_page_source);
-
-  // uint32 userid = 1;
-  void clear_userid();
-  static const int kUseridFieldNumber = 1;
-  ::google::protobuf::uint32 userid() const;
-  void set_userid(::google::protobuf::uint32 value);
-
-  // uint32 gender = 8;
-  void clear_gender();
-  static const int kGenderFieldNumber = 8;
-  ::google::protobuf::uint32 gender() const;
-  void set_gender(::google::protobuf::uint32 value);
-
-  // uint64 add_identity = 9;
-  void clear_add_identity();
-  static const int kAddIdentityFieldNumber = 9;
-  ::google::protobuf::uint64 add_identity() const;
-  void set_add_identity(::google::protobuf::uint64 value);
-
-  // uint64 del_identity = 10;
-  void clear_del_identity();
-  static const int kDelIdentityFieldNumber = 10;
-  ::google::protobuf::uint64 del_identity() const;
-  void set_del_identity(::google::protobuf::uint64 value);
-
-  // uint32 client_page = 17;
-  void clear_client_page();
-  static const int kClientPageFieldNumber = 17;
-  ::google::protobuf::uint32 client_page() const;
-  void set_client_page(::google::protobuf::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:user.user_update_req)
+  // @@protoc_insertion_point(class_scope:im_user.ulogin_comfirm)
  private:
+  void set_has_deviceinfo();
+  void clear_has_deviceinfo();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr nickname_;
-  ::google::protobuf::internal::ArenaStringPtr realname_;
-  ::google::protobuf::internal::ArenaStringPtr avatar_;
-  ::google::protobuf::internal::ArenaStringPtr mobile_;
-  ::google::protobuf::internal::ArenaStringPtr mail_;
-  ::google::protobuf::internal::ArenaStringPtr introduction_;
-  ::google::protobuf::internal::ArenaStringPtr company_;
-  ::google::protobuf::internal::ArenaStringPtr occupation_;
-  ::google::protobuf::internal::ArenaStringPtr industry_;
-  ::google::protobuf::internal::ArenaStringPtr location_;
-  ::google::protobuf::internal::ArenaStringPtr last_device_info_;
-  ::google::protobuf::internal::ArenaStringPtr last_page_source_;
-  ::google::protobuf::uint32 userid_;
-  ::google::protobuf::uint32 gender_;
-  ::google::protobuf::uint64 add_identity_;
-  ::google::protobuf::uint64 del_identity_;
-  ::google::protobuf::uint32 client_page_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::internal::ArenaStringPtr deviceinfo_;
   friend struct ::protobuf_user_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
 
-class user_update_ack : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:user.user_update_ack) */ {
+class ulogin_comfirm_ack : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:im_user.ulogin_comfirm_ack) */ {
  public:
-  user_update_ack();
-  virtual ~user_update_ack();
+  ulogin_comfirm_ack();
+  virtual ~ulogin_comfirm_ack();
 
-  user_update_ack(const user_update_ack& from);
+  ulogin_comfirm_ack(const ulogin_comfirm_ack& from);
 
-  inline user_update_ack& operator=(const user_update_ack& from) {
+  inline ulogin_comfirm_ack& operator=(const ulogin_comfirm_ack& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  user_update_ack(user_update_ack&& from) noexcept
-    : user_update_ack() {
+  ulogin_comfirm_ack(ulogin_comfirm_ack&& from) noexcept
+    : ulogin_comfirm_ack() {
     *this = ::std::move(from);
   }
 
-  inline user_update_ack& operator=(user_update_ack&& from) noexcept {
+  inline ulogin_comfirm_ack& operator=(ulogin_comfirm_ack&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -876,35 +590,42 @@ class user_update_ack : public ::google::protobuf::Message /* @@protoc_insertion
     return *this;
   }
   #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
   static const ::google::protobuf::Descriptor* descriptor();
-  static const user_update_ack& default_instance();
+  static const ulogin_comfirm_ack& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const user_update_ack* internal_default_instance() {
-    return reinterpret_cast<const user_update_ack*>(
-               &_user_update_ack_default_instance_);
+  static inline const ulogin_comfirm_ack* internal_default_instance() {
+    return reinterpret_cast<const ulogin_comfirm_ack*>(
+               &_ulogin_comfirm_ack_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     3;
 
-  void Swap(user_update_ack* other);
-  friend void swap(user_update_ack& a, user_update_ack& b) {
+  void Swap(ulogin_comfirm_ack* other);
+  friend void swap(ulogin_comfirm_ack& a, ulogin_comfirm_ack& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline user_update_ack* New() const final {
-    return CreateMaybeMessage<user_update_ack>(NULL);
+  inline ulogin_comfirm_ack* New() const final {
+    return CreateMaybeMessage<ulogin_comfirm_ack>(NULL);
   }
 
-  user_update_ack* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<user_update_ack>(arena);
+  ulogin_comfirm_ack* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<ulogin_comfirm_ack>(arena);
   }
   void CopyFrom(const ::google::protobuf::Message& from) final;
   void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const user_update_ack& from);
-  void MergeFrom(const user_update_ack& from);
+  void CopyFrom(const ulogin_comfirm_ack& from);
+  void MergeFrom(const ulogin_comfirm_ack& from);
   void Clear() final;
   bool IsInitialized() const final;
 
@@ -921,7 +642,7 @@ class user_update_ack : public ::google::protobuf::Message /* @@protoc_insertion
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(user_update_ack* other);
+  void InternalSwap(ulogin_comfirm_ack* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -937,7 +658,7 @@ class user_update_ack : public ::google::protobuf::Message /* @@protoc_insertion
 
   // accessors -------------------------------------------------------
 
-  // .common.errorinfo error = 1;
+  // optional .common.errorinfo error = 1;
   bool has_error() const;
   void clear_error();
   static const int kErrorFieldNumber = 1;
@@ -949,41 +670,37 @@ class user_update_ack : public ::google::protobuf::Message /* @@protoc_insertion
   ::common::errorinfo* mutable_error();
   void set_allocated_error(::common::errorinfo* error);
 
-  // uint32 client_page = 2;
-  void clear_client_page();
-  static const int kClientPageFieldNumber = 2;
-  ::google::protobuf::uint32 client_page() const;
-  void set_client_page(::google::protobuf::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:user.user_update_ack)
+  // @@protoc_insertion_point(class_scope:im_user.ulogin_comfirm_ack)
  private:
+  void set_has_error();
+  void clear_has_error();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::common::errorinfo* error_;
-  ::google::protobuf::uint32 client_page_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::common::errorinfo* error_;
   friend struct ::protobuf_user_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
 
-class query_user_info_req : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:user.query_user_info_req) */ {
+class ulogout : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:im_user.ulogout) */ {
  public:
-  query_user_info_req();
-  virtual ~query_user_info_req();
+  ulogout();
+  virtual ~ulogout();
 
-  query_user_info_req(const query_user_info_req& from);
+  ulogout(const ulogout& from);
 
-  inline query_user_info_req& operator=(const query_user_info_req& from) {
+  inline ulogout& operator=(const ulogout& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  query_user_info_req(query_user_info_req&& from) noexcept
-    : query_user_info_req() {
+  ulogout(ulogout&& from) noexcept
+    : ulogout() {
     *this = ::std::move(from);
   }
 
-  inline query_user_info_req& operator=(query_user_info_req&& from) noexcept {
+  inline ulogout& operator=(ulogout&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -992,35 +709,42 @@ class query_user_info_req : public ::google::protobuf::Message /* @@protoc_inser
     return *this;
   }
   #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
   static const ::google::protobuf::Descriptor* descriptor();
-  static const query_user_info_req& default_instance();
+  static const ulogout& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const query_user_info_req* internal_default_instance() {
-    return reinterpret_cast<const query_user_info_req*>(
-               &_query_user_info_req_default_instance_);
+  static inline const ulogout* internal_default_instance() {
+    return reinterpret_cast<const ulogout*>(
+               &_ulogout_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     4;
 
-  void Swap(query_user_info_req* other);
-  friend void swap(query_user_info_req& a, query_user_info_req& b) {
+  void Swap(ulogout* other);
+  friend void swap(ulogout& a, ulogout& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline query_user_info_req* New() const final {
-    return CreateMaybeMessage<query_user_info_req>(NULL);
+  inline ulogout* New() const final {
+    return CreateMaybeMessage<ulogout>(NULL);
   }
 
-  query_user_info_req* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<query_user_info_req>(arena);
+  ulogout* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<ulogout>(arena);
   }
   void CopyFrom(const ::google::protobuf::Message& from) final;
   void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const query_user_info_req& from);
-  void MergeFrom(const query_user_info_req& from);
+  void CopyFrom(const ulogout& from);
+  void MergeFrom(const ulogout& from);
   void Clear() final;
   bool IsInitialized() const final;
 
@@ -1037,7 +761,7 @@ class query_user_info_req : public ::google::protobuf::Message /* @@protoc_inser
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(query_user_info_req* other);
+  void InternalSwap(ulogout* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -1053,47 +777,44 @@ class query_user_info_req : public ::google::protobuf::Message /* @@protoc_inser
 
   // accessors -------------------------------------------------------
 
-  // uint32 userid = 1;
-  void clear_userid();
-  static const int kUseridFieldNumber = 1;
-  ::google::protobuf::uint32 userid() const;
-  void set_userid(::google::protobuf::uint32 value);
+  // required uint32 imid = 1;
+  bool has_imid() const;
+  void clear_imid();
+  static const int kImidFieldNumber = 1;
+  ::google::protobuf::uint32 imid() const;
+  void set_imid(::google::protobuf::uint32 value);
 
-  // uint32 client_page = 2;
-  void clear_client_page();
-  static const int kClientPageFieldNumber = 2;
-  ::google::protobuf::uint32 client_page() const;
-  void set_client_page(::google::protobuf::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:user.query_user_info_req)
+  // @@protoc_insertion_point(class_scope:im_user.ulogout)
  private:
+  void set_has_imid();
+  void clear_has_imid();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::uint32 userid_;
-  ::google::protobuf::uint32 client_page_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::uint32 imid_;
   friend struct ::protobuf_user_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
 
-class query_user_info_ack : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:user.query_user_info_ack) */ {
+class ulogout_ack : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:im_user.ulogout_ack) */ {
  public:
-  query_user_info_ack();
-  virtual ~query_user_info_ack();
+  ulogout_ack();
+  virtual ~ulogout_ack();
 
-  query_user_info_ack(const query_user_info_ack& from);
+  ulogout_ack(const ulogout_ack& from);
 
-  inline query_user_info_ack& operator=(const query_user_info_ack& from) {
+  inline ulogout_ack& operator=(const ulogout_ack& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  query_user_info_ack(query_user_info_ack&& from) noexcept
-    : query_user_info_ack() {
+  ulogout_ack(ulogout_ack&& from) noexcept
+    : ulogout_ack() {
     *this = ::std::move(from);
   }
 
-  inline query_user_info_ack& operator=(query_user_info_ack&& from) noexcept {
+  inline ulogout_ack& operator=(ulogout_ack&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -1102,35 +823,42 @@ class query_user_info_ack : public ::google::protobuf::Message /* @@protoc_inser
     return *this;
   }
   #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
   static const ::google::protobuf::Descriptor* descriptor();
-  static const query_user_info_ack& default_instance();
+  static const ulogout_ack& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const query_user_info_ack* internal_default_instance() {
-    return reinterpret_cast<const query_user_info_ack*>(
-               &_query_user_info_ack_default_instance_);
+  static inline const ulogout_ack* internal_default_instance() {
+    return reinterpret_cast<const ulogout_ack*>(
+               &_ulogout_ack_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     5;
 
-  void Swap(query_user_info_ack* other);
-  friend void swap(query_user_info_ack& a, query_user_info_ack& b) {
+  void Swap(ulogout_ack* other);
+  friend void swap(ulogout_ack& a, ulogout_ack& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline query_user_info_ack* New() const final {
-    return CreateMaybeMessage<query_user_info_ack>(NULL);
+  inline ulogout_ack* New() const final {
+    return CreateMaybeMessage<ulogout_ack>(NULL);
   }
 
-  query_user_info_ack* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<query_user_info_ack>(arena);
+  ulogout_ack* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<ulogout_ack>(arena);
   }
   void CopyFrom(const ::google::protobuf::Message& from) final;
   void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const query_user_info_ack& from);
-  void MergeFrom(const query_user_info_ack& from);
+  void CopyFrom(const ulogout_ack& from);
+  void MergeFrom(const ulogout_ack& from);
   void Clear() final;
   bool IsInitialized() const final;
 
@@ -1147,7 +875,7 @@ class query_user_info_ack : public ::google::protobuf::Message /* @@protoc_inser
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(query_user_info_ack* other);
+  void InternalSwap(ulogout_ack* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -1163,175 +891,7 @@ class query_user_info_ack : public ::google::protobuf::Message /* @@protoc_inser
 
   // accessors -------------------------------------------------------
 
-  // bytes nickname = 3;
-  void clear_nickname();
-  static const int kNicknameFieldNumber = 3;
-  const ::std::string& nickname() const;
-  void set_nickname(const ::std::string& value);
-  #if LANG_CXX11
-  void set_nickname(::std::string&& value);
-  #endif
-  void set_nickname(const char* value);
-  void set_nickname(const void* value, size_t size);
-  ::std::string* mutable_nickname();
-  ::std::string* release_nickname();
-  void set_allocated_nickname(::std::string* nickname);
-
-  // bytes realname = 4;
-  void clear_realname();
-  static const int kRealnameFieldNumber = 4;
-  const ::std::string& realname() const;
-  void set_realname(const ::std::string& value);
-  #if LANG_CXX11
-  void set_realname(::std::string&& value);
-  #endif
-  void set_realname(const char* value);
-  void set_realname(const void* value, size_t size);
-  ::std::string* mutable_realname();
-  ::std::string* release_realname();
-  void set_allocated_realname(::std::string* realname);
-
-  // bytes avatar = 5;
-  void clear_avatar();
-  static const int kAvatarFieldNumber = 5;
-  const ::std::string& avatar() const;
-  void set_avatar(const ::std::string& value);
-  #if LANG_CXX11
-  void set_avatar(::std::string&& value);
-  #endif
-  void set_avatar(const char* value);
-  void set_avatar(const void* value, size_t size);
-  ::std::string* mutable_avatar();
-  ::std::string* release_avatar();
-  void set_allocated_avatar(::std::string* avatar);
-
-  // string mobile = 6;
-  void clear_mobile();
-  static const int kMobileFieldNumber = 6;
-  const ::std::string& mobile() const;
-  void set_mobile(const ::std::string& value);
-  #if LANG_CXX11
-  void set_mobile(::std::string&& value);
-  #endif
-  void set_mobile(const char* value);
-  void set_mobile(const char* value, size_t size);
-  ::std::string* mutable_mobile();
-  ::std::string* release_mobile();
-  void set_allocated_mobile(::std::string* mobile);
-
-  // string mail = 7;
-  void clear_mail();
-  static const int kMailFieldNumber = 7;
-  const ::std::string& mail() const;
-  void set_mail(const ::std::string& value);
-  #if LANG_CXX11
-  void set_mail(::std::string&& value);
-  #endif
-  void set_mail(const char* value);
-  void set_mail(const char* value, size_t size);
-  ::std::string* mutable_mail();
-  ::std::string* release_mail();
-  void set_allocated_mail(::std::string* mail);
-
-  // bytes introduction = 8;
-  void clear_introduction();
-  static const int kIntroductionFieldNumber = 8;
-  const ::std::string& introduction() const;
-  void set_introduction(const ::std::string& value);
-  #if LANG_CXX11
-  void set_introduction(::std::string&& value);
-  #endif
-  void set_introduction(const char* value);
-  void set_introduction(const void* value, size_t size);
-  ::std::string* mutable_introduction();
-  ::std::string* release_introduction();
-  void set_allocated_introduction(::std::string* introduction);
-
-  // bytes company = 11;
-  void clear_company();
-  static const int kCompanyFieldNumber = 11;
-  const ::std::string& company() const;
-  void set_company(const ::std::string& value);
-  #if LANG_CXX11
-  void set_company(::std::string&& value);
-  #endif
-  void set_company(const char* value);
-  void set_company(const void* value, size_t size);
-  ::std::string* mutable_company();
-  ::std::string* release_company();
-  void set_allocated_company(::std::string* company);
-
-  // bytes occupation = 12;
-  void clear_occupation();
-  static const int kOccupationFieldNumber = 12;
-  const ::std::string& occupation() const;
-  void set_occupation(const ::std::string& value);
-  #if LANG_CXX11
-  void set_occupation(::std::string&& value);
-  #endif
-  void set_occupation(const char* value);
-  void set_occupation(const void* value, size_t size);
-  ::std::string* mutable_occupation();
-  ::std::string* release_occupation();
-  void set_allocated_occupation(::std::string* occupation);
-
-  // bytes industry = 13;
-  void clear_industry();
-  static const int kIndustryFieldNumber = 13;
-  const ::std::string& industry() const;
-  void set_industry(const ::std::string& value);
-  #if LANG_CXX11
-  void set_industry(::std::string&& value);
-  #endif
-  void set_industry(const char* value);
-  void set_industry(const void* value, size_t size);
-  ::std::string* mutable_industry();
-  ::std::string* release_industry();
-  void set_allocated_industry(::std::string* industry);
-
-  // bytes location = 14;
-  void clear_location();
-  static const int kLocationFieldNumber = 14;
-  const ::std::string& location() const;
-  void set_location(const ::std::string& value);
-  #if LANG_CXX11
-  void set_location(::std::string&& value);
-  #endif
-  void set_location(const char* value);
-  void set_location(const void* value, size_t size);
-  ::std::string* mutable_location();
-  ::std::string* release_location();
-  void set_allocated_location(::std::string* location);
-
-  // bytes last_device_info = 15;
-  void clear_last_device_info();
-  static const int kLastDeviceInfoFieldNumber = 15;
-  const ::std::string& last_device_info() const;
-  void set_last_device_info(const ::std::string& value);
-  #if LANG_CXX11
-  void set_last_device_info(::std::string&& value);
-  #endif
-  void set_last_device_info(const char* value);
-  void set_last_device_info(const void* value, size_t size);
-  ::std::string* mutable_last_device_info();
-  ::std::string* release_last_device_info();
-  void set_allocated_last_device_info(::std::string* last_device_info);
-
-  // bytes last_page_source = 16;
-  void clear_last_page_source();
-  static const int kLastPageSourceFieldNumber = 16;
-  const ::std::string& last_page_source() const;
-  void set_last_page_source(const ::std::string& value);
-  #if LANG_CXX11
-  void set_last_page_source(::std::string&& value);
-  #endif
-  void set_last_page_source(const char* value);
-  void set_last_page_source(const void* value, size_t size);
-  ::std::string* mutable_last_page_source();
-  ::std::string* release_last_page_source();
-  void set_allocated_last_page_source(::std::string* last_page_source);
-
-  // .common.errorinfo error = 1;
+  // optional .common.errorinfo error = 1;
   bool has_error() const;
   void clear_error();
   static const int kErrorFieldNumber = 1;
@@ -1343,74 +903,37 @@ class query_user_info_ack : public ::google::protobuf::Message /* @@protoc_inser
   ::common::errorinfo* mutable_error();
   void set_allocated_error(::common::errorinfo* error);
 
-  // uint32 userid = 2;
-  void clear_userid();
-  static const int kUseridFieldNumber = 2;
-  ::google::protobuf::uint32 userid() const;
-  void set_userid(::google::protobuf::uint32 value);
-
-  // uint32 gender = 9;
-  void clear_gender();
-  static const int kGenderFieldNumber = 9;
-  ::google::protobuf::uint32 gender() const;
-  void set_gender(::google::protobuf::uint32 value);
-
-  // uint64 identity = 10;
-  void clear_identity();
-  static const int kIdentityFieldNumber = 10;
-  ::google::protobuf::uint64 identity() const;
-  void set_identity(::google::protobuf::uint64 value);
-
-  // uint32 client_page = 17;
-  void clear_client_page();
-  static const int kClientPageFieldNumber = 17;
-  ::google::protobuf::uint32 client_page() const;
-  void set_client_page(::google::protobuf::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:user.query_user_info_ack)
+  // @@protoc_insertion_point(class_scope:im_user.ulogout_ack)
  private:
+  void set_has_error();
+  void clear_has_error();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr nickname_;
-  ::google::protobuf::internal::ArenaStringPtr realname_;
-  ::google::protobuf::internal::ArenaStringPtr avatar_;
-  ::google::protobuf::internal::ArenaStringPtr mobile_;
-  ::google::protobuf::internal::ArenaStringPtr mail_;
-  ::google::protobuf::internal::ArenaStringPtr introduction_;
-  ::google::protobuf::internal::ArenaStringPtr company_;
-  ::google::protobuf::internal::ArenaStringPtr occupation_;
-  ::google::protobuf::internal::ArenaStringPtr industry_;
-  ::google::protobuf::internal::ArenaStringPtr location_;
-  ::google::protobuf::internal::ArenaStringPtr last_device_info_;
-  ::google::protobuf::internal::ArenaStringPtr last_page_source_;
-  ::common::errorinfo* error_;
-  ::google::protobuf::uint32 userid_;
-  ::google::protobuf::uint32 gender_;
-  ::google::protobuf::uint64 identity_;
-  ::google::protobuf::uint32 client_page_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::common::errorinfo* error_;
   friend struct ::protobuf_user_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
 
-class set_personal_password_req : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:user.set_personal_password_req) */ {
+class forced_offline_ntf : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:im_user.forced_offline_ntf) */ {
  public:
-  set_personal_password_req();
-  virtual ~set_personal_password_req();
+  forced_offline_ntf();
+  virtual ~forced_offline_ntf();
 
-  set_personal_password_req(const set_personal_password_req& from);
+  forced_offline_ntf(const forced_offline_ntf& from);
 
-  inline set_personal_password_req& operator=(const set_personal_password_req& from) {
+  inline forced_offline_ntf& operator=(const forced_offline_ntf& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  set_personal_password_req(set_personal_password_req&& from) noexcept
-    : set_personal_password_req() {
+  forced_offline_ntf(forced_offline_ntf&& from) noexcept
+    : forced_offline_ntf() {
     *this = ::std::move(from);
   }
 
-  inline set_personal_password_req& operator=(set_personal_password_req&& from) noexcept {
+  inline forced_offline_ntf& operator=(forced_offline_ntf&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -1419,35 +942,42 @@ class set_personal_password_req : public ::google::protobuf::Message /* @@protoc
     return *this;
   }
   #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
   static const ::google::protobuf::Descriptor* descriptor();
-  static const set_personal_password_req& default_instance();
+  static const forced_offline_ntf& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const set_personal_password_req* internal_default_instance() {
-    return reinterpret_cast<const set_personal_password_req*>(
-               &_set_personal_password_req_default_instance_);
+  static inline const forced_offline_ntf* internal_default_instance() {
+    return reinterpret_cast<const forced_offline_ntf*>(
+               &_forced_offline_ntf_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     6;
 
-  void Swap(set_personal_password_req* other);
-  friend void swap(set_personal_password_req& a, set_personal_password_req& b) {
+  void Swap(forced_offline_ntf* other);
+  friend void swap(forced_offline_ntf& a, forced_offline_ntf& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline set_personal_password_req* New() const final {
-    return CreateMaybeMessage<set_personal_password_req>(NULL);
+  inline forced_offline_ntf* New() const final {
+    return CreateMaybeMessage<forced_offline_ntf>(NULL);
   }
 
-  set_personal_password_req* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<set_personal_password_req>(arena);
+  forced_offline_ntf* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<forced_offline_ntf>(arena);
   }
   void CopyFrom(const ::google::protobuf::Message& from) final;
   void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const set_personal_password_req& from);
-  void MergeFrom(const set_personal_password_req& from);
+  void CopyFrom(const forced_offline_ntf& from);
+  void MergeFrom(const forced_offline_ntf& from);
   void Clear() final;
   bool IsInitialized() const final;
 
@@ -1464,7 +994,7 @@ class set_personal_password_req : public ::google::protobuf::Message /* @@protoc
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(set_personal_password_req* other);
+  void InternalSwap(forced_offline_ntf* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -1480,148 +1010,7 @@ class set_personal_password_req : public ::google::protobuf::Message /* @@protoc
 
   // accessors -------------------------------------------------------
 
-  // bytes old_password = 1;
-  void clear_old_password();
-  static const int kOldPasswordFieldNumber = 1;
-  const ::std::string& old_password() const;
-  void set_old_password(const ::std::string& value);
-  #if LANG_CXX11
-  void set_old_password(::std::string&& value);
-  #endif
-  void set_old_password(const char* value);
-  void set_old_password(const void* value, size_t size);
-  ::std::string* mutable_old_password();
-  ::std::string* release_old_password();
-  void set_allocated_old_password(::std::string* old_password);
-
-  // bytes new_password = 2;
-  void clear_new_password();
-  static const int kNewPasswordFieldNumber = 2;
-  const ::std::string& new_password() const;
-  void set_new_password(const ::std::string& value);
-  #if LANG_CXX11
-  void set_new_password(::std::string&& value);
-  #endif
-  void set_new_password(const char* value);
-  void set_new_password(const void* value, size_t size);
-  ::std::string* mutable_new_password();
-  ::std::string* release_new_password();
-  void set_allocated_new_password(::std::string* new_password);
-
-  // bytes confirm_new_password = 3;
-  void clear_confirm_new_password();
-  static const int kConfirmNewPasswordFieldNumber = 3;
-  const ::std::string& confirm_new_password() const;
-  void set_confirm_new_password(const ::std::string& value);
-  #if LANG_CXX11
-  void set_confirm_new_password(::std::string&& value);
-  #endif
-  void set_confirm_new_password(const char* value);
-  void set_confirm_new_password(const void* value, size_t size);
-  ::std::string* mutable_confirm_new_password();
-  ::std::string* release_confirm_new_password();
-  void set_allocated_confirm_new_password(::std::string* confirm_new_password);
-
-  // @@protoc_insertion_point(class_scope:user.set_personal_password_req)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr old_password_;
-  ::google::protobuf::internal::ArenaStringPtr new_password_;
-  ::google::protobuf::internal::ArenaStringPtr confirm_new_password_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  friend struct ::protobuf_user_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
-
-class set_personal_password_ack : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:user.set_personal_password_ack) */ {
- public:
-  set_personal_password_ack();
-  virtual ~set_personal_password_ack();
-
-  set_personal_password_ack(const set_personal_password_ack& from);
-
-  inline set_personal_password_ack& operator=(const set_personal_password_ack& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  set_personal_password_ack(set_personal_password_ack&& from) noexcept
-    : set_personal_password_ack() {
-    *this = ::std::move(from);
-  }
-
-  inline set_personal_password_ack& operator=(set_personal_password_ack&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const set_personal_password_ack& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const set_personal_password_ack* internal_default_instance() {
-    return reinterpret_cast<const set_personal_password_ack*>(
-               &_set_personal_password_ack_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    7;
-
-  void Swap(set_personal_password_ack* other);
-  friend void swap(set_personal_password_ack& a, set_personal_password_ack& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline set_personal_password_ack* New() const final {
-    return CreateMaybeMessage<set_personal_password_ack>(NULL);
-  }
-
-  set_personal_password_ack* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<set_personal_password_ack>(arena);
-  }
-  void CopyFrom(const ::google::protobuf::Message& from) final;
-  void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const set_personal_password_ack& from);
-  void MergeFrom(const set_personal_password_ack& from);
-  void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) final;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const final;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* target) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(set_personal_password_ack* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // .common.errorinfo error = 1;
+  // optional .common.errorinfo error = 1;
   bool has_error() const;
   void clear_error();
   static const int kErrorFieldNumber = 1;
@@ -1633,262 +1022,15 @@ class set_personal_password_ack : public ::google::protobuf::Message /* @@protoc
   ::common::errorinfo* mutable_error();
   void set_allocated_error(::common::errorinfo* error);
 
-  // @@protoc_insertion_point(class_scope:user.set_personal_password_ack)
+  // @@protoc_insertion_point(class_scope:im_user.forced_offline_ntf)
  private:
+  void set_has_error();
+  void clear_has_error();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
   ::common::errorinfo* error_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  friend struct ::protobuf_user_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
-
-class user_unregister_req : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:user.user_unregister_req) */ {
- public:
-  user_unregister_req();
-  virtual ~user_unregister_req();
-
-  user_unregister_req(const user_unregister_req& from);
-
-  inline user_unregister_req& operator=(const user_unregister_req& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  user_unregister_req(user_unregister_req&& from) noexcept
-    : user_unregister_req() {
-    *this = ::std::move(from);
-  }
-
-  inline user_unregister_req& operator=(user_unregister_req&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const user_unregister_req& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const user_unregister_req* internal_default_instance() {
-    return reinterpret_cast<const user_unregister_req*>(
-               &_user_unregister_req_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    8;
-
-  void Swap(user_unregister_req* other);
-  friend void swap(user_unregister_req& a, user_unregister_req& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline user_unregister_req* New() const final {
-    return CreateMaybeMessage<user_unregister_req>(NULL);
-  }
-
-  user_unregister_req* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<user_unregister_req>(arena);
-  }
-  void CopyFrom(const ::google::protobuf::Message& from) final;
-  void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const user_unregister_req& from);
-  void MergeFrom(const user_unregister_req& from);
-  void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) final;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const final;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* target) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(user_unregister_req* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // bytes domain = 1;
-  void clear_domain();
-  static const int kDomainFieldNumber = 1;
-  const ::std::string& domain() const;
-  void set_domain(const ::std::string& value);
-  #if LANG_CXX11
-  void set_domain(::std::string&& value);
-  #endif
-  void set_domain(const char* value);
-  void set_domain(const void* value, size_t size);
-  ::std::string* mutable_domain();
-  ::std::string* release_domain();
-  void set_allocated_domain(::std::string* domain);
-
-  // bytes account = 2;
-  void clear_account();
-  static const int kAccountFieldNumber = 2;
-  const ::std::string& account() const;
-  void set_account(const ::std::string& value);
-  #if LANG_CXX11
-  void set_account(::std::string&& value);
-  #endif
-  void set_account(const char* value);
-  void set_account(const void* value, size_t size);
-  ::std::string* mutable_account();
-  ::std::string* release_account();
-  void set_allocated_account(::std::string* account);
-
-  // bytes password = 3;
-  void clear_password();
-  static const int kPasswordFieldNumber = 3;
-  const ::std::string& password() const;
-  void set_password(const ::std::string& value);
-  #if LANG_CXX11
-  void set_password(::std::string&& value);
-  #endif
-  void set_password(const char* value);
-  void set_password(const void* value, size_t size);
-  ::std::string* mutable_password();
-  ::std::string* release_password();
-  void set_allocated_password(::std::string* password);
-
-  // @@protoc_insertion_point(class_scope:user.user_unregister_req)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr domain_;
-  ::google::protobuf::internal::ArenaStringPtr account_;
-  ::google::protobuf::internal::ArenaStringPtr password_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  friend struct ::protobuf_user_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
-
-class user_unregister_ack : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:user.user_unregister_ack) */ {
- public:
-  user_unregister_ack();
-  virtual ~user_unregister_ack();
-
-  user_unregister_ack(const user_unregister_ack& from);
-
-  inline user_unregister_ack& operator=(const user_unregister_ack& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  user_unregister_ack(user_unregister_ack&& from) noexcept
-    : user_unregister_ack() {
-    *this = ::std::move(from);
-  }
-
-  inline user_unregister_ack& operator=(user_unregister_ack&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const user_unregister_ack& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const user_unregister_ack* internal_default_instance() {
-    return reinterpret_cast<const user_unregister_ack*>(
-               &_user_unregister_ack_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    9;
-
-  void Swap(user_unregister_ack* other);
-  friend void swap(user_unregister_ack& a, user_unregister_ack& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline user_unregister_ack* New() const final {
-    return CreateMaybeMessage<user_unregister_ack>(NULL);
-  }
-
-  user_unregister_ack* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<user_unregister_ack>(arena);
-  }
-  void CopyFrom(const ::google::protobuf::Message& from) final;
-  void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const user_unregister_ack& from);
-  void MergeFrom(const user_unregister_ack& from);
-  void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) final;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const final;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* target) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(user_unregister_ack* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // .common.errorinfo error = 1;
-  bool has_error() const;
-  void clear_error();
-  static const int kErrorFieldNumber = 1;
-  private:
-  const ::common::errorinfo& _internal_error() const;
-  public:
-  const ::common::errorinfo& error() const;
-  ::common::errorinfo* release_error();
-  ::common::errorinfo* mutable_error();
-  void set_allocated_error(::common::errorinfo* error);
-
-  // @@protoc_insertion_point(class_scope:user.user_unregister_ack)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::common::errorinfo* error_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_user_2eproto::TableStruct;
 };
 // ===================================================================
@@ -1900,720 +1042,408 @@ class user_unregister_ack : public ::google::protobuf::Message /* @@protoc_inser
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// user_register_req
+// ulogin
 
-// bytes domain = 1;
-inline void user_register_req::clear_domain() {
-  domain_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// required uint32 imid = 1;
+inline bool ulogin::has_imid() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline const ::std::string& user_register_req::domain() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.domain)
-  return domain_.GetNoArena();
+inline void ulogin::set_has_imid() {
+  _has_bits_[0] |= 0x00000010u;
 }
-inline void user_register_req::set_domain(const ::std::string& value) {
-  
-  domain_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_register_req.domain)
+inline void ulogin::clear_has_imid() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void ulogin::clear_imid() {
+  imid_ = 0u;
+  clear_has_imid();
+}
+inline ::google::protobuf::uint32 ulogin::imid() const {
+  // @@protoc_insertion_point(field_get:im_user.ulogin.imid)
+  return imid_;
+}
+inline void ulogin::set_imid(::google::protobuf::uint32 value) {
+  set_has_imid();
+  imid_ = value;
+  // @@protoc_insertion_point(field_set:im_user.ulogin.imid)
+}
+
+// required bytes imToken = 2;
+inline bool ulogin::has_imtoken() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ulogin::set_has_imtoken() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ulogin::clear_has_imtoken() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ulogin::clear_imtoken() {
+  imtoken_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_imtoken();
+}
+inline const ::std::string& ulogin::imtoken() const {
+  // @@protoc_insertion_point(field_get:im_user.ulogin.imToken)
+  return imtoken_.GetNoArena();
+}
+inline void ulogin::set_imtoken(const ::std::string& value) {
+  set_has_imtoken();
+  imtoken_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:im_user.ulogin.imToken)
 }
 #if LANG_CXX11
-inline void user_register_req::set_domain(::std::string&& value) {
-  
-  domain_.SetNoArena(
+inline void ulogin::set_imtoken(::std::string&& value) {
+  set_has_imtoken();
+  imtoken_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_register_req.domain)
+  // @@protoc_insertion_point(field_set_rvalue:im_user.ulogin.imToken)
 }
 #endif
-inline void user_register_req::set_domain(const char* value) {
+inline void ulogin::set_imtoken(const char* value) {
   GOOGLE_DCHECK(value != NULL);
-  
-  domain_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_register_req.domain)
+  set_has_imtoken();
+  imtoken_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:im_user.ulogin.imToken)
 }
-inline void user_register_req::set_domain(const void* value, size_t size) {
-  
-  domain_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+inline void ulogin::set_imtoken(const void* value, size_t size) {
+  set_has_imtoken();
+  imtoken_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_register_req.domain)
+  // @@protoc_insertion_point(field_set_pointer:im_user.ulogin.imToken)
 }
-inline ::std::string* user_register_req::mutable_domain() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_register_req.domain)
-  return domain_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline ::std::string* ulogin::mutable_imtoken() {
+  set_has_imtoken();
+  // @@protoc_insertion_point(field_mutable:im_user.ulogin.imToken)
+  return imtoken_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* user_register_req::release_domain() {
-  // @@protoc_insertion_point(field_release:user.user_register_req.domain)
-  
-  return domain_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_register_req::set_allocated_domain(::std::string* domain) {
-  if (domain != NULL) {
-    
-  } else {
-    
+inline ::std::string* ulogin::release_imtoken() {
+  // @@protoc_insertion_point(field_release:im_user.ulogin.imToken)
+  if (!has_imtoken()) {
+    return NULL;
   }
-  domain_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), domain);
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_req.domain)
+  clear_has_imtoken();
+  return imtoken_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void ulogin::set_allocated_imtoken(::std::string* imtoken) {
+  if (imtoken != NULL) {
+    set_has_imtoken();
+  } else {
+    clear_has_imtoken();
+  }
+  imtoken_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), imtoken);
+  // @@protoc_insertion_point(field_set_allocated:im_user.ulogin.imToken)
 }
 
-// bytes account = 2;
-inline void user_register_req::clear_account() {
-  account_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// optional uint32 clienttype = 3;
+inline bool ulogin::has_clienttype() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
-inline const ::std::string& user_register_req::account() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.account)
-  return account_.GetNoArena();
+inline void ulogin::set_has_clienttype() {
+  _has_bits_[0] |= 0x00000020u;
 }
-inline void user_register_req::set_account(const ::std::string& value) {
-  
-  account_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_register_req.account)
+inline void ulogin::clear_has_clienttype() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void ulogin::clear_clienttype() {
+  clienttype_ = 0u;
+  clear_has_clienttype();
+}
+inline ::google::protobuf::uint32 ulogin::clienttype() const {
+  // @@protoc_insertion_point(field_get:im_user.ulogin.clienttype)
+  return clienttype_;
+}
+inline void ulogin::set_clienttype(::google::protobuf::uint32 value) {
+  set_has_clienttype();
+  clienttype_ = value;
+  // @@protoc_insertion_point(field_set:im_user.ulogin.clienttype)
+}
+
+// optional bytes deviceInfo = 4;
+inline bool ulogin::has_deviceinfo() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ulogin::set_has_deviceinfo() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ulogin::clear_has_deviceinfo() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ulogin::clear_deviceinfo() {
+  deviceinfo_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_deviceinfo();
+}
+inline const ::std::string& ulogin::deviceinfo() const {
+  // @@protoc_insertion_point(field_get:im_user.ulogin.deviceInfo)
+  return deviceinfo_.GetNoArena();
+}
+inline void ulogin::set_deviceinfo(const ::std::string& value) {
+  set_has_deviceinfo();
+  deviceinfo_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:im_user.ulogin.deviceInfo)
 }
 #if LANG_CXX11
-inline void user_register_req::set_account(::std::string&& value) {
-  
-  account_.SetNoArena(
+inline void ulogin::set_deviceinfo(::std::string&& value) {
+  set_has_deviceinfo();
+  deviceinfo_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_register_req.account)
+  // @@protoc_insertion_point(field_set_rvalue:im_user.ulogin.deviceInfo)
 }
 #endif
-inline void user_register_req::set_account(const char* value) {
+inline void ulogin::set_deviceinfo(const char* value) {
   GOOGLE_DCHECK(value != NULL);
-  
-  account_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_register_req.account)
+  set_has_deviceinfo();
+  deviceinfo_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:im_user.ulogin.deviceInfo)
 }
-inline void user_register_req::set_account(const void* value, size_t size) {
-  
-  account_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+inline void ulogin::set_deviceinfo(const void* value, size_t size) {
+  set_has_deviceinfo();
+  deviceinfo_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_register_req.account)
+  // @@protoc_insertion_point(field_set_pointer:im_user.ulogin.deviceInfo)
 }
-inline ::std::string* user_register_req::mutable_account() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_register_req.account)
-  return account_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline ::std::string* ulogin::mutable_deviceinfo() {
+  set_has_deviceinfo();
+  // @@protoc_insertion_point(field_mutable:im_user.ulogin.deviceInfo)
+  return deviceinfo_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* user_register_req::release_account() {
-  // @@protoc_insertion_point(field_release:user.user_register_req.account)
-  
-  return account_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_register_req::set_allocated_account(::std::string* account) {
-  if (account != NULL) {
-    
-  } else {
-    
+inline ::std::string* ulogin::release_deviceinfo() {
+  // @@protoc_insertion_point(field_release:im_user.ulogin.deviceInfo)
+  if (!has_deviceinfo()) {
+    return NULL;
   }
-  account_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), account);
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_req.account)
+  clear_has_deviceinfo();
+  return deviceinfo_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void ulogin::set_allocated_deviceinfo(::std::string* deviceinfo) {
+  if (deviceinfo != NULL) {
+    set_has_deviceinfo();
+  } else {
+    clear_has_deviceinfo();
+  }
+  deviceinfo_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), deviceinfo);
+  // @@protoc_insertion_point(field_set_allocated:im_user.ulogin.deviceInfo)
 }
 
-// uint32 user_type = 3;
-inline void user_register_req::clear_user_type() {
-  user_type_ = 0u;
+// optional uint32 app_version = 5;
+inline bool ulogin::has_app_version() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
 }
-inline ::google::protobuf::uint32 user_register_req::user_type() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.user_type)
-  return user_type_;
+inline void ulogin::set_has_app_version() {
+  _has_bits_[0] |= 0x00000040u;
 }
-inline void user_register_req::set_user_type(::google::protobuf::uint32 value) {
-  
-  user_type_ = value;
-  // @@protoc_insertion_point(field_set:user.user_register_req.user_type)
+inline void ulogin::clear_has_app_version() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void ulogin::clear_app_version() {
+  app_version_ = 0u;
+  clear_has_app_version();
+}
+inline ::google::protobuf::uint32 ulogin::app_version() const {
+  // @@protoc_insertion_point(field_get:im_user.ulogin.app_version)
+  return app_version_;
+}
+inline void ulogin::set_app_version(::google::protobuf::uint32 value) {
+  set_has_app_version();
+  app_version_ = value;
+  // @@protoc_insertion_point(field_set:im_user.ulogin.app_version)
 }
 
-// bytes nickname = 4;
-inline void user_register_req::clear_nickname() {
-  nickname_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// optional bytes clientip = 6;
+inline bool ulogin::has_clientip() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline const ::std::string& user_register_req::nickname() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.nickname)
-  return nickname_.GetNoArena();
+inline void ulogin::set_has_clientip() {
+  _has_bits_[0] |= 0x00000004u;
 }
-inline void user_register_req::set_nickname(const ::std::string& value) {
-  
-  nickname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_register_req.nickname)
+inline void ulogin::clear_has_clientip() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ulogin::clear_clientip() {
+  clientip_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_clientip();
+}
+inline const ::std::string& ulogin::clientip() const {
+  // @@protoc_insertion_point(field_get:im_user.ulogin.clientip)
+  return clientip_.GetNoArena();
+}
+inline void ulogin::set_clientip(const ::std::string& value) {
+  set_has_clientip();
+  clientip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:im_user.ulogin.clientip)
 }
 #if LANG_CXX11
-inline void user_register_req::set_nickname(::std::string&& value) {
-  
-  nickname_.SetNoArena(
+inline void ulogin::set_clientip(::std::string&& value) {
+  set_has_clientip();
+  clientip_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_register_req.nickname)
+  // @@protoc_insertion_point(field_set_rvalue:im_user.ulogin.clientip)
 }
 #endif
-inline void user_register_req::set_nickname(const char* value) {
+inline void ulogin::set_clientip(const char* value) {
   GOOGLE_DCHECK(value != NULL);
-  
-  nickname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_register_req.nickname)
+  set_has_clientip();
+  clientip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:im_user.ulogin.clientip)
 }
-inline void user_register_req::set_nickname(const void* value, size_t size) {
-  
-  nickname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+inline void ulogin::set_clientip(const void* value, size_t size) {
+  set_has_clientip();
+  clientip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_register_req.nickname)
+  // @@protoc_insertion_point(field_set_pointer:im_user.ulogin.clientip)
 }
-inline ::std::string* user_register_req::mutable_nickname() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_register_req.nickname)
-  return nickname_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline ::std::string* ulogin::mutable_clientip() {
+  set_has_clientip();
+  // @@protoc_insertion_point(field_mutable:im_user.ulogin.clientip)
+  return clientip_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* user_register_req::release_nickname() {
-  // @@protoc_insertion_point(field_release:user.user_register_req.nickname)
-  
-  return nickname_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_register_req::set_allocated_nickname(::std::string* nickname) {
-  if (nickname != NULL) {
-    
-  } else {
-    
+inline ::std::string* ulogin::release_clientip() {
+  // @@protoc_insertion_point(field_release:im_user.ulogin.clientip)
+  if (!has_clientip()) {
+    return NULL;
   }
-  nickname_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), nickname);
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_req.nickname)
+  clear_has_clientip();
+  return clientip_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void ulogin::set_allocated_clientip(::std::string* clientip) {
+  if (clientip != NULL) {
+    set_has_clientip();
+  } else {
+    clear_has_clientip();
+  }
+  clientip_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), clientip);
+  // @@protoc_insertion_point(field_set_allocated:im_user.ulogin.clientip)
 }
 
-// bytes avatar = 5;
-inline void user_register_req::clear_avatar() {
-  avatar_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// optional bytes serv_nodeIdentify = 7;
+inline bool ulogin::has_serv_nodeidentify() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline const ::std::string& user_register_req::avatar() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.avatar)
-  return avatar_.GetNoArena();
+inline void ulogin::set_has_serv_nodeidentify() {
+  _has_bits_[0] |= 0x00000008u;
 }
-inline void user_register_req::set_avatar(const ::std::string& value) {
-  
-  avatar_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_register_req.avatar)
+inline void ulogin::clear_has_serv_nodeidentify() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void ulogin::clear_serv_nodeidentify() {
+  serv_nodeidentify_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_serv_nodeidentify();
+}
+inline const ::std::string& ulogin::serv_nodeidentify() const {
+  // @@protoc_insertion_point(field_get:im_user.ulogin.serv_nodeIdentify)
+  return serv_nodeidentify_.GetNoArena();
+}
+inline void ulogin::set_serv_nodeidentify(const ::std::string& value) {
+  set_has_serv_nodeidentify();
+  serv_nodeidentify_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:im_user.ulogin.serv_nodeIdentify)
 }
 #if LANG_CXX11
-inline void user_register_req::set_avatar(::std::string&& value) {
-  
-  avatar_.SetNoArena(
+inline void ulogin::set_serv_nodeidentify(::std::string&& value) {
+  set_has_serv_nodeidentify();
+  serv_nodeidentify_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_register_req.avatar)
+  // @@protoc_insertion_point(field_set_rvalue:im_user.ulogin.serv_nodeIdentify)
 }
 #endif
-inline void user_register_req::set_avatar(const char* value) {
+inline void ulogin::set_serv_nodeidentify(const char* value) {
   GOOGLE_DCHECK(value != NULL);
-  
-  avatar_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_register_req.avatar)
+  set_has_serv_nodeidentify();
+  serv_nodeidentify_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:im_user.ulogin.serv_nodeIdentify)
 }
-inline void user_register_req::set_avatar(const void* value, size_t size) {
-  
-  avatar_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+inline void ulogin::set_serv_nodeidentify(const void* value, size_t size) {
+  set_has_serv_nodeidentify();
+  serv_nodeidentify_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_register_req.avatar)
+  // @@protoc_insertion_point(field_set_pointer:im_user.ulogin.serv_nodeIdentify)
 }
-inline ::std::string* user_register_req::mutable_avatar() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_register_req.avatar)
-  return avatar_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline ::std::string* ulogin::mutable_serv_nodeidentify() {
+  set_has_serv_nodeidentify();
+  // @@protoc_insertion_point(field_mutable:im_user.ulogin.serv_nodeIdentify)
+  return serv_nodeidentify_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* user_register_req::release_avatar() {
-  // @@protoc_insertion_point(field_release:user.user_register_req.avatar)
-  
-  return avatar_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_register_req::set_allocated_avatar(::std::string* avatar) {
-  if (avatar != NULL) {
-    
-  } else {
-    
+inline ::std::string* ulogin::release_serv_nodeidentify() {
+  // @@protoc_insertion_point(field_release:im_user.ulogin.serv_nodeIdentify)
+  if (!has_serv_nodeidentify()) {
+    return NULL;
   }
-  avatar_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), avatar);
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_req.avatar)
+  clear_has_serv_nodeidentify();
+  return serv_nodeidentify_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-
-// string mobile = 6;
-inline void user_register_req::clear_mobile() {
-  mobile_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_register_req::mobile() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.mobile)
-  return mobile_.GetNoArena();
-}
-inline void user_register_req::set_mobile(const ::std::string& value) {
-  
-  mobile_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_register_req.mobile)
-}
-#if LANG_CXX11
-inline void user_register_req::set_mobile(::std::string&& value) {
-  
-  mobile_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_register_req.mobile)
-}
-#endif
-inline void user_register_req::set_mobile(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  mobile_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_register_req.mobile)
-}
-inline void user_register_req::set_mobile(const char* value, size_t size) {
-  
-  mobile_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_register_req.mobile)
-}
-inline ::std::string* user_register_req::mutable_mobile() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_register_req.mobile)
-  return mobile_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_register_req::release_mobile() {
-  // @@protoc_insertion_point(field_release:user.user_register_req.mobile)
-  
-  return mobile_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_register_req::set_allocated_mobile(::std::string* mobile) {
-  if (mobile != NULL) {
-    
+inline void ulogin::set_allocated_serv_nodeidentify(::std::string* serv_nodeidentify) {
+  if (serv_nodeidentify != NULL) {
+    set_has_serv_nodeidentify();
   } else {
-    
+    clear_has_serv_nodeidentify();
   }
-  mobile_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mobile);
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_req.mobile)
+  serv_nodeidentify_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), serv_nodeidentify);
+  // @@protoc_insertion_point(field_set_allocated:im_user.ulogin.serv_nodeIdentify)
 }
 
-// string mail = 7;
-inline void user_register_req::clear_mail() {
-  mail_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_register_req::mail() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.mail)
-  return mail_.GetNoArena();
-}
-inline void user_register_req::set_mail(const ::std::string& value) {
-  
-  mail_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_register_req.mail)
-}
-#if LANG_CXX11
-inline void user_register_req::set_mail(::std::string&& value) {
-  
-  mail_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_register_req.mail)
-}
-#endif
-inline void user_register_req::set_mail(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  mail_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_register_req.mail)
-}
-inline void user_register_req::set_mail(const char* value, size_t size) {
-  
-  mail_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_register_req.mail)
-}
-inline ::std::string* user_register_req::mutable_mail() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_register_req.mail)
-  return mail_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_register_req::release_mail() {
-  // @@protoc_insertion_point(field_release:user.user_register_req.mail)
-  
-  return mail_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_register_req::set_allocated_mail(::std::string* mail) {
-  if (mail != NULL) {
-    
-  } else {
-    
-  }
-  mail_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mail);
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_req.mail)
-}
-
-// bytes introduction = 8;
-inline void user_register_req::clear_introduction() {
-  introduction_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_register_req::introduction() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.introduction)
-  return introduction_.GetNoArena();
-}
-inline void user_register_req::set_introduction(const ::std::string& value) {
-  
-  introduction_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_register_req.introduction)
-}
-#if LANG_CXX11
-inline void user_register_req::set_introduction(::std::string&& value) {
-  
-  introduction_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_register_req.introduction)
-}
-#endif
-inline void user_register_req::set_introduction(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  introduction_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_register_req.introduction)
-}
-inline void user_register_req::set_introduction(const void* value, size_t size) {
-  
-  introduction_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_register_req.introduction)
-}
-inline ::std::string* user_register_req::mutable_introduction() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_register_req.introduction)
-  return introduction_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_register_req::release_introduction() {
-  // @@protoc_insertion_point(field_release:user.user_register_req.introduction)
-  
-  return introduction_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_register_req::set_allocated_introduction(::std::string* introduction) {
-  if (introduction != NULL) {
-    
-  } else {
-    
-  }
-  introduction_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), introduction);
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_req.introduction)
-}
-
-// uint32 gender = 9;
-inline void user_register_req::clear_gender() {
-  gender_ = 0u;
-}
-inline ::google::protobuf::uint32 user_register_req::gender() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.gender)
-  return gender_;
-}
-inline void user_register_req::set_gender(::google::protobuf::uint32 value) {
-  
-  gender_ = value;
-  // @@protoc_insertion_point(field_set:user.user_register_req.gender)
-}
-
-// uint64 identity = 10;
-inline void user_register_req::clear_identity() {
-  identity_ = GOOGLE_ULONGLONG(0);
-}
-inline ::google::protobuf::uint64 user_register_req::identity() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.identity)
-  return identity_;
-}
-inline void user_register_req::set_identity(::google::protobuf::uint64 value) {
-  
-  identity_ = value;
-  // @@protoc_insertion_point(field_set:user.user_register_req.identity)
-}
-
-// bytes company = 11;
-inline void user_register_req::clear_company() {
-  company_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_register_req::company() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.company)
-  return company_.GetNoArena();
-}
-inline void user_register_req::set_company(const ::std::string& value) {
-  
-  company_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_register_req.company)
-}
-#if LANG_CXX11
-inline void user_register_req::set_company(::std::string&& value) {
-  
-  company_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_register_req.company)
-}
-#endif
-inline void user_register_req::set_company(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  company_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_register_req.company)
-}
-inline void user_register_req::set_company(const void* value, size_t size) {
-  
-  company_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_register_req.company)
-}
-inline ::std::string* user_register_req::mutable_company() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_register_req.company)
-  return company_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_register_req::release_company() {
-  // @@protoc_insertion_point(field_release:user.user_register_req.company)
-  
-  return company_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_register_req::set_allocated_company(::std::string* company) {
-  if (company != NULL) {
-    
-  } else {
-    
-  }
-  company_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), company);
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_req.company)
-}
-
-// bytes occupation = 12;
-inline void user_register_req::clear_occupation() {
-  occupation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_register_req::occupation() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.occupation)
-  return occupation_.GetNoArena();
-}
-inline void user_register_req::set_occupation(const ::std::string& value) {
-  
-  occupation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_register_req.occupation)
-}
-#if LANG_CXX11
-inline void user_register_req::set_occupation(::std::string&& value) {
-  
-  occupation_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_register_req.occupation)
-}
-#endif
-inline void user_register_req::set_occupation(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  occupation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_register_req.occupation)
-}
-inline void user_register_req::set_occupation(const void* value, size_t size) {
-  
-  occupation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_register_req.occupation)
-}
-inline ::std::string* user_register_req::mutable_occupation() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_register_req.occupation)
-  return occupation_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_register_req::release_occupation() {
-  // @@protoc_insertion_point(field_release:user.user_register_req.occupation)
-  
-  return occupation_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_register_req::set_allocated_occupation(::std::string* occupation) {
-  if (occupation != NULL) {
-    
-  } else {
-    
-  }
-  occupation_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), occupation);
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_req.occupation)
-}
-
-// bytes industry = 13;
-inline void user_register_req::clear_industry() {
-  industry_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_register_req::industry() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.industry)
-  return industry_.GetNoArena();
-}
-inline void user_register_req::set_industry(const ::std::string& value) {
-  
-  industry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_register_req.industry)
-}
-#if LANG_CXX11
-inline void user_register_req::set_industry(::std::string&& value) {
-  
-  industry_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_register_req.industry)
-}
-#endif
-inline void user_register_req::set_industry(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  industry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_register_req.industry)
-}
-inline void user_register_req::set_industry(const void* value, size_t size) {
-  
-  industry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_register_req.industry)
-}
-inline ::std::string* user_register_req::mutable_industry() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_register_req.industry)
-  return industry_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_register_req::release_industry() {
-  // @@protoc_insertion_point(field_release:user.user_register_req.industry)
-  
-  return industry_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_register_req::set_allocated_industry(::std::string* industry) {
-  if (industry != NULL) {
-    
-  } else {
-    
-  }
-  industry_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), industry);
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_req.industry)
-}
-
-// bytes area = 14;
-inline void user_register_req::clear_area() {
-  area_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_register_req::area() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.area)
-  return area_.GetNoArena();
-}
-inline void user_register_req::set_area(const ::std::string& value) {
-  
-  area_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_register_req.area)
-}
-#if LANG_CXX11
-inline void user_register_req::set_area(::std::string&& value) {
-  
-  area_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_register_req.area)
-}
-#endif
-inline void user_register_req::set_area(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  area_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_register_req.area)
-}
-inline void user_register_req::set_area(const void* value, size_t size) {
-  
-  area_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_register_req.area)
-}
-inline ::std::string* user_register_req::mutable_area() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_register_req.area)
-  return area_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_register_req::release_area() {
-  // @@protoc_insertion_point(field_release:user.user_register_req.area)
-  
-  return area_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_register_req::set_allocated_area(::std::string* area) {
-  if (area != NULL) {
-    
-  } else {
-    
-  }
-  area_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), area);
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_req.area)
-}
-
-// bytes password = 15;
-inline void user_register_req::clear_password() {
-  password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_register_req::password() const {
-  // @@protoc_insertion_point(field_get:user.user_register_req.password)
-  return password_.GetNoArena();
-}
-inline void user_register_req::set_password(const ::std::string& value) {
-  
-  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_register_req.password)
-}
-#if LANG_CXX11
-inline void user_register_req::set_password(::std::string&& value) {
-  
-  password_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_register_req.password)
-}
-#endif
-inline void user_register_req::set_password(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_register_req.password)
-}
-inline void user_register_req::set_password(const void* value, size_t size) {
-  
-  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_register_req.password)
-}
-inline ::std::string* user_register_req::mutable_password() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_register_req.password)
-  return password_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_register_req::release_password() {
-  // @@protoc_insertion_point(field_release:user.user_register_req.password)
-  
-  return password_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_register_req::set_allocated_password(::std::string* password) {
-  if (password != NULL) {
-    
-  } else {
-    
-  }
-  password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), password);
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_req.password)
+// optional uint32 push_chat_msg = 8;
+inline bool ulogin::has_push_chat_msg() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void ulogin::set_has_push_chat_msg() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void ulogin::clear_has_push_chat_msg() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void ulogin::clear_push_chat_msg() {
+  push_chat_msg_ = 0u;
+  clear_has_push_chat_msg();
+}
+inline ::google::protobuf::uint32 ulogin::push_chat_msg() const {
+  // @@protoc_insertion_point(field_get:im_user.ulogin.push_chat_msg)
+  return push_chat_msg_;
+}
+inline void ulogin::set_push_chat_msg(::google::protobuf::uint32 value) {
+  set_has_push_chat_msg();
+  push_chat_msg_ = value;
+  // @@protoc_insertion_point(field_set:im_user.ulogin.push_chat_msg)
 }
 
 // -------------------------------------------------------------------
 
-// user_register_ack
+// ulogin_ack
 
-// .common.errorinfo error = 1;
-inline bool user_register_ack::has_error() const {
-  return this != internal_default_instance() && error_ != NULL;
+// optional .common.errorinfo error = 1;
+inline bool ulogin_ack::has_error() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline const ::common::errorinfo& user_register_ack::_internal_error() const {
+inline void ulogin_ack::set_has_error() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ulogin_ack::clear_has_error() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const ::common::errorinfo& ulogin_ack::_internal_error() const {
   return *error_;
 }
-inline const ::common::errorinfo& user_register_ack::error() const {
+inline const ::common::errorinfo& ulogin_ack::error() const {
   const ::common::errorinfo* p = error_;
-  // @@protoc_insertion_point(field_get:user.user_register_ack.error)
+  // @@protoc_insertion_point(field_get:im_user.ulogin_ack.error)
   return p != NULL ? *p : *reinterpret_cast<const ::common::errorinfo*>(
       &::common::_errorinfo_default_instance_);
 }
-inline ::common::errorinfo* user_register_ack::release_error() {
-  // @@protoc_insertion_point(field_release:user.user_register_ack.error)
-  
+inline ::common::errorinfo* ulogin_ack::release_error() {
+  // @@protoc_insertion_point(field_release:im_user.ulogin_ack.error)
+  clear_has_error();
   ::common::errorinfo* temp = error_;
   error_ = NULL;
   return temp;
 }
-inline ::common::errorinfo* user_register_ack::mutable_error() {
-  
+inline ::common::errorinfo* ulogin_ack::mutable_error() {
+  set_has_error();
   if (error_ == NULL) {
     auto* p = CreateMaybeMessage<::common::errorinfo>(GetArenaNoVirtual());
     error_ = p;
   }
-  // @@protoc_insertion_point(field_mutable:user.user_register_ack.error)
+  // @@protoc_insertion_point(field_mutable:im_user.ulogin_ack.error)
   return error_;
 }
-inline void user_register_ack::set_allocated_error(::common::errorinfo* error) {
+inline void ulogin_ack::set_allocated_error(::common::errorinfo* error) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete reinterpret_cast< ::google::protobuf::MessageLite*>(error_);
@@ -2624,878 +1454,172 @@ inline void user_register_ack::set_allocated_error(::common::errorinfo* error) {
       error = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, error, submessage_arena);
     }
-    
+    set_has_error();
   } else {
-    
+    clear_has_error();
   }
   error_ = error;
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_ack.error)
+  // @@protoc_insertion_point(field_set_allocated:im_user.ulogin_ack.error)
 }
 
-// bytes account = 2;
-inline void user_register_ack::clear_account() {
-  account_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// optional uint32 beat_time = 2;
+inline bool ulogin_ack::has_beat_time() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline const ::std::string& user_register_ack::account() const {
-  // @@protoc_insertion_point(field_get:user.user_register_ack.account)
-  return account_.GetNoArena();
+inline void ulogin_ack::set_has_beat_time() {
+  _has_bits_[0] |= 0x00000002u;
 }
-inline void user_register_ack::set_account(const ::std::string& value) {
-  
-  account_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_register_ack.account)
+inline void ulogin_ack::clear_has_beat_time() {
+  _has_bits_[0] &= ~0x00000002u;
 }
-#if LANG_CXX11
-inline void user_register_ack::set_account(::std::string&& value) {
-  
-  account_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_register_ack.account)
+inline void ulogin_ack::clear_beat_time() {
+  beat_time_ = 0u;
+  clear_has_beat_time();
 }
-#endif
-inline void user_register_ack::set_account(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  account_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_register_ack.account)
+inline ::google::protobuf::uint32 ulogin_ack::beat_time() const {
+  // @@protoc_insertion_point(field_get:im_user.ulogin_ack.beat_time)
+  return beat_time_;
 }
-inline void user_register_ack::set_account(const void* value, size_t size) {
-  
-  account_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_register_ack.account)
-}
-inline ::std::string* user_register_ack::mutable_account() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_register_ack.account)
-  return account_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_register_ack::release_account() {
-  // @@protoc_insertion_point(field_release:user.user_register_ack.account)
-  
-  return account_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_register_ack::set_allocated_account(::std::string* account) {
-  if (account != NULL) {
-    
-  } else {
-    
-  }
-  account_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), account);
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_ack.account)
+inline void ulogin_ack::set_beat_time(::google::protobuf::uint32 value) {
+  set_has_beat_time();
+  beat_time_ = value;
+  // @@protoc_insertion_point(field_set:im_user.ulogin_ack.beat_time)
 }
 
-// uint32 userid = 3;
-inline void user_register_ack::clear_userid() {
-  userid_ = 0u;
+// optional uint32 login_prompt = 3;
+inline bool ulogin_ack::has_login_prompt() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline ::google::protobuf::uint32 user_register_ack::userid() const {
-  // @@protoc_insertion_point(field_get:user.user_register_ack.userid)
-  return userid_;
+inline void ulogin_ack::set_has_login_prompt() {
+  _has_bits_[0] |= 0x00000004u;
 }
-inline void user_register_ack::set_userid(::google::protobuf::uint32 value) {
-  
-  userid_ = value;
-  // @@protoc_insertion_point(field_set:user.user_register_ack.userid)
+inline void ulogin_ack::clear_has_login_prompt() {
+  _has_bits_[0] &= ~0x00000004u;
 }
-
-// bytes password = 4;
-inline void user_register_ack::clear_password() {
-  password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline void ulogin_ack::clear_login_prompt() {
+  login_prompt_ = 0u;
+  clear_has_login_prompt();
 }
-inline const ::std::string& user_register_ack::password() const {
-  // @@protoc_insertion_point(field_get:user.user_register_ack.password)
-  return password_.GetNoArena();
+inline ::google::protobuf::uint32 ulogin_ack::login_prompt() const {
+  // @@protoc_insertion_point(field_get:im_user.ulogin_ack.login_prompt)
+  return login_prompt_;
 }
-inline void user_register_ack::set_password(const ::std::string& value) {
-  
-  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_register_ack.password)
-}
-#if LANG_CXX11
-inline void user_register_ack::set_password(::std::string&& value) {
-  
-  password_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_register_ack.password)
-}
-#endif
-inline void user_register_ack::set_password(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_register_ack.password)
-}
-inline void user_register_ack::set_password(const void* value, size_t size) {
-  
-  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_register_ack.password)
-}
-inline ::std::string* user_register_ack::mutable_password() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_register_ack.password)
-  return password_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_register_ack::release_password() {
-  // @@protoc_insertion_point(field_release:user.user_register_ack.password)
-  
-  return password_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_register_ack::set_allocated_password(::std::string* password) {
-  if (password != NULL) {
-    
-  } else {
-    
-  }
-  password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), password);
-  // @@protoc_insertion_point(field_set_allocated:user.user_register_ack.password)
+inline void ulogin_ack::set_login_prompt(::google::protobuf::uint32 value) {
+  set_has_login_prompt();
+  login_prompt_ = value;
+  // @@protoc_insertion_point(field_set:im_user.ulogin_ack.login_prompt)
 }
 
 // -------------------------------------------------------------------
 
-// user_update_req
+// ulogin_comfirm
 
-// uint32 userid = 1;
-inline void user_update_req::clear_userid() {
-  userid_ = 0u;
+// optional bytes deviceInfo = 1;
+inline bool ulogin_comfirm::has_deviceinfo() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline ::google::protobuf::uint32 user_update_req::userid() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.userid)
-  return userid_;
+inline void ulogin_comfirm::set_has_deviceinfo() {
+  _has_bits_[0] |= 0x00000001u;
 }
-inline void user_update_req::set_userid(::google::protobuf::uint32 value) {
-  
-  userid_ = value;
-  // @@protoc_insertion_point(field_set:user.user_update_req.userid)
+inline void ulogin_comfirm::clear_has_deviceinfo() {
+  _has_bits_[0] &= ~0x00000001u;
 }
-
-// bytes nickname = 2;
-inline void user_update_req::clear_nickname() {
-  nickname_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline void ulogin_comfirm::clear_deviceinfo() {
+  deviceinfo_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_deviceinfo();
 }
-inline const ::std::string& user_update_req::nickname() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.nickname)
-  return nickname_.GetNoArena();
+inline const ::std::string& ulogin_comfirm::deviceinfo() const {
+  // @@protoc_insertion_point(field_get:im_user.ulogin_comfirm.deviceInfo)
+  return deviceinfo_.GetNoArena();
 }
-inline void user_update_req::set_nickname(const ::std::string& value) {
-  
-  nickname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_update_req.nickname)
+inline void ulogin_comfirm::set_deviceinfo(const ::std::string& value) {
+  set_has_deviceinfo();
+  deviceinfo_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:im_user.ulogin_comfirm.deviceInfo)
 }
 #if LANG_CXX11
-inline void user_update_req::set_nickname(::std::string&& value) {
-  
-  nickname_.SetNoArena(
+inline void ulogin_comfirm::set_deviceinfo(::std::string&& value) {
+  set_has_deviceinfo();
+  deviceinfo_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_update_req.nickname)
+  // @@protoc_insertion_point(field_set_rvalue:im_user.ulogin_comfirm.deviceInfo)
 }
 #endif
-inline void user_update_req::set_nickname(const char* value) {
+inline void ulogin_comfirm::set_deviceinfo(const char* value) {
   GOOGLE_DCHECK(value != NULL);
-  
-  nickname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_update_req.nickname)
+  set_has_deviceinfo();
+  deviceinfo_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:im_user.ulogin_comfirm.deviceInfo)
 }
-inline void user_update_req::set_nickname(const void* value, size_t size) {
-  
-  nickname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+inline void ulogin_comfirm::set_deviceinfo(const void* value, size_t size) {
+  set_has_deviceinfo();
+  deviceinfo_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_update_req.nickname)
+  // @@protoc_insertion_point(field_set_pointer:im_user.ulogin_comfirm.deviceInfo)
 }
-inline ::std::string* user_update_req::mutable_nickname() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_update_req.nickname)
-  return nickname_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline ::std::string* ulogin_comfirm::mutable_deviceinfo() {
+  set_has_deviceinfo();
+  // @@protoc_insertion_point(field_mutable:im_user.ulogin_comfirm.deviceInfo)
+  return deviceinfo_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* user_update_req::release_nickname() {
-  // @@protoc_insertion_point(field_release:user.user_update_req.nickname)
-  
-  return nickname_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_update_req::set_allocated_nickname(::std::string* nickname) {
-  if (nickname != NULL) {
-    
-  } else {
-    
+inline ::std::string* ulogin_comfirm::release_deviceinfo() {
+  // @@protoc_insertion_point(field_release:im_user.ulogin_comfirm.deviceInfo)
+  if (!has_deviceinfo()) {
+    return NULL;
   }
-  nickname_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), nickname);
-  // @@protoc_insertion_point(field_set_allocated:user.user_update_req.nickname)
+  clear_has_deviceinfo();
+  return deviceinfo_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-
-// bytes realname = 3;
-inline void user_update_req::clear_realname() {
-  realname_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_update_req::realname() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.realname)
-  return realname_.GetNoArena();
-}
-inline void user_update_req::set_realname(const ::std::string& value) {
-  
-  realname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_update_req.realname)
-}
-#if LANG_CXX11
-inline void user_update_req::set_realname(::std::string&& value) {
-  
-  realname_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_update_req.realname)
-}
-#endif
-inline void user_update_req::set_realname(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  realname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_update_req.realname)
-}
-inline void user_update_req::set_realname(const void* value, size_t size) {
-  
-  realname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_update_req.realname)
-}
-inline ::std::string* user_update_req::mutable_realname() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_update_req.realname)
-  return realname_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_update_req::release_realname() {
-  // @@protoc_insertion_point(field_release:user.user_update_req.realname)
-  
-  return realname_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_update_req::set_allocated_realname(::std::string* realname) {
-  if (realname != NULL) {
-    
+inline void ulogin_comfirm::set_allocated_deviceinfo(::std::string* deviceinfo) {
+  if (deviceinfo != NULL) {
+    set_has_deviceinfo();
   } else {
-    
+    clear_has_deviceinfo();
   }
-  realname_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), realname);
-  // @@protoc_insertion_point(field_set_allocated:user.user_update_req.realname)
-}
-
-// bytes avatar = 4;
-inline void user_update_req::clear_avatar() {
-  avatar_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_update_req::avatar() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.avatar)
-  return avatar_.GetNoArena();
-}
-inline void user_update_req::set_avatar(const ::std::string& value) {
-  
-  avatar_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_update_req.avatar)
-}
-#if LANG_CXX11
-inline void user_update_req::set_avatar(::std::string&& value) {
-  
-  avatar_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_update_req.avatar)
-}
-#endif
-inline void user_update_req::set_avatar(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  avatar_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_update_req.avatar)
-}
-inline void user_update_req::set_avatar(const void* value, size_t size) {
-  
-  avatar_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_update_req.avatar)
-}
-inline ::std::string* user_update_req::mutable_avatar() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_update_req.avatar)
-  return avatar_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_update_req::release_avatar() {
-  // @@protoc_insertion_point(field_release:user.user_update_req.avatar)
-  
-  return avatar_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_update_req::set_allocated_avatar(::std::string* avatar) {
-  if (avatar != NULL) {
-    
-  } else {
-    
-  }
-  avatar_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), avatar);
-  // @@protoc_insertion_point(field_set_allocated:user.user_update_req.avatar)
-}
-
-// string mobile = 5;
-inline void user_update_req::clear_mobile() {
-  mobile_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_update_req::mobile() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.mobile)
-  return mobile_.GetNoArena();
-}
-inline void user_update_req::set_mobile(const ::std::string& value) {
-  
-  mobile_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_update_req.mobile)
-}
-#if LANG_CXX11
-inline void user_update_req::set_mobile(::std::string&& value) {
-  
-  mobile_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_update_req.mobile)
-}
-#endif
-inline void user_update_req::set_mobile(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  mobile_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_update_req.mobile)
-}
-inline void user_update_req::set_mobile(const char* value, size_t size) {
-  
-  mobile_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_update_req.mobile)
-}
-inline ::std::string* user_update_req::mutable_mobile() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_update_req.mobile)
-  return mobile_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_update_req::release_mobile() {
-  // @@protoc_insertion_point(field_release:user.user_update_req.mobile)
-  
-  return mobile_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_update_req::set_allocated_mobile(::std::string* mobile) {
-  if (mobile != NULL) {
-    
-  } else {
-    
-  }
-  mobile_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mobile);
-  // @@protoc_insertion_point(field_set_allocated:user.user_update_req.mobile)
-}
-
-// string mail = 6;
-inline void user_update_req::clear_mail() {
-  mail_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_update_req::mail() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.mail)
-  return mail_.GetNoArena();
-}
-inline void user_update_req::set_mail(const ::std::string& value) {
-  
-  mail_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_update_req.mail)
-}
-#if LANG_CXX11
-inline void user_update_req::set_mail(::std::string&& value) {
-  
-  mail_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_update_req.mail)
-}
-#endif
-inline void user_update_req::set_mail(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  mail_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_update_req.mail)
-}
-inline void user_update_req::set_mail(const char* value, size_t size) {
-  
-  mail_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_update_req.mail)
-}
-inline ::std::string* user_update_req::mutable_mail() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_update_req.mail)
-  return mail_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_update_req::release_mail() {
-  // @@protoc_insertion_point(field_release:user.user_update_req.mail)
-  
-  return mail_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_update_req::set_allocated_mail(::std::string* mail) {
-  if (mail != NULL) {
-    
-  } else {
-    
-  }
-  mail_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mail);
-  // @@protoc_insertion_point(field_set_allocated:user.user_update_req.mail)
-}
-
-// bytes introduction = 7;
-inline void user_update_req::clear_introduction() {
-  introduction_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_update_req::introduction() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.introduction)
-  return introduction_.GetNoArena();
-}
-inline void user_update_req::set_introduction(const ::std::string& value) {
-  
-  introduction_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_update_req.introduction)
-}
-#if LANG_CXX11
-inline void user_update_req::set_introduction(::std::string&& value) {
-  
-  introduction_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_update_req.introduction)
-}
-#endif
-inline void user_update_req::set_introduction(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  introduction_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_update_req.introduction)
-}
-inline void user_update_req::set_introduction(const void* value, size_t size) {
-  
-  introduction_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_update_req.introduction)
-}
-inline ::std::string* user_update_req::mutable_introduction() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_update_req.introduction)
-  return introduction_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_update_req::release_introduction() {
-  // @@protoc_insertion_point(field_release:user.user_update_req.introduction)
-  
-  return introduction_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_update_req::set_allocated_introduction(::std::string* introduction) {
-  if (introduction != NULL) {
-    
-  } else {
-    
-  }
-  introduction_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), introduction);
-  // @@protoc_insertion_point(field_set_allocated:user.user_update_req.introduction)
-}
-
-// uint32 gender = 8;
-inline void user_update_req::clear_gender() {
-  gender_ = 0u;
-}
-inline ::google::protobuf::uint32 user_update_req::gender() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.gender)
-  return gender_;
-}
-inline void user_update_req::set_gender(::google::protobuf::uint32 value) {
-  
-  gender_ = value;
-  // @@protoc_insertion_point(field_set:user.user_update_req.gender)
-}
-
-// uint64 add_identity = 9;
-inline void user_update_req::clear_add_identity() {
-  add_identity_ = GOOGLE_ULONGLONG(0);
-}
-inline ::google::protobuf::uint64 user_update_req::add_identity() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.add_identity)
-  return add_identity_;
-}
-inline void user_update_req::set_add_identity(::google::protobuf::uint64 value) {
-  
-  add_identity_ = value;
-  // @@protoc_insertion_point(field_set:user.user_update_req.add_identity)
-}
-
-// uint64 del_identity = 10;
-inline void user_update_req::clear_del_identity() {
-  del_identity_ = GOOGLE_ULONGLONG(0);
-}
-inline ::google::protobuf::uint64 user_update_req::del_identity() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.del_identity)
-  return del_identity_;
-}
-inline void user_update_req::set_del_identity(::google::protobuf::uint64 value) {
-  
-  del_identity_ = value;
-  // @@protoc_insertion_point(field_set:user.user_update_req.del_identity)
-}
-
-// bytes company = 11;
-inline void user_update_req::clear_company() {
-  company_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_update_req::company() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.company)
-  return company_.GetNoArena();
-}
-inline void user_update_req::set_company(const ::std::string& value) {
-  
-  company_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_update_req.company)
-}
-#if LANG_CXX11
-inline void user_update_req::set_company(::std::string&& value) {
-  
-  company_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_update_req.company)
-}
-#endif
-inline void user_update_req::set_company(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  company_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_update_req.company)
-}
-inline void user_update_req::set_company(const void* value, size_t size) {
-  
-  company_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_update_req.company)
-}
-inline ::std::string* user_update_req::mutable_company() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_update_req.company)
-  return company_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_update_req::release_company() {
-  // @@protoc_insertion_point(field_release:user.user_update_req.company)
-  
-  return company_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_update_req::set_allocated_company(::std::string* company) {
-  if (company != NULL) {
-    
-  } else {
-    
-  }
-  company_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), company);
-  // @@protoc_insertion_point(field_set_allocated:user.user_update_req.company)
-}
-
-// bytes occupation = 12;
-inline void user_update_req::clear_occupation() {
-  occupation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_update_req::occupation() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.occupation)
-  return occupation_.GetNoArena();
-}
-inline void user_update_req::set_occupation(const ::std::string& value) {
-  
-  occupation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_update_req.occupation)
-}
-#if LANG_CXX11
-inline void user_update_req::set_occupation(::std::string&& value) {
-  
-  occupation_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_update_req.occupation)
-}
-#endif
-inline void user_update_req::set_occupation(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  occupation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_update_req.occupation)
-}
-inline void user_update_req::set_occupation(const void* value, size_t size) {
-  
-  occupation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_update_req.occupation)
-}
-inline ::std::string* user_update_req::mutable_occupation() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_update_req.occupation)
-  return occupation_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_update_req::release_occupation() {
-  // @@protoc_insertion_point(field_release:user.user_update_req.occupation)
-  
-  return occupation_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_update_req::set_allocated_occupation(::std::string* occupation) {
-  if (occupation != NULL) {
-    
-  } else {
-    
-  }
-  occupation_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), occupation);
-  // @@protoc_insertion_point(field_set_allocated:user.user_update_req.occupation)
-}
-
-// bytes industry = 13;
-inline void user_update_req::clear_industry() {
-  industry_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_update_req::industry() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.industry)
-  return industry_.GetNoArena();
-}
-inline void user_update_req::set_industry(const ::std::string& value) {
-  
-  industry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_update_req.industry)
-}
-#if LANG_CXX11
-inline void user_update_req::set_industry(::std::string&& value) {
-  
-  industry_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_update_req.industry)
-}
-#endif
-inline void user_update_req::set_industry(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  industry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_update_req.industry)
-}
-inline void user_update_req::set_industry(const void* value, size_t size) {
-  
-  industry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_update_req.industry)
-}
-inline ::std::string* user_update_req::mutable_industry() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_update_req.industry)
-  return industry_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_update_req::release_industry() {
-  // @@protoc_insertion_point(field_release:user.user_update_req.industry)
-  
-  return industry_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_update_req::set_allocated_industry(::std::string* industry) {
-  if (industry != NULL) {
-    
-  } else {
-    
-  }
-  industry_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), industry);
-  // @@protoc_insertion_point(field_set_allocated:user.user_update_req.industry)
-}
-
-// bytes location = 14;
-inline void user_update_req::clear_location() {
-  location_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_update_req::location() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.location)
-  return location_.GetNoArena();
-}
-inline void user_update_req::set_location(const ::std::string& value) {
-  
-  location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_update_req.location)
-}
-#if LANG_CXX11
-inline void user_update_req::set_location(::std::string&& value) {
-  
-  location_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_update_req.location)
-}
-#endif
-inline void user_update_req::set_location(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_update_req.location)
-}
-inline void user_update_req::set_location(const void* value, size_t size) {
-  
-  location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_update_req.location)
-}
-inline ::std::string* user_update_req::mutable_location() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_update_req.location)
-  return location_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_update_req::release_location() {
-  // @@protoc_insertion_point(field_release:user.user_update_req.location)
-  
-  return location_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_update_req::set_allocated_location(::std::string* location) {
-  if (location != NULL) {
-    
-  } else {
-    
-  }
-  location_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), location);
-  // @@protoc_insertion_point(field_set_allocated:user.user_update_req.location)
-}
-
-// bytes last_device_info = 15;
-inline void user_update_req::clear_last_device_info() {
-  last_device_info_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_update_req::last_device_info() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.last_device_info)
-  return last_device_info_.GetNoArena();
-}
-inline void user_update_req::set_last_device_info(const ::std::string& value) {
-  
-  last_device_info_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_update_req.last_device_info)
-}
-#if LANG_CXX11
-inline void user_update_req::set_last_device_info(::std::string&& value) {
-  
-  last_device_info_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_update_req.last_device_info)
-}
-#endif
-inline void user_update_req::set_last_device_info(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  last_device_info_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_update_req.last_device_info)
-}
-inline void user_update_req::set_last_device_info(const void* value, size_t size) {
-  
-  last_device_info_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_update_req.last_device_info)
-}
-inline ::std::string* user_update_req::mutable_last_device_info() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_update_req.last_device_info)
-  return last_device_info_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_update_req::release_last_device_info() {
-  // @@protoc_insertion_point(field_release:user.user_update_req.last_device_info)
-  
-  return last_device_info_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_update_req::set_allocated_last_device_info(::std::string* last_device_info) {
-  if (last_device_info != NULL) {
-    
-  } else {
-    
-  }
-  last_device_info_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), last_device_info);
-  // @@protoc_insertion_point(field_set_allocated:user.user_update_req.last_device_info)
-}
-
-// bytes last_page_source = 16;
-inline void user_update_req::clear_last_page_source() {
-  last_page_source_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_update_req::last_page_source() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.last_page_source)
-  return last_page_source_.GetNoArena();
-}
-inline void user_update_req::set_last_page_source(const ::std::string& value) {
-  
-  last_page_source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_update_req.last_page_source)
-}
-#if LANG_CXX11
-inline void user_update_req::set_last_page_source(::std::string&& value) {
-  
-  last_page_source_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_update_req.last_page_source)
-}
-#endif
-inline void user_update_req::set_last_page_source(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  last_page_source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_update_req.last_page_source)
-}
-inline void user_update_req::set_last_page_source(const void* value, size_t size) {
-  
-  last_page_source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_update_req.last_page_source)
-}
-inline ::std::string* user_update_req::mutable_last_page_source() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_update_req.last_page_source)
-  return last_page_source_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_update_req::release_last_page_source() {
-  // @@protoc_insertion_point(field_release:user.user_update_req.last_page_source)
-  
-  return last_page_source_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_update_req::set_allocated_last_page_source(::std::string* last_page_source) {
-  if (last_page_source != NULL) {
-    
-  } else {
-    
-  }
-  last_page_source_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), last_page_source);
-  // @@protoc_insertion_point(field_set_allocated:user.user_update_req.last_page_source)
-}
-
-// uint32 client_page = 17;
-inline void user_update_req::clear_client_page() {
-  client_page_ = 0u;
-}
-inline ::google::protobuf::uint32 user_update_req::client_page() const {
-  // @@protoc_insertion_point(field_get:user.user_update_req.client_page)
-  return client_page_;
-}
-inline void user_update_req::set_client_page(::google::protobuf::uint32 value) {
-  
-  client_page_ = value;
-  // @@protoc_insertion_point(field_set:user.user_update_req.client_page)
+  deviceinfo_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), deviceinfo);
+  // @@protoc_insertion_point(field_set_allocated:im_user.ulogin_comfirm.deviceInfo)
 }
 
 // -------------------------------------------------------------------
 
-// user_update_ack
+// ulogin_comfirm_ack
 
-// .common.errorinfo error = 1;
-inline bool user_update_ack::has_error() const {
-  return this != internal_default_instance() && error_ != NULL;
+// optional .common.errorinfo error = 1;
+inline bool ulogin_comfirm_ack::has_error() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline const ::common::errorinfo& user_update_ack::_internal_error() const {
+inline void ulogin_comfirm_ack::set_has_error() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ulogin_comfirm_ack::clear_has_error() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const ::common::errorinfo& ulogin_comfirm_ack::_internal_error() const {
   return *error_;
 }
-inline const ::common::errorinfo& user_update_ack::error() const {
+inline const ::common::errorinfo& ulogin_comfirm_ack::error() const {
   const ::common::errorinfo* p = error_;
-  // @@protoc_insertion_point(field_get:user.user_update_ack.error)
+  // @@protoc_insertion_point(field_get:im_user.ulogin_comfirm_ack.error)
   return p != NULL ? *p : *reinterpret_cast<const ::common::errorinfo*>(
       &::common::_errorinfo_default_instance_);
 }
-inline ::common::errorinfo* user_update_ack::release_error() {
-  // @@protoc_insertion_point(field_release:user.user_update_ack.error)
-  
+inline ::common::errorinfo* ulogin_comfirm_ack::release_error() {
+  // @@protoc_insertion_point(field_release:im_user.ulogin_comfirm_ack.error)
+  clear_has_error();
   ::common::errorinfo* temp = error_;
   error_ = NULL;
   return temp;
 }
-inline ::common::errorinfo* user_update_ack::mutable_error() {
-  
+inline ::common::errorinfo* ulogin_comfirm_ack::mutable_error() {
+  set_has_error();
   if (error_ == NULL) {
     auto* p = CreateMaybeMessage<::common::errorinfo>(GetArenaNoVirtual());
     error_ = p;
   }
-  // @@protoc_insertion_point(field_mutable:user.user_update_ack.error)
+  // @@protoc_insertion_point(field_mutable:im_user.ulogin_comfirm_ack.error)
   return error_;
 }
-inline void user_update_ack::set_allocated_error(::common::errorinfo* error) {
+inline void ulogin_comfirm_ack::set_allocated_error(::common::errorinfo* error) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete reinterpret_cast< ::google::protobuf::MessageLite*>(error_);
@@ -3506,94 +1630,82 @@ inline void user_update_ack::set_allocated_error(::common::errorinfo* error) {
       error = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, error, submessage_arena);
     }
-    
+    set_has_error();
   } else {
-    
+    clear_has_error();
   }
   error_ = error;
-  // @@protoc_insertion_point(field_set_allocated:user.user_update_ack.error)
-}
-
-// uint32 client_page = 2;
-inline void user_update_ack::clear_client_page() {
-  client_page_ = 0u;
-}
-inline ::google::protobuf::uint32 user_update_ack::client_page() const {
-  // @@protoc_insertion_point(field_get:user.user_update_ack.client_page)
-  return client_page_;
-}
-inline void user_update_ack::set_client_page(::google::protobuf::uint32 value) {
-  
-  client_page_ = value;
-  // @@protoc_insertion_point(field_set:user.user_update_ack.client_page)
+  // @@protoc_insertion_point(field_set_allocated:im_user.ulogin_comfirm_ack.error)
 }
 
 // -------------------------------------------------------------------
 
-// query_user_info_req
+// ulogout
 
-// uint32 userid = 1;
-inline void query_user_info_req::clear_userid() {
-  userid_ = 0u;
+// required uint32 imid = 1;
+inline bool ulogout::has_imid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline ::google::protobuf::uint32 query_user_info_req::userid() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_req.userid)
-  return userid_;
+inline void ulogout::set_has_imid() {
+  _has_bits_[0] |= 0x00000001u;
 }
-inline void query_user_info_req::set_userid(::google::protobuf::uint32 value) {
-  
-  userid_ = value;
-  // @@protoc_insertion_point(field_set:user.query_user_info_req.userid)
+inline void ulogout::clear_has_imid() {
+  _has_bits_[0] &= ~0x00000001u;
 }
-
-// uint32 client_page = 2;
-inline void query_user_info_req::clear_client_page() {
-  client_page_ = 0u;
+inline void ulogout::clear_imid() {
+  imid_ = 0u;
+  clear_has_imid();
 }
-inline ::google::protobuf::uint32 query_user_info_req::client_page() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_req.client_page)
-  return client_page_;
+inline ::google::protobuf::uint32 ulogout::imid() const {
+  // @@protoc_insertion_point(field_get:im_user.ulogout.imid)
+  return imid_;
 }
-inline void query_user_info_req::set_client_page(::google::protobuf::uint32 value) {
-  
-  client_page_ = value;
-  // @@protoc_insertion_point(field_set:user.query_user_info_req.client_page)
+inline void ulogout::set_imid(::google::protobuf::uint32 value) {
+  set_has_imid();
+  imid_ = value;
+  // @@protoc_insertion_point(field_set:im_user.ulogout.imid)
 }
 
 // -------------------------------------------------------------------
 
-// query_user_info_ack
+// ulogout_ack
 
-// .common.errorinfo error = 1;
-inline bool query_user_info_ack::has_error() const {
-  return this != internal_default_instance() && error_ != NULL;
+// optional .common.errorinfo error = 1;
+inline bool ulogout_ack::has_error() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline const ::common::errorinfo& query_user_info_ack::_internal_error() const {
+inline void ulogout_ack::set_has_error() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ulogout_ack::clear_has_error() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const ::common::errorinfo& ulogout_ack::_internal_error() const {
   return *error_;
 }
-inline const ::common::errorinfo& query_user_info_ack::error() const {
+inline const ::common::errorinfo& ulogout_ack::error() const {
   const ::common::errorinfo* p = error_;
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.error)
+  // @@protoc_insertion_point(field_get:im_user.ulogout_ack.error)
   return p != NULL ? *p : *reinterpret_cast<const ::common::errorinfo*>(
       &::common::_errorinfo_default_instance_);
 }
-inline ::common::errorinfo* query_user_info_ack::release_error() {
-  // @@protoc_insertion_point(field_release:user.query_user_info_ack.error)
-  
+inline ::common::errorinfo* ulogout_ack::release_error() {
+  // @@protoc_insertion_point(field_release:im_user.ulogout_ack.error)
+  clear_has_error();
   ::common::errorinfo* temp = error_;
   error_ = NULL;
   return temp;
 }
-inline ::common::errorinfo* query_user_info_ack::mutable_error() {
-  
+inline ::common::errorinfo* ulogout_ack::mutable_error() {
+  set_has_error();
   if (error_ == NULL) {
     auto* p = CreateMaybeMessage<::common::errorinfo>(GetArenaNoVirtual());
     error_ = p;
   }
-  // @@protoc_insertion_point(field_mutable:user.query_user_info_ack.error)
+  // @@protoc_insertion_point(field_mutable:im_user.ulogout_ack.error)
   return error_;
 }
-inline void query_user_info_ack::set_allocated_error(::common::errorinfo* error) {
+inline void ulogout_ack::set_allocated_error(::common::errorinfo* error) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete reinterpret_cast< ::google::protobuf::MessageLite*>(error_);
@@ -3604,903 +1716,54 @@ inline void query_user_info_ack::set_allocated_error(::common::errorinfo* error)
       error = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, error, submessage_arena);
     }
-    
+    set_has_error();
   } else {
-    
+    clear_has_error();
   }
   error_ = error;
-  // @@protoc_insertion_point(field_set_allocated:user.query_user_info_ack.error)
-}
-
-// uint32 userid = 2;
-inline void query_user_info_ack::clear_userid() {
-  userid_ = 0u;
-}
-inline ::google::protobuf::uint32 query_user_info_ack::userid() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.userid)
-  return userid_;
-}
-inline void query_user_info_ack::set_userid(::google::protobuf::uint32 value) {
-  
-  userid_ = value;
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.userid)
-}
-
-// bytes nickname = 3;
-inline void query_user_info_ack::clear_nickname() {
-  nickname_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& query_user_info_ack::nickname() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.nickname)
-  return nickname_.GetNoArena();
-}
-inline void query_user_info_ack::set_nickname(const ::std::string& value) {
-  
-  nickname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.nickname)
-}
-#if LANG_CXX11
-inline void query_user_info_ack::set_nickname(::std::string&& value) {
-  
-  nickname_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.query_user_info_ack.nickname)
-}
-#endif
-inline void query_user_info_ack::set_nickname(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  nickname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.query_user_info_ack.nickname)
-}
-inline void query_user_info_ack::set_nickname(const void* value, size_t size) {
-  
-  nickname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.query_user_info_ack.nickname)
-}
-inline ::std::string* query_user_info_ack::mutable_nickname() {
-  
-  // @@protoc_insertion_point(field_mutable:user.query_user_info_ack.nickname)
-  return nickname_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* query_user_info_ack::release_nickname() {
-  // @@protoc_insertion_point(field_release:user.query_user_info_ack.nickname)
-  
-  return nickname_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void query_user_info_ack::set_allocated_nickname(::std::string* nickname) {
-  if (nickname != NULL) {
-    
-  } else {
-    
-  }
-  nickname_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), nickname);
-  // @@protoc_insertion_point(field_set_allocated:user.query_user_info_ack.nickname)
-}
-
-// bytes realname = 4;
-inline void query_user_info_ack::clear_realname() {
-  realname_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& query_user_info_ack::realname() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.realname)
-  return realname_.GetNoArena();
-}
-inline void query_user_info_ack::set_realname(const ::std::string& value) {
-  
-  realname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.realname)
-}
-#if LANG_CXX11
-inline void query_user_info_ack::set_realname(::std::string&& value) {
-  
-  realname_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.query_user_info_ack.realname)
-}
-#endif
-inline void query_user_info_ack::set_realname(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  realname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.query_user_info_ack.realname)
-}
-inline void query_user_info_ack::set_realname(const void* value, size_t size) {
-  
-  realname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.query_user_info_ack.realname)
-}
-inline ::std::string* query_user_info_ack::mutable_realname() {
-  
-  // @@protoc_insertion_point(field_mutable:user.query_user_info_ack.realname)
-  return realname_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* query_user_info_ack::release_realname() {
-  // @@protoc_insertion_point(field_release:user.query_user_info_ack.realname)
-  
-  return realname_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void query_user_info_ack::set_allocated_realname(::std::string* realname) {
-  if (realname != NULL) {
-    
-  } else {
-    
-  }
-  realname_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), realname);
-  // @@protoc_insertion_point(field_set_allocated:user.query_user_info_ack.realname)
-}
-
-// bytes avatar = 5;
-inline void query_user_info_ack::clear_avatar() {
-  avatar_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& query_user_info_ack::avatar() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.avatar)
-  return avatar_.GetNoArena();
-}
-inline void query_user_info_ack::set_avatar(const ::std::string& value) {
-  
-  avatar_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.avatar)
-}
-#if LANG_CXX11
-inline void query_user_info_ack::set_avatar(::std::string&& value) {
-  
-  avatar_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.query_user_info_ack.avatar)
-}
-#endif
-inline void query_user_info_ack::set_avatar(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  avatar_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.query_user_info_ack.avatar)
-}
-inline void query_user_info_ack::set_avatar(const void* value, size_t size) {
-  
-  avatar_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.query_user_info_ack.avatar)
-}
-inline ::std::string* query_user_info_ack::mutable_avatar() {
-  
-  // @@protoc_insertion_point(field_mutable:user.query_user_info_ack.avatar)
-  return avatar_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* query_user_info_ack::release_avatar() {
-  // @@protoc_insertion_point(field_release:user.query_user_info_ack.avatar)
-  
-  return avatar_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void query_user_info_ack::set_allocated_avatar(::std::string* avatar) {
-  if (avatar != NULL) {
-    
-  } else {
-    
-  }
-  avatar_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), avatar);
-  // @@protoc_insertion_point(field_set_allocated:user.query_user_info_ack.avatar)
-}
-
-// string mobile = 6;
-inline void query_user_info_ack::clear_mobile() {
-  mobile_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& query_user_info_ack::mobile() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.mobile)
-  return mobile_.GetNoArena();
-}
-inline void query_user_info_ack::set_mobile(const ::std::string& value) {
-  
-  mobile_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.mobile)
-}
-#if LANG_CXX11
-inline void query_user_info_ack::set_mobile(::std::string&& value) {
-  
-  mobile_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.query_user_info_ack.mobile)
-}
-#endif
-inline void query_user_info_ack::set_mobile(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  mobile_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.query_user_info_ack.mobile)
-}
-inline void query_user_info_ack::set_mobile(const char* value, size_t size) {
-  
-  mobile_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.query_user_info_ack.mobile)
-}
-inline ::std::string* query_user_info_ack::mutable_mobile() {
-  
-  // @@protoc_insertion_point(field_mutable:user.query_user_info_ack.mobile)
-  return mobile_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* query_user_info_ack::release_mobile() {
-  // @@protoc_insertion_point(field_release:user.query_user_info_ack.mobile)
-  
-  return mobile_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void query_user_info_ack::set_allocated_mobile(::std::string* mobile) {
-  if (mobile != NULL) {
-    
-  } else {
-    
-  }
-  mobile_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mobile);
-  // @@protoc_insertion_point(field_set_allocated:user.query_user_info_ack.mobile)
-}
-
-// string mail = 7;
-inline void query_user_info_ack::clear_mail() {
-  mail_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& query_user_info_ack::mail() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.mail)
-  return mail_.GetNoArena();
-}
-inline void query_user_info_ack::set_mail(const ::std::string& value) {
-  
-  mail_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.mail)
-}
-#if LANG_CXX11
-inline void query_user_info_ack::set_mail(::std::string&& value) {
-  
-  mail_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.query_user_info_ack.mail)
-}
-#endif
-inline void query_user_info_ack::set_mail(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  mail_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.query_user_info_ack.mail)
-}
-inline void query_user_info_ack::set_mail(const char* value, size_t size) {
-  
-  mail_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.query_user_info_ack.mail)
-}
-inline ::std::string* query_user_info_ack::mutable_mail() {
-  
-  // @@protoc_insertion_point(field_mutable:user.query_user_info_ack.mail)
-  return mail_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* query_user_info_ack::release_mail() {
-  // @@protoc_insertion_point(field_release:user.query_user_info_ack.mail)
-  
-  return mail_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void query_user_info_ack::set_allocated_mail(::std::string* mail) {
-  if (mail != NULL) {
-    
-  } else {
-    
-  }
-  mail_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mail);
-  // @@protoc_insertion_point(field_set_allocated:user.query_user_info_ack.mail)
-}
-
-// bytes introduction = 8;
-inline void query_user_info_ack::clear_introduction() {
-  introduction_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& query_user_info_ack::introduction() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.introduction)
-  return introduction_.GetNoArena();
-}
-inline void query_user_info_ack::set_introduction(const ::std::string& value) {
-  
-  introduction_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.introduction)
-}
-#if LANG_CXX11
-inline void query_user_info_ack::set_introduction(::std::string&& value) {
-  
-  introduction_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.query_user_info_ack.introduction)
-}
-#endif
-inline void query_user_info_ack::set_introduction(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  introduction_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.query_user_info_ack.introduction)
-}
-inline void query_user_info_ack::set_introduction(const void* value, size_t size) {
-  
-  introduction_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.query_user_info_ack.introduction)
-}
-inline ::std::string* query_user_info_ack::mutable_introduction() {
-  
-  // @@protoc_insertion_point(field_mutable:user.query_user_info_ack.introduction)
-  return introduction_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* query_user_info_ack::release_introduction() {
-  // @@protoc_insertion_point(field_release:user.query_user_info_ack.introduction)
-  
-  return introduction_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void query_user_info_ack::set_allocated_introduction(::std::string* introduction) {
-  if (introduction != NULL) {
-    
-  } else {
-    
-  }
-  introduction_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), introduction);
-  // @@protoc_insertion_point(field_set_allocated:user.query_user_info_ack.introduction)
-}
-
-// uint32 gender = 9;
-inline void query_user_info_ack::clear_gender() {
-  gender_ = 0u;
-}
-inline ::google::protobuf::uint32 query_user_info_ack::gender() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.gender)
-  return gender_;
-}
-inline void query_user_info_ack::set_gender(::google::protobuf::uint32 value) {
-  
-  gender_ = value;
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.gender)
-}
-
-// uint64 identity = 10;
-inline void query_user_info_ack::clear_identity() {
-  identity_ = GOOGLE_ULONGLONG(0);
-}
-inline ::google::protobuf::uint64 query_user_info_ack::identity() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.identity)
-  return identity_;
-}
-inline void query_user_info_ack::set_identity(::google::protobuf::uint64 value) {
-  
-  identity_ = value;
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.identity)
-}
-
-// bytes company = 11;
-inline void query_user_info_ack::clear_company() {
-  company_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& query_user_info_ack::company() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.company)
-  return company_.GetNoArena();
-}
-inline void query_user_info_ack::set_company(const ::std::string& value) {
-  
-  company_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.company)
-}
-#if LANG_CXX11
-inline void query_user_info_ack::set_company(::std::string&& value) {
-  
-  company_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.query_user_info_ack.company)
-}
-#endif
-inline void query_user_info_ack::set_company(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  company_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.query_user_info_ack.company)
-}
-inline void query_user_info_ack::set_company(const void* value, size_t size) {
-  
-  company_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.query_user_info_ack.company)
-}
-inline ::std::string* query_user_info_ack::mutable_company() {
-  
-  // @@protoc_insertion_point(field_mutable:user.query_user_info_ack.company)
-  return company_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* query_user_info_ack::release_company() {
-  // @@protoc_insertion_point(field_release:user.query_user_info_ack.company)
-  
-  return company_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void query_user_info_ack::set_allocated_company(::std::string* company) {
-  if (company != NULL) {
-    
-  } else {
-    
-  }
-  company_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), company);
-  // @@protoc_insertion_point(field_set_allocated:user.query_user_info_ack.company)
-}
-
-// bytes occupation = 12;
-inline void query_user_info_ack::clear_occupation() {
-  occupation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& query_user_info_ack::occupation() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.occupation)
-  return occupation_.GetNoArena();
-}
-inline void query_user_info_ack::set_occupation(const ::std::string& value) {
-  
-  occupation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.occupation)
-}
-#if LANG_CXX11
-inline void query_user_info_ack::set_occupation(::std::string&& value) {
-  
-  occupation_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.query_user_info_ack.occupation)
-}
-#endif
-inline void query_user_info_ack::set_occupation(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  occupation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.query_user_info_ack.occupation)
-}
-inline void query_user_info_ack::set_occupation(const void* value, size_t size) {
-  
-  occupation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.query_user_info_ack.occupation)
-}
-inline ::std::string* query_user_info_ack::mutable_occupation() {
-  
-  // @@protoc_insertion_point(field_mutable:user.query_user_info_ack.occupation)
-  return occupation_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* query_user_info_ack::release_occupation() {
-  // @@protoc_insertion_point(field_release:user.query_user_info_ack.occupation)
-  
-  return occupation_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void query_user_info_ack::set_allocated_occupation(::std::string* occupation) {
-  if (occupation != NULL) {
-    
-  } else {
-    
-  }
-  occupation_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), occupation);
-  // @@protoc_insertion_point(field_set_allocated:user.query_user_info_ack.occupation)
-}
-
-// bytes industry = 13;
-inline void query_user_info_ack::clear_industry() {
-  industry_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& query_user_info_ack::industry() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.industry)
-  return industry_.GetNoArena();
-}
-inline void query_user_info_ack::set_industry(const ::std::string& value) {
-  
-  industry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.industry)
-}
-#if LANG_CXX11
-inline void query_user_info_ack::set_industry(::std::string&& value) {
-  
-  industry_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.query_user_info_ack.industry)
-}
-#endif
-inline void query_user_info_ack::set_industry(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  industry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.query_user_info_ack.industry)
-}
-inline void query_user_info_ack::set_industry(const void* value, size_t size) {
-  
-  industry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.query_user_info_ack.industry)
-}
-inline ::std::string* query_user_info_ack::mutable_industry() {
-  
-  // @@protoc_insertion_point(field_mutable:user.query_user_info_ack.industry)
-  return industry_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* query_user_info_ack::release_industry() {
-  // @@protoc_insertion_point(field_release:user.query_user_info_ack.industry)
-  
-  return industry_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void query_user_info_ack::set_allocated_industry(::std::string* industry) {
-  if (industry != NULL) {
-    
-  } else {
-    
-  }
-  industry_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), industry);
-  // @@protoc_insertion_point(field_set_allocated:user.query_user_info_ack.industry)
-}
-
-// bytes location = 14;
-inline void query_user_info_ack::clear_location() {
-  location_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& query_user_info_ack::location() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.location)
-  return location_.GetNoArena();
-}
-inline void query_user_info_ack::set_location(const ::std::string& value) {
-  
-  location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.location)
-}
-#if LANG_CXX11
-inline void query_user_info_ack::set_location(::std::string&& value) {
-  
-  location_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.query_user_info_ack.location)
-}
-#endif
-inline void query_user_info_ack::set_location(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.query_user_info_ack.location)
-}
-inline void query_user_info_ack::set_location(const void* value, size_t size) {
-  
-  location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.query_user_info_ack.location)
-}
-inline ::std::string* query_user_info_ack::mutable_location() {
-  
-  // @@protoc_insertion_point(field_mutable:user.query_user_info_ack.location)
-  return location_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* query_user_info_ack::release_location() {
-  // @@protoc_insertion_point(field_release:user.query_user_info_ack.location)
-  
-  return location_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void query_user_info_ack::set_allocated_location(::std::string* location) {
-  if (location != NULL) {
-    
-  } else {
-    
-  }
-  location_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), location);
-  // @@protoc_insertion_point(field_set_allocated:user.query_user_info_ack.location)
-}
-
-// bytes last_device_info = 15;
-inline void query_user_info_ack::clear_last_device_info() {
-  last_device_info_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& query_user_info_ack::last_device_info() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.last_device_info)
-  return last_device_info_.GetNoArena();
-}
-inline void query_user_info_ack::set_last_device_info(const ::std::string& value) {
-  
-  last_device_info_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.last_device_info)
-}
-#if LANG_CXX11
-inline void query_user_info_ack::set_last_device_info(::std::string&& value) {
-  
-  last_device_info_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.query_user_info_ack.last_device_info)
-}
-#endif
-inline void query_user_info_ack::set_last_device_info(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  last_device_info_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.query_user_info_ack.last_device_info)
-}
-inline void query_user_info_ack::set_last_device_info(const void* value, size_t size) {
-  
-  last_device_info_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.query_user_info_ack.last_device_info)
-}
-inline ::std::string* query_user_info_ack::mutable_last_device_info() {
-  
-  // @@protoc_insertion_point(field_mutable:user.query_user_info_ack.last_device_info)
-  return last_device_info_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* query_user_info_ack::release_last_device_info() {
-  // @@protoc_insertion_point(field_release:user.query_user_info_ack.last_device_info)
-  
-  return last_device_info_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void query_user_info_ack::set_allocated_last_device_info(::std::string* last_device_info) {
-  if (last_device_info != NULL) {
-    
-  } else {
-    
-  }
-  last_device_info_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), last_device_info);
-  // @@protoc_insertion_point(field_set_allocated:user.query_user_info_ack.last_device_info)
-}
-
-// bytes last_page_source = 16;
-inline void query_user_info_ack::clear_last_page_source() {
-  last_page_source_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& query_user_info_ack::last_page_source() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.last_page_source)
-  return last_page_source_.GetNoArena();
-}
-inline void query_user_info_ack::set_last_page_source(const ::std::string& value) {
-  
-  last_page_source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.last_page_source)
-}
-#if LANG_CXX11
-inline void query_user_info_ack::set_last_page_source(::std::string&& value) {
-  
-  last_page_source_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.query_user_info_ack.last_page_source)
-}
-#endif
-inline void query_user_info_ack::set_last_page_source(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  last_page_source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.query_user_info_ack.last_page_source)
-}
-inline void query_user_info_ack::set_last_page_source(const void* value, size_t size) {
-  
-  last_page_source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.query_user_info_ack.last_page_source)
-}
-inline ::std::string* query_user_info_ack::mutable_last_page_source() {
-  
-  // @@protoc_insertion_point(field_mutable:user.query_user_info_ack.last_page_source)
-  return last_page_source_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* query_user_info_ack::release_last_page_source() {
-  // @@protoc_insertion_point(field_release:user.query_user_info_ack.last_page_source)
-  
-  return last_page_source_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void query_user_info_ack::set_allocated_last_page_source(::std::string* last_page_source) {
-  if (last_page_source != NULL) {
-    
-  } else {
-    
-  }
-  last_page_source_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), last_page_source);
-  // @@protoc_insertion_point(field_set_allocated:user.query_user_info_ack.last_page_source)
-}
-
-// uint32 client_page = 17;
-inline void query_user_info_ack::clear_client_page() {
-  client_page_ = 0u;
-}
-inline ::google::protobuf::uint32 query_user_info_ack::client_page() const {
-  // @@protoc_insertion_point(field_get:user.query_user_info_ack.client_page)
-  return client_page_;
-}
-inline void query_user_info_ack::set_client_page(::google::protobuf::uint32 value) {
-  
-  client_page_ = value;
-  // @@protoc_insertion_point(field_set:user.query_user_info_ack.client_page)
+  // @@protoc_insertion_point(field_set_allocated:im_user.ulogout_ack.error)
 }
 
 // -------------------------------------------------------------------
 
-// set_personal_password_req
+// forced_offline_ntf
 
-// bytes old_password = 1;
-inline void set_personal_password_req::clear_old_password() {
-  old_password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// optional .common.errorinfo error = 1;
+inline bool forced_offline_ntf::has_error() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline const ::std::string& set_personal_password_req::old_password() const {
-  // @@protoc_insertion_point(field_get:user.set_personal_password_req.old_password)
-  return old_password_.GetNoArena();
+inline void forced_offline_ntf::set_has_error() {
+  _has_bits_[0] |= 0x00000001u;
 }
-inline void set_personal_password_req::set_old_password(const ::std::string& value) {
-  
-  old_password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.set_personal_password_req.old_password)
+inline void forced_offline_ntf::clear_has_error() {
+  _has_bits_[0] &= ~0x00000001u;
 }
-#if LANG_CXX11
-inline void set_personal_password_req::set_old_password(::std::string&& value) {
-  
-  old_password_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.set_personal_password_req.old_password)
-}
-#endif
-inline void set_personal_password_req::set_old_password(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  old_password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.set_personal_password_req.old_password)
-}
-inline void set_personal_password_req::set_old_password(const void* value, size_t size) {
-  
-  old_password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.set_personal_password_req.old_password)
-}
-inline ::std::string* set_personal_password_req::mutable_old_password() {
-  
-  // @@protoc_insertion_point(field_mutable:user.set_personal_password_req.old_password)
-  return old_password_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* set_personal_password_req::release_old_password() {
-  // @@protoc_insertion_point(field_release:user.set_personal_password_req.old_password)
-  
-  return old_password_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void set_personal_password_req::set_allocated_old_password(::std::string* old_password) {
-  if (old_password != NULL) {
-    
-  } else {
-    
-  }
-  old_password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), old_password);
-  // @@protoc_insertion_point(field_set_allocated:user.set_personal_password_req.old_password)
-}
-
-// bytes new_password = 2;
-inline void set_personal_password_req::clear_new_password() {
-  new_password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& set_personal_password_req::new_password() const {
-  // @@protoc_insertion_point(field_get:user.set_personal_password_req.new_password)
-  return new_password_.GetNoArena();
-}
-inline void set_personal_password_req::set_new_password(const ::std::string& value) {
-  
-  new_password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.set_personal_password_req.new_password)
-}
-#if LANG_CXX11
-inline void set_personal_password_req::set_new_password(::std::string&& value) {
-  
-  new_password_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.set_personal_password_req.new_password)
-}
-#endif
-inline void set_personal_password_req::set_new_password(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  new_password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.set_personal_password_req.new_password)
-}
-inline void set_personal_password_req::set_new_password(const void* value, size_t size) {
-  
-  new_password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.set_personal_password_req.new_password)
-}
-inline ::std::string* set_personal_password_req::mutable_new_password() {
-  
-  // @@protoc_insertion_point(field_mutable:user.set_personal_password_req.new_password)
-  return new_password_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* set_personal_password_req::release_new_password() {
-  // @@protoc_insertion_point(field_release:user.set_personal_password_req.new_password)
-  
-  return new_password_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void set_personal_password_req::set_allocated_new_password(::std::string* new_password) {
-  if (new_password != NULL) {
-    
-  } else {
-    
-  }
-  new_password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), new_password);
-  // @@protoc_insertion_point(field_set_allocated:user.set_personal_password_req.new_password)
-}
-
-// bytes confirm_new_password = 3;
-inline void set_personal_password_req::clear_confirm_new_password() {
-  confirm_new_password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& set_personal_password_req::confirm_new_password() const {
-  // @@protoc_insertion_point(field_get:user.set_personal_password_req.confirm_new_password)
-  return confirm_new_password_.GetNoArena();
-}
-inline void set_personal_password_req::set_confirm_new_password(const ::std::string& value) {
-  
-  confirm_new_password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.set_personal_password_req.confirm_new_password)
-}
-#if LANG_CXX11
-inline void set_personal_password_req::set_confirm_new_password(::std::string&& value) {
-  
-  confirm_new_password_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.set_personal_password_req.confirm_new_password)
-}
-#endif
-inline void set_personal_password_req::set_confirm_new_password(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  confirm_new_password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.set_personal_password_req.confirm_new_password)
-}
-inline void set_personal_password_req::set_confirm_new_password(const void* value, size_t size) {
-  
-  confirm_new_password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.set_personal_password_req.confirm_new_password)
-}
-inline ::std::string* set_personal_password_req::mutable_confirm_new_password() {
-  
-  // @@protoc_insertion_point(field_mutable:user.set_personal_password_req.confirm_new_password)
-  return confirm_new_password_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* set_personal_password_req::release_confirm_new_password() {
-  // @@protoc_insertion_point(field_release:user.set_personal_password_req.confirm_new_password)
-  
-  return confirm_new_password_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void set_personal_password_req::set_allocated_confirm_new_password(::std::string* confirm_new_password) {
-  if (confirm_new_password != NULL) {
-    
-  } else {
-    
-  }
-  confirm_new_password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), confirm_new_password);
-  // @@protoc_insertion_point(field_set_allocated:user.set_personal_password_req.confirm_new_password)
-}
-
-// -------------------------------------------------------------------
-
-// set_personal_password_ack
-
-// .common.errorinfo error = 1;
-inline bool set_personal_password_ack::has_error() const {
-  return this != internal_default_instance() && error_ != NULL;
-}
-inline const ::common::errorinfo& set_personal_password_ack::_internal_error() const {
+inline const ::common::errorinfo& forced_offline_ntf::_internal_error() const {
   return *error_;
 }
-inline const ::common::errorinfo& set_personal_password_ack::error() const {
+inline const ::common::errorinfo& forced_offline_ntf::error() const {
   const ::common::errorinfo* p = error_;
-  // @@protoc_insertion_point(field_get:user.set_personal_password_ack.error)
+  // @@protoc_insertion_point(field_get:im_user.forced_offline_ntf.error)
   return p != NULL ? *p : *reinterpret_cast<const ::common::errorinfo*>(
       &::common::_errorinfo_default_instance_);
 }
-inline ::common::errorinfo* set_personal_password_ack::release_error() {
-  // @@protoc_insertion_point(field_release:user.set_personal_password_ack.error)
-  
+inline ::common::errorinfo* forced_offline_ntf::release_error() {
+  // @@protoc_insertion_point(field_release:im_user.forced_offline_ntf.error)
+  clear_has_error();
   ::common::errorinfo* temp = error_;
   error_ = NULL;
   return temp;
 }
-inline ::common::errorinfo* set_personal_password_ack::mutable_error() {
-  
+inline ::common::errorinfo* forced_offline_ntf::mutable_error() {
+  set_has_error();
   if (error_ == NULL) {
     auto* p = CreateMaybeMessage<::common::errorinfo>(GetArenaNoVirtual());
     error_ = p;
   }
-  // @@protoc_insertion_point(field_mutable:user.set_personal_password_ack.error)
+  // @@protoc_insertion_point(field_mutable:im_user.forced_offline_ntf.error)
   return error_;
 }
-inline void set_personal_password_ack::set_allocated_error(::common::errorinfo* error) {
+inline void forced_offline_ntf::set_allocated_error(::common::errorinfo* error) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete reinterpret_cast< ::google::protobuf::MessageLite*>(error_);
@@ -4511,227 +1774,12 @@ inline void set_personal_password_ack::set_allocated_error(::common::errorinfo* 
       error = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, error, submessage_arena);
     }
-    
+    set_has_error();
   } else {
-    
+    clear_has_error();
   }
   error_ = error;
-  // @@protoc_insertion_point(field_set_allocated:user.set_personal_password_ack.error)
-}
-
-// -------------------------------------------------------------------
-
-// user_unregister_req
-
-// bytes domain = 1;
-inline void user_unregister_req::clear_domain() {
-  domain_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_unregister_req::domain() const {
-  // @@protoc_insertion_point(field_get:user.user_unregister_req.domain)
-  return domain_.GetNoArena();
-}
-inline void user_unregister_req::set_domain(const ::std::string& value) {
-  
-  domain_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_unregister_req.domain)
-}
-#if LANG_CXX11
-inline void user_unregister_req::set_domain(::std::string&& value) {
-  
-  domain_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_unregister_req.domain)
-}
-#endif
-inline void user_unregister_req::set_domain(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  domain_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_unregister_req.domain)
-}
-inline void user_unregister_req::set_domain(const void* value, size_t size) {
-  
-  domain_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_unregister_req.domain)
-}
-inline ::std::string* user_unregister_req::mutable_domain() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_unregister_req.domain)
-  return domain_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_unregister_req::release_domain() {
-  // @@protoc_insertion_point(field_release:user.user_unregister_req.domain)
-  
-  return domain_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_unregister_req::set_allocated_domain(::std::string* domain) {
-  if (domain != NULL) {
-    
-  } else {
-    
-  }
-  domain_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), domain);
-  // @@protoc_insertion_point(field_set_allocated:user.user_unregister_req.domain)
-}
-
-// bytes account = 2;
-inline void user_unregister_req::clear_account() {
-  account_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_unregister_req::account() const {
-  // @@protoc_insertion_point(field_get:user.user_unregister_req.account)
-  return account_.GetNoArena();
-}
-inline void user_unregister_req::set_account(const ::std::string& value) {
-  
-  account_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_unregister_req.account)
-}
-#if LANG_CXX11
-inline void user_unregister_req::set_account(::std::string&& value) {
-  
-  account_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_unregister_req.account)
-}
-#endif
-inline void user_unregister_req::set_account(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  account_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_unregister_req.account)
-}
-inline void user_unregister_req::set_account(const void* value, size_t size) {
-  
-  account_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_unregister_req.account)
-}
-inline ::std::string* user_unregister_req::mutable_account() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_unregister_req.account)
-  return account_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_unregister_req::release_account() {
-  // @@protoc_insertion_point(field_release:user.user_unregister_req.account)
-  
-  return account_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_unregister_req::set_allocated_account(::std::string* account) {
-  if (account != NULL) {
-    
-  } else {
-    
-  }
-  account_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), account);
-  // @@protoc_insertion_point(field_set_allocated:user.user_unregister_req.account)
-}
-
-// bytes password = 3;
-inline void user_unregister_req::clear_password() {
-  password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& user_unregister_req::password() const {
-  // @@protoc_insertion_point(field_get:user.user_unregister_req.password)
-  return password_.GetNoArena();
-}
-inline void user_unregister_req::set_password(const ::std::string& value) {
-  
-  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:user.user_unregister_req.password)
-}
-#if LANG_CXX11
-inline void user_unregister_req::set_password(::std::string&& value) {
-  
-  password_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:user.user_unregister_req.password)
-}
-#endif
-inline void user_unregister_req::set_password(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:user.user_unregister_req.password)
-}
-inline void user_unregister_req::set_password(const void* value, size_t size) {
-  
-  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:user.user_unregister_req.password)
-}
-inline ::std::string* user_unregister_req::mutable_password() {
-  
-  // @@protoc_insertion_point(field_mutable:user.user_unregister_req.password)
-  return password_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* user_unregister_req::release_password() {
-  // @@protoc_insertion_point(field_release:user.user_unregister_req.password)
-  
-  return password_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void user_unregister_req::set_allocated_password(::std::string* password) {
-  if (password != NULL) {
-    
-  } else {
-    
-  }
-  password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), password);
-  // @@protoc_insertion_point(field_set_allocated:user.user_unregister_req.password)
-}
-
-// -------------------------------------------------------------------
-
-// user_unregister_ack
-
-// .common.errorinfo error = 1;
-inline bool user_unregister_ack::has_error() const {
-  return this != internal_default_instance() && error_ != NULL;
-}
-inline const ::common::errorinfo& user_unregister_ack::_internal_error() const {
-  return *error_;
-}
-inline const ::common::errorinfo& user_unregister_ack::error() const {
-  const ::common::errorinfo* p = error_;
-  // @@protoc_insertion_point(field_get:user.user_unregister_ack.error)
-  return p != NULL ? *p : *reinterpret_cast<const ::common::errorinfo*>(
-      &::common::_errorinfo_default_instance_);
-}
-inline ::common::errorinfo* user_unregister_ack::release_error() {
-  // @@protoc_insertion_point(field_release:user.user_unregister_ack.error)
-  
-  ::common::errorinfo* temp = error_;
-  error_ = NULL;
-  return temp;
-}
-inline ::common::errorinfo* user_unregister_ack::mutable_error() {
-  
-  if (error_ == NULL) {
-    auto* p = CreateMaybeMessage<::common::errorinfo>(GetArenaNoVirtual());
-    error_ = p;
-  }
-  // @@protoc_insertion_point(field_mutable:user.user_unregister_ack.error)
-  return error_;
-}
-inline void user_unregister_ack::set_allocated_error(::common::errorinfo* error) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete reinterpret_cast< ::google::protobuf::MessageLite*>(error_);
-  }
-  if (error) {
-    ::google::protobuf::Arena* submessage_arena = NULL;
-    if (message_arena != submessage_arena) {
-      error = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, error, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  error_ = error;
-  // @@protoc_insertion_point(field_set_allocated:user.user_unregister_ack.error)
+  // @@protoc_insertion_point(field_set_allocated:im_user.forced_offline_ntf.error)
 }
 
 #ifdef __GNUC__
@@ -4749,16 +1797,10 @@ inline void user_unregister_ack::set_allocated_error(::common::errorinfo* error)
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace user
+}  // namespace im_user
 
 // @@protoc_insertion_point(global_scope)
 

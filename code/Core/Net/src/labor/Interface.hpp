@@ -35,7 +35,7 @@
 namespace net
 {
 
-//#define USE_CONHASH
+#define USE_CONHASH
 
 class Cmd;
 class Module;
@@ -204,6 +204,14 @@ bool SendTo(const net::tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const M
  */
 bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
 /**
+ * @brief 根据路由id自动发送到指定的节点
+ * @note 根据路由id自动发送到指定的节点
+ * @param oMsgHead 数据包头
+ * @param oMsgBody 数据包体
+ * @return 是否发送成功
+ */
+bool SendToSession(const MsgHead& oMsgHead, const MsgBody& oMsgBody);
+/**
  * @brief 根据路由发送到同一类型的节点
  * @note 根据路由发送到同一类型的节点
  * @param strNodeType 节点类型
@@ -211,7 +219,7 @@ bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBo
  * @param oMsgBody 数据包体
  * @return 是否发送成功
  */
-bool SendToAuto(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
+bool SendToSession(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
 /**
  * @brief 发送到下一个同一类型的节点
  * @note 发送到下一个同一类型的节点，适用于对同一类型节点做轮询方式发送以达到简单的负载均衡。

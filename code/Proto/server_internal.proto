@@ -1,0 +1,53 @@
+syntax = "proto2";
+
+import "common.proto";
+
+// 个人离线通知
+message personal_notify
+{
+	required uint32         imid 	= 1;   //用户id
+}
+
+// 群离线通知
+message group_notify
+{
+	required uint32         imid 	= 1;  //用户id
+}
+
+//离线公众号用户分组消息推送
+message offical_userset_notify
+{
+	required uint32         imid 	= 1;  //用户id
+}
+
+//离线公众号指定用户消息推送
+message offical_specified_notify
+{
+	required uint32         imid 	= 1;  //用户id
+}
+
+// 账号信息，用于用户注册或用户信息更新
+message user_register
+{
+	required uint32 user_type		= 1;	// 用户类型
+	required bytes guid				= 2;	// 用户ID，用户名
+	optional bytes nickname			= 3;	// 昵称
+	optional bytes avatar			= 4;	// 头像
+	optional string mobile			= 5;    // 手机号
+	optional bytes introduction		= 6;	// 简介
+	optional int32 gender			= 7;	// 性别
+	optional uint64 add_identity    = 8;	// 增加的身份
+	optional uint64 del_identity 	= 9;	// 去除的身份
+	optional bytes company			= 10;	// 公司
+	optional bytes occupation       = 11;	// 职位
+	optional bytes industry         = 12;   // 行业
+	optional bytes area				= 13;   // 地区
+	optional bytes password			= 14;	// 密码
+	optional uint32 imid            = 15;   // 用户imid，用户注册时不需要
+}
+
+message user_register_ack
+{
+	optional common.errorinfo       error                    	= 1;    ///< 错误代码
+	optional uint32 imid										= 2; 	///< 用户IMID
+}
