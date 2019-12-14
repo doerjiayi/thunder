@@ -10,7 +10,7 @@
 #ifndef SRC_CMDREGISTER_STEPNODEBROADCAST_HPP_
 #define SRC_CMDREGISTER_STEPNODEBROADCAST_HPP_
 
-#include "Step.hpp"
+#include "Comm.hpp"
 
 namespace coor
 {
@@ -19,7 +19,7 @@ class StepNodeBroadcast: public net::Step
 {
 public:
 public:
-    StepNodeBroadcast(const std::string& strNodeIdentity, int32 iCmd, const MsgBody& oMsgBody);
+    StepNodeBroadcast(const std::string& strNodeIdentity, int32 iCmd, const std::string& strBody);
     virtual ~StepNodeBroadcast();
 
     virtual net::E_CMD_STATUS Emit(

@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package beacon;
+package coor;
 
 /**
- * @brief BEACON节点间心跳
+ * @brief coor节点间心跳
  */
 message Election
 {

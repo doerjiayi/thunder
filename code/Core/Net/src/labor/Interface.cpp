@@ -21,6 +21,7 @@ uint32 GetWorkerIndex(){return(g_pLabor->GetWorkerIndex());}
 const std::string& GetNodeType() {return(g_pLabor->GetNodeType());}
 const util::CJsonObject& GetCustomConf() {return(g_pLabor->GetCustomConf());}
 const std::string& GetWorkerIdentify() {return(g_pLabor->GetWorkerIdentify());}
+const std::string& GetNodeIdentify() {return(g_pLabor->GetNodeIdentify());}
 const std::string& GetWorkPath(){return(g_pLabor->GetWorkPath());}
 std::string GetConfigPath(){return(g_pLabor->GetWorkPath() + std::string("/conf/"));}
 time_t GetNowTime(){return(g_pLabor->GetNowTime());}
@@ -133,7 +134,7 @@ Session* GetSession(const std::string& strSessionId, const std::string& strSessi
 bool SendTo(const net::tagMsgShell& stMsgShell){return(g_pLabor->SendTo(stMsgShell));}
 bool SendTo(const net::tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendTo(stMsgShell, oMsgHead, oMsgBody));}
 bool SendTo(const net::tagMsgShell& stMsgShell,uint32 cmd,uint32 seq,const std::string &strBody){return(g_pLabor->SendTo(stMsgShell,cmd,seq,strBody));}
-bool SendTo(const net::tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL){return(g_pLabor->SendTo(stMsgShell,oHttpMsg,pHttpStep));}
+bool SendTo(const net::tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpStep* pHttpStep){return(g_pLabor->SendTo(stMsgShell,oHttpMsg,pHttpStep));}
 bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendTo(strIdentify, oMsgHead, oMsgBody));}
 bool SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const std::string &strBody){return(g_pLabor->SendTo(strIdentify,cmd,seq,strBody));}
 bool SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const MsgBody& oMsgBody){return(g_pLabor->SendTo(strIdentify,cmd,seq,oMsgBody));}

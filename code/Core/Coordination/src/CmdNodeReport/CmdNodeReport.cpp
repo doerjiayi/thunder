@@ -25,7 +25,7 @@ bool CmdNodeReport::AnyMessage(const net::tagMsgShell& stMsgShell,const MsgHead&
     util::CJsonObject oNodeId;
     if (nullptr == m_pSessionOnlineNodes)
     {
-        m_pSessionOnlineNodes = net::GetSession("coor::SessionOnlineNodes");
+        m_pSessionOnlineNodes = (SessionOnlineNodes*)net::GetSession("coor::SessionOnlineNodes");
         if (nullptr == m_pSessionOnlineNodes)
         {
             LOG4_ERROR("no session node found!");

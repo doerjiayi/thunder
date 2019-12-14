@@ -19,7 +19,7 @@ namespace coor
 class CmdNodeDisconnect: public net::Cmd
 {
 public:
-    CmdNodeDisconnect() :m_pSessionOnlineNodes(nullptr){}
+    CmdNodeDisconnect() = default;
     virtual ~CmdNodeDisconnect() = default;
     virtual bool Init();
     virtual bool AnyMessage(

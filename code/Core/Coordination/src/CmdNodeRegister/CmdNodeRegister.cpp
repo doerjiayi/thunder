@@ -13,15 +13,6 @@
 namespace coor
 {
 
-CmdNodeRegister::CmdNodeRegister(int32 iCmd)
-    :    m_pSessionOnlineNodes(nullptr)
-{
-}
-
-CmdNodeRegister::~CmdNodeRegister()
-{
-}
-
 bool CmdNodeRegister::Init()
 {
     util::CJsonObject oBeaconConf = net::GetCustomConf();

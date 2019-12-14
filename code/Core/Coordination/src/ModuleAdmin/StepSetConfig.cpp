@@ -40,10 +40,10 @@ StepSetConfig::~StepSetConfig()
 {
 }
 
-net::E_CMD_STATUS StepSetConfig::Emit(int iErrno, const std::string& strErrMsg, void* data)
+net::E_CMD_STATUS StepSetConfig::Emit(int iErrno = 0, const std::string& strErrMsg = "", const std::string& strErrShow = "")
 {
     MsgBody oMsgBody;
-    neb::ConfigInfo oConfigFileInfo;
+    ConfigInfo oConfigFileInfo;
     int iDecodeLen = Base64decode_len(m_strConfigFileContent.c_str());
     char* pBufPlain = (char*)malloc(iDecodeLen);
     int iDecodeBytes = Base64decode(pBufPlain, m_strConfigFileContent.c_str());

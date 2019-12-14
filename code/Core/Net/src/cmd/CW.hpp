@@ -69,6 +69,9 @@ enum E_CMD
     CMD_REQ_RELOAD_LOGIC_CONFIG         = 39,   ///< Center通知配置到节点服务器,重新加载逻辑配置
     CMD_RSP_RELOAD_LOGIC_CONFIG         = 40,   ///< 节点服务器得到通知应答Center
 
+	CMD_REQ_LEADER_ELECTION             = 113,  ///< 分布式leader选举请求
+	CMD_RSP_LEADER_ELECTION             = 114,  ///< 分布式leader选举响应（通过心跳结合优先权选举，无须响应）
+
 	CMD_REQ_SET_NODE_CONFIG             = 201,  ///< 更新框架配置文件请求
 	CMD_RSP_SET_NODE_CONFIG             = 202,  ///< 更新框架配置文件应答
 	CMD_REQ_GET_NODE_CONFIG             = 203,  ///< 获取框架配置文件请求
@@ -83,7 +86,6 @@ enum E_CMD
 	CMD_RSP_GET_CUSTOM_CONFIG           = 212,  ///< 获取自定义配置文件响应
 	CMD_REQ_RELOAD_CUSTOM_CONFIG        = 213,  ///< 重新加载自定义配置文件请求
 	CMD_RSP_RELOAD_CUSTOM_CONFIG        = 214,  ///< 重新加载自定义配置文件响应
-
 
     // 接入层转发命令字，如客户端数据转发给Logic，Logic数据转发给客户端等
     CMD_REQ_FROM_CLIENT                 = 501,     ///< 客户端发送过来需由接入层转发的数据，传输的MsgHead里的Cmd不会被改变（无业务逻辑直接转发的场景，如登录等接入层有业务逻辑的场景不适用）

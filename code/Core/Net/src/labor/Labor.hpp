@@ -426,7 +426,9 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
 
 	virtual bool Host2Addr(const std::string & strHost,int iPort,struct sockaddr_in &stAddr,bool boRefresh=false){return false;}
 	const std::string& GetWorkerIdentify();
+	const std::string& GetNodeIdentify();
 	std::string m_strWorkerIdentify;
+	std::string m_strNodeIdentify;
 	Coroutine m_Coroutine;
 	util::IgnoreChars m_IgnoreChars;//含默认过滤字符
 private:

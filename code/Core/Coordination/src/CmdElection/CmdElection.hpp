@@ -19,8 +19,8 @@ namespace coor
 class CmdElection: public net::Cmd
 {
 public:
-    CmdElection(int32 iCmd);
-    virtual ~CmdElection();
+    CmdElection() = default;
+    virtual ~CmdElection() = default;
 
     virtual bool Init();
     virtual bool AnyMessage(
@@ -29,7 +29,7 @@ public:
                     const MsgBody& oMsgBody);
 
 private:
-    SessionOnlineNodes* m_pSessionOnlineNodes;
+    SessionOnlineNodes* m_pSessionOnlineNodes = nullptr;
 };
 
 } /* namespace coor */

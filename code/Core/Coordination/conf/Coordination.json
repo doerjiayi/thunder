@@ -1,7 +1,7 @@
 {
     "node_type":"BEACON",
     "//host":"系统内各Server之间通信绑定的IP（Server to Server）",
-    "host":"192.168.157.130",
+    "host":"192.168.11.66",
     "//port":"系统内各Server之间通信监听的端口",
     "port":16000,
     "//access_host":"对系统外提供服务绑定的IP（Client to Server），若不提供对外服务，则无需配置",
@@ -10,7 +10,7 @@
     "access_port":16088,
     "//access_codec":"接入端编解码器，目前支持CODEC_PRIVATE(4),CODEC_HTTP(3),CODEC_PROTOBUF(2)",
     "access_codec":3,
-    "gateway":"113.102.157.188",
+    "gateway":"192.168.11.66",
     "gateway_port":16088,
     "//server_name":"异步事件驱动Server",
     "server_name":"neb_Beacon",
@@ -25,8 +25,8 @@
     "//config_path":"配置文件路径（相对路径）",
     "config_path":"conf/",
     "beacon": [
-        { "host": "192.168.1.11", "port": 16000 },
-        { "host": "192.168.1.12", "port": 16000 }
+        { "host": "192.168.11.66", "port": 16000 },
+        { "host": "192.168.11.66", "port": 16000 }
     ],
     "//log_path":"日志文件路径（相对路径）",
     "log_path":"log/",

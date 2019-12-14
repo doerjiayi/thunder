@@ -13,6 +13,7 @@
 #include "Comm.hpp"
 #include "SessionOnlineNodes.hpp"
 #include "StepGetConfig.hpp"
+#include "StepSetConfig.hpp"
 
 namespace coor
 {
@@ -61,8 +62,8 @@ namespace coor
 class ModuleAdmin: public net::Module
 {
 public:
-    ModuleAdmin(const std::string& strModulePath);
-    virtual ~ModuleAdmin();
+    ModuleAdmin() = default;
+    virtual ~ModuleAdmin() = default;
 
     virtual bool Init();
 
@@ -81,7 +82,7 @@ protected:
             util::CJsonObject& oCmdJson, util::CJsonObject& oResult);
 
 private:
-    SessionOnlineNodes* m_pSessionOnlineNodes;
+    SessionOnlineNodes* m_pSessionOnlineNodes = nullptr;
 };
 
 } /* namespace coor */

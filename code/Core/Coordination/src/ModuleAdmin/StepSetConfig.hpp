@@ -34,9 +34,7 @@ public:
     virtual ~StepSetConfig();
 
     virtual net::E_CMD_STATUS Emit(
-            int iErrno = 0,
-            const std::string& strErrMsg = "",
-            void* data = NULL);
+    		int iErrno = 0, const std::string& strErrMsg = "", const std::string& strErrShow = "");
 
     virtual net::E_CMD_STATUS Callback(
             const net::tagMsgShell& stMsgShell,
@@ -47,7 +45,7 @@ public:
     virtual net::E_CMD_STATUS Timeout();
 
 private:
-    SessionOnlineNodes* m_pSessionOnlineNodes;
+    SessionOnlineNodes* m_pSessionOnlineNodes ;//= nullptr;
     net::tagMsgShell m_stMsgShell;
     int32 m_iEmitNum;
     int32 m_iSetResultCode;

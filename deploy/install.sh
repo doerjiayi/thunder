@@ -4,7 +4,7 @@ RUN_PATH=`pwd`
 cd ${RUN_PATH}
 lib3_path=/app/thunder/deploy/3lib
 
-SRC_IP=18.78
+SRC_IP=11.66
 #不填则自动识别目标物理地址为本物理机地址
 DST_IP=
 

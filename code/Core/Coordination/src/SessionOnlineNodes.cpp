@@ -7,7 +7,6 @@
  * @note
  * Modify history:
  ******************************************************************************/
-#include "CW.hpp"
 #include "SessionOnlineNodes.hpp"
 
 namespace coor
@@ -410,10 +409,7 @@ void SessionOnlineNodes::AddNodeBroadcast(const util::CJsonObject& oNodeInfo)
                             {
                                 continue;
                             }
-
-                            MsgBody oMsgBody;
-                            oMsgBody.set_body(oAddNodes.ToString());
-                            net::ExecStep(new coor::StepNodeBroadcast(node_iter->first, (int32)net::CMD_REQ_NODE_NOTICE, oMsgBody))
+                            net::ExecStep(new StepNodeBroadcast(node_iter->first,net::CMD_REQ_NODE_REG_NOTICE, oAddNodes.ToString()));
                         }
                     }
                     catch(std::bad_alloc& e)
@@ -445,12 +441,10 @@ void SessionOnlineNodes::AddNodeBroadcast(const util::CJsonObject& oNodeInfo)
     /* send subscribe node info to this node */
     if (oSubcribeNodeInfo["add_nodes"].GetArraySize() > 0)
     {
-		MsgBody oMsgBody;
 		char szThisNodeIdentity[32];
-		oMsgBody.set_body(oSubcribeNodeInfo.ToString());
 		snprintf(szThisNodeIdentity, sizeof(szThisNodeIdentity),
 						"%s:%s", oNodeInfo("node_ip").c_str(), oNodeInfo("node_port").c_str());
-		net::ExecStep(new coor::StepNodeBroadcast(szThisNodeIdentity,net::CMD_REQ_NODE_REG_NOTICE,oMsgBody));
+		net::ExecStep(new coor::StepNodeBroadcast(szThisNodeIdentity,net::CMD_REQ_NODE_REG_NOTICE,oSubcribeNodeInfo.ToString()));
     }
 }
 
@@ -479,9 +473,7 @@ void SessionOnlineNodes::RemoveNodeBroadcast(const util::CJsonObject& oNodeInfo)
                 {
                     for (node_iter = node_list_iter->second.begin(); node_iter != node_list_iter->second.end(); ++node_iter)
                     {
-                        MsgBody oMsgBody;
-                        oMsgBody.set_body(oDelNodes.ToString());
-                        net::ExecStep(new coor::StepNodeBroadcast(node_iter->first,net::CMD_REQ_NODE_REG_NOTICE,oMsgBody));
+                        net::ExecStep(new coor::StepNodeBroadcast(node_iter->first,net::CMD_REQ_NODE_REG_NOTICE,oDelNodes.ToString()));
                     }
                 }
             }
@@ -501,7 +493,7 @@ void SessionOnlineNodes::InitElection(const util::CJsonObject& oBeacon)
         m_bIsLeader = true;
     }
     else if (m_mapBeacon.size() == 1
-            && GetNodeIdentify() == m_mapBeacon.begin()->first)
+            && net::GetNodeIdentify() == m_mapBeacon.begin()->first)
     {
         m_bIsLeader = true;
     }
@@ -534,13 +526,13 @@ void SessionOnlineNodes::CheckLeader()
         }
         uint32 uiLeaderBit = mc_uiLeader & iter->second;
         iter->second = ((iter->second << 1) & mc_uiAlive) | uiLeaderBit;
-        if (iter->first == GetNodeIdentify())
+        if (iter->first == net::GetNodeIdentify())
         {
             iter->second |= 1;
         }
     }
 
-    if (strLeader == GetNodeIdentify())
+    if (strLeader == net::GetNodeIdentify())
     {
         m_bIsLeader = true;
     }
@@ -570,13 +562,17 @@ void SessionOnlineNodes::SendBeaconBeat()
     }
     m_setAddedNodeId.clear();
     m_setRemovedNodeId.clear();
-    oMsgBody.set_data(oElection.SerializeAsString());
-
+    std::string strBody = oElection.SerializeAsString();
+    auto defaultCallback = [](const MsgHead& oInMsgHead,const MsgBody& oInMsgBody,void* data,net::Session*pSession)
+	{
+		LOG4_DEBUG("send succ oInMsgBody:%s!", oInMsgBody.DebugString().c_str());
+	};
     for (auto iter = m_mapBeacon.begin(); iter != m_mapBeacon.end(); ++iter)
     {
-        if (GetNodeIdentify() != iter->first)
+        if (net::GetNodeIdentify() != iter->first)
         {
-            net::SendTo(iter->first, net::CMD_REQ_LEADER_ELECTION, GetSequence(), oMsgBody);
+//            net::SendTo(iter->first, net::CMD_REQ_LEADER_ELECTION, GetSequence(), oMsgBody);
+        	net::SendToCallback(this,net::CMD_REQ_NODE_REG_NOTICE,strBody,defaultCallback,iter->first);
         }
     }
 }

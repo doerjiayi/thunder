@@ -12,8 +12,8 @@
 namespace coor
 {
 
-StepNodeBroadcast::StepNodeBroadcast(const std::string& strNodeIdentity, int32 iCmd, const MsgBody& oMsgBody)
-    : m_strTargetNodeIdentity(strNodeIdentity), m_iCmd(iCmd), m_strBody(oMsgBody)
+StepNodeBroadcast::StepNodeBroadcast(const std::string& strNodeIdentity, int32 iCmd, const std::string& strBody)
+    : m_strTargetNodeIdentity(strNodeIdentity), m_iCmd(iCmd), m_strBody(strBody)
 {
 }
 

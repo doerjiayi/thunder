@@ -35,6 +35,16 @@ const std::string& Labor::GetWorkerIdentify()
 	return(m_strWorkerIdentify);
 }
 
+const std::string& Labor::GetNodeIdentify()
+{
+	if (m_strNodeIdentify.size() < 5) // IP + port 长度一定会大于这个数即可，不在乎数值是什么
+	{
+		char szWorkerIdentify[64] = {0};
+		snprintf(szWorkerIdentify, 64, "%s:%d", GetHostForServer().c_str(),GetPortForServer());
+		m_strNodeIdentify = szWorkerIdentify;
+	}
+	return(m_strNodeIdentify);
+}
 
 
 } /* namespace net */

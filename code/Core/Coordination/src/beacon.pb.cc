@@ -19,23 +19,23 @@
 #endif
 // @@protoc_insertion_point(includes)
 
-namespace beacon {
+namespace coor {
 class ElectionDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<Election>
       _instance;
 } _Election_default_instance_;
-}  // namespace beacon
+}  // namespace coor
 namespace protobuf_beacon_2eproto {
 static void InitDefaultsElection() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::beacon::_Election_default_instance_;
-    new (ptr) ::beacon::Election();
+    void* ptr = &::coor::_Election_default_instance_;
+    new (ptr) ::coor::Election();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::beacon::Election::InitAsDefaultInstance();
+  ::coor::Election::InitAsDefaultInstance();
 }
 
 ::google::protobuf::internal::SCCInfo<0> scc_info_Election =
@@ -49,21 +49,21 @@ void InitDefaults() {
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::beacon::Election, _internal_metadata_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::coor::Election, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::beacon::Election, is_leader_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::beacon::Election, last_node_id_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::beacon::Election, added_node_id_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::beacon::Election, removed_node_id_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::coor::Election, is_leader_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::coor::Election, last_node_id_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::coor::Election, added_node_id_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::coor::Election, removed_node_id_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, sizeof(::beacon::Election)},
+  { 0, -1, sizeof(::coor::Election)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::google::protobuf::Message*>(&::beacon::_Election_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::coor::_Election_default_instance_),
 };
 
 void protobuf_AssignDescriptors() {
@@ -87,13 +87,13 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\014beacon.proto\022\006beacon\"c\n\010Election\022\021\n\tis"
-      "_leader\030\001 \001(\005\022\024\n\014last_node_id\030\002 \001(\r\022\025\n\ra"
-      "dded_node_id\030\003 \003(\r\022\027\n\017removed_node_id\030\004 "
-      "\003(\rb\006proto3"
+      "\n\014beacon.proto\022\004coor\"c\n\010Election\022\021\n\tis_l"
+      "eader\030\001 \001(\005\022\024\n\014last_node_id\030\002 \001(\r\022\025\n\radd"
+      "ed_node_id\030\003 \003(\r\022\027\n\017removed_node_id\030\004 \003("
+      "\rb\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 131);
+      descriptor, 129);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "beacon.proto", &protobuf_RegisterTypes);
 }
@@ -109,7 +109,7 @@ struct StaticDescriptorInitializer {
   }
 } static_descriptor_initializer;
 }  // namespace protobuf_beacon_2eproto
-namespace beacon {
+namespace coor {
 
 // ===================================================================
 
@@ -127,7 +127,7 @@ Election::Election()
   ::google::protobuf::internal::InitSCC(
       &protobuf_beacon_2eproto::scc_info_Election.base);
   SharedCtor();
-  // @@protoc_insertion_point(constructor:beacon.Election)
+  // @@protoc_insertion_point(constructor:coor.Election)
 }
 Election::Election(const Election& from)
   : ::google::protobuf::Message(),
@@ -138,7 +138,7 @@ Election::Election(const Election& from)
   ::memcpy(&is_leader_, &from.is_leader_,
     static_cast<size_t>(reinterpret_cast<char*>(&last_node_id_) -
     reinterpret_cast<char*>(&is_leader_)) + sizeof(last_node_id_));
-  // @@protoc_insertion_point(copy_constructor:beacon.Election)
+  // @@protoc_insertion_point(copy_constructor:coor.Election)
 }
 
 void Election::SharedCtor() {
@@ -148,7 +148,7 @@ void Election::SharedCtor() {
 }
 
 Election::~Election() {
-  // @@protoc_insertion_point(destructor:beacon.Election)
+  // @@protoc_insertion_point(destructor:coor.Election)
   SharedDtor();
 }
 
@@ -170,7 +170,7 @@ const Election& Election::default_instance() {
 
 
 void Election::Clear() {
-// @@protoc_insertion_point(message_clear_start:beacon.Election)
+// @@protoc_insertion_point(message_clear_start:coor.Election)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -187,7 +187,7 @@ bool Election::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:beacon.Election)
+  // @@protoc_insertion_point(parse_start:coor.Election)
   for (;;) {
     ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -271,17 +271,17 @@ bool Election::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:beacon.Election)
+  // @@protoc_insertion_point(parse_success:coor.Election)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:beacon.Election)
+  // @@protoc_insertion_point(parse_failure:coor.Election)
   return false;
 #undef DO_
 }
 
 void Election::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:beacon.Election)
+  // @@protoc_insertion_point(serialize_start:coor.Election)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -321,13 +321,13 @@ void Election::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
   }
-  // @@protoc_insertion_point(serialize_end:beacon.Election)
+  // @@protoc_insertion_point(serialize_end:coor.Election)
 }
 
 ::google::protobuf::uint8* Election::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic; // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:beacon.Election)
+  // @@protoc_insertion_point(serialize_to_array_start:coor.Election)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -371,12 +371,12 @@ void Election::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:beacon.Election)
+  // @@protoc_insertion_point(serialize_to_array_end:coor.Election)
   return target;
 }
 
 size_t Election::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:beacon.Election)
+// @@protoc_insertion_point(message_byte_size_start:coor.Election)
   size_t total_size = 0;
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -436,22 +436,22 @@ size_t Election::ByteSizeLong() const {
 }
 
 void Election::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:beacon.Election)
+// @@protoc_insertion_point(generalized_merge_from_start:coor.Election)
   GOOGLE_DCHECK_NE(&from, this);
   const Election* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const Election>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:beacon.Election)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:coor.Election)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:beacon.Election)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:coor.Election)
     MergeFrom(*source);
   }
 }
 
 void Election::MergeFrom(const Election& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:beacon.Election)
+// @@protoc_insertion_point(class_specific_merge_from_start:coor.Election)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -468,14 +468,14 @@ void Election::MergeFrom(const Election& from) {
 }
 
 void Election::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:beacon.Election)
+// @@protoc_insertion_point(generalized_copy_from_start:coor.Election)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void Election::CopyFrom(const Election& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:beacon.Election)
+// @@protoc_insertion_point(class_specific_copy_from_start:coor.Election)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -505,11 +505,11 @@ void Election::InternalSwap(Election* other) {
 
 
 // @@protoc_insertion_point(namespace_scope)
-}  // namespace beacon
+}  // namespace coor
 namespace google {
 namespace protobuf {
-template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::beacon::Election* Arena::CreateMaybeMessage< ::beacon::Election >(Arena* arena) {
-  return Arena::CreateInternal< ::beacon::Election >(arena);
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::coor::Election* Arena::CreateMaybeMessage< ::coor::Election >(Arena* arena) {
+  return Arena::CreateInternal< ::coor::Election >(arena);
 }
 }  // namespace protobuf
 }  // namespace google

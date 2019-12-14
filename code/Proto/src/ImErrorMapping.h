@@ -96,7 +96,7 @@ inline const char * robot_err_msg(int code)
         case ERR_USER_KICED_OFFLINE:                    return "您的账号在其他设备登录，请重新登录";//你的帐号已经别处登录，您被迫下线
         case ERR_PRELOGIN_QRY_IDENTITY:                 return "系统繁忙，请稍后再尝试";///< 预登录从center查询ip,port出错
         case ERR_QUERY_UINFO_FROM_BUSINESS:             return "系统繁忙，请稍后再尝试";//从业务查询用户信息失败
-        case ERR_CHECK_LOGIN_TOKEN:                     return "身份信息错误，请重新登录";
+        case ERR_CHECK_PRE_LOGIN_TOKEN:                     return "身份信息错误，请重新登录";
         case ERR_DEVICE_KICED_OFFLINE:                  return "您的账号在其他设备登录，请重新登录!";
         case ERR_USER_NOT_EXIST:                        return "用户不存在";
         case ERR_USER_INFO_REGISTER:                    return "用户信息注册失败";
@@ -154,21 +154,6 @@ inline const char * robot_err_msg(int code)
     }
     return "未知错误";
 }
-
-//        case ERR_HTTP_SESSION_GET:                      return "数据错误[20401]";                 ///< HTTP SESSION 获取失败
-//        case ERR_HTTP_NO_HEADER:                        return "数据错误[20402]";                 ///< http请求没有header
-//        case ERR_HTTP_NO_BODY:                          return "数据错误[20403]";                 ///< http请求没有body
-//        case ERR_HTTP_NO_COOKIE:                        return "Cookie缺失[20404]";               ///< http请求缺少cookie
-//        case ERR_HTTP_NO_METHOD:                        return "协议格式错误[20405]";             ///< http请求缺少请求类型(GET/POST)
-//        case ERR_HTTP_TYPE:                             return "协议格式错误[20406]";             ///< http类型错误(请求/响应)
-//        case ERR_HTTP_METHOD:                           return "数据错误[20407]";                 ///< http接口错误(GET/POST)
-//        case ERR_HTTP_PARAM_DECODE:                     return "数据错误[20408]";                 ///< http参数解析失败
-//        case ERR_HTTP_PARAM_MISSING:                    return "参数缺失[20409]";                 ///< http请求缺少参数
-//        case ERR_HTTP_COOKIE_PARAM_DECODE:              return "Cookie数据错误[20410]";           ///< http请求cookie参数解析失败
-//        case ERR_HTTP_COOKIE_PARAM_MISSING:             return "Cookie参数缺失[20411]";           ///< http请求缺少cookie参数
-//        case ERR_HTTP_PARAM_ERROR:                      return "参数格式错误[20412]";             ///< http参数格式错误
-//        case ERR_HTTP_COOKIE_PARAM_ERROR:               return "Cookie数据错误[20413]";           ///< http请求Cookie参数错误
-//        case ERR_HTTP_POST_TO_JAVA:                     return "系统繁忙，请稍后再尝试[20414]";    ///< http post数据给java服务时出错
 
 }
 

@@ -12,15 +12,6 @@
 namespace coor
 {
 
-ModuleAdmin::ModuleAdmin(const std::string& strModulePath)
-    : net::Module(strModulePath), m_pSessionOnlineNodes(nullptr)
-{
-}
-
-ModuleAdmin::~ModuleAdmin()
-{
-}
-
 bool ModuleAdmin::Init()
 {
     return(true);
@@ -54,7 +45,7 @@ bool ModuleAdmin::AnyMessage(
     }
     if (nullptr == m_pSessionOnlineNodes)
     {
-        m_pSessionOnlineNodes = net::GetSession("coor::SessionOnlineNodes");
+        m_pSessionOnlineNodes = (SessionOnlineNodes*)net::GetSession("coor::SessionOnlineNodes");
         if (nullptr == m_pSessionOnlineNodes)
         {
             LOG4_ERROR("no session node found!");
@@ -227,7 +218,7 @@ void ModuleAdmin::Get(const net::tagMsgShell& stMsgShell,
     {
         if (oCmdJson["args"].GetArraySize() == 2)
         {
-            std::shared_ptr<net::Step> pStep = new StepGetConfig(
+            auto pStep = new StepGetConfig(
                     stMsgShell, iHttpMajor, iHttpMinor,
                     (int32)net::CMD_REQ_GET_NODE_CONFIG,
                     oCmdJson["args"](1), std::string(""), std::string(""));
@@ -238,7 +229,7 @@ void ModuleAdmin::Get(const net::tagMsgShell& stMsgShell,
             }
             else
             {
-                pStep->Emit();
+                net::ExecStep(pStep);
             }
         }
         else
@@ -251,8 +242,7 @@ void ModuleAdmin::Get(const net::tagMsgShell& stMsgShell,
     {
         if (oCmdJson["args"].GetArraySize() == 2)
         {
-            std::shared_ptr<net::Step> pStep = MakeSharedStep(
-                    "coor::StepGetConfig", stMsgShell, iHttpMajor, iHttpMinor,
+            auto pStep = new coor::StepGetConfig(stMsgShell, iHttpMajor, iHttpMinor,
                     (int32)net::CMD_REQ_GET_NODE_CUSTOM_CONFIG,
                     oCmdJson["args"](1), std::string(""), std::string(""));
             if (nullptr == pStep)
@@ -262,7 +252,7 @@ void ModuleAdmin::Get(const net::tagMsgShell& stMsgShell,
             }
             else
             {
-                pStep->Emit();
+                net::ExecStep(pStep);
             }
         }
         else
@@ -275,8 +265,7 @@ void ModuleAdmin::Get(const net::tagMsgShell& stMsgShell,
     {
         if (oCmdJson["args"].GetArraySize() == 4)
         {
-            std::shared_ptr<net::Step> pStep = MakeSharedStep(
-                    "coor::StepGetConfig", stMsgShell, iHttpMajor, iHttpMinor,
+            auto pStep = new coor::StepGetConfig(stMsgShell, iHttpMajor, iHttpMinor,
                     (int32)net::CMD_REQ_GET_CUSTOM_CONFIG,
                     oCmdJson["args"](1), oCmdJson["args"](2), oCmdJson["args"](3));
             if (nullptr == pStep)
@@ -286,7 +275,7 @@ void ModuleAdmin::Get(const net::tagMsgShell& stMsgShell,
             }
             else
             {
-                pStep->Emit();
+            	net::ExecStep(pStep);
             }
         }
         else
@@ -318,11 +307,11 @@ void ModuleAdmin::Set(const net::tagMsgShell& stMsgShell,int32 iHttpMajor, int32
         }
         if (oCmdJson["args"].GetArraySize() == 3)
         {
-            std::shared_ptr<net::Step> pStep = MakeSharedStep(
-                    "coor::StepSetConfig", m_pSessionOnlineNodes,
+            auto pStep = new StepSetConfig(m_pSessionOnlineNodes,
                     stMsgShell, iHttpMajor, iHttpMinor,
                     iCmd, oCmdJson["args"](1), std::string(""),
                     oCmdJson["args"](2), std::string(""), std::string(""));
+
             if (nullptr == pStep)
             {
                 oResult.Add("code", (int32)net::ERR_NEW);
@@ -335,8 +324,7 @@ void ModuleAdmin::Set(const net::tagMsgShell& stMsgShell,int32 iHttpMajor, int32
         }
         else if (oCmdJson["args"].GetArraySize() == 4)
         {
-            std::shared_ptr<net::Step> pStep = MakeSharedStep(
-                    "coor::StepSetConfig", m_pSessionOnlineNodes,
+            auto pStep = new StepSetConfig( m_pSessionOnlineNodes,
                     stMsgShell, iHttpMajor, iHttpMinor,
                     iCmd, oCmdJson["args"](1),
                     oCmdJson["args"](2), oCmdJson["args"](3), 
@@ -348,7 +336,7 @@ void ModuleAdmin::Set(const net::tagMsgShell& stMsgShell,int32 iHttpMajor, int32
             }
             else
             {
-                pStep->Emit();
+            	net::ExecStep(pStep);
             }
         }
         else
@@ -363,8 +351,7 @@ void ModuleAdmin::Set(const net::tagMsgShell& stMsgShell,int32 iHttpMajor, int32
         int32 iCmd = net::CMD_REQ_SET_CUSTOM_CONFIG;
         if (oCmdJson["args"].GetArraySize() == 4)
         {
-            std::shared_ptr<net::Step> pStep = MakeSharedStep(
-                    "coor::StepSetConfig", m_pSessionOnlineNodes,
+            auto pStep = new StepSetConfig(m_pSessionOnlineNodes,
                     stMsgShell, iHttpMajor, iHttpMinor,
                     iCmd, oCmdJson["args"](1), std::string(""),
                     oCmdJson["args"](3), std::string(""), oCmdJson["args"](2));
@@ -375,13 +362,12 @@ void ModuleAdmin::Set(const net::tagMsgShell& stMsgShell,int32 iHttpMajor, int32
             }
             else
             {
-                pStep->Emit();
+            	net::ExecStep(pStep);
             }
         }
         else if (oCmdJson["args"].GetArraySize() == 5)
         {
-            std::shared_ptr<net::Step> pStep = MakeSharedStep(
-                    "coor::StepSetConfig", m_pSessionOnlineNodes,
+        	auto pStep = new StepSetConfig(m_pSessionOnlineNodes,
                     stMsgShell, iHttpMajor, iHttpMinor,
                     iCmd, oCmdJson["args"](1), std::string(""), oCmdJson["args"](4),
                     oCmdJson["args"](2), oCmdJson["args"](3));
@@ -392,13 +378,12 @@ void ModuleAdmin::Set(const net::tagMsgShell& stMsgShell,int32 iHttpMajor, int32
             }
             else
             {
-                pStep->Emit();
+            	net::ExecStep(pStep);
             }
         }
         else if (oCmdJson["args"].GetArraySize() == 6)
         {
-            std::shared_ptr<net::Step> pStep = MakeSharedStep(
-                    "coor::StepSetConfig", m_pSessionOnlineNodes,
+        	auto pStep = new StepSetConfig(m_pSessionOnlineNodes,
                     stMsgShell, iHttpMajor, iHttpMinor,
                     iCmd, oCmdJson["args"](1), oCmdJson["args"](2), oCmdJson["args"](5),
                     oCmdJson["args"](3), oCmdJson["args"](4));
@@ -409,7 +394,7 @@ void ModuleAdmin::Set(const net::tagMsgShell& stMsgShell,int32 iHttpMajor, int32
             }
             else
             {
-                pStep->Emit();
+            	net::ExecStep(pStep);
             }
         }
         else

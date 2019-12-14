@@ -19,8 +19,8 @@ namespace coor
 class CmdNodeReport: public net::Cmd
 {
 public:
-    CmdNodeReport():m_pSessionOnlineNodes(nullptr){}
-    virtual ~CmdNodeReport();
+    CmdNodeReport() = default;
+    virtual ~CmdNodeReport() = default;
 
     virtual bool Init();
     virtual bool AnyMessage(
@@ -29,7 +29,7 @@ public:
                     const MsgBody& oMsgBody);
 
 private:
-    SessionOnlineNodes* m_pSessionOnlineNodes;
+    SessionOnlineNodes* m_pSessionOnlineNodes = nullptr;
 };
 
 } /* namespace coor */

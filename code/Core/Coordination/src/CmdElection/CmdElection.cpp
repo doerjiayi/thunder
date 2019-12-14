@@ -12,15 +12,6 @@
 namespace coor
 {
 
-CmdElection::CmdElection(int32 iCmd)
-    :    m_pSessionOnlineNodes(nullptr)
-{
-}
-
-CmdElection::~CmdElection()
-{
-}
-
 bool CmdElection::Init()
 {
     return(true);
@@ -31,7 +22,7 @@ bool CmdElection::AnyMessage(const net::tagMsgShell& stMsgShell,const MsgHead& o
     Election oElection;
     if (nullptr == m_pSessionOnlineNodes)
     {
-        m_pSessionOnlineNodes = net::GetSession("coor::SessionOnlineNodes");
+        m_pSessionOnlineNodes = (SessionOnlineNodes*)net::GetSession("coor::SessionOnlineNodes");
         if (nullptr == m_pSessionOnlineNodes)
         {
             LOG4_ERROR("no session node found!");
@@ -40,7 +31,7 @@ bool CmdElection::AnyMessage(const net::tagMsgShell& stMsgShell,const MsgHead& o
     }
     if (oElection.ParseFromString(oMsgBody.body()))
     {
-        m_pSessionOnlineNodes->AddBeaconBeat(net::getstMsgShell->GetIdentify(), oElection);
+        m_pSessionOnlineNodes->AddBeaconBeat(net::GetConnectIdentify(stMsgShell), oElection);
         return(true);
     }
     else

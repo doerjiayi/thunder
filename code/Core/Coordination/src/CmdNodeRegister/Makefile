@@ -49,10 +49,9 @@ INC := $(INC) \
 LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
            -L$(UTIL_PATH)/lib -lUtil \
            -L$(3PARTY_PATH)/lib -lhiredis_vip \
-           -L$(3PARTY_PATH)/lib -lhiredis -lredlock \
            -L$(3PARTY_PATH)/lib -lprotobuf \
            -L$(3PARTY_PATH)/lib -llog4cplus \
-           -L$(3PARTY_PATH)/lib -ljemalloc -ltcmalloc \
+           -L$(3PARTY_PATH)/lib -ljemalloc  \
            -L$(SYSTEM_LIB_PATH) -lpthread \
            -L$(SYSTEM_LIB_PATH) -ldl -lrt  
 

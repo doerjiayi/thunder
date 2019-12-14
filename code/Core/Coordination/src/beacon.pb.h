@@ -52,14 +52,14 @@ extern ElectionDefaultTypeInternal _Election_default_instance_;
 }  // namespace coor
 namespace google {
 namespace protobuf {
-template<> ::beacon::Election* Arena::CreateMaybeMessage<::beacon::Election>(Arena*);
+template<> ::coor::Election* Arena::CreateMaybeMessage<::coor::Election>(Arena*);
 }  // namespace protobuf
 }  // namespace google
 namespace coor {
 
 // ===================================================================
 
-class Election : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:beacon.Election) */ {
+class Election : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:coor.Election) */ {
  public:
   Election();
   virtual ~Election();
@@ -182,7 +182,7 @@ class Election : public ::google::protobuf::Message /* @@protoc_insertion_point(
   ::google::protobuf::uint32 last_node_id() const;
   void set_last_node_id(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:beacon.Election)
+  // @@protoc_insertion_point(class_scope:coor.Election)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -211,13 +211,13 @@ inline void Election::clear_is_leader() {
   is_leader_ = 0;
 }
 inline ::google::protobuf::int32 Election::is_leader() const {
-  // @@protoc_insertion_point(field_get:beacon.Election.is_leader)
+  // @@protoc_insertion_point(field_get:coor.Election.is_leader)
   return is_leader_;
 }
 inline void Election::set_is_leader(::google::protobuf::int32 value) {
   
   is_leader_ = value;
-  // @@protoc_insertion_point(field_set:beacon.Election.is_leader)
+  // @@protoc_insertion_point(field_set:coor.Election.is_leader)
 }
 
 // uint32 last_node_id = 2;
@@ -225,13 +225,13 @@ inline void Election::clear_last_node_id() {
   last_node_id_ = 0u;
 }
 inline ::google::protobuf::uint32 Election::last_node_id() const {
-  // @@protoc_insertion_point(field_get:beacon.Election.last_node_id)
+  // @@protoc_insertion_point(field_get:coor.Election.last_node_id)
   return last_node_id_;
 }
 inline void Election::set_last_node_id(::google::protobuf::uint32 value) {
   
   last_node_id_ = value;
-  // @@protoc_insertion_point(field_set:beacon.Election.last_node_id)
+  // @@protoc_insertion_point(field_set:coor.Election.last_node_id)
 }
 
 // repeated uint32 added_node_id = 3;
@@ -242,25 +242,25 @@ inline void Election::clear_added_node_id() {
   added_node_id_.Clear();
 }
 inline ::google::protobuf::uint32 Election::added_node_id(int index) const {
-  // @@protoc_insertion_point(field_get:beacon.Election.added_node_id)
+  // @@protoc_insertion_point(field_get:coor.Election.added_node_id)
   return added_node_id_.Get(index);
 }
 inline void Election::set_added_node_id(int index, ::google::protobuf::uint32 value) {
   added_node_id_.Set(index, value);
-  // @@protoc_insertion_point(field_set:beacon.Election.added_node_id)
+  // @@protoc_insertion_point(field_set:coor.Election.added_node_id)
 }
 inline void Election::add_added_node_id(::google::protobuf::uint32 value) {
   added_node_id_.Add(value);
-  // @@protoc_insertion_point(field_add:beacon.Election.added_node_id)
+  // @@protoc_insertion_point(field_add:coor.Election.added_node_id)
 }
 inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
 Election::added_node_id() const {
-  // @@protoc_insertion_point(field_list:beacon.Election.added_node_id)
+  // @@protoc_insertion_point(field_list:coor.Election.added_node_id)
   return added_node_id_;
 }
 inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
 Election::mutable_added_node_id() {
-  // @@protoc_insertion_point(field_mutable_list:beacon.Election.added_node_id)
+  // @@protoc_insertion_point(field_mutable_list:coor.Election.added_node_id)
   return &added_node_id_;
 }
 
@@ -272,25 +272,25 @@ inline void Election::clear_removed_node_id() {
   removed_node_id_.Clear();
 }
 inline ::google::protobuf::uint32 Election::removed_node_id(int index) const {
-  // @@protoc_insertion_point(field_get:beacon.Election.removed_node_id)
+  // @@protoc_insertion_point(field_get:coor.Election.removed_node_id)
   return removed_node_id_.Get(index);
 }
 inline void Election::set_removed_node_id(int index, ::google::protobuf::uint32 value) {
   removed_node_id_.Set(index, value);
-  // @@protoc_insertion_point(field_set:beacon.Election.removed_node_id)
+  // @@protoc_insertion_point(field_set:coor.Election.removed_node_id)
 }
 inline void Election::add_removed_node_id(::google::protobuf::uint32 value) {
   removed_node_id_.Add(value);
-  // @@protoc_insertion_point(field_add:beacon.Election.removed_node_id)
+  // @@protoc_insertion_point(field_add:coor.Election.removed_node_id)
 }
 inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
 Election::removed_node_id() const {
-  // @@protoc_insertion_point(field_list:beacon.Election.removed_node_id)
+  // @@protoc_insertion_point(field_list:coor.Election.removed_node_id)
   return removed_node_id_;
 }
 inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
 Election::mutable_removed_node_id() {
-  // @@protoc_insertion_point(field_mutable_list:beacon.Election.removed_node_id)
+  // @@protoc_insertion_point(field_mutable_list:coor.Election.removed_node_id)
   return &removed_node_id_;
 }
 

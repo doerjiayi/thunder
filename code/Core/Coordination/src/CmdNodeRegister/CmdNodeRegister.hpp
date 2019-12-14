@@ -18,8 +18,8 @@ namespace coor
 class CmdNodeRegister: public net::Cmd
 {
 public:
-    CmdNodeRegister(int32 iCmd);
-    virtual ~CmdNodeRegister();
+    CmdNodeRegister() = default;
+    virtual ~CmdNodeRegister() = default;
 
     virtual bool Init();
     virtual bool AnyMessage(

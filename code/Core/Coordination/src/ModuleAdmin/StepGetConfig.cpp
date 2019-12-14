@@ -55,8 +55,8 @@ net::E_CMD_STATUS StepGetConfig::Emit(int iErrno = 0, const std::string& strErrM
         oResponseData.Add("code", net::ERR_CONNECTION);
         oResponseData.Add("msg", "unknow identify \"" + m_strNodeIdentify + "\"!");
         oHttpMsg.set_body(oResponseData.ToFormattedString());
-        SendTo(m_pChannel, oHttpMsg);
-        return(net::CMD_STATUS_FAULT);
+        SendTo(m_tagMsgShell, oHttpMsg);
+        return(net::STATUS_CMD_FAULT);
     }
 }
 
@@ -86,8 +86,8 @@ net::E_CMD_STATUS StepGetConfig::Callback(const net::tagMsgShell& stMsgShell, co
         }
     }
     oHttpMsg.set_body(oResponseData.ToFormattedString());
-    SendTo(m_pChannel, oHttpMsg);
-    return(net::CMD_STATUS_COMPLETED);
+    SendTo(m_tagMsgShell, oHttpMsg);
+    return(net::STATUS_CMD_COMPLETED);
 }
 
 net::E_CMD_STATUS StepGetConfig::Timeout()
@@ -101,8 +101,8 @@ net::E_CMD_STATUS StepGetConfig::Timeout()
     oResponseData.Add("code", net::ERR_TIMEOUT);
     oResponseData.Add("msg", "get config file timeout!");
     oHttpMsg.set_body(oResponseData.ToFormattedString());
-    SendTo(m_pChannel, oHttpMsg);
-    return(net::CMD_STATUS_FAULT);
+    SendTo(m_tagMsgShell, oHttpMsg);
+    return(net::STATUS_CMD_FAULT);
 }
 
 } /* namespace coor */

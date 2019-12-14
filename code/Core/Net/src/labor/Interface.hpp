@@ -82,6 +82,12 @@ const util::CJsonObject& GetCustomConf() ;
  */
 const std::string& GetWorkerIdentify() ;
 /**
+ * @brief 获取当前节点标识符
+ * @note 由 IP:port组成，例如： 192.168.18.22:30001
+ * @return 当前节点标识符
+ */
+const std::string& GetNodeIdentify() ;
+/**
  * @brief 获取工作目录
  * @return 工作目录
  */

@@ -45,7 +45,7 @@ DbAgentSession* GetDbAgentSession()
 
 bool DbAgentSession::Init()
 {
-	if (!net::GetJsonConfigFile(net::GetConfigPath() + std::string("CmdDbOper.json"),m_oDbConf))
+	if (!net::GetConfig(m_oDbConf,net::GetConfigPath() + std::string("CmdDbOper.json")))
 	{
 		return false;
 	}

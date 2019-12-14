@@ -2917,7 +2917,7 @@ bool Worker::SendToSession(const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 	{
 		char szIdentify[32] = {0};
 		snprintf(szIdentify, sizeof(szIdentify), "%u", oMsgBody.session_id());
-		bSendResult = SendTo(szIdentify, oOutMsgHead, m_oReqMsgBody);
+		bSendResult = SendTo(szIdentify, oMsgHead, oMsgBody);
 	}
 	else if (oMsgBody.has_session())
 	{
