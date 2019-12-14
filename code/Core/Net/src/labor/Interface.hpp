@@ -138,10 +138,12 @@ bool SendToModCallback(net::Step* pUpperStep,uint32 uiCmd,const std::string &str
 bool AddMsgShell(const std::string& strIdentify, const net::tagMsgShell& stMsgShell);
 /**
  * @brief 删除指定标识的消息外壳
- * @note 删除指定标识的消息外壳由Worker类实例调用，在IoError或IoTimeout时调
- * 用。
+ * @note 删除指定标识的消息外壳由Worker类实例调用，在IoError或IoTimeout时调用。
  */
 void DelMsgShell(const std::string& strIdentify, const net::tagMsgShell& stMsgShell);
+
+std::string GetClientAddr(const tagMsgShell& stMsgShell);
+std::string GetConnectIdentify(const tagMsgShell& stMsgShell);
 /**
  * @brief 解析消息到message
  */
@@ -206,6 +208,7 @@ bool SendTo(const net::tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpSte
  */
 bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
 bool SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const std::string &strBody);
+bool SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const MsgBody& oMsgBody);
 /**
  * @brief 根据路由id自动发送到指定的节点
  * @note 根据路由id自动发送到指定的节点

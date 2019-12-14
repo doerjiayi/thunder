@@ -8,15 +8,13 @@
  * Modify history:
  ******************************************************************************/
 #include "StepSetConfig.hpp"
-#include <util/encrypt/base64.h>
-#include <channel/SocketChannel.hpp>
 
 namespace coor
 {
 
 StepSetConfig::StepSetConfig(
-        std::shared_ptr<SessionOnlineNodes> pSessionOnlineNodes,
-        const net::tagMsgShell& stMsgShell,
+		SessionOnlineNodes* pSessionOnlineNodes,
+		const net::tagMsgShell& stMsgShell,
         int32 iHttpMajor,
         int32 iHttpMinor,
         int32 iCmd,
@@ -25,7 +23,7 @@ StepSetConfig::StepSetConfig(
         const std::string& strConfigFileContent,
         const std::string& strConfigFileRelativePath,
         const std::string& strConfigFileName)
-    : m_pSessionOnlineNodes(pSessionOnlineNodes), m_pChannel(stMsgShell),
+    : m_pSessionOnlineNodes(pSessionOnlineNodes), m_stMsgShell(stMsgShell),
       m_iEmitNum(0), m_iSetResultCode(0),
       m_iHttpMajor(iHttpMajor), m_iHttpMinor(iHttpMinor),
       m_iCmd(iCmd),
@@ -45,14 +43,14 @@ StepSetConfig::~StepSetConfig()
 net::E_CMD_STATUS StepSetConfig::Emit(int iErrno, const std::string& strErrMsg, void* data)
 {
     MsgBody oMsgBody;
-    net::ConfigInfo oConfigFileInfo;
+    neb::ConfigInfo oConfigFileInfo;
     int iDecodeLen = Base64decode_len(m_strConfigFileContent.c_str());
     char* pBufPlain = (char*)malloc(iDecodeLen);
     int iDecodeBytes = Base64decode(pBufPlain, m_strConfigFileContent.c_str());
     oConfigFileInfo.set_file_name(m_strConfigFileName);
     oConfigFileInfo.set_file_content(pBufPlain, iDecodeBytes);
     oConfigFileInfo.set_file_path(m_strConfigFileRelativePath);
-    oMsgBody.set_data(oConfigFileInfo.SerializeAsString());
+    oMsgBody.set_body(oConfigFileInfo.SerializeAsString());
     free(pBufPlain);
 
     HttpMsg oHttpMsg;
@@ -63,18 +61,18 @@ net::E_CMD_STATUS StepSetConfig::Emit(int iErrno, const std::string& strErrMsg, 
     util::CJsonObject oResponseData;
     if (m_strNodeIdentify.size() > 0)
     {
-        if (SendTo(m_strNodeIdentify, m_iCmd, GetSequence(), oMsgBody))
+        if (net::SendTo(m_strNodeIdentify, m_iCmd, GetSequence(), oMsgBody))
         {
             ++m_iEmitNum;
-            return(net::CMD_STATUS_RUNNING);
+            return(net::STATUS_CMD_RUNNING);
         }
         else
         {
             oResponseData.Add("code", ERR_NODE_IDENTIFY);
             oResponseData.Add("msg", "unknow identify \"" + m_strNodeIdentify + "\"!");
             oHttpMsg.set_body(oResponseData.ToFormattedString());
-            SendTo(m_pChannel, oHttpMsg);
-            return(net::CMD_STATUS_FAULT);
+            SendTo(m_stMsgShell, oHttpMsg);
+            return(net::STATUS_CMD_FAULT);
         }
     }
     else if (m_strNodeType.size() > 0)
@@ -84,7 +82,7 @@ net::E_CMD_STATUS StepSetConfig::Emit(int iErrno, const std::string& strErrMsg, 
         {
             for (auto it = vecNodes.begin(); it != vecNodes.end(); ++it)
             {
-                if (SendTo(*it, m_iCmd, GetSequence(), oMsgBody))
+                if (net::SendTo(*it, m_iCmd, GetSequence(), oMsgBody))
                 {
                     ++m_iEmitNum;
                 }
@@ -100,18 +98,18 @@ net::E_CMD_STATUS StepSetConfig::Emit(int iErrno, const std::string& strErrMsg, 
                 oResponseData.Add("msg", "failed");
                 oResponseData.Add("data", m_oSetResultMsg);
                 oHttpMsg.set_body(oResponseData.ToFormattedString());
-                SendTo(m_pChannel, oHttpMsg);
-                return(net::CMD_STATUS_FAULT);
+                net::SendTo(m_stMsgShell, oHttpMsg);
+                return(net::STATUS_CMD_FAULT);
             }
-            return(net::CMD_STATUS_RUNNING);
+            return(net::STATUS_CMD_RUNNING);
         }
         else
         {
             oResponseData.Add("code", ERR_INVALID_ARGV);
             oResponseData.Add("msg", "There are no nodes of this type!");
             oHttpMsg.set_body(oResponseData.ToFormattedString());
-            SendTo(m_pChannel, oHttpMsg);
-            return(net::CMD_STATUS_FAULT);
+            net::SendTo(m_stMsgShell, oHttpMsg);
+            return(net::STATUS_CMD_FAULT);
         }
     }
     else
@@ -119,8 +117,8 @@ net::E_CMD_STATUS StepSetConfig::Emit(int iErrno, const std::string& strErrMsg, 
         oResponseData.Add("code", ERR_INVALID_ARGV);
         oResponseData.Add("msg", "miss node type!");
         oHttpMsg.set_body(oResponseData.ToFormattedString());
-        SendTo(m_pChannel, oHttpMsg);
-        return(net::CMD_STATUS_FAULT);
+        SendTo(m_stMsgShell, oHttpMsg);
+        return(net::STATUS_CMD_FAULT);
     }
 }
 
@@ -128,7 +126,7 @@ net::E_CMD_STATUS StepSetConfig::Callback(const net::tagMsgShell& stMsgShell, co
 {
     --m_iEmitNum;
     m_iSetResultCode |= oInMsgBody.rsp_result().code();
-    m_oSetResultMsg.Add(stMsgShell->GetIdentify(), oInMsgBody.rsp_result().msg());
+    m_oSetResultMsg.Add(net::GetConnectIdentify(stMsgShell), oInMsgBody.rsp_result().msg());
     if (0 == m_iEmitNum)
     {
         HttpMsg oHttpMsg;
@@ -149,12 +147,12 @@ net::E_CMD_STATUS StepSetConfig::Callback(const net::tagMsgShell& stMsgShell, co
             oResponseData.Add("data", m_oSetResultMsg);
         }
         oHttpMsg.set_body(oResponseData.ToFormattedString());
-        SendTo(m_pChannel, oHttpMsg);
-        return(net::CMD_STATUS_COMPLETED);
+        SendTo(m_stMsgShell, oHttpMsg);
+        return(net::STATUS_CMD_COMPLETED);
     }
     else
     {
-        return(net::CMD_STATUS_RUNNING);
+        return(net::STATUS_CMD_RUNNING);
     }
 }
 
@@ -169,8 +167,8 @@ net::E_CMD_STATUS StepSetConfig::Timeout()
     oResponseData.Add("code", net::ERR_TIMEOUT);
     oResponseData.Add("msg", "get config file timeout!");
     oHttpMsg.set_body(oResponseData.ToFormattedString());
-    SendTo(m_pChannel, oHttpMsg);
-    return(net::CMD_STATUS_FAULT);
+    net::SendTo(m_stMsgShell, oHttpMsg);
+    return(net::STATUS_CMD_FAULT);
 }
 
 } /* namespace coor */

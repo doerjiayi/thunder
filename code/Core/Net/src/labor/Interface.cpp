@@ -114,6 +114,9 @@ bool SendToModCallback(net::Step* pUpperStep,uint32 uiCmd,const std::string &str
 bool AddMsgShell(const std::string& strIdentify, const net::tagMsgShell& stMsgShell){return(g_pLabor->AddMsgShell(strIdentify, stMsgShell));}
 void DelMsgShell(const std::string& strIdentify, const net::tagMsgShell& stMsgShell){g_pLabor->DelMsgShell(strIdentify,stMsgShell);}
 
+std::string GetClientAddr(const tagMsgShell& stMsgShell){return g_pLabor->GetClientAddr(stMsgShell);}
+std::string GetConnectIdentify(const tagMsgShell& stMsgShell){return g_pLabor->GetConnectIdentify(stMsgShell);}
+
 bool ParseMsgBody(const MsgBody& oInMsgBody,google::protobuf::Message &message){return g_pLabor->ParseMsgBody(oInMsgBody,message);}
 
 bool RegisterCallback(net::Step* pStep){return(g_pLabor->RegisterCallback(pStep));}
@@ -133,6 +136,7 @@ bool SendTo(const net::tagMsgShell& stMsgShell,uint32 cmd,uint32 seq,const std::
 bool SendTo(const net::tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL){return(g_pLabor->SendTo(stMsgShell,oHttpMsg,pHttpStep));}
 bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendTo(strIdentify, oMsgHead, oMsgBody));}
 bool SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const std::string &strBody){return(g_pLabor->SendTo(strIdentify,cmd,seq,strBody));}
+bool SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const MsgBody& oMsgBody){return(g_pLabor->SendTo(strIdentify,cmd,seq,oMsgBody));}
 
 bool SendToSession(const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendToSession(oMsgHead, oMsgBody));}
 bool SendToSession(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(g_pLabor->SendToSession(strNodeType, oMsgHead, oMsgBody));}

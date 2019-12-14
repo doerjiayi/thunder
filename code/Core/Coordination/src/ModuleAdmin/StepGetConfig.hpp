@@ -10,9 +10,7 @@
 #ifndef SRC_CMDREGISTER_STEPGETCONFIG_HPP_
 #define SRC_CMDREGISTER_STEPGETCONFIG_HPP_
 
-#include <util/http/http_parser.h>
-#include <util/json/CJsonObject.hpp>
-#include "Step.hpp"
+#include "Comm.hpp"
 
 namespace coor
 {
@@ -31,9 +29,7 @@ public:
     virtual ~StepGetConfig();
 
     virtual net::E_CMD_STATUS Emit(
-            int iErrno = 0,
-            const std::string& strErrMsg = "",
-            void* data = NULL);
+    		int iErrno = 0, const std::string& strErrMsg = "", const std::string& strErrShow = "");
 
     virtual net::E_CMD_STATUS Callback(
             const net::tagMsgShell& stMsgShell,

@@ -9,11 +9,9 @@
  ******************************************************************************/
 #ifndef MODULEADMIN_HPP
 #define MODULEADMIN_HPP
-#include <string>
-#include "util/json/CJsonObject.hpp"
-#include "util/http/http_parser.h"
+
+#include "Comm.hpp"
 #include "SessionOnlineNodes.hpp"
-#include "BeaconError.hpp"
 #include "StepGetConfig.hpp"
 
 namespace coor
@@ -83,7 +81,7 @@ protected:
             util::CJsonObject& oCmdJson, util::CJsonObject& oResult);
 
 private:
-    std::shared_ptr<SessionOnlineNodes> m_pSessionOnlineNodes;
+    SessionOnlineNodes* m_pSessionOnlineNodes;
 };
 
 } /* namespace coor */

@@ -10,27 +10,18 @@
 #ifndef SRC_CMDREGISTER_STEPSETCONFIG_HPP_
 #define SRC_CMDREGISTER_STEPSETCONFIG_HPP_
 
-#include <util/http/http_parser.h>
-#include <util/json/CJsonObject.hpp>
-#include <pb/neb_sys.pb.h>
-#include <actor/step/PbStep.hpp>
+#include "Comm.hpp"
 #include "BeaconError.hpp"
 #include "SessionOnlineNodes.hpp"
 
 namespace coor
 {
 
-class StepSetConfig: public net::PbStep,
-    public net::DynamicCreator<StepSetConfig,
-                               std::shared_ptr<SessionOnlineNodes>,
-                               std::shared_ptr<net::SocketChannel>,
-                               int32, int32, int32,
-                               std::string, std::string, std::string,
-                               std::string, std::string>
+class StepSetConfig: public net::Step
 {
 public:
     StepSetConfig(
-            std::shared_ptr<SessionOnlineNodes> pSessionOnlineNodes,
+    		SessionOnlineNodes* pSessionOnlineNodes,
             const net::tagMsgShell& stMsgShell,
             int32 iHttpMajor,
             int32 iHttpMinor,
@@ -56,8 +47,8 @@ public:
     virtual net::E_CMD_STATUS Timeout();
 
 private:
-    std::shared_ptr<SessionOnlineNodes> m_pSessionOnlineNodes;
-    std::shared_ptr<net::SocketChannel> m_pChannel;
+    SessionOnlineNodes* m_pSessionOnlineNodes;
+    net::tagMsgShell m_stMsgShell;
     int32 m_iEmitNum;
     int32 m_iSetResultCode;
     int32 m_iHttpMajor;

@@ -2899,6 +2899,17 @@ bool Worker::SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const s
 	return SendTo(strIdentify,oOutMsgHead,oOutMsgBody);
 }
 
+bool Worker::SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const MsgBody& oMsgBody)
+{
+	LOG4_TRACE("%s(identify: %s)", __FUNCTION__, strIdentify.c_str());
+	MsgHead oOutMsgHead;
+	oOutMsgHead.set_seq(seq);
+	oOutMsgHead.set_cmd(cmd);
+	oOutMsgHead.set_msgbody_len(oMsgBody.ByteSize());
+	return SendTo(strIdentify,oOutMsgHead,oMsgBody);
+}
+
+
 bool Worker::SendToSession(const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
 	bool bSendResult = false;

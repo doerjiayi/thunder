@@ -33,16 +33,16 @@ StepGetConfig::~StepGetConfig()
 {
 }
 
-net::E_CMD_STATUS StepGetConfig::Emit(int iErrno, const std::string& strErrMsg, void* data)
+net::E_CMD_STATUS StepGetConfig::Emit(int iErrno = 0, const std::string& strErrMsg = "", const std::string& strErrShow = "")
 {
     MsgBody oMsgBody;
-    net::ConfigInfo oConfigFileInfo;
+    ConfigInfo oConfigFileInfo;
     oConfigFileInfo.set_file_name(m_strConfigFileName);
     oConfigFileInfo.set_file_path(m_strConfigFileRelativePath);
     oMsgBody.set_body(oConfigFileInfo.SerializeAsString());
-    if (SendTo(m_strNodeIdentify, m_iCmd, GetSequence(), oMsgBody))
+    if (net::SendTo(m_strNodeIdentify, m_iCmd, GetSequence(), oMsgBody))
     {
-        return(net::CMD_STATUS_RUNNING);
+        return(net::STATUS_CMD_RUNNING);
     }
     else
     {
@@ -72,8 +72,8 @@ net::E_CMD_STATUS StepGetConfig::Callback(const net::tagMsgShell& stMsgShell, co
     oResponseData.Add("msg", oInMsgBody.rsp_result().msg());
     if (net::ERR_OK == oInMsgBody.rsp_result().code())
     {
-        net::ConfigInfo oConfigInfo;
-        if (oConfigInfo.ParseFromString(oInMsgBody.data()))
+        ConfigInfo oConfigInfo;
+        if (oConfigInfo.ParseFromString(oInMsgBody.body()))
         {
             int iEncodeLen = Base64encode_len(oConfigInfo.file_content().size());
             char* pBufEncoded = (char*)malloc(iEncodeLen);

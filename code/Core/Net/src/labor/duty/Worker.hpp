@@ -144,9 +144,10 @@ public:
     bool SendTo(const tagMsgShell& stMsgShell);
     bool SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
     bool SendTo(const tagMsgShell& stMsgShell,uint32 cmd,uint32 seq,const std::string &strBody);
+    bool SendTo(const tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL);
     bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
     bool SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const std::string &strBody);
-    bool SendTo(const tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL);
+    bool SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const MsgBody& oMsgBody);
 	bool SentTo(const std::string& strHost, int iPort, const std::string& strUrlPath, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL);
 
     bool SendToSession(const MsgHead& oMsgHead, const MsgBody& oMsgBody);
