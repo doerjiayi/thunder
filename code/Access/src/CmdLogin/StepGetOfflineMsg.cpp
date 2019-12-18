@@ -70,7 +70,7 @@ net::E_CMD_STATUS StepGetOfflineMsg::Emit(int iErrno, const std::string& strErrM
 	{
 		return(net::STATUS_CMD_COMPLETED);
 	}
-	net::SendToSession("LOGIC",m_oOutMsgHead, m_oOutMsgBody);
+	GetLabor()->SendToSession("LOGIC",m_oOutMsgHead, m_oOutMsgBody);
     return(net::STATUS_CMD_RUNNING);
 }
 
@@ -165,7 +165,7 @@ net::E_CMD_STATUS StepGetOfflineMsg::Callback(
                     void* data)
 {
     LOG4_DEBUG("seq[%llu] StepGetOfflineMsg::Callback ok!", oInMsgHead.seq());
-    net::SendToClient(stMsgShell,oInMsgHead,oInMsgBody);//返回客户端
+    GetLabor()->SendToClient(stMsgShell,oInMsgHead,oInMsgBody);//返回客户端
 	return(net::STATUS_CMD_RUNNING);
 }
 

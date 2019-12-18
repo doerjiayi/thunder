@@ -220,7 +220,7 @@ bool CmdDataProxy::RedisOnly(const net::tagMsgShell& stMsgShell, const MsgHead& 
     LOG4_DEBUG("%s()", __FUNCTION__);
     if (DataMem::MemOperate::RedisOperate::T_WRITE == oMemOperate.redis_operate().op_type())
     {
-        return g_pLabor->ExecStep(new StepWriteToRedis(stMsgShell, oInMsgHead, oMemOperate.redis_operate(), m_pRedisNodeSession));
+        return GetLabor()->ExecStep(new StepWriteToRedis(stMsgShell, oInMsgHead, oMemOperate.redis_operate(), m_pRedisNodeSession));
     }
     else
     {
@@ -235,14 +235,14 @@ bool CmdDataProxy::RedisOnly(const net::tagMsgShell& stMsgShell, const MsgHead& 
         {
             pStepReadFromRedis = new StepReadFromRedis(stMsgShell, oInMsgHead,oMemOperate.redis_operate(), m_pRedisNodeSession, false);
         }
-        return g_pLabor->ExecStep(pStepReadFromRedis);
+        return GetLabor()->ExecStep(pStepReadFromRedis);
     }
 }
 
 bool CmdDataProxy::DbOnly(const net::tagMsgShell& stMsgShell, const MsgHead& oInMsgHead,const DataMem::MemOperate& oMemOperate)
 {
     LOG4_DEBUG("%s()", __FUNCTION__);
-    return g_pLabor->ExecStep(new StepSendToDbAgent(stMsgShell, oInMsgHead, oMemOperate, m_pRedisNodeSession));
+    return GetLabor()->ExecStep(new StepSendToDbAgent(stMsgShell, oInMsgHead, oMemOperate, m_pRedisNodeSession));
 }
 
 bool CmdDataProxy::ReadEither(const net::tagMsgShell& stMsgShell, const MsgHead& oInMsgHead,const DataMem::MemOperate& oMemOperate)
@@ -267,7 +267,7 @@ bool CmdDataProxy::ReadEither(const net::tagMsgShell& stMsgShell, const MsgHead&
     {
         pStepReadFromRedis = new StepReadFromRedis(stMsgShell, oInMsgHead,oMemOperate.redis_operate(), m_pRedisNodeSession, false, NULL, "", pStepSendToDbAgent);
     }
-    return g_pLabor->ExecStep(pStepReadFromRedis);
+    return GetLabor()->ExecStep(pStepReadFromRedis);
 }
 
 bool CmdDataProxy::WriteBoth(const net::tagMsgShell& stMsgShell, const MsgHead& oInMsgHead,DataMem::MemOperate& oMemOperate)
@@ -275,7 +275,7 @@ bool CmdDataProxy::WriteBoth(const net::tagMsgShell& stMsgShell, const MsgHead& 
     LOG4_DEBUG("%s()", __FUNCTION__);
     pStepSendToDbAgent = new StepSendToDbAgent(stMsgShell, oInMsgHead, oMemOperate, m_pRedisNodeSession);
     pStepWriteToRedis = new StepWriteToRedis(stMsgShell, oInMsgHead, oMemOperate.redis_operate(), m_pRedisNodeSession, pStepSendToDbAgent);
-    return g_pLabor->ExecStep(pStepWriteToRedis);
+    return GetLabor()->ExecStep(pStepWriteToRedis);
 }
 
 bool CmdDataProxy::UpdateBothWithDataset(const net::tagMsgShell& stMsgShell, const MsgHead& oInMsgHead,DataMem::MemOperate& oMemOperate)
@@ -314,7 +314,7 @@ bool CmdDataProxy::UpdateBothWithDataset(const net::tagMsgShell& stMsgShell, con
         pStepReadFromRedisForWrite = new StepReadFromRedisForWrite(stMsgShell, oInMsgHead, oMemOperate, m_pRedisNodeSession,
                         m_pProxySess->m_oNosqlDbRelative["tables"][oMemOperate.db_operate().table_name()]["cols"],
 						m_pProxySess->m_oNosqlDbRelative["redis_struct"][strRedisDataPurpose]("key_field"));
-        return g_pLabor->ExecStep(pStepReadFromRedisForWrite);
+        return GetLabor()->ExecStep(pStepReadFromRedisForWrite);
     }
     else if (NOSQL_T_STRING == oMemOperate.redis_operate().redis_structure())
     {
@@ -322,7 +322,7 @@ bool CmdDataProxy::UpdateBothWithDataset(const net::tagMsgShell& stMsgShell, con
         oMemOperate.mutable_redis_operate()->clear_fields();
         pStepReadFromRedisForWrite = new StepReadFromRedisForWrite(stMsgShell, oInMsgHead, oMemOperate, m_pRedisNodeSession,
                         m_pProxySess->m_oNosqlDbRelative["tables"][oMemOperate.db_operate().table_name()]["cols"]);
-        return g_pLabor->ExecStep(pStepReadFromRedisForWrite);
+        return GetLabor()->ExecStep(pStepReadFromRedisForWrite);
     }
     else
     {
@@ -338,7 +338,7 @@ bool CmdDataProxy::Response(const net::tagMsgShell& stMsgShell, const MsgHead& o
     DataMem::MemRsp oRsp;
     oRsp.set_err_no(iErrno);
     oRsp.set_err_msg(strErrMsg);
-    return net::SendToClient(stMsgShell, oInMsgHead, oRsp);
+    return GetLabor()->SendToClient(stMsgShell, oInMsgHead, oRsp);
 }
 
 bool CmdDataProxy::GetNodeSession(const DataMem::MemOperate& oMemOperate)

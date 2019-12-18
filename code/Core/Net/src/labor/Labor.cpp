@@ -11,6 +11,8 @@
 
 //每个进程只有一个labor，使用单例模式
 net::Labor* g_pLabor = NULL;
+net::Labor* GetLabor() {return g_pLabor;}
+const net::Labor* GetCLabor() {return g_pLabor;}
 
 namespace net
 {
@@ -37,11 +39,11 @@ const std::string& Labor::GetWorkerIdentify()
 
 const std::string& Labor::GetNodeIdentify()
 {
-	if (m_strNodeIdentify.size() < 5) // IP + port 长度一定会大于这个数即可，不在乎数值是什么
+	if (m_strNodeIdentify.size() < 5) // IP + port长度一定会大于这个数即可，不在乎数值是什么
 	{
-		char szWorkerIdentify[64] = {0};
-		snprintf(szWorkerIdentify, 64, "%s:%d", GetHostForServer().c_str(),GetPortForServer());
-		m_strNodeIdentify = szWorkerIdentify;
+		char szNodeIdentify[64] = {0};
+		snprintf(szNodeIdentify, 64, "%s:%d", GetHostForServer().c_str(),GetPortForServer());
+		m_strNodeIdentify = szNodeIdentify;
 	}
 	return(m_strNodeIdentify);
 }

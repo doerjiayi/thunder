@@ -34,12 +34,12 @@ net::Cmd* create() \
 //是否使用Nagle算法(否则注释掉)
 #define ENABLE_NAGLE
 //框架日志都使用本系列日志接口
-#define LOG4_FATAL(args...) LOG4CPLUS_FATAL_FMT(g_pLabor->GetLogger(), ##args)
-#define LOG4_ERROR(args...) LOG4CPLUS_ERROR_FMT(g_pLabor->GetLogger(), ##args)
-#define LOG4_WARN(args...) LOG4CPLUS_WARN_FMT(g_pLabor->GetLogger(), ##args)
-#define LOG4_INFO(args...) LOG4CPLUS_INFO_FMT(g_pLabor->GetLogger(), ##args)
-#define LOG4_DEBUG(args...) LOG4CPLUS_DEBUG_FMT(g_pLabor->GetLogger(), ##args)
-#define LOG4_TRACE(args...) LOG4CPLUS_TRACE_FMT(g_pLabor->GetLogger(), ##args)
+#define LOG4_FATAL(args...) LOG4CPLUS_FATAL_FMT(GetLabor()->GetLogger(), ##args)
+#define LOG4_ERROR(args...) LOG4CPLUS_ERROR_FMT(GetLabor()->GetLogger(), ##args)
+#define LOG4_WARN(args...) LOG4CPLUS_WARN_FMT(GetLabor()->GetLogger(), ##args)
+#define LOG4_INFO(args...) LOG4CPLUS_INFO_FMT(GetLabor()->GetLogger(), ##args)
+#define LOG4_DEBUG(args...) LOG4CPLUS_DEBUG_FMT(GetLabor()->GetLogger(), ##args)
+#define LOG4_TRACE(args...) LOG4CPLUS_TRACE_FMT(GetLabor()->GetLogger(), ##args)
 
 #define LOAD_CONFIG(conf,name,member) if (!conf.Get(name, member)) {LOG4_ERROR("config load(%s) failed",name);return false;}
 

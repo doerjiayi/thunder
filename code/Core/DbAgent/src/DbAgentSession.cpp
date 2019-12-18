@@ -28,7 +28,7 @@ DbAgentSession* GetDbAgentSession()
     	if (!pSess->Init())
     	{
     		LOG4_ERROR("pSess->Init() error!");
-    		g_pLabor->DeleteCallback(pSess);
+    		GetLabor()->DeleteCallback(pSess);
     		return NULL;
     	}
         LOG4_DEBUG("register DbAgentSession ok!");
@@ -926,13 +926,13 @@ bool DbAgentSession::Response(const net::tagMsgShell &stMsgShell,const MsgHead &
     oRsp.set_from(DataMem::MemRsp::FROM_DB);
     oRsp.set_err_no(iErrno);
     oRsp.set_err_msg(strErrMsg);
-    return net::SendToClient(stMsgShell, oInMsgHead, oRsp);
+    return GetLabor()->SendToClient(stMsgShell, oInMsgHead, oRsp);
 }
 
 bool DbAgentSession::Response(const net::tagMsgShell &stMsgShell,const MsgHead &oInMsgHead,const DataMem::MemRsp& oRsp)
 {
     LOG4_TRACE("error %d: %s", oRsp.err_no(), oRsp.err_msg().c_str());
-    return net::SendToClient(stMsgShell, oInMsgHead, oRsp);
+    return GetLabor()->SendToClient(stMsgShell, oInMsgHead, oRsp);
 }
 
 std::string DbAgentSession::GetFullTableName(const std::string& strTableName, uint64 uiFactor)

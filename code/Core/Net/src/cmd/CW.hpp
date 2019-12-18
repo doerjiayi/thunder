@@ -52,6 +52,7 @@ enum E_CMD
     CMD_RSP_SERVER_DATA_STATUS_REPORT   = 26,   ///< 服务器数据状态上报应答
     CMD_REQ_GET_LOAD_MIN_SERVER         = 27,   ///< 获取低负载服务器请求
     CMD_RSP_GET_LOAD_MIN_SERVER         = 28,   ///< 获取低负载服务器应答
+
     CMD_REQ_SET_LOG_LEVEL               = 29,   ///< 设置日志级别请求（manager to worker）
     CMD_RSP_SET_LOG_LEVEL               = 30,   ///< 设置日志级别响应（无须响应）
     CMD_REQ_RELOAD_SO                   = 31,   ///< 重新加载so请求（manager to worker）
@@ -65,27 +66,11 @@ enum E_CMD
     CMD_REQ_NODE_RESTART_WORKERS        = 37,   ///< 重启工作者请求
     CMD_RSP_NODE_RESTART_WORKERS        = 38,   ///< 重启工作者应答
 
-	//配置
     CMD_REQ_RELOAD_LOGIC_CONFIG         = 39,   ///< Center通知配置到节点服务器,重新加载逻辑配置
     CMD_RSP_RELOAD_LOGIC_CONFIG         = 40,   ///< 节点服务器得到通知应答Center
 
-	CMD_REQ_LEADER_ELECTION             = 113,  ///< 分布式leader选举请求
-	CMD_RSP_LEADER_ELECTION             = 114,  ///< 分布式leader选举响应（通过心跳结合优先权选举，无须响应）
-
-	CMD_REQ_SET_NODE_CONFIG             = 201,  ///< 更新框架配置文件请求
-	CMD_RSP_SET_NODE_CONFIG             = 202,  ///< 更新框架配置文件应答
-	CMD_REQ_GET_NODE_CONFIG             = 203,  ///< 获取框架配置文件请求
-	CMD_RSP_GET_NODE_CONFIG             = 204,  ///< 获取框架配置文件应答
-	CMD_REQ_SET_NODE_CUSTOM_CONFIG      = 205,  ///< 更新框架配置文件中自定义部分配置请求
-	CMD_RSP_SET_NODE_CUSTOM_CONFIG      = 206,  ///< 更新框架配置文件中自定义部分配置应答
-	CMD_REQ_GET_NODE_CUSTOM_CONFIG      = 207,  ///< 获取框架配置文件中自定义部分配置请求
-	CMD_RSP_GET_NODE_CUSTOM_CONFIG      = 208,  ///< 获取框架配置文件中自定义部分配置应答
-	CMD_REQ_SET_CUSTOM_CONFIG           = 209,  ///< 更新自定义配置文件请求
-	CMD_RSP_SET_CUSTOM_CONFIG           = 210,  ///< 更新自定义配置文件响应
-	CMD_REQ_GET_CUSTOM_CONFIG           = 211,  ///< 获取自定义配置文件请求
-	CMD_RSP_GET_CUSTOM_CONFIG           = 212,  ///< 获取自定义配置文件响应
-	CMD_REQ_RELOAD_CUSTOM_CONFIG        = 213,  ///< 重新加载自定义配置文件请求
-	CMD_RSP_RELOAD_CUSTOM_CONFIG        = 214,  ///< 重新加载自定义配置文件响应
+	CMD_REQ_LEADER_ELECTION             = 41,  ///< 分布式leader选举请求
+	CMD_RSP_LEADER_ELECTION             = 42,  ///< 分布式leader选举响应（通过心跳结合优先权选举，无须响应）
 
     // 接入层转发命令字，如客户端数据转发给Logic，Logic数据转发给客户端等
     CMD_REQ_FROM_CLIENT                 = 501,     ///< 客户端发送过来需由接入层转发的数据，传输的MsgHead里的Cmd不会被改变（无业务逻辑直接转发的场景，如登录等接入层有业务逻辑的场景不适用）

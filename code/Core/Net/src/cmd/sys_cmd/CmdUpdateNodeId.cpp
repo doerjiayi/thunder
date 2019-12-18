@@ -30,7 +30,7 @@ bool CmdUpdateNodeId::AnyMessage(
     {
         int iNodeId = 0;
         oNode.Get("node_id", iNodeId);
-        g_pLabor->SetNodeId(iNodeId);
+        GetLabor()->SetNodeId(iNodeId);
         return(true);
     }
     return(false);

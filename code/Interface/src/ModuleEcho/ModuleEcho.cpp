@@ -45,7 +45,7 @@ void ModuleEcho::Response(const net::tagMsgShell& stMsgShell,const HttpMsg& oInH
     util::CJsonObject oRsp;
     oRsp.Add("code", iCode);
     oRsp.Add("msg", "ok");
-    net::SendToClient(stMsgShell,oInHttpMsg,oRsp.ToString());
+    GetLabor()->SendToClient(stMsgShell,oInHttpMsg,oRsp.ToString());
 }
 
 } /* namespace core */

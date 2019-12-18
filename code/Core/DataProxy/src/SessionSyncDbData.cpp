@@ -76,7 +76,7 @@ net::E_CMD_STATUS SessionSyncDbData::Timeout()
 		MsgBody oMsgBody;
         if(GetSyncData(oMsgHead, oMsgBody))
         {
-            if (!g_pLabor->ExecStep(new StepSyncToDb(m_strTableName, oMsgHead, oMsgBody)))
+            if (!GetLabor()->ExecStep(new StepSyncToDb(m_strTableName, oMsgHead, oMsgBody)))
             {
             	LOG4_ERROR("failed to ExecStep(new StepSyncToDb)");
             }

@@ -152,7 +152,7 @@ net::E_CMD_STATUS StepWriteToRedis::Callback(const redisAsyncContext *c, int sta
     if (m_oRedisOperate.key_ttl() != 0)
     {
     	StepSetTtl* pStepSetTtl = new StepSetTtl(m_strMasterNode, m_oRedisOperate.key_name(), m_oRedisOperate.key_ttl());
-        g_pLabor->ExecStep(pStepSetTtl);
+        GetLabor()->ExecStep(pStepSetTtl);
     }
     return(net::STATUS_CMD_COMPLETED);
 }

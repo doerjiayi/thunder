@@ -30,6 +30,8 @@ public:
                     const tagMsgShell& stMsgShell,
                     const MsgHead& oInMsgHead,
                     const MsgBody& oInMsgBody);
+
+    util::CJsonObject m_jsonData;
 };
 
 } /* namespace net */

@@ -1,0 +1,39 @@
+{
+    "node_type":"ACCESS",
+    "access_host":"192.168.11.66",
+    "access_port":27010,
+    "access_codec":8,
+    "inner_host":"192.168.11.66",
+    "inner_port":27011,
+    "center":[
+        {"host":"192.168.11.66","port":"27000"}],
+    "server_name":"Access_im",
+    "process_num":1,
+    "//cpu_affinity":"是否设置进程CPU亲和度（绑定CPU）",
+    "cpu_affinity":false,
+    "worker_capacity":1000000,
+    "config_path":"conf/",
+    "log_path":"log/",
+    "max_log_file_num":10,
+    "max_log_file_size":20480000,
+    "permission":{
+        "addr_permit":{"stat_interval":1.0, "permit_num":5000000},
+        "uin_permit":{"stat_interval":1.0, "permit_num":5000000}
+    },
+    "io_timeout":300.0,
+    "step_timeout":5.0,
+    "log_levels":{"FATAL":50000, "ERROR":40000, "WARN":30000, "INFO":20000, "DEBUG":10000, "TRACE":0},
+    "log_level":20000,
+    "load_so_interval":60.0,
+    
+    "so":[
+       {"cmd":1003, "so_path":"plugins/CmdFromClient.so", "entrance_symbol":"create","load":true, "version":1},
+       {"cmd":1004, "so_path":"plugins/CmdHello.so", "entrance_symbol":"create","load":true, "version":1},
+       {"cmd":1005, "so_path":"plugins/CmdKickedOffLine.so", "entrance_symbol":"create","process_num":0, "load":true, "version":1},
+       {"cmd":1006, "so_path":"plugins/CmdLogin.so", "entrance_symbol":"create","load":true, "version":1},
+       {"cmd":1007, "so_path":"plugins/CmdLogout.so", "entrance_symbol":"create","load":true, "version":1},
+       {"cmd":1008, "so_path":"plugins/CmdToClient.so", "entrance_symbol":"create","load":true, "version":1},
+       {"cmd":1009, "so_path":"plugins/CmdUpdateAdditional.so", "entrance_symbol":"create","load":true, "version":1}
+    ]
+}
+

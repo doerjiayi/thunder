@@ -62,29 +62,33 @@ net::E_CMD_STATUS StepNode::Emit(int iErrno , const std::string& strErrMsg , con
         oOutHead.set_cmd(m_uiCmd);
         oOutBody.set_body(m_strMsgSerial);
         oOutHead.set_msgbody_len(oOutBody.ByteSize());
-        LOG4_TRACE("%s() m_uiModFactor(%d)!Send cmd[%u] seq[%u] sending",__FUNCTION__,m_uiModFactor,oOutHead.cmd(),oOutHead.seq());
+        LOG4_TRACE("%s() m_uiModFactor(%lld)!Send cmd[%u] seq[%u] sending",__FUNCTION__,m_uiModFactor,oOutHead.cmd(),oOutHead.seq());
         bool bRet(false);
         if (m_strNodeType.size())
         {
         	if (m_strNodeType.find(':') != std::string::npos)
 			{
-				bRet = net::SendTo(m_strNodeType,oOutHead,oOutBody);//标识符
+				bRet = GetLabor()->SendTo(m_strNodeType,oOutHead,oOutBody);//标识符
 			}
 			else
 			{
 				if (m_uiModFactor >= 0)
 				{
-					bRet = net::SendToWithMod(m_strNodeType,m_uiModFactor,oOutHead,oOutBody);
+					#ifdef USE_CONHASH
+					bRet = GetLabor()->SendToConHash(m_strNodeType,m_uiModFactor,oOutHead,oOutBody);
+					#else
+					bRet = GetLabor()->SendToWithMod(m_strNodeType,m_uiModFactor,oOutHead,oOutBody);
+					#endif
 				}
 				else
 				{
-					bRet = net::SendToNext(m_strNodeType,oOutHead,oOutBody);
+					bRet = GetLabor()->SendToNext(m_strNodeType,oOutHead,oOutBody);
 				}
 			}
         }
         else
         {
-        	bRet = net::SendTo(m_stMsgShell,oOutHead,oOutBody);//标识符
+        	bRet = GetLabor()->SendTo(m_stMsgShell,oOutHead,oOutBody);//标识符
         }
         if (!bRet)
         {
@@ -147,7 +151,7 @@ net::E_CMD_STATUS StepNode::Callback(const net::tagMsgShell& stMsgShell,const Ms
     }
     else if (m_storageCallbackStep)
 	{
-    	Step* pUpperStep = g_pLabor->GetStep(m_uiUpperStepSeq);
+    	Step* pUpperStep = GetLabor()->GetStep(m_uiUpperStepSeq);
     	if (pUpperStep)
     	{
     		DataMem::MemRsp oRsp;
@@ -174,7 +178,7 @@ net::E_CMD_STATUS StepNode::Callback(const net::tagMsgShell& stMsgShell,const Ms
     }
     else if (m_standardCallbackStep)
     {
-    	Step* pUpperStep = g_pLabor->GetStep(m_uiUpperStepSeq);
+    	Step* pUpperStep = GetLabor()->GetStep(m_uiUpperStepSeq);
     	if (pUpperStep)
 		{
     		m_standardCallbackStep(oInMsgHead,oInMsgBody,data,pUpperStep);
@@ -192,13 +196,13 @@ net::E_CMD_STATUS StepNode::Callback(const net::tagMsgShell& stMsgShell,const Ms
     }
     if (m_uiUpperStepSeq)
     {
-    	Step* pUpperStep = g_pLabor->GetStep(m_uiUpperStepSeq);
+    	Step* pUpperStep = GetLabor()->GetStep(m_uiUpperStepSeq);
     	if (pUpperStep)
     	{
     		LOG4_TRACE("step %u RemovePreStepSeq for pUpperStep seq %u",GetSequence(),m_uiUpperStepSeq);
     		pUpperStep->RemovePreStepSeq(this);
     	}
-    	g_pLabor->ExecStep(m_uiUpperStepSeq);
+    	GetLabor()->ExecStep(m_uiUpperStepSeq);
     }
     return net::STATUS_CMD_COMPLETED;
 }
@@ -281,7 +285,7 @@ net::Session* StepNode::GetSession()
 	{
 		if (m_strUpperSessionId.size() > 0 && m_strUpperSessionClassName.size() > 0)
 		{
-			m_pSession = g_pLabor->GetSession(m_strUpperSessionId,m_strUpperSessionClassName);
+			m_pSession = GetLabor()->GetSession(m_strUpperSessionId,m_strUpperSessionClassName);
 		}
 	}
 	return m_pSession;

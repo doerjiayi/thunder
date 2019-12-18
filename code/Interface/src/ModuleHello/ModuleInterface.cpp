@@ -40,7 +40,7 @@ void ModuleHello::GenKey(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHt
 		util::CJsonObject oRsp;
 		oRsp.Add("token", strToken);
 		oRsp.Add("key", strKey);
-		net::SendToClient(stMsgShell,oInHttpMsg,oRsp.ToString(),200);
+		GetLabor()->SendToClient(stMsgShell,oInHttpMsg,oRsp.ToString(),200);
 	}
 	{//发送服务器
 		auto callback = [] (const MsgHead& oInMsgHead,const MsgBody& oInMsgBody,void* data,net::Step*pStep)
@@ -48,7 +48,7 @@ void ModuleHello::GenKey(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHt
 			LOG4_TRACE("callback %s",oInMsgBody.body().c_str());//不需要再返回客户端
 		};
 		util::CJsonObject oJson;
-		std::string address = g_pLabor->GetClientAddr(stMsgShell);
+		std::string address = GetLabor()->GetClientAddr(stMsgShell);
 		oJson.Add("token", strToken);
 		oJson.Add("key", strKey);
 		oJson.Add("genkey", "1");
@@ -56,7 +56,7 @@ void ModuleHello::GenKey(const net::tagMsgShell& stMsgShell,const HttpMsg& oInHt
 		oJson.Add("address",address);
 		LOG4_DEBUG("oJson(%s)",oJson.ToString().c_str());
 		int64 mod = util::CalcKeyHash(address.c_str(),address.size());
-		net::SendToModCallback(new net::DataStep(stMsgShell,oInHttpMsg),GET_TOKEN_GEN,oJson.ToString(),callback,mod,"LOGIC");
+		GetLabor()->SendToCallback(new net::DataStep(stMsgShell,oInHttpMsg),GET_TOKEN_GEN,oJson.ToString(),callback,"LOGIC",mod);
 	}
 }
 
@@ -77,7 +77,7 @@ void ModuleHello::VerifyKey(const net::tagMsgShell& stMsgShell,const HttpMsg& oI
 	if (strToken.empty() || strKey.empty())
 	{
 		LOG4_ERROR("%s() strToken.empty() || strKey.empty()", __FUNCTION__);
-		net::SendToClient(stMsgShell,oInHttpMsg,"strToken empty or strKey empty",400);
+		GetLabor()->SendToClient(stMsgShell,oInHttpMsg,"strToken empty or strKey empty",400);
 		return;
 	}
 	auto callback = [] (const MsgHead& oInMsgHead,const MsgBody& oInMsgBody,void* data,net::Step*pStep)
@@ -90,11 +90,11 @@ void ModuleHello::VerifyKey(const net::tagMsgShell& stMsgShell,const HttpMsg& oI
 		pStep->SendToClient(oInMsgBody.body(), code == 0 ? 200 : 401);//https://www.runoob.com/http/http-status-codes.html
 	};
 	oJson.Add("verifykey", "1");
-	std::string address = g_pLabor->GetClientAddr(stMsgShell);
+	std::string address = GetLabor()->GetClientAddr(stMsgShell);
 	oJson.Add("address",address);
 	LOG4_DEBUG("oJson(%s)",oJson.ToString().c_str());
 	int64 mod = util::CalcKeyHash(address.c_str(),address.size());
-	net::SendToModCallback(new net::DataStep(stMsgShell,oInHttpMsg),GET_TOKEN_GEN,oJson.ToString(),callback,mod,"LOGIC");
+	GetLabor()->SendToCallback(new net::DataStep(stMsgShell,oInHttpMsg),GET_TOKEN_GEN,oJson.ToString(),callback,"LOGIC",mod);
 }
 
 //oInHttpMsg:type: 0
@@ -148,7 +148,7 @@ void ModuleHello::Response(const net::tagMsgShell& stMsgShell,const HttpMsg& oIn
     util::CJsonObject oRsp;
     oRsp.Add("code", iCode);
     oRsp.Add("msg", "ok");
-    net::SendToClient(stMsgShell,oInHttpMsg,oRsp.ToString());
+    GetLabor()->SendToClient(stMsgShell,oInHttpMsg,oRsp.ToString());
 }
 
 } /* namespace core */

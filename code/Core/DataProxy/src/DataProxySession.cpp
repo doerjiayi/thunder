@@ -28,7 +28,7 @@ DataProxySession* GetDataProxySession()
 	{
 		if (!pSess->Init())
 		{
-			g_pLabor->DeleteCallback(pSess);
+			GetLabor()->DeleteCallback(pSess);
 			return NULL;
 		}
 		LOG4_DEBUG("register DataProxySession ok!");

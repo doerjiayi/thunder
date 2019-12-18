@@ -82,7 +82,7 @@ bool CmdLocateData::RedisOnly(const net::tagMsgShell& stMsgShell, const MsgHead&
 		oRspJson.Add("redis_node", util::CJsonObject("{}"));
 		oRspJson["redis_node"].Add("master", strMasterIdentify);
 		oRspJson["redis_node"].Add("slave", strSlaveIdentify);
-		return net::SendToClient(stMsgShell, oInMsgHead, oRspJson.ToString());
+		return GetLabor()->SendToClient(stMsgShell, oInMsgHead, oRspJson.ToString());
 	}
 	LOG4_ERROR("GetSession error! strSectionFactor(%s)", strSectionFactor.c_str());
 	Response(stMsgShell, oInMsgHead, ERR_LACK_CLUSTER_INFO, "GetSession error!");
@@ -95,7 +95,7 @@ bool CmdLocateData::DbOnly(const net::tagMsgShell& stMsgShell, const MsgHead& oI
 	{
 		pStep->SendToClient(oInMsgBody.body());
 	};
-	return net::SendToCallback(new net::DataStep(stMsgShell,oInMsgHead),oInMsgHead.cmd(),oInMsgBody.body(),callback,AGENT_R);
+	return GetLabor()->SendToCallback(new net::DataStep(stMsgShell,oInMsgHead),oInMsgHead.cmd(),oInMsgBody.body(),callback,AGENT_R);
 }
 
 bool CmdLocateData::RedisAndDb(const net::tagMsgShell& stMsgShell, const MsgHead& oInMsgHead,const MsgBody& oInMsgBody)
@@ -134,7 +134,7 @@ bool CmdLocateData::RedisAndDb(const net::tagMsgShell& stMsgShell, const MsgHead
 		oRspJson.Add("redis_node", pParam->oRedisNodeJson);
 		pStep->SendToClient(oRspJson.ToString());
 	};
-	return net::SendToCallback(new net::DataStep(stMsgShell,oInMsgHead,new DataParam(oRedisNodeJson)),oInMsgHead.cmd(),oInMsgBody.body(),callback,AGENT_R);
+	return GetLabor()->SendToCallback(new net::DataStep(stMsgShell,oInMsgHead,new DataParam(oRedisNodeJson)),oInMsgHead.cmd(),oInMsgBody.body(),callback,AGENT_R);
 }
 
 void CmdLocateData::Response(const net::tagMsgShell& stMsgShell, const MsgHead& oInMsgHead,int iErrno, const std::string& strErrMsg)
@@ -143,7 +143,7 @@ void CmdLocateData::Response(const net::tagMsgShell& stMsgShell, const MsgHead& 
     util::CJsonObject oRspJson;
     oRspJson.Add("code", iErrno);
     oRspJson.Add("msg", strErrMsg);
-    net::SendToClient(stMsgShell,oInMsgHead,oRspJson.ToString());
+    GetLabor()->SendToClient(stMsgShell,oInMsgHead,oRspJson.ToString());
 }
 
 } /* namespace core */

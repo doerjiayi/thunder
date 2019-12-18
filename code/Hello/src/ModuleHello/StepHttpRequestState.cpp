@@ -107,7 +107,7 @@ void StepHttpRequestState::Response(int nCode)
     oRsp.Add("code", nCode);
     oRsp.Add("msg", "ok");
     oHttpMsg.set_body(oRsp.ToString());
-    g_pLabor->SendTo(m_stReqMsgShell, oHttpMsg);
+    GetLabor()->SendTo(m_stReqMsgShell, oHttpMsg);
 }
 
 } /* namespace net */

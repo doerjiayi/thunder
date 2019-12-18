@@ -53,7 +53,7 @@ E_CMD_STATUS StepNodeNotice::Emit(
             {
                 memset(strIdentify,0,50);
                 sprintf(strIdentify,"%s:%d.%d",node_ip.c_str(),node_port,j);
-                net::AddNodeIdentify(node_type,string(strIdentify));
+                GetLabor()->AddNodeIdentify(node_type,string(strIdentify));
                 LOG4_DEBUG("Step::AddNodeIdentify(%s,%s)",node_type.c_str(),strIdentify);
             }
         }
@@ -72,7 +72,7 @@ E_CMD_STATUS StepNodeNotice::Emit(
             {
                 memset(strIdentify,0,50);
                 sprintf(strIdentify,"%s:%d.%d",node_ip.c_str(),node_port,j);
-                net::DelNodeIdentify(node_type,string(strIdentify));
+                GetLabor()->DelNodeIdentify(node_type,string(strIdentify));
                 LOG4_DEBUG("Step::DelNodeIdentify(%s,%s)",node_type.c_str(),strIdentify);
             }
         }

@@ -76,7 +76,7 @@ private:
 
 template <typename T> T* MakeSession(const std::string& strSessionId, const std::string& strSessionClass,ev_tstamp dSessionTimeout=60.0,const util::CJsonObject &conf = util::CJsonObject())
 {
-	T* pSession = (T*) g_pLabor->GetSession(strSessionId,strSessionClass);
+	T* pSession = (T*) GetLabor()->GetSession(strSessionId,strSessionClass);
 	if (pSession)
 	{
 		return (pSession);
@@ -87,11 +87,11 @@ template <typename T> T* MakeSession(const std::string& strSessionId, const std:
 		LOG4_ERROR("error %d: new %s() error!",net::ERR_NEW,strSessionClass.c_str());
 		return (NULL);
 	}
-	if (g_pLabor->RegisterCallback(pSession))
+	if (GetLabor()->RegisterCallback(pSession))
 	{
 		if (!pSession->Init(conf))
 		{
-			g_pLabor->DeleteCallback(pSession);
+			GetLabor()->DeleteCallback(pSession);
 			return NULL;
 		}
 		return (pSession);
@@ -107,7 +107,7 @@ template <typename T> T* MakeSession(const std::string& strSessionId, const std:
 
 template <typename T> T* MakeSession(uint64 uiSessionId, const std::string& strSessionClass,ev_tstamp dSessionTimeout=60.0,const util::CJsonObject &conf = util::CJsonObject())
 {
-	T* pSession = (T*) g_pLabor->GetSession(uiSessionId,strSessionClass);
+	T* pSession = (T*) GetLabor()->GetSession(uiSessionId,strSessionClass);
 	if (pSession)
 	{
 		return (pSession);
@@ -118,11 +118,11 @@ template <typename T> T* MakeSession(uint64 uiSessionId, const std::string& strS
 		LOG4_ERROR("error %d: new %s() error!",net::ERR_NEW,strSessionClass.c_str());
 		return (NULL);
 	}
-	if (g_pLabor->RegisterCallback(pSession))
+	if (GetLabor()->RegisterCallback(pSession))
 	{
 		if (!pSession->Init(conf))
 		{
-			g_pLabor->DeleteCallback(pSession);
+			GetLabor()->DeleteCallback(pSession);
 			return NULL;
 		}
 		return (pSession);

@@ -143,19 +143,19 @@ public:
     void DeleteCallback(Step* pStep)
     {
         LOG4_TRACE("Step[%u]::%s()", GetSequence(), __FUNCTION__);
-        g_pLabor->DeleteCallback(GetSequence(), pStep);
+        GetLabor()->DeleteCallback(GetSequence(), pStep);
     }
     /*
      * 发送客户端封装(只有构造函数传入shell使用)
      * */
     bool SendToClient(HttpMsg &oInHttpMsg,const std::string &strBody,int iCode)
     {
-    	return net::SendToClient(m_stReqMsgShell,oInHttpMsg,strBody,iCode);
+    	return GetLabor()->SendToClient(m_stReqMsgShell,oInHttpMsg,strBody,iCode);
     }
     bool SendToClient(const std::string &strBody,int nCode = 200)
 	{
-		if (m_oReqMsgHead.cmd() == 0) return net::SendToClient(m_stReqMsgShell,m_oInHttpMsg,strBody,nCode);
-		else return net::SendToClient(m_stReqMsgShell,m_oReqMsgHead,strBody);
+		if (m_oReqMsgHead.cmd() == 0) return GetLabor()->SendToClient(m_stReqMsgShell,m_oInHttpMsg,strBody,nCode);
+		else return GetLabor()->SendToClient(m_stReqMsgShell,m_oReqMsgHead,strBody);
 	}
 public:
 	/*

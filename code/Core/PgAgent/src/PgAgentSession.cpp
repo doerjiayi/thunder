@@ -23,11 +23,11 @@ PgAgentSession* GetPgAgentSession()
         LOG4_ERROR("error %d: new PgAgentSession() error!",ERR_NEW);
         return (NULL);
     }
-	if (g_pLabor->RegisterCallback(pSess))
+	if (GetLabor()->RegisterCallback(pSess))
 	{
 		if (!pSess->Init())
 		{
-			g_pLabor->DeleteCallback(pSess);
+			GetLabor()->DeleteCallback(pSess);
 			LOG4_ERROR("PgAgentSession init error!");
 			return (NULL);
 		}
@@ -1518,7 +1518,7 @@ bool PgAgentSession::Response(const net::tagMsgShell &stMsgShell,const MsgHead &
 bool PgAgentSession::Response(const net::tagMsgShell &stMsgShell,const MsgHead &oInMsgHead,const DataMem::MemRsp& oRsp)
 {
     LOG4_TRACE("error %d: %s", oRsp.err_no(), oRsp.err_msg().c_str());
-    return net::SendToClient(stMsgShell,oInMsgHead,oRsp.SerializeAsString());
+    return GetLabor()->SendToClient(stMsgShell,oInMsgHead,oRsp.SerializeAsString());
 }
 
 bool PgAgentSession::Init()

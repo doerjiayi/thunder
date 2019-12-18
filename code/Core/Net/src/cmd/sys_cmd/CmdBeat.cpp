@@ -29,7 +29,7 @@ bool CmdBeat::AnyMessage(
     MsgHead oOutMsgHead = oInMsgHead;
     MsgBody oOutMsgBody = oInMsgBody;
     oOutMsgHead.set_cmd(oInMsgHead.cmd() + 1);
-    g_pLabor->SendTo(stMsgShell, oOutMsgHead, oOutMsgBody);
+    GetLabor()->SendTo(stMsgShell, oOutMsgHead, oOutMsgBody);
     return(bResult);
 }
 

@@ -145,7 +145,7 @@ bool CJsonObject::AddEmptySubArray(const std::string& strKey)
 
 CJsonObject& CJsonObject::operator[](const std::string& strKey)
 {
-    std::tr1::unordered_map<std::string, CJsonObject*>::iterator iter;
+    std::unordered_map<std::string, CJsonObject*>::iterator iter;
     iter = m_mapJsonObjectRef.find(strKey);
     if (iter == m_mapJsonObjectRef.end())
     {
@@ -185,7 +185,7 @@ CJsonObject& CJsonObject::operator[](const std::string& strKey)
 
 CJsonObject& CJsonObject::operator[](unsigned int uiWhich)
 {
-    std::tr1::unordered_map<unsigned int, CJsonObject*>::iterator iter;
+    std::unordered_map<unsigned int, CJsonObject*>::iterator iter;
     iter = m_mapJsonArrayRef.find(uiWhich);
     if (iter == m_mapJsonArrayRef.end())
     {
@@ -226,7 +226,7 @@ CJsonObject& CJsonObject::operator[](unsigned int uiWhich)
 std::string CJsonObject::operator()(const std::string& strKey)
 {
     cJSON* pJsonStruct = NULL;
-	std::tr1::unordered_map<std::string, CJsonObject*>::const_iterator iter;
+	std::unordered_map<std::string, CJsonObject*>::const_iterator iter;
 	iter = m_mapJsonObjectRef.find(strKey);
 	if (iter != m_mapJsonObjectRef.end())
 	{
@@ -260,7 +260,7 @@ std::string CJsonObject::operator()(const std::string& strKey)
 std::string CJsonObject::operator()(const std::string& strKey)const
 {
 	cJSON* pJsonStruct = NULL;
-	std::tr1::unordered_map<std::string, CJsonObject*>::const_iterator iter;
+	std::unordered_map<std::string, CJsonObject*>::const_iterator iter;
 	iter = m_mapJsonObjectRef.find(strKey);
 	if (iter != m_mapJsonObjectRef.end())
 	{
@@ -349,7 +349,7 @@ std::string CJsonObject::JsonStruct2Str(const cJSON* pJsonStruct)const
 std::string CJsonObject::operator()(unsigned int uiWhich)
 {
 	cJSON* pJsonStruct = NULL;
-	std::tr1::unordered_map<unsigned int, CJsonObject*>::const_iterator iter;
+	std::unordered_map<unsigned int, CJsonObject*>::const_iterator iter;
 	iter = m_mapJsonArrayRef.find(uiWhich);
 	if (iter != m_mapJsonArrayRef.end())
 	{
@@ -383,7 +383,7 @@ std::string CJsonObject::operator()(unsigned int uiWhich)
 std::string CJsonObject::operator()(unsigned int uiWhich)const//只获取成员为原子类型
 {
 	cJSON* pJsonStruct = NULL;
-	std::tr1::unordered_map<unsigned int, CJsonObject*>::const_iterator iter;
+	std::unordered_map<unsigned int, CJsonObject*>::const_iterator iter;
 	iter = m_mapJsonArrayRef.find(uiWhich);
 	if (iter != m_mapJsonArrayRef.end())
 	{
@@ -429,7 +429,7 @@ void CJsonObject::Clear()
         cJSON_Delete(m_pJsonData);
         m_pJsonData = NULL;
     }
-    for (std::tr1::unordered_map<unsigned int, CJsonObject*>::iterator iter = m_mapJsonArrayRef.begin();
+    for (std::unordered_map<unsigned int, CJsonObject*>::iterator iter = m_mapJsonArrayRef.begin();
                     iter != m_mapJsonArrayRef.end(); ++iter)
     {
         if (iter->second != NULL)
@@ -439,7 +439,7 @@ void CJsonObject::Clear()
         }
     }
     m_mapJsonArrayRef.clear();
-    for (std::tr1::unordered_map<std::string, CJsonObject*>::iterator iter = m_mapJsonObjectRef.begin();
+    for (std::unordered_map<std::string, CJsonObject*>::iterator iter = m_mapJsonObjectRef.begin();
                     iter != m_mapJsonObjectRef.end(); ++iter)
     {
         if (iter->second != NULL)
@@ -836,7 +836,7 @@ bool CJsonObject::Add(const std::string& strKey, const CJsonObject& oJsonObject)
     {
         return(false);
     }
-    std::tr1::unordered_map<std::string, CJsonObject*>::iterator iter = m_mapJsonObjectRef.find(strKey);
+    std::unordered_map<std::string, CJsonObject*>::iterator iter = m_mapJsonObjectRef.find(strKey);
     if (iter != m_mapJsonObjectRef.end())
     {
         if (iter->second != NULL)
@@ -1191,7 +1191,7 @@ bool CJsonObject::Delete(const std::string& strKey)
         return(false);
     }
     cJSON_DeleteItemFromObject(pFocusData, strKey.c_str());
-    std::tr1::unordered_map<std::string, CJsonObject*>::iterator iter = m_mapJsonObjectRef.find(strKey);
+    std::unordered_map<std::string, CJsonObject*>::iterator iter = m_mapJsonObjectRef.find(strKey);
     if (iter != m_mapJsonObjectRef.end())
     {
         if (iter->second != NULL)
@@ -1236,7 +1236,7 @@ bool CJsonObject::Replace(const std::string& strKey, const CJsonObject& oJsonObj
     {
         return(false);
     }
-    std::tr1::unordered_map<std::string, CJsonObject*>::iterator iter = m_mapJsonObjectRef.find(strKey);
+    std::unordered_map<std::string, CJsonObject*>::iterator iter = m_mapJsonObjectRef.find(strKey);
     if (iter != m_mapJsonObjectRef.end())
     {
         if (iter->second != NULL)
@@ -1847,7 +1847,7 @@ bool CJsonObject::Add(const CJsonObject& oJsonObject)
         return(false);
     }
     unsigned int uiLastIndex = (unsigned int)cJSON_GetArraySize(pFocusData) - 1;
-    for (std::tr1::unordered_map<unsigned int, CJsonObject*>::iterator iter = m_mapJsonArrayRef.begin();
+    for (std::unordered_map<unsigned int, CJsonObject*>::iterator iter = m_mapJsonArrayRef.begin();
                     iter != m_mapJsonArrayRef.end(); )
     {
         if (iter->first >= uiLastIndex)
@@ -2243,7 +2243,7 @@ bool CJsonObject::AddAsFirst(const CJsonObject& oJsonObject)
     {
         return(false);
     }
-    for (std::tr1::unordered_map<unsigned int, CJsonObject*>::iterator iter = m_mapJsonArrayRef.begin();
+    for (std::unordered_map<unsigned int, CJsonObject*>::iterator iter = m_mapJsonArrayRef.begin();
                     iter != m_mapJsonArrayRef.end(); )
     {
         if (iter->second != NULL)
@@ -2614,7 +2614,7 @@ bool CJsonObject::Delete(int iWhich)
         return(false);
     }
     cJSON_DeleteItemFromArray(pFocusData, iWhich);
-    for (std::tr1::unordered_map<unsigned int, CJsonObject*>::iterator iter = m_mapJsonArrayRef.begin();
+    for (std::unordered_map<unsigned int, CJsonObject*>::iterator iter = m_mapJsonArrayRef.begin();
                     iter != m_mapJsonArrayRef.end(); )
     {
         if (iter->first >= (unsigned int)iWhich)
@@ -2666,7 +2666,7 @@ bool CJsonObject::Replace(int iWhich, const CJsonObject& oJsonObject)
     {
         return(false);
     }
-    std::tr1::unordered_map<unsigned int, CJsonObject*>::iterator iter = m_mapJsonArrayRef.find(iWhich);
+    std::unordered_map<unsigned int, CJsonObject*>::iterator iter = m_mapJsonArrayRef.find(iWhich);
     if (iter != m_mapJsonArrayRef.end())
     {
         if (iter->second != NULL)

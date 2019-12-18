@@ -69,7 +69,7 @@ net::E_CMD_STATUS StepLocateData::Emit(int iErrno, const std::string& strErrMsg,
     oMsgHead.set_msgbody_len(oMsgBody.ByteSize());
     oMsgHead.set_seq(GetSequence());
     LOG4_DEBUG("body: %s",oMsgBody.body().c_str());
-    if (!net::SendToNext("PROXY", oMsgHead, oMsgBody))
+    if (!GetLabor()->SendToNext("PROXY", oMsgHead, oMsgBody))
     {
         LOG4_ERROR("send to dataproxy error!");
         Response(ERR_SERVERINFO, "send to dataproxy error!", "send to dataproxy error!");
@@ -91,7 +91,7 @@ net::E_CMD_STATUS StepLocateData::Callback(
     oHttpMsg.set_http_major(m_oInHttpMsg.http_major());
     oHttpMsg.set_http_minor(m_oInHttpMsg.http_minor());
     oHttpMsg.set_body(oInMsgBody.body());
-    g_pLabor->SendTo(m_stInMsgShell, oHttpMsg);
+    GetLabor()->SendTo(m_stInMsgShell, oHttpMsg);
     return(net::STATUS_CMD_COMPLETED);
 }
 
@@ -104,7 +104,7 @@ net::E_CMD_STATUS StepLocateData::Timeout()
     oHttpMsg.set_http_major(m_oInHttpMsg.http_major());
     oHttpMsg.set_http_minor(m_oInHttpMsg.http_minor());
     oHttpMsg.set_body("timeout");
-    g_pLabor->SendTo(m_stInMsgShell, oHttpMsg);
+    GetLabor()->SendTo(m_stInMsgShell, oHttpMsg);
     return(net::STATUS_CMD_COMPLETED);
 }
 
@@ -119,7 +119,7 @@ bool StepLocateData::Response(int iErrno, const std::string& strErrMsg, const st
     oRsp.Add("code", iErrno);
     oRsp.Add("msg", strErrClientShow.c_str());
     oHttpMsg.set_body(oRsp.ToFormattedString());
-    g_pLabor->SendTo(m_stInMsgShell, oHttpMsg);
+    GetLabor()->SendTo(m_stInMsgShell, oHttpMsg);
     return(net::STATUS_CMD_COMPLETED);
 }
 

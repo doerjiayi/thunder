@@ -34,7 +34,7 @@ E_CMD_STATUS StepTellWorker::Emit(int iErrno,const std::string& strErrMsg,const 
     oOutMsgHead.set_cmd(CMD_REQ_TELL_WORKER);
     oOutMsgHead.set_seq(GetSequence());
     oOutMsgHead.set_msgbody_len(oOutMsgBody.ByteSize());
-    net::SendTo(m_stMsgShell, oOutMsgHead, oOutMsgBody);
+    GetLabor()->SendTo(m_stMsgShell, oOutMsgHead, oOutMsgBody);
     return(STATUS_CMD_RUNNING);
 }
 

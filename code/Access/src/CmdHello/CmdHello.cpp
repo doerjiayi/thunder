@@ -26,7 +26,7 @@ bool CmdHello::AnyMessage(const net::tagMsgShell& stMsgShell,
 	LOG4_DEBUG("CmdHello::AnyMessage:%s", oOutMsgBody.body().c_str());
 	oOutMsgBody.set_body(oInMsgBody.body());
 	oOutMsgHead.set_msgbody_len(oOutMsgBody.ByteSize());
-	net::SendTo(stMsgShell, oOutMsgHead, oOutMsgBody);
+	GetLabor()->SendTo(stMsgShell, oOutMsgHead, oOutMsgBody);
     return(true);
 }
 

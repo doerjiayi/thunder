@@ -82,7 +82,7 @@ bool HttpStep::HttpRequest(const HttpMsg& oHttpMsg)
             strPath = oHttpMsg.url().substr(stUrl.field_data[UF_PATH].off, stUrl.field_data[UF_PATH].len);
         }
 
-        return(g_pLabor->SentTo(strHost, iPort, strPath, oHttpMsg, this));
+        return(GetLabor()->SentTo(strHost, iPort, strPath, oHttpMsg, this));
     }
     else
     {
@@ -93,7 +93,7 @@ bool HttpStep::HttpRequest(const HttpMsg& oHttpMsg)
 
 bool HttpStep::SendTo(const tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg)
 {
-    return(g_pLabor->SendTo(stMsgShell, oHttpMsg));
+    return(GetLabor()->SendTo(stMsgShell, oHttpMsg));
 }
 
 } /* namespace net */

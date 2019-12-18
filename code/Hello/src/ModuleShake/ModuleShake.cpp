@@ -116,7 +116,7 @@ bool ModuleShake::ResponseWebsocketResponseHandshake(const net::tagMsgShell& stM
         header->set_header_value(ws_req.sec_webSocket_protocol);
     }
     LOG4_DEBUG("%s", ToString(oOutHttpMsg).c_str());
-    return g_pLabor->SendTo(stMsgShell, oOutHttpMsg);
+    return GetLabor()->SendTo(stMsgShell, oOutHttpMsg);
 }
 
 std::string ModuleShake::GenerateKey(const std::string &key)
@@ -237,7 +237,7 @@ bool ModuleShake::ResponseHttp(const net::tagMsgShell& stMsgShell, const HttpMsg
     oOutHttpMsg.set_http_major(oInHttpMsg.http_major());
     oOutHttpMsg.set_http_minor(oInHttpMsg.http_minor());
     oOutHttpMsg.set_body(msg);
-    g_pLabor->SendTo(stMsgShell, oOutHttpMsg);
+    GetLabor()->SendTo(stMsgShell, oOutHttpMsg);
     return(true);
 }
 

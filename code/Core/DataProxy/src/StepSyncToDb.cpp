@@ -30,7 +30,7 @@ net::E_CMD_STATUS StepSyncToDb::Emit(int iErrno, const std::string& strErrMsg, c
     LOG4_TRACE("try to sync strTableName(%s),oMsgHead(%d:%s),oMsgBody(%d),cmd(%u)",
                     m_strSessionId.c_str(),m_oMsgHead.ByteSize(),m_oMsgHead.DebugString().c_str(),
 					m_oMsgBody.ByteSize(),m_oMsgHead.cmd());
-    if (!net::SendToNext(AGENT_W, oMsgHead, m_oMsgBody))
+    if (!GetLabor()->SendToNext(AGENT_W, oMsgHead, m_oMsgBody))
     {
         LOG4_ERROR("SendToNext(\"%s\") error!",AGENT_W);
         SessionSyncDbData* pSessionSync = (SessionSyncDbData*)net::GetSession(m_strSessionId, "net::SessionSyncDbData");

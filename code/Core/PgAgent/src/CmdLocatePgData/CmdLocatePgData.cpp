@@ -46,7 +46,7 @@ bool CmdLocatePgData::AnyMessage(const net::tagMsgShell& stMsgShell, const MsgHe
     pDbAgentSession->LocatePgConfig(oQuery,nCode,strErrMsg,oRspJson);
     oRspJson.Add("code", nCode);
     oRspJson.Add("msg", strErrMsg);
-	return net::SendToClient(stMsgShell,oInMsgHead,oRspJson.ToString());
+	return GetLabor()->SendToClient(stMsgShell,oInMsgHead,oRspJson.ToString());
 }
 
 

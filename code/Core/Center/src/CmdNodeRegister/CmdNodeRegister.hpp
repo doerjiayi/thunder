@@ -3,7 +3,7 @@
  * @file     CmdNodeRegister.hpp
  * @brief    被告知Worker信息
  * @author   cjy
- * @date:    2015年8月9日
+ * @date:    2019年8月9日
  * @note     A连接B成功后，A将己方的Worker信息A_attr（节点类型和Worker唯一标记）告知B，
  * B收到A后将A_attr登记起来，并将己方的Worker信息B_attr回复A
  * Modify history:
@@ -20,7 +20,7 @@ namespace core
 /**
  * @brief   节点注册
  * @author  chenjiayi
- * @date    2015年8月9日
+ * @date    2019年8月9日
  * @note    各个模块启动时需要向CENTER进行注册
  */
 class CmdNodeRegister: public net::Cmd

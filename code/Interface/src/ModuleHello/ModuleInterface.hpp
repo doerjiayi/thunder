@@ -21,7 +21,7 @@
 #include "step/Step.hpp"
 #include "step/HttpStep.hpp"
 #include "ImError.h"
-#include "../InterfaceSession.h"
+#include "InterfaceSession.h"
 #include "util/CommonUtils.hpp"
 
 namespace im

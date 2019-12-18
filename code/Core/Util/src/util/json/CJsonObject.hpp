@@ -20,7 +20,7 @@
 #include <string>
 #include <map>
 #include <vector>
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include "cJSON.h"
 
 
@@ -138,8 +138,8 @@ private:
     cJSON* m_pJsonData;
     cJSON* m_pExternJsonDataRef;
     std::string m_strErrMsg;
-    std::tr1::unordered_map<unsigned int, CJsonObject*> m_mapJsonArrayRef;
-	std::tr1::unordered_map<std::string, CJsonObject*> m_mapJsonObjectRef;
+    std::unordered_map<unsigned int, CJsonObject*> m_mapJsonArrayRef;
+	std::unordered_map<std::string, CJsonObject*> m_mapJsonObjectRef;
 };
 
 }

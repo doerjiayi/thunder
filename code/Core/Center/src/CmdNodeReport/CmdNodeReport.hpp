@@ -21,7 +21,7 @@ namespace core
 /**
  * @brief   节点上报
  * @author  chenjiayi
- * @date    2015年8月9日
+ * @date    2019年8月9日
  * @note    各个模块启动时需要向CENTER进行上报数据
  */
 class CmdNodeReport : public net::Cmd

@@ -74,7 +74,7 @@ net::E_CMD_STATUS StepSendToDbAgent::Emit(int iErrno, const std::string& strErrM
 
     if (m_oMemOperate.db_operate().SELECT == m_oMemOperate.db_operate().query_type())
     {
-        if (!net::SendToNext(AGENT_R, oOutMsgHead, oOutMsgBody))
+        if (!GetLabor()->SendToNext(AGENT_R, oOutMsgHead, oOutMsgBody))
         {
             LOG4_ERROR("SendToNext(\"%s\") error:%d!",AGENT_R,ERR_DATA_TRANSFER);
             Response(m_stMsgShell, m_oReqMsgHead, ERR_DATA_TRANSFER, "SendToNext(\"DBAGENT_R\") error!");
@@ -83,7 +83,7 @@ net::E_CMD_STATUS StepSendToDbAgent::Emit(int iErrno, const std::string& strErrM
     }
     else
     {
-        if (!net::SendToNext(AGENT_W, oOutMsgHead, oOutMsgBody))
+        if (!GetLabor()->SendToNext(AGENT_W, oOutMsgHead, oOutMsgBody))
         {
         	LOG4_ERROR("SendToNext(\"%s\") error:%d!",AGENT_W,ERR_DATA_TRANSFER);
             SessionSyncDbData* pSessionSync = GetSessionSyncDbData(m_oMemOperate.db_operate().table_name(),net::GetWorkPath() + SYNC_DATA_DIR);
@@ -271,7 +271,7 @@ void StepSendToDbAgent::WriteBackToRedis(const net::tagMsgShell& stMsgShell, con
 			&& (m_oMemOperate.redis_operate().redis_cmd_write().size()>=3))//写redis命为空，就不回写redis了
     {
         pStepWriteBackToRedis = new StepWriteBackToRedis(stMsgShell, oInMsgHead, m_oMemOperate,m_pNodeSession, m_iRelative, m_strKeyField, &m_oJoinField);
-        g_pLabor->ExecStep(pStepWriteBackToRedis);
+        GetLabor()->ExecStep(pStepWriteBackToRedis);
     }
 }
 

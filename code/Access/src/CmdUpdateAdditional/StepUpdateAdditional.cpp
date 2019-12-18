@@ -39,17 +39,17 @@ net::E_CMD_STATUS StepUpdateAdditional::Emit(int iErrno, const std::string& strE
 			LOG4_DEBUG("BAN_LOGIN:userid(%u)",m_basicinfo.userid());
 			if(m_stMsgShell.iFd > 0)
 			{	
-				g_pLabor->AbandonConnect(szIdentify);
-				g_pLabor->Disconnect(m_stMsgShell,false);
+				GetLabor()->AbandonConnect(szIdentify);
+				GetLabor()->Disconnect(m_stMsgShell,false);
 			}
 		}
 		else
 		{
 			LOG4_DEBUG("SetClientData:userid(%u)",m_basicinfo.userid());
-			g_pLabor->GetMsgShell(szIdentify,m_stMsgShell);
+			GetLabor()->GetMsgShell(szIdentify,m_stMsgShell);
 			util::CBuffer oBuff;
 			oBuff.Write(m_basicinfo.SerializeAsString().c_str(),m_basicinfo.ByteSize());
-			g_pLabor->SetClientData(m_stMsgShell,&oBuff);//设置客户端数据
+			GetLabor()->SetClientData(m_stMsgShell,&oBuff);//设置客户端数据
 		}
 	}
 	else

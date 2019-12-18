@@ -1,7 +1,7 @@
 /*
  * NodeSession.cpp
  *
- *  Created on: 2015年11月6日
+ *  Created on: 2019年11月6日
  *      Author: chen
  */
 #include "cmd/CW.hpp"
@@ -113,9 +113,9 @@ bool NodeSession::Init(std::string &err,bool boReload)
 	LOAD_CONFIG(conf,"route", m_objRoute);
 	{//中心服务器本身配置
 		LOG4_INFO("gc_iBeatInterval:%d,NODE_BEAT:%f",net::gc_iBeatInterval,NODE_BEAT);
-		m_centerInnerPort = g_pLabor->GetPortForServer();
-		m_centerInnerHost = g_pLabor->GetHostForServer();
-		m_centerNodeType = g_pLabor->GetNodeType();
+		m_centerInnerPort = GetLabor()->GetPortForServer();
+		m_centerInnerHost = GetLabor()->GetHostForServer();
+		m_centerNodeType = GetLabor()->GetNodeType();
 		m_centerProcessNum = 1;//中心服务器工作进程数只有一个
 
 		snprintf(m_CenterActive.inner_ip,sizeof(m_CenterActive.inner_ip),"%s",m_centerInnerHost.c_str());
@@ -1053,7 +1053,7 @@ NodeSession* GetNodeSession(bool boReload)
             if(!pSess->Init(err,boReload))
             {
                 LOG4_ERROR("NodeSession init error!%s",err.c_str());
-                g_pLabor->DeleteCallback(pSess);
+                GetLabor()->DeleteCallback(pSess);
                 return NULL;
             }
         }
@@ -1067,7 +1067,7 @@ NodeSession* GetNodeSession(bool boReload)
         LOG4_ERROR("error %d: new NodeSession() error!", ERR_NEW);
         return (NULL);
     }
-    LOG4CPLUS_INFO_FMT(g_pLabor->GetLogger(),"new NodeSession(1,%d) NodeSession timeout:%d",nodeSessionTimeOut,nodeSessionTimeOut);
+    LOG4_INFO("new NodeSession(1,%d) NodeSession timeout:%d",nodeSessionTimeOut,nodeSessionTimeOut);
     std::string err;
     if(!pSess->Init(err))
     {
@@ -1076,7 +1076,7 @@ NodeSession* GetNodeSession(bool boReload)
         pSess = NULL;
         return (NULL);
     }
-    if (net::RegisterCallback(pSess))
+    if (GetLabor()->RegisterCallback(pSess))
     {
         LOG4_DEBUG("register NodeSession ok!");
         return (pSess);

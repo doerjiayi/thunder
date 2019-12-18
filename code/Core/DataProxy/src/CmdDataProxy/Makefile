@@ -1,6 +1,6 @@
 CC = gcc
 CXX = $(shell command -v ccache >/dev/null 2>&1 && echo "ccache g++" || echo "g++")
-CXXFLAG = -g -Og -fPIC -DNODE_BEAT=10.0 -Wall -Wno-deprecated-declarations -Wno-format -std=c++11  -Wstrict-overflow -DAGENT_R=\"PGAGENT\" -DAGENT_W=\"PGAGENT\"
+CXXFLAG = -g -Og -fPIC -DNODE_BEAT=10.0 -Wall -Wno-deprecated-declarations -Wno-format -std=c++11  -Wstrict-overflow -DAGENT_R=\"DBAGENT\" -DAGENT_W=\"DBAGENT\"
 
 ARCH:=$(shell uname -m)
 

@@ -29,51 +29,52 @@ bool CmdNodeNotice::AnyMessage(
                 const MsgHead& oInMsgHead,
                 const MsgBody& oInMsgBody)
 {
-    bool bResult = false;
-    util::CBuffer oBuff;
-    MsgHead oOutMsgHead;
-    MsgBody oOutMsgBody;
+	LOG4_DEBUG("CmdNodeNotice seq[%llu] jsonbuf[%s] Parse is ok",oInMsgHead.seq(),oInMsgBody.body().c_str());
+	if (m_jsonData.Parse(oInMsgBody.body()))
+	{
+		string node_type = "";
+		string node_ip = "";
+		int    node_port = 0;
+		int    worker_num = 0;
+		char   strIdentify[50] = {0};
+		for (int i = 0;i<m_jsonData["node_arry_reg"].GetArraySize();i++)
+		{
+			if (
+				m_jsonData["node_arry_reg"][i].Get("node_type",node_type)
+				&&m_jsonData["node_arry_reg"][i].Get("node_ip",node_ip)
+				&&m_jsonData["node_arry_reg"][i].Get("node_port",node_port)
+				&&m_jsonData["node_arry_reg"][i].Get("worker_num",worker_num)
+				)
+			{
+				for(int j = 0;j<worker_num;j++)
+				{
+					sprintf(strIdentify,"%s:%d.%d",node_ip.c_str(),node_port,j);
+					GetLabor()->AddNodeIdentify(node_type,string(strIdentify));
+					LOG4_DEBUG("Step::AddNodeIdentify(%s,%s)",node_type.c_str(),strIdentify);
+				}
+			}
+		}
 
-    util::CJsonObject jObj;
-    int iRet = 0;
-    if (GetCmd() == (int)oInMsgHead.cmd())
-    {
-        if (jObj.Parse(oInMsgBody.body()))
-        {
-            bResult = true;
-            LOG4_DEBUG("CmdNodeNotice seq[%llu] jsonbuf[%s] Parse is ok",
-                oInMsgHead.seq(),oInMsgBody.body().c_str());
-
-            Step* pStep = new StepNodeNotice(stMsgShell, oInMsgHead, oInMsgBody);
-            if (pStep == NULL)
-            {
-                LOG4_ERROR("error %d: new StepNodeNotice() error!", ERR_NEW);
-                return(STATUS_CMD_FAULT);
-            }
-            if (RegisterCallback(pStep))
-            {
-                pStep->Emit(ERR_OK);
-                return(STATUS_CMD_COMPLETED);
-            }
-            else
-            {
-                delete pStep;
-            }
-
-            //STEP不需要回调
-            DeleteCallback(pStep);
-
-            return(bResult);
-        }
-        else
-        {
-            iRet = 1;
-            bResult = false;
-            LOG4_ERROR("error jsonParse error! json[%s]", oInMsgBody.body().c_str());
-        }
-    }
-
-    return(bResult);
+		for (int i = 0;i<m_jsonData["node_arry_exit"].GetArraySize();i++)
+		{
+			if (
+				m_jsonData["node_arry_exit"][i].Get("node_type",node_type)
+				&&m_jsonData["node_arry_exit"][i].Get("node_ip",node_ip)
+				&&m_jsonData["node_arry_exit"][i].Get("node_port",node_port)
+				&&m_jsonData["node_arry_exit"][i].Get("worker_num",worker_num)
+				)
+			{
+				for(int j = 0;j<worker_num;j++)
+				{
+					sprintf(strIdentify,"%s:%d.%d",node_ip.c_str(),node_port,j);
+					GetLabor()->DelNodeIdentify(node_type,string(strIdentify));
+					LOG4_DEBUG("Step::DelNodeIdentify(%s,%s)",node_type.c_str(),strIdentify);
+				}
+			}
+		}
+	}
+	GetLabor()->SendToClient(stMsgShell,oInMsgHead,"ok");
+    return(true);
 }
 
 } /* namespace net */

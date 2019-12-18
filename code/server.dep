@@ -1,2 +1,2 @@
 #需要编译的服务器(只需要指定逻辑服务),如DataProxy，核心代码放置在 /Core
-ORTHER_TARGETS = Hello Interface Logic
+ORTHER_TARGETS = Hello Interface Logic Access

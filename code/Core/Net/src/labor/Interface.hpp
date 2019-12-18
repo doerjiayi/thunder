@@ -82,12 +82,6 @@ const util::CJsonObject& GetCustomConf() ;
  */
 const std::string& GetWorkerIdentify() ;
 /**
- * @brief 获取当前节点标识符
- * @note 由 IP:port组成，例如： 192.168.18.22:30001
- * @return 当前节点标识符
- */
-const std::string& GetNodeIdentify() ;
-/**
  * @brief 获取工作目录
  * @return 工作目录
  */
@@ -144,12 +138,10 @@ bool SendToModCallback(net::Step* pUpperStep,uint32 uiCmd,const std::string &str
 bool AddMsgShell(const std::string& strIdentify, const net::tagMsgShell& stMsgShell);
 /**
  * @brief 删除指定标识的消息外壳
- * @note 删除指定标识的消息外壳由Worker类实例调用，在IoError或IoTimeout时调用。
+ * @note 删除指定标识的消息外壳由Worker类实例调用，在IoError或IoTimeout时调
+ * 用。
  */
 void DelMsgShell(const std::string& strIdentify, const net::tagMsgShell& stMsgShell);
-
-std::string GetClientAddr(const tagMsgShell& stMsgShell);
-std::string GetConnectIdentify(const tagMsgShell& stMsgShell);
 /**
  * @brief 解析消息到message
  */
@@ -199,8 +191,6 @@ bool SendTo(const net::tagMsgShell& stMsgShell);
  * @return 是否发送成功
  */
 bool SendTo(const net::tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
-bool SendTo(const net::tagMsgShell& stMsgShell,uint32 cmd,uint32 seq,const std::string &strBody);
-bool SendTo(const net::tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL);
 /**
  * @brief 发送数据
  * @note 指定连接标识符将数据发送。此函数先查找与strIdentify匹配的stMsgShell，如果找到就调用
@@ -213,16 +203,6 @@ bool SendTo(const net::tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpSte
  * @return 是否发送成功
  */
 bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
-bool SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const std::string &strBody);
-bool SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const MsgBody& oMsgBody);
-/**
- * @brief 根据路由id自动发送到指定的节点
- * @note 根据路由id自动发送到指定的节点
- * @param oMsgHead 数据包头
- * @param oMsgBody 数据包体
- * @return 是否发送成功
- */
-bool SendToSession(const MsgHead& oMsgHead, const MsgBody& oMsgBody);
 /**
  * @brief 根据路由发送到同一类型的节点
  * @note 根据路由发送到同一类型的节点
@@ -251,6 +231,7 @@ bool SendToNext(const std::string& strNodeType, const MsgHead& oMsgHead, const M
  * @return 是否发送成功
  */
 bool SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
+
 /**
  * @brief 以一致性哈希方式选择发送到同一类型节点
  * @note 以取模方式选择发送到同一类型节点，实现简单有要求的负载均衡。
@@ -261,6 +242,8 @@ bool SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, const Msg
  * @return 是否发送成功
  */
 bool SendToConHash(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
+
+
 /**
  * @brief 注册redis回调
  * @param strIdentify redis节点标识(192.168.16.22:9988形式的IP+端口)

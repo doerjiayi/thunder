@@ -30,23 +30,7 @@ net::E_CMD_STATUS StepLogoutToLogic::Emit(int iErrno, const std::string& strErrM
     LOG4_DEBUG("seq[%llu] StepLogoutToLogic::Emit!", m_oInMsgHead.seq());
     MsgHead oOutMsgHead = m_oInMsgHead;
     oOutMsgHead.set_seq(GetSequence());     // 更换消息头的seq后直接转发
-    if (m_oInMsgBody.has_session_id())
-    {
-        net::SendToWithMod("LOGIC", m_oInMsgBody.session_id(), oOutMsgHead, m_oInMsgBody);
-    }
-    else if (m_oInMsgBody.has_session())
-    {
-        unsigned int uiSessionFactor = 0;
-        for (unsigned int i = 0; i < m_oInMsgBody.session().size(); ++i)
-        {
-            uiSessionFactor += m_oInMsgBody.session()[i];
-        }
-        net::SendToWithMod("LOGIC", uiSessionFactor, oOutMsgHead, m_oInMsgBody);
-    }
-    else
-    {
-        net::SendToNext("LOGIC", oOutMsgHead, m_oInMsgBody);
-    }
+    GetLabor()->SendToSession("LOGIC",oOutMsgHead,m_oInMsgBody);
     LOG4_DEBUG("cmd[%llu]  Logout  Disconnect", m_oInMsgHead.cmd());
     return(net::STATUS_CMD_RUNNING);
 }
@@ -58,7 +42,7 @@ net::E_CMD_STATUS StepLogoutToLogic::Callback(
                     void* data)
 {
     LOG4_DEBUG("seq[%llu] StepLogoutToLogic::Callback ok!", oInMsgHead.seq());
-	g_pLabor->Disconnect(m_stMsgShell,false);
+	GetLabor()->Disconnect(m_stMsgShell,false);
     return(net::STATUS_CMD_COMPLETED);
 }
 
@@ -67,7 +51,7 @@ net::E_CMD_STATUS StepLogoutToLogic::Timeout()
     ++m_iTimeoutNum;
     if (m_iTimeoutNum <= 3)
     {
-        g_pLabor->Disconnect(m_stMsgShell);
+        GetLabor()->Disconnect(m_stMsgShell);
         return(net::STATUS_CMD_COMPLETED);
     }
     else

@@ -65,7 +65,7 @@ bool CmdLocateData::AnyMessage(const net::tagMsgShell& stMsgShell, const MsgHead
 	oRspJson.Add("db_node", util::CJsonObject("{}"));
 	oRspJson["db_node"].Add(strInstance, dbInstanceConf);
 	oRspJson["db_node"].Add("table_name", strTableName);
-	return net::SendToClient(stMsgShell, oInMsgHead, oRspJson.ToFormattedString());
+	return GetLabor()->SendToClient(stMsgShell, oInMsgHead, oRspJson.ToFormattedString());
 }
 
 bool CmdLocateData::Response(const net::tagMsgShell& stMsgShell, const MsgHead& oInMsgHead,int iErrno, const std::string& strErrMsg)
@@ -74,7 +74,7 @@ bool CmdLocateData::Response(const net::tagMsgShell& stMsgShell, const MsgHead& 
     util::CJsonObject oRspJson;
     oRspJson.Add("code", iErrno);
     oRspJson.Add("msg", strErrMsg);
-    return net::SendToClient(stMsgShell, oInMsgHead, oRspJson.ToFormattedString());
+    return GetLabor()->SendToClient(stMsgShell, oInMsgHead, oRspJson.ToFormattedString());
 }
 
 } /* namespace core */

@@ -46,7 +46,7 @@ net::E_CMD_STATUS StepToLogic::Emit(int iErrno, const std::string& strErrMsg,con
 	net::tagMsgShell tstMsgShell;
 	char szIdentify[32] = {0};
 	snprintf(szIdentify, sizeof(szIdentify), "%u", m_oInAsk.imid());
-	g_pLabor->GetMsgShell(szIdentify,tstMsgShell);
+	GetLabor()->GetMsgShell(szIdentify,tstMsgShell);
 	//已经登录过
 	if (m_stMsgShell.iFd == tstMsgShell.iFd && m_stMsgShell.ulSeq == tstMsgShell.ulSeq)
 	{
@@ -69,7 +69,7 @@ net::E_CMD_STATUS StepToLogic::Emit(int iErrno, const std::string& strErrMsg,con
 	}
     m_oOutMsgHead.set_seq(GetSequence());//往后面发数据需要另设Sequence
     LOG4_DEBUG("seq[%llu] StepToLogic::Emit!", m_oInMsgHead.seq());
-    net::SendToSession("LOGIC",m_oOutMsgHead, m_oOutMsgBody);
+    GetLabor()->SendToSession("LOGIC",m_oOutMsgHead, m_oOutMsgBody);
     return(net::STATUS_CMD_RUNNING);
 }
 
@@ -90,7 +90,7 @@ net::E_CMD_STATUS StepToLogic::Callback(
         return net::STATUS_CMD_COMPLETED;
     }
 	LOG4_DEBUG("seq[%llu] StepToLogic::Callback imid[%u] oOutAck[%s]!", oInMsgHead.seq(),m_oInAsk.imid(),oOutAck.DebugString().c_str());
-    net::SendTo(m_stMsgShell,oOutMsgHead,oInMsgBody);//先
+    GetLabor()->SendTo(m_stMsgShell,oOutMsgHead,oInMsgBody);//先
     if (oOutAck.error().error_code()==0)//登录成功
     {
         char strUid[50] = {0};
@@ -103,11 +103,11 @@ net::E_CMD_STATUS StepToLogic::Callback(
             return net::STATUS_CMD_COMPLETED;
         }
         //填写客户端IP
-        basicinfo.set_login_ip(g_pLabor->GetClientAddr(m_stMsgShell));
+        basicinfo.set_login_ip(GetLabor()->GetClientAddr(m_stMsgShell));
         util::CBuffer oBuff;
         oBuff.Write(basicinfo.SerializeAsString().c_str(),basicinfo.ByteSize());
         //设置客户端数据
-        g_pLabor->SetClientData(m_stMsgShell,&oBuff);
+        GetLabor()->SetClientData(m_stMsgShell,&oBuff);
 		//添加新增数据
 		m_oInMsgBody.set_additional(basicinfo.SerializeAsString());
 		m_bLoginOk= true;
@@ -116,7 +116,7 @@ net::E_CMD_STATUS StepToLogic::Callback(
     }
     else //如果验证失败，断掉连接
     {
-		g_pLabor->Disconnect(m_stMsgShell,false);
+		GetLabor()->Disconnect(m_stMsgShell,false);
         LOG4_ERROR("cmd[%u]  Login  error Disconnect oOutAck[%s]", oInMsgHead.cmd(),oOutAck.DebugString().c_str());
     }
     return(net::STATUS_CMD_COMPLETED);
@@ -134,7 +134,7 @@ net::E_CMD_STATUS StepToLogic::Timeout()
     {
         m_oOutMsgHead.set_seq(GetSequence());//往后面发数据需要另设Sequence
         LOG4_DEBUG("seq[%llu]  StepToLogic::Timeout Send to!", m_oOutMsgHead.seq());
-        net::SendToSession("LOGIC",m_oOutMsgHead, m_oOutMsgBody);
+        GetLabor()->SendToSession("LOGIC",m_oOutMsgHead, m_oOutMsgBody);
         return(net::STATUS_CMD_RUNNING);
     }
     else

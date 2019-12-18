@@ -35,13 +35,13 @@ bool CmdToldWorker::AnyMessage(const tagMsgShell& stMsgShell,const MsgHead& oInM
         {
             bResult = true;
             LOG4_DEBUG("AddMsgShell(%s, fd %d, seq %llu)!",oInTargetWorker.worker_identify().c_str(), stMsgShell.iFd, stMsgShell.ulSeq);
-            g_pLabor->AddMsgShell(oInTargetWorker.worker_identify(), stMsgShell);
-            g_pLabor->AddNodeIdentify(oInTargetWorker.node_type(), oInTargetWorker.worker_identify());
-            g_pLabor->AddInnerFd(stMsgShell);
-            snprintf(m_pErrBuff, gc_iMaxBuffLen, "%s:%d.%d", g_pLabor->GetHostForServer().c_str(),g_pLabor->GetPortForServer(), g_pLabor->GetWorkerIndex());
+            GetLabor()->AddMsgShell(oInTargetWorker.worker_identify(), stMsgShell);
+            GetLabor()->AddNodeIdentify(oInTargetWorker.node_type(), oInTargetWorker.worker_identify());
+            GetLabor()->AddInnerFd(stMsgShell);
+            snprintf(m_pErrBuff, gc_iMaxBuffLen, "%s:%d.%d", GetLabor()->GetHostForServer().c_str(),GetLabor()->GetPortForServer(), GetLabor()->GetWorkerIndex());
             oOutTargetWorker.set_err_no(0);
             oOutTargetWorker.set_worker_identify(m_pErrBuff);
-            oOutTargetWorker.set_node_type(g_pLabor->GetNodeType());
+            oOutTargetWorker.set_node_type(GetLabor()->GetNodeType());
             oOutTargetWorker.set_err_msg("OK");
         }
         else
@@ -49,7 +49,7 @@ bool CmdToldWorker::AnyMessage(const tagMsgShell& stMsgShell,const MsgHead& oInM
             bResult = false;
             oOutTargetWorker.set_err_no(ERR_PARASE_PROTOBUF);
             oOutTargetWorker.set_worker_identify("unknow");
-            oOutTargetWorker.set_node_type(g_pLabor->GetNodeType());
+            oOutTargetWorker.set_node_type(GetLabor()->GetNodeType());
             oOutTargetWorker.set_err_msg("WorkerLoad ParseFromString error!");
             LOG4_ERROR("error %d: WorkerLoad ParseFromString error!", ERR_PARASE_PROTOBUF);
         }
@@ -61,12 +61,12 @@ bool CmdToldWorker::AnyMessage(const tagMsgShell& stMsgShell,const MsgHead& oInM
         LOG4_ERROR("error %d: %s!", ERR_UNKNOWN_CMD, m_pErrBuff);
         oOutTargetWorker.set_err_no(ERR_UNKNOWN_CMD);
         oOutTargetWorker.set_worker_identify("unknow");
-        oOutTargetWorker.set_node_type(g_pLabor->GetNodeType());
+        oOutTargetWorker.set_node_type(GetLabor()->GetNodeType());
         oOutTargetWorker.set_err_msg(m_pErrBuff);
     }
     oOutMsgBody.set_body(oOutTargetWorker.SerializeAsString());
     oOutMsgHead.set_msgbody_len(oOutMsgBody.ByteSize());
-    g_pLabor->SendTo(stMsgShell, oOutMsgHead, oOutMsgBody);
+    GetLabor()->SendTo(stMsgShell, oOutMsgHead, oOutMsgBody);
     return(bResult);
 }
 

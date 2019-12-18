@@ -29,8 +29,8 @@ E_CMD_STATUS StepIoTimeout::Emit(int iErrno,const std::string& strErrMsg,const s
     oOutMsgHead.set_seq(GetSequence());
     oOutMsgHead.set_msgbody_len(0);
     LOG4_TRACE("StepIoTimeout::Emit stMsgShell(%d,%u) ClientAddr(%s) GetConnectIdentify(%s)",
-                    m_stMsgShell.iFd,m_stMsgShell.ulSeq,g_pLabor->GetClientAddr(m_stMsgShell).c_str(),
-                    g_pLabor->GetConnectIdentify(m_stMsgShell).c_str());
+                    m_stMsgShell.iFd,m_stMsgShell.ulSeq,GetLabor()->GetClientAddr(m_stMsgShell).c_str(),
+                    GetLabor()->GetConnectIdentify(m_stMsgShell).c_str());
     if (SendTo(m_stMsgShell, oOutMsgHead, oOutMsgBody))
     {
         return(STATUS_CMD_RUNNING);
@@ -45,18 +45,18 @@ E_CMD_STATUS StepIoTimeout::Emit(int iErrno,const std::string& strErrMsg,const s
 E_CMD_STATUS StepIoTimeout::Callback(const tagMsgShell& stMsgShell,const MsgHead& oInMsgHead,const MsgBody& oInMsgBody,void* data)
 {
     LOG4_TRACE("StepIoTimeout::Callback stMsgShell(%d,%u) ClientAddr(%s) GetConnectIdentify(%s)",
-                        m_stMsgShell.iFd,m_stMsgShell.ulSeq,g_pLabor->GetClientAddr(stMsgShell).c_str(),
-                        g_pLabor->GetConnectIdentify(stMsgShell).c_str());
-    g_pLabor->IoTimeout(watcher, true);
+                        m_stMsgShell.iFd,m_stMsgShell.ulSeq,GetLabor()->GetClientAddr(stMsgShell).c_str(),
+                        GetLabor()->GetConnectIdentify(stMsgShell).c_str());
+    GetLabor()->IoTimeout(watcher, true);
     return(STATUS_CMD_COMPLETED);
 }
 
 E_CMD_STATUS StepIoTimeout::Timeout()
 {
     LOG4_TRACE("StepIoTimeout::Timeout stMsgShell(%d,%u) ClientAddr(%s) ConnectIdentify(%s)",
-                            m_stMsgShell.iFd,m_stMsgShell.ulSeq,g_pLabor->GetClientAddr(m_stMsgShell).c_str(),
-                            g_pLabor->GetConnectIdentify(m_stMsgShell).c_str());
-    g_pLabor->IoTimeout(watcher, false);
+                            m_stMsgShell.iFd,m_stMsgShell.ulSeq,GetLabor()->GetClientAddr(m_stMsgShell).c_str(),
+                            GetLabor()->GetConnectIdentify(m_stMsgShell).c_str());
+    GetLabor()->IoTimeout(watcher, false);
     return(STATUS_CMD_FAULT);
 }
 

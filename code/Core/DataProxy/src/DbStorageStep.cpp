@@ -32,13 +32,13 @@ bool DbStorageStep::Response(const net::tagMsgShell& stMsgShell, const MsgHead& 
     DataMem::MemRsp oRsp;
     oRsp.set_err_no(iErrno);
     oRsp.set_err_msg(strErrMsg);
-    return net::SendToClient(stMsgShell,oInMsgHead,oRsp);
+    return GetLabor()->SendToClient(stMsgShell,oInMsgHead,oRsp);
 }
 
 bool DbStorageStep::Response(const net::tagMsgShell& stMsgShell, const MsgHead& oInMsgHead,const DataMem::MemRsp& oRsp)
 {
     LOG4_TRACE("%d: %s", oRsp.err_no(), oRsp.err_msg().c_str());
-    return net::SendToClient(stMsgShell,oInMsgHead,oRsp);
+    return GetLabor()->SendToClient(stMsgShell,oInMsgHead,oRsp);
 }
 
 

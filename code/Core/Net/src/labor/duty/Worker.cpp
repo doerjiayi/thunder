@@ -30,6 +30,7 @@ extern "C" {
 #include "codec/HttpCodec.hpp"
 #include "codec/CodecWebSocketJson.hpp"
 #include "codec/CodecWebSocketPb.hpp"
+#include "codec/CodecCustom.hpp"
 #include "step/Step.hpp"
 #include "step/RedisStep.hpp"
 #include "step/HttpStep.hpp"
@@ -146,7 +147,7 @@ void Worker::StepTimeoutCallback(struct ev_loop* loop, struct ev_timer* watcher,
     if (watcher->data != NULL)
     {
         Step* pStep = (Step*)watcher->data;
-        ((Worker*)(g_pLabor))->StepTimeout(pStep, watcher);
+        ((Worker*)GetLabor())->StepTimeout(pStep, watcher);
     }
 }
 
@@ -155,7 +156,7 @@ void Worker::SessionTimeoutCallback(struct ev_loop* loop, struct ev_timer* watch
     if (watcher->data != NULL)
     {
         Session* pSession = (Session*)watcher->data;
-        ((Worker*)g_pLabor)->SessionTimeout(pSession, watcher);
+        ((Worker*)GetLabor())->SessionTimeout(pSession, watcher);
     }
 }
 
@@ -384,6 +385,31 @@ bool Worker::RecvDataAndDispose(tagIoWatcherData* pData, struct ev_io* watcher)
                 oInMsgHead.Clear();
                 oInMsgBody.Clear();
                 E_CODEC_STATUS eCodecStatus = codec_iter->second->Decode(conn_iter->second, oInMsgHead, oInMsgBody);
+                if (conn_iter->second->eCodecType == util::CODEC_TEST)
+				{
+					if (CODEC_STATUS_OK == eCodecStatus)
+					{
+						tagMsgShell stMsgShell;
+						stMsgShell.iFd = pData->iFd;
+						stMsgShell.ulSeq = conn_iter->second->ulSeq;
+						oInMsgBody.set_body("ok");
+						SendTo(stMsgShell,oInMsgHead,oInMsgBody);
+					}
+					else if (CODEC_STATUS_ERR == eCodecStatus)
+					{
+						if (pData->iFd != m_iManagerControlFd && pData->iFd != m_iManagerDataFd)
+						{
+							LOG4_DEBUG("if (pData->iFd != m_iManagerControlFd && pData->iFd != m_iManagerDataFd)");
+							DestroyConnect(conn_iter);
+						}
+						return(false);
+					}
+					else
+					{
+						break;  // 数据尚未接收完整
+					}
+					return(true);
+				}
                 //网关类型节点的连接初始化时支持协议编解码器的替换（支持的是websocket json 或websocket pb与http,private的替换）
                 if (eConnectStatus_init == pConn->ucConnectStatus)
                 {
@@ -1679,6 +1705,9 @@ bool Worker::Init(util::CJsonObject& oJsonConf)
     m_mapCodec.insert(std::make_pair(util::CODEC_WEBSOCKET_EX_JS, pCodec));
     pCodec = new CodecWebSocketPb(util::CODEC_WEBSOCKET_EX_PB);
     m_mapCodec.insert(std::make_pair(util::CODEC_WEBSOCKET_EX_PB, pCodec));
+    pCodec = new CodecCustom(util::CODEC_TEST);
+	m_mapCodec.insert(std::make_pair(util::CODEC_TEST, pCodec));
+
     m_pCmdConnect = new CmdConnectWorker();
     if (m_pCmdConnect == NULL)
     {
@@ -1750,23 +1779,22 @@ bool Worker::InitLogger(const util::CJsonObject& oJsonConf)
             iLogLevel = log4cplus::INFO_LOG_LEVEL;
         }
         log4cplus::initialize();
-        log4cplus::SharedAppenderPtr append(new log4cplus::RollingFileAppender(
-                        strLogname, iMaxLogFileSize, iMaxLogFileNum));
-        append->setName(strLogname);
-        std::auto_ptr<log4cplus::Layout> layout(new log4cplus::PatternLayout(strParttern));
-        append->setLayout(layout);
-        m_oLogger = log4cplus::Logger::getInstance(LOG4CPLUS_TEXT(strLogname));
-        m_oLogger.setLogLevel(iLogLevel);
-        m_oLogger.addAppender(append);
-        if (oJsonConf.Get("socket_logging_host", strLoggingHost) && oJsonConf.Get("socket_logging_port", iLoggingPort))
-        {
-            log4cplus::SharedAppenderPtr socket_append(new log4cplus::SocketAppender(
-                            strLoggingHost, iLoggingPort, ssServerName.str()));
-            socket_append->setName(ssServerName.str());
-            socket_append->setLayout(layout);
-            socket_append->setThreshold(log4cplus::INFO_LOG_LEVEL);
-            m_oLogger.addAppender(socket_append);
-        }
+		log4cplus::SharedAppenderPtr file_append(new log4cplus::RollingFileAppender(strLogname, iMaxLogFileSize, iMaxLogFileNum));
+		file_append->setName(strLogname);
+		std::auto_ptr<log4cplus::Layout> layout(new log4cplus::PatternLayout(strParttern));
+		file_append->setLayout(layout);
+		//log4cplus::Logger::getRoot().addAppender(file_append);
+		m_oLogger = log4cplus::Logger::getInstance(strLogname);
+		m_oLogger.setLogLevel(iLogLevel);
+		m_oLogger.addAppender(file_append);
+		if (oJsonConf.Get("socket_logging_host", strLoggingHost) && oJsonConf.Get("socket_logging_port", iLoggingPort))
+		{
+			log4cplus::SharedAppenderPtr socket_append(new log4cplus::SocketAppender(strLoggingHost, iLoggingPort, ssServerName.str()));
+			socket_append->setName(ssServerName.str());
+			socket_append->setLayout(layout);
+			socket_append->setThreshold(log4cplus::INFO_LOG_LEVEL);
+			m_oLogger.addAppender(socket_append);
+		}
         LOG4_INFO("%s program begin...", getproctitle());
         m_bInitLogger = true;
         return(true);
@@ -2138,7 +2166,7 @@ bool Worker::RegisterCallback(const std::string& strIdentify, RedisStep* pRedisS
     }
     else
     {
-        LOG4_DEBUG("g_pLabor->AutoRedisCmd(%s, %d)", strHost.c_str(), iPort);
+        LOG4_DEBUG("GetLabor()->AutoRedisCmd(%s, %d)", strHost.c_str(), iPort);
         return(AutoRedisCmd(strHost, iPort, pRedisStep));
     }
 }
@@ -2156,7 +2184,7 @@ bool Worker::RegisterCallback(const std::string& strHost, int iPort, RedisStep* 
     }
     else
     {
-        LOG4_TRACE("g_pLabor->AutoRedisCmd(%s, %d)", strHost.c_str(), iPort);
+        LOG4_TRACE("GetLabor()->AutoRedisCmd(%s, %d)", strHost.c_str(), iPort);
         return(AutoRedisCmd(strHost, iPort, pRedisStep));
     }
 }
@@ -2856,22 +2884,6 @@ bool Worker::SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, cons
     }
 }
 
-bool Worker::SendTo(const tagMsgShell& stMsgShell,uint32 cmd,uint32 seq,const std::string &strBody)
-{
-	MsgHead oOutMsgHead;
-	MsgBody oOutMsgBody;
-	oOutMsgBody.set_body(strBody);
-	oOutMsgHead.set_seq(seq);
-	oOutMsgHead.set_cmd(cmd);
-	oOutMsgHead.set_msgbody_len(oOutMsgBody.ByteSize());
-	if (!SendTo(stMsgShell, oOutMsgHead, oOutMsgBody))
-	{
-		LOG4_ERROR("send to tagMsgShell(fd %d, seq %u) error!", stMsgShell.iFd, stMsgShell.ulSeq);
-		return false;
-	}
-	return true;
-}
-
 bool Worker::SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
     LOG4_TRACE("%s(identify: %s)", __FUNCTION__, strIdentify.c_str());
@@ -2887,54 +2899,16 @@ bool Worker::SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, con
     }
 }
 
-bool Worker::SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const std::string &strBody)
-{
-	LOG4_TRACE("%s(identify: %s)", __FUNCTION__, strIdentify.c_str());
-	MsgHead oOutMsgHead;
-	MsgBody oOutMsgBody;
-	oOutMsgBody.set_body(strBody);
-	oOutMsgHead.set_seq(seq);
-	oOutMsgHead.set_cmd(cmd);
-	oOutMsgHead.set_msgbody_len(oOutMsgBody.ByteSize());
-	return SendTo(strIdentify,oOutMsgHead,oOutMsgBody);
-}
-
-bool Worker::SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const MsgBody& oMsgBody)
-{
-	LOG4_TRACE("%s(identify: %s)", __FUNCTION__, strIdentify.c_str());
-	MsgHead oOutMsgHead;
-	oOutMsgHead.set_seq(seq);
-	oOutMsgHead.set_cmd(cmd);
-	oOutMsgHead.set_msgbody_len(oMsgBody.ByteSize());
-	return SendTo(strIdentify,oOutMsgHead,oMsgBody);
-}
-
-
-bool Worker::SendToSession(const MsgHead& oMsgHead, const MsgBody& oMsgBody)
-{
-	bool bSendResult = false;
-	if (oMsgBody.has_session_id())
-	{
-		char szIdentify[32] = {0};
-		snprintf(szIdentify, sizeof(szIdentify), "%u", oMsgBody.session_id());
-		bSendResult = SendTo(szIdentify, oMsgHead, oMsgBody);
-	}
-	else if (oMsgBody.has_session())
-	{
-		bSendResult = SendTo(oMsgBody.session(), oMsgHead, oMsgBody);
-	}
-	else
-	{
-		LOG4_WARN("no session id");
-	}
-	return bSendResult;
-}
 
 bool Worker::SendToSession(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
 	if (oMsgBody.has_session_id())
 	{
-		return SendToWithMod(strNodeType, oMsgBody.session_id(), oMsgHead, oMsgBody);
+		#ifdef USE_CONHASH
+		return GetLabor()->SendToConHash(strNodeType, oMsgBody.session_id(), oMsgHead, oMsgBody);
+		#else
+		return GetLabor()->SendToWithMod(strNodeType, oMsgBody.session_id(), oMsgHead, oMsgBody);
+		#endif
 	}
 	else if (oMsgBody.has_session())
 	{
@@ -2943,11 +2917,38 @@ bool Worker::SendToSession(const std::string& strNodeType, const MsgHead& oMsgHe
 		{
 			uiSessionFactor += oMsgBody.session()[i];
 		}
-		return SendToWithMod(strNodeType, uiSessionFactor, oMsgHead, oMsgBody);
+		#ifdef USE_CONHASH
+		return GetLabor()->SendToConHash(strNodeType, uiSessionFactor, oMsgHead, oMsgBody);
+		#else
+		return GetLabor()->SendToWithMod(strNodeType, uiSessionFactor, oMsgHead, oMsgBody);
+		#endif
 	}
 	else
 	{
 		return SendToNext(strNodeType, oMsgHead, oMsgBody);
+	}
+}
+
+bool Worker::SendToClientSession(const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+{
+	if (oMsgBody.has_session_id())
+	{
+		net::tagMsgShell tstMsgShell;
+		char szIdentify[32] = {0};
+		snprintf(szIdentify, sizeof(szIdentify), "%u", oMsgBody.session_id());
+		GetLabor()->GetMsgShell(szIdentify,tstMsgShell);
+		return SendTo(tstMsgShell,oMsgHead,oMsgBody);
+	}
+	else if (oMsgBody.has_session())
+	{
+		net::tagMsgShell tstMsgShell;
+		GetLabor()->GetMsgShell(oMsgBody.session(),tstMsgShell);
+		return SendTo(tstMsgShell,oMsgHead,oMsgBody);
+	}
+	else
+	{
+		LOG4_WARN("%s(no session: %s)", __FUNCTION__, oMsgBody.DebugString().c_str());
+		return false;
 	}
 }
 
@@ -2990,10 +2991,7 @@ bool Worker::SendToNext(const std::string& strNodeType, const MsgHead& oMsgHead,
 
 bool Worker::SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
 {
-	LOG4_TRACE("%s(nody_type: %s, mod_factor: %u)", __FUNCTION__, strNodeType.c_str(), uiModFactor);
-#ifdef USE_CONHASH
-    return SendToConHash(strNodeType,uiModFactor,oMsgHead,oMsgBody);
-#endif
+    LOG4_TRACE("%s(nody_type: %s, mod_factor: %u)", __FUNCTION__, strNodeType.c_str(), uiModFactor);
     std::unordered_map<std::string, std::pair<std::set<std::string>::iterator, std::set<std::string> > >::iterator node_type_iter;
     node_type_iter = m_mapNodeIdentify.find(strNodeType);
     if (node_type_iter == m_mapNodeIdentify.end())
@@ -3019,7 +3017,7 @@ bool Worker::SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, c
             {
                 if (i == target_identify && id_iter != node_type_iter->second.second.end())
                 {
-                    return(SendTo(*id_iter, oMsgHead, oMsgBody));// SendTo(identify: 192.168.11.66:16068.0)
+                    return(SendTo(*id_iter, oMsgHead, oMsgBody));
                 }
             }
             return(false);

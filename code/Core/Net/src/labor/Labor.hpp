@@ -40,6 +40,28 @@ public:     // Labor相关设置（由Cmd类或Step类调用这些方法完成La
     virtual void ResetLogLevel(log4cplus::LogLevel iLogLevel) = 0;
 
     /**
+     * @brief 连接成功后发送
+     * @note 当前Server往另一个Server发送数据而两Server之间没有可用连接时，框架层向对端发起连接（发起连接
+     * 的过程是异步非阻塞的，connect()函数返回的时候并不知道连接是否成功），并将待发送数据存放于应用层待发
+     * 送缓冲区。当连接成功时将待发送数据从应用层待发送缓冲区拷贝到应用层发送缓冲区并发送。此函数由框架层自
+     * 动调用，业务逻辑层无须关注。
+     * @param stMsgShell 消息外壳
+     * @return 是否发送成功
+     */
+    virtual bool SendTo(const tagMsgShell& stMsgShell) = 0;
+
+    /**
+     * @brief 发送数据
+     * @note 使用指定连接将数据发送。如果能直接得知stMsgShell（比如刚从该连接接收到数据，欲回确认包），就
+     * 应调用此函数发送。此函数是SendTo()函数中最高效的一个。
+     * @param stMsgShell 消息外壳
+     * @param oMsgHead 数据包头
+     * @param oMsgBody 数据包体
+     * @return 是否发送成功
+     */
+    virtual bool SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody) = 0;
+
+    /**
      * @brief 设置连接的标识符信息
      * @note 设置连接的标识符信息到框架层的连接属性tagConnectionAttr里。当连接断开时，框架层工作者可以通
      * 过连接属性里的strIdentify调用Step::DelMsgShell(const std::string& strIdentify)删除连接标识。
@@ -49,6 +71,17 @@ public:     // Labor相关设置（由Cmd类或Step类调用这些方法完成La
      */
     virtual bool SetConnectIdentify(const tagMsgShell& stMsgShell, const std::string& strIdentify) = 0;
 
+    /**
+     * @brief 自动连接并发送
+     * @note 当strIdentify对应的连接不存在时，分解strIdentify得到host、port等信息建立连接，连接成功后发
+     * 送数据。仅适用于strIdentify是合法的Server间通信标识符（IP:port:worker_index组成）。返回ture只标
+     * 识连接这个动作发起成功，不代表数据已发送成功。
+     * @param strIdentify 连接标识符
+     * @param oMsgHead 数据包头
+     * @param oMsgBody 数据包体
+     * @return 是否可以自动发送
+     */
+    virtual bool AutoSend(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody) = 0;
     // TODO virtual bool AutoHttp(const std::string& strHost, int iPort, const HttpMsg& oHttpMsg);
     /**
      * @brief 发送给父进程
@@ -274,111 +307,20 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
 	virtual bool GetClientData(const tagMsgShell& stMsgShell, util::CBuffer* pBuff){return(false);}
     virtual std::string GetClientAddr(const tagMsgShell& stMsgShell){return("");}
     virtual std::string GetConnectIdentify(const tagMsgShell& stMsgShell){return("");}
-	/**
-	 * @brief 自动连接并发送
-	 * @note 当strIdentify对应的连接不存在时，分解strIdentify得到host、port等信息建立连接，连接成功后发
-	 * 送数据。仅适用于strIdentify是合法的Server间通信标识符（IP:port:worker_index组成）。返回ture只标
-	 * 识连接这个动作发起成功，不代表数据已发送成功。
-	 * @param strIdentify 连接标识符
-	 * @param oMsgHead 数据包头
-	 * @param oMsgBody 数据包体
-	 * @return 是否可以自动发送
-	 */
-	virtual bool AutoSend(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody) = 0;
-	/**
-	* @brief 连接成功后发送
-	* @note 当前Server往另一个Server发送数据而两Server之间没有可用连接时，框架层向对端发起连接（发起连接
-	* 的过程是异步非阻塞的，connect()函数返回的时候并不知道连接是否成功），并将待发送数据存放于应用层待发
-	* 送缓冲区。当连接成功时将待发送数据从应用层待发送缓冲区拷贝到应用层发送缓冲区并发送。此函数由框架层自
-	* 动调用，业务逻辑层无须关注。
-	* @param stMsgShell 消息外壳
-	* @return 是否发送成功
-	*/
-   virtual bool SendTo(const tagMsgShell& stMsgShell) = 0;
-	   /**
-	* @brief 发送数据
-	* @note 使用指定连接将数据发送。如果能直接得知stMsgShell（比如刚从该连接接收到数据，欲回确认包），就
-	* 应调用此函数发送。此函数是SendTo()函数中最高效的一个。
-	* @param strIdentify 连接标识符(IP:port.worker_index, e.g 192.168.11.12:3001.1)
-	* @param stMsgShell 消息外壳
-	* @param oMsgHead 数据包头
-	* @param oMsgBody 数据包体
-	* @param oHttpMsg Http数据包
-	* @return 是否发送成功
-	*/
-    virtual bool SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody) = 0;
-    virtual bool SendTo(const tagMsgShell& stMsgShell,uint32 cmd,uint32 seq,const std::string &strBody){return(false);}
-    virtual bool SendTo(const tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL){return(false);}
-    virtual bool SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const std::string &strBody){return(false);}
+    /**
+     * @brief 发送数据
+     * @note 指定连接标识符将数据发送。此函数先查找与strIdentify匹配的stMsgShell，如果找到就调用
+     * SendTo(const tagMsgShell& stMsgShell, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+     * 发送，如果未找到则调用SendToWithAutoConnect(const std::string& strIdentify,
+     * const MsgHead& oMsgHead, const MsgBody& oMsgBody)连接后再发送。
+     * @param strIdentify 连接标识符(IP:port.worker_index, e.g 192.168.11.12:3001.1)
+     * @param oMsgHead 数据包头
+     * @param oMsgBody 数据包体
+     * @return 是否发送成功
+     */
     virtual bool SendTo(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
-    virtual bool SendTo(const std::string& strIdentify,uint32 cmd,uint32 seq,const MsgBody& oMsgBody){return(false);}
     virtual bool SentTo(const std::string& strHost, int iPort, const std::string& strUrlPath, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL){return(false);}
-
-    /*
-	 * @brief 异步通用回调接口简化封装
-	 * */
-	virtual bool SendToCallback(Session* pSession,const DataMem::MemOperate* pMemOper,SessionCallbackMem callback,const std::string &nodeType=PROXY_NODE,uint32 uiCmd = CMD_REQ_STORATE,int64 uiModFactor=-1){return false;}
-	virtual bool SendToCallback(Step* pUpperStep,const DataMem::MemOperate* pMemOper,StepCallbackMem callback,const std::string &nodeType=PROXY_NODE,uint32 uiCmd = CMD_REQ_STORATE,int64 uiModFactor=-1){return false;}
-	virtual bool SendToCallback(Session* pSession,uint32 uiCmd,const std::string &strBody,SessionCallback callback,const std::string &nodeType,int64 uiModFactor=-1){return false;}
-	virtual bool SendToCallback(Step* pUpperStep,uint32 uiCmd,const std::string &strBody,StepCallback callback,const std::string &nodeType,int64 uiModFactor=-1){return false;}
-	virtual bool SendToCallback(Session* pSession,uint32 uiCmd,const std::string &strBody,SessionCallback callback,const tagMsgShell& stMsgShell,int64 uiModFactor=-1){return false;}
-	virtual bool SendToCallback(Step* pUpperStep,uint32 uiCmd,const std::string &strBody,StepCallback callback,const tagMsgShell& stMsgShell,int64 uiModFactor=-1){return false;}
-
-	virtual bool HttpsGet(const std::string & strUrl, std::string & strResponse,
-			const std::string& strUserpwd = "",util::CurlClient::eContentType eType = util::CurlClient::eContentType_none,
-			const std::string& strCaPath= "",int iPort = 0){return(false);}
-	virtual bool HttpsPost(const std::string & strUrl, const std::string & strFields,std::string & strResponse,
-			const std::string& strUserpwd = "",util::CurlClient::eContentType eType = util::CurlClient::eContentType_none,
-			const std::string& strCaPath= "",int iPort = 0){return(false);}
-	virtual bool AutoConnect(const std::string& strIdentify){return(false);}
-	/**
-	 * @brief 根据路由id自动发送到指定的节点
-	 * @note 根据路由id自动发送到指定的节点
-	 * @param strNodeType 节点类型
-	 * @param oMsgHead 数据包头
-	 * @param oMsgBody 数据包体
-	 * @return 是否发送成功
-	 */
-	virtual bool SendToSession(const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
-	virtual bool SendToSession(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
-	/**
-	 * @brief 发送到下一个同一类型的节点
-	 * @note 发送到下一个同一类型的节点，适用于对同一类型节点做轮询方式发送以达到简单的负载均衡。
-	 * @param strNodeType 节点类型
-	 * @param oMsgHead 数据包头
-	 * @param oMsgBody 数据包体
-	 * @return 是否发送成功
-	 */
-	virtual bool SendToNext(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
-	/**
-	 * @brief 以取模方式选择发送到同一类型节点
-	 * @note 以取模方式选择发送到同一类型节点，实现简单有要求的负载均衡。
-	 * @param strNodeType 节点类型
-	 * @param uiModFactor 取模因子
-	 * @param oMsgHead 数据包头
-	 * @param oMsgBody 数据包体
-	 * @return 是否发送成功
-	 */
-	virtual bool SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
-	/**
-	 * @brief 以一致性哈希方式选择发送到同一类型节点
-	 * @note 以取模方式选择发送到同一类型节点，实现简单有要求的负载均衡。
-	 * @param strNodeType 节点类型
-	 * @param uiModFactor 取模因子
-	 * @param oMsgHead 数据包头
-	 * @param oMsgBody 数据包体
-	 * @return 是否发送成功
-	 */
-	virtual bool SendToConHash(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
-	/**
-	 * @brief 发送到一种类型的节点
-	 * @note 发送到同一种类型除当前节点之外的所有节点。
-	 * @param strNodeType 节点类型
-	 * @param oMsgHead 数据包头
-	 * @param oMsgBody 数据包体
-	 * @return 是否发送成功
-	 */
-	virtual bool SendToNodeType(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
+    virtual bool Host2Addr(const std::string & strHost,int iPort,struct sockaddr_in &stAddr,bool boRefresh=false){return false;}
     /*
      * @brief 服务器使用的发送到客户端接口
      * @note 为支持对不同客户端构造不同响应消息
@@ -389,15 +331,98 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
     virtual bool SendToClient(const tagMsgShell& stInMsgShell,const MsgHead& oInMsgHead,const google::protobuf::Message &message,const std::string& additional = "",uint64 sessionid = 0,const std::string& strSession = "",bool boJsonBody=false){return(false);}
     virtual bool SendToClient(const tagMsgShell& stInMsgShell,const MsgHead& oInMsgHead,const std::string &strBody){return(false);}
 	virtual bool SendToClient(const tagMsgShell& stInMsgShell,const HttpMsg& oInHttpMsg,const std::string &strBody,int iCode=200,const std::unordered_map<std::string,std::string> &heads = std::unordered_map<std::string,std::string>()){return(false);}
-
+    /*
+     * @brief 异步通用回调接口简化封装
+     * */
+    virtual bool SendToCallback(Session* pSession,const DataMem::MemOperate* pMemOper,SessionCallbackMem callback,const std::string &nodeType=PROXY_NODE,uint32 uiCmd = CMD_REQ_STORATE,int64 uiModFactor=-1){return false;}
+    virtual bool SendToCallback(Step* pUpperStep,const DataMem::MemOperate* pMemOper,StepCallbackMem callback,const std::string &nodeType=PROXY_NODE,uint32 uiCmd = CMD_REQ_STORATE,int64 uiModFactor=-1){return false;}
+    virtual bool SendToCallback(Session* pSession,uint32 uiCmd,const std::string &strBody,SessionCallback callback,const std::string &nodeType,int64 uiModFactor=-1){return false;}
+    virtual bool SendToCallback(Step* pUpperStep,uint32 uiCmd,const std::string &strBody,StepCallback callback,const std::string &nodeType,int64 uiModFactor=-1){return false;}
+    virtual bool SendToCallback(Session* pSession,uint32 uiCmd,const std::string &strBody,SessionCallback callback,const tagMsgShell& stMsgShell,int64 uiModFactor=-1){return false;}
+    virtual bool SendToCallback(Step* pUpperStep,uint32 uiCmd,const std::string &strBody,StepCallback callback,const tagMsgShell& stMsgShell,int64 uiModFactor=-1){return false;}
+    /**
+     * @brief 发送数据
+     * @param stMsgShell 消息外壳
+     * @param oHttpMsg Http数据包
+     * @return 是否发送成功
+     */
+    virtual bool SendTo(const tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL){return(false);}
+    virtual bool HttpsGet(const std::string & strUrl, std::string & strResponse,
+            const std::string& strUserpwd = "",util::CurlClient::eContentType eType = util::CurlClient::eContentType_none,
+            const std::string& strCaPath= "",int iPort = 0){return(false);}
+    virtual bool HttpsPost(const std::string & strUrl, const std::string & strFields,std::string & strResponse,
+            const std::string& strUserpwd = "",util::CurlClient::eContentType eType = util::CurlClient::eContentType_none,
+            const std::string& strCaPath= "",int iPort = 0){return(false);}
+    virtual bool AutoConnect(const std::string& strIdentify){return(false);}
+    /**
+	 * @brief 根据路由id自动发送到同一类型的节点
+	 * @note 根据路由id自动发送到同一类型的节点
+	 * @param strNodeType 节点类型
+	 * @param oMsgHead 数据包头
+	 * @param oMsgBody 数据包体
+	 * @return 是否发送成功
+	 */
+	virtual bool SendToSession(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
+	/**
+	 * @brief 根据路由id自动发送到客户端
+	 * @note 根据路由id自动发送到同一类型的节点
+	 * @param strNodeType 节点类型
+	 * @param oMsgHead 数据包头
+	 * @param oMsgBody 数据包体
+	 * @return 是否发送成功
+	 */
+	virtual bool SendToClientSession(const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
+	/**
+     * @brief 发送到下一个同一类型的节点
+     * @note 发送到下一个同一类型的节点，适用于对同一类型节点做轮询方式发送以达到简单的负载均衡。
+     * @param strNodeType 节点类型
+     * @param oMsgHead 数据包头
+     * @param oMsgBody 数据包体
+     * @return 是否发送成功
+     */
+    virtual bool SendToNext(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
+    /**
+     * @brief 以取模方式选择发送到同一类型节点
+     * @note 以取模方式选择发送到同一类型节点，实现简单有要求的负载均衡。
+     * @param strNodeType 节点类型
+     * @param uiModFactor 取模因子
+     * @param oMsgHead 数据包头
+     * @param oMsgBody 数据包体
+     * @return 是否发送成功
+     */
+    virtual bool SendToWithMod(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
+    /**
+	 * @brief 以一致性哈希方式选择发送到同一类型节点
+	 * @note 以取模方式选择发送到同一类型节点，实现简单有要求的负载均衡。
+	 * @param strNodeType 节点类型
+	 * @param uiModFactor 取模因子
+	 * @param oMsgHead 数据包头
+	 * @param oMsgBody 数据包体
+	 * @return 是否发送成功
+	 */
+    virtual bool SendToConHash(const std::string& strNodeType, uint32 uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
+    /**
+     * @brief 发送到一种类型的节点
+     * @note 发送到同一种类型除当前节点之外的所有节点。
+     * @param strNodeType 节点类型
+     * @param oMsgHead 数据包头
+     * @param oMsgBody 数据包体
+     * @return 是否发送成功
+     */
+    virtual bool SendToNodeType(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody){return(false);}
     /**
      * @brief 断开连接
      * @note 当业务层发现连接非法（如客户端登录时无法通过验证），可调用此方法断开连接
      * @param stMsgShell 消息外壳
-     * @param strIdentify 连接标识符
      * @return 断开连接结果
      */
     virtual bool Disconnect(const tagMsgShell& stMsgShell, bool bMsgShellNotice = true){return(false);}
+    /**
+     * @brief 断开连接
+     * @note 当业务层发现连接非法（如客户端登录时无法通过验证），可调用此方法断开连接
+     * @param strIdentify 连接标识符
+     * @return 断开连接结果
+     */
     virtual bool Disconnect(const std::string& strIdentify, bool bMsgShellNotice = true){return(false);}
     /**
      * @brief 放弃已存在的连接
@@ -423,10 +448,8 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
 	virtual bool ExecStep(RedisStep* pStep){return false;}
 	virtual Step* GetStep(uint32 uiStepSeq){return NULL;}
 
-
-	virtual bool Host2Addr(const std::string & strHost,int iPort,struct sockaddr_in &stAddr,bool boRefresh=false){return false;}
-	const std::string& GetWorkerIdentify();
-	const std::string& GetNodeIdentify();
+	virtual const std::string& GetWorkerIdentify();
+	virtual const std::string& GetNodeIdentify();
 	std::string m_strWorkerIdentify;
 	std::string m_strNodeIdentify;
 	Coroutine m_Coroutine;
@@ -438,6 +461,7 @@ private:
 };
 
 } /* namespace net */
-extern net::Labor* g_pLabor;
+net::Labor* GetLabor();
+const net::Labor* GetCLabor();
 
 #endif /* SRC_NodeLabor_HPP_ */

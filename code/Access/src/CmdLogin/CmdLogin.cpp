@@ -50,7 +50,7 @@ bool CmdLogin::AnyMessage(
 		{
 			LOG4_DEBUG("im_user::ulogin ParseFromString [%s] oInMsgBody[%s] ok!",oInAsk.DebugString().c_str(),oInMsgBody.DebugString().c_str());
 			//判断是否重复登录
-			if (g_pLabor->HadClientData(stMsgShell))
+			if (GetLabor()->HadClientData(stMsgShell))
 			{
 				oOutAck.mutable_error()->set_error_code(net::ERR_OK);
 				oOutAck.mutable_error()->set_error_info("ok");
@@ -71,7 +71,7 @@ bool CmdLogin::AnyMessage(
     oOutMsgBody.set_body(oOutAck.SerializeAsString());
     oOutMsgBody.set_additional(oInMsgBody.additional());
     oOutMsgHead.set_msgbody_len(oOutMsgBody.ByteSize());
-    net::SendTo(stMsgShell, oOutMsgHead,oOutMsgBody);
+    GetLabor()->SendTo(stMsgShell, oOutMsgHead,oOutMsgBody);
     return(true);
 }
 

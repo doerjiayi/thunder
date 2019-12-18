@@ -32,7 +32,7 @@ bool RedisStorageStep::Response(const net::tagMsgShell& stMsgShell, const MsgHea
     DataMem::MemRsp oRsp;
     oRsp.set_err_no(iErrno);
     oRsp.set_err_msg(strErrMsg);
-    return net::SendToClient(stMsgShell,oInMsgHead,oRsp);
+    return GetLabor()->SendToClient(stMsgShell,oInMsgHead,oRsp);
 }
 
 bool RedisStorageStep::Response(const net::tagMsgShell& stMsgShell, const MsgHead& oInMsgHead,const DataMem::MemRsp& oRsp)
@@ -42,7 +42,7 @@ bool RedisStorageStep::Response(const net::tagMsgShell& stMsgShell, const MsgHea
     {
         LOG4_DEBUG("oRsp:%s",oRsp.DebugString().c_str());
     }
-    return net::SendToClient(stMsgShell,oInMsgHead,oRsp);
+    return GetLabor()->SendToClient(stMsgShell,oInMsgHead,oRsp);
 }
 
 } /* namespace core */

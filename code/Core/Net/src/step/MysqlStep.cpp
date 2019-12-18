@@ -147,7 +147,7 @@ bool MysqlStep::Launch(MysqlStep *pStep,uint32 uiTimeOutMax,uint8 uiToRetry,doub
 			return(false);
 		}
 	}
-	if (!g_pLabor->RegisterCallback(pStep))//注册mysql访问任务
+	if (!GetLabor()->RegisterCallback(pStep))//注册mysql访问任务
 	{
 		LOG4_ERROR("%s() RegisterCallback error",__FUNCTION__);
 		delete pStep;
@@ -204,13 +204,13 @@ static uint64 uiExecTaskCounter = 0;
 int CustomMysqlHandler::on_execsql(util::MysqlAsyncConn *c, util::SqlTask *task) {
 	++uiExecTaskCounter;
 	LOG4_TRACE("%s:%d sql: %s done uiExecTaskCounter:%llu",__FUNCTION__,__LINE__, task->sql.c_str(),uiExecTaskCounter);
-	((net::Worker*)g_pLabor)->Dispose(c,task,NULL);
+	((net::Worker*)GetLabor())->Dispose(c,task,NULL);
 	return 0;
 }
 int CustomMysqlHandler::on_query(util::MysqlAsyncConn *c, util::SqlTask *task, MYSQL_RES *pResultSet) {
 	++uiExecTaskCounter;
 	LOG4_TRACE("%s:%d sql: %s done uiExecTaskCounter:%llu",__FUNCTION__,__LINE__, task->sql.c_str(),uiExecTaskCounter);
-	((net::Worker*)g_pLabor)->Dispose(c,task,pResultSet);
+	((net::Worker*)GetLabor())->Dispose(c,task,pResultSet);
 	return 0;
 }
 

@@ -34,10 +34,6 @@ enum E_ERROR_NO
     ERR_BODY_JSON                       = 10011,    ///< 消息体json解析错误
     ERR_SERVERINFO_RECORD               = 10012,    ///< 存档服务器信息错误
 	ERR_TIMEOUT 						= 10013,    ///< 超时
-
-	ERR_NODE_NUM                        = 10014,    ///< 系统节点数超过最大限制65535
-	ERR_FILE_NOT_EXIST                  = 10020,    ///< 文件不存在
-	ERR_CONNECTION                      = 10021,    ///< 连接错误
 };
 
 }   // namespace net

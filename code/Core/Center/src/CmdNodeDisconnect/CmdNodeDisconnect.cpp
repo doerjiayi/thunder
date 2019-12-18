@@ -3,7 +3,7 @@
  * @file     CmdNodeDisconnect.cpp
  * @brief 
  * @author   cjy
- * @date:    2015年8月9日
+ * @date:    2019年8月9日
  * @note
  * Modify history:
  ******************************************************************************/
@@ -13,7 +13,14 @@ MUDULE_CREATE(core::CmdNodeDisconnect);
 
 namespace core
 {
+CmdNodeDisconnect::CmdNodeDisconnect():pSess(NULL),boInit(false)
+{
+}
 
+CmdNodeDisconnect::~CmdNodeDisconnect()
+{
+
+}
 bool CmdNodeDisconnect::Init()
 {
     if (boInit)

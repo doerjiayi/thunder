@@ -55,7 +55,7 @@ HelloSession* GetHelloSession()
     {
         if (!pSess->Init(oCurrentConf))
         {
-            g_pLabor->DeleteCallback(pSess);
+            GetLabor()->DeleteCallback(pSess);
             LOG4_ERROR("HelloSession init error!");
             return (NULL);
         }

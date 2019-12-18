@@ -38,7 +38,7 @@ bool CmdLogout::AnyMessage(
 				oOutAck.mutable_error()->set_error_code(net::ERR_OK);
 				oOutAck.mutable_error()->set_error_info("OK");
 				oOutAck.mutable_error()->set_error_client_show("OK");
-				net::SendToClient(stMsgShell, oInMsgHead,oOutAck);
+				GetLabor()->SendToClient(stMsgShell, oInMsgHead,oOutAck);
 				net::ExecStep(new StepLogoutToLogic(stMsgShell, oInMsgHead, oInMsgBody,oInAsk));
 				return(true);
 			}
@@ -48,8 +48,8 @@ bool CmdLogout::AnyMessage(
 	oOutAck.mutable_error()->set_error_info("invalid protocol err");
 	oOutAck.mutable_error()->set_error_client_show("解析Protobuf出错");
 	LOG4_ERROR("error %d: StepLogoutToLogic ParseFromString error!", ERR_INVALID_PROTOCOL);
-	g_pLabor->Disconnect(stMsgShell,false);
-	net::SendToClient(stMsgShell, oInMsgHead,oOutAck);
+	GetLabor()->Disconnect(stMsgShell,false);
+	GetLabor()->SendToClient(stMsgShell, oInMsgHead,oOutAck);
 	return(false);
 }
 

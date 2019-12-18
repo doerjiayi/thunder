@@ -86,7 +86,7 @@ Step::~Step()
 bool Step::RegisterCallback(Step* pStep, ev_tstamp dTimeout)
 {
     bool bRegisterResult = false;
-    bRegisterResult = g_pLabor->RegisterCallback(GetSequence(), pStep, dTimeout);
+    bRegisterResult = GetLabor()->RegisterCallback(GetSequence(), pStep, dTimeout);
     if (bRegisterResult && (m_pNextStep == pStep))
     {
         m_setNextStepSeq.insert(pStep->GetSequence());
@@ -135,7 +135,7 @@ bool Step::NextStep(int iErrno, const std::string& strErrMsg, const std::string&
 {
     for (auto seq_iter:m_setNextStepSeq)
     {
-        g_pLabor->ExecStep(GetSequence(),seq_iter, iErrno, strErrMsg, strErrClientShow);
+        GetLabor()->ExecStep(GetSequence(),seq_iter, iErrno, strErrMsg, strErrClientShow);
     }
     if (m_setNextStepSeq.size() > 0)
     {
@@ -180,10 +180,7 @@ uint32 Step::GetSequence()
     }
     if (0 == m_ulSequence)
     {
-        if (NULL != g_pLabor)
-        {
-            m_ulSequence = g_pLabor->GetSequence();
-        }
+		m_ulSequence = GetLabor()->GetSequence();
     }
     return(m_ulSequence);
 }
@@ -193,7 +190,7 @@ void Step::DelayTimeout()
     if (m_bRegistered)
     {
     	LOG4_TRACE("step %u DelayTimeout dActiveTime(%lf) dTimeout(%lf)", GetSequence(),m_dActiveTime,m_dTimeout);
-        g_pLabor->ResetTimeout(this, m_pTimeoutWatcher);
+        GetLabor()->ResetTimeout(this, m_pTimeoutWatcher);
     }
     else
     {

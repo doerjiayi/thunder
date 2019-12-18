@@ -29,7 +29,7 @@ net::E_CMD_STATUS StepToClient::Emit(int iErrno, const std::string& strErrMsg, c
 {
     MsgHead oOutMsgHead = m_oReqMsgHead;
     oOutMsgHead.set_seq(GetSequence());     // 更换消息头的seq后直接转发
-    if (net::SendToSession(oOutMsgHead, m_oReqMsgBody))
+    if (GetLabor()->SendToClientSession(oOutMsgHead, m_oReqMsgBody))
     {
         return(net::STATUS_CMD_RUNNING);
     }
@@ -43,7 +43,7 @@ net::E_CMD_STATUS StepToClient::Emit(int iErrno, const std::string& strErrMsg, c
         oOutMsgHead.set_cmd(net::CMD_RSP_SYS_ERROR);//系统错误响应
         oOutMsgHead.set_seq(m_oReqMsgHead.seq());
         oOutMsgHead.set_msgbody_len(oOutMsgBody.ByteSize());
-        net::SendTo(m_stReqMsgShell, oOutMsgHead, oOutMsgBody);
+        GetLabor()->SendTo(m_stReqMsgShell, oOutMsgHead, oOutMsgBody);
         return(net::STATUS_CMD_COMPLETED);
     }
 }
@@ -56,7 +56,7 @@ net::E_CMD_STATUS StepToClient::Callback(
 {
     m_oReqMsgHead.set_cmd(oInMsgHead.cmd());
     m_oReqMsgHead.set_msgbody_len(oInMsgBody.ByteSize());
-    net::SendTo(m_stReqMsgShell, m_oReqMsgHead, oInMsgBody);
+    GetLabor()->SendTo(m_stReqMsgShell, m_oReqMsgHead, oInMsgBody);
     return(net::STATUS_CMD_COMPLETED);
 }
 

@@ -164,14 +164,14 @@ net::E_CMD_STATUS StepReadFromRedisForWrite::ExecUpdate(bool bDbOnly)
     {
         m_oMemOperate.clear_redis_operate();
         pStepSendToDbAgent = new StepSendToDbAgent(m_stMsgShell, m_oReqMsgHead, m_oMemOperate,m_pRedisNodeSession, RELATIVE_DATASET, &m_oTableFields, m_strKeyField);
-        g_pLabor->ExecStep(pStepSendToDbAgent);
+        GetLabor()->ExecStep(pStepSendToDbAgent);
         return(net::STATUS_CMD_COMPLETED);
     }
     else
     {
         pStepSendToDbAgent = new StepSendToDbAgent(m_stMsgShell, m_oReqMsgHead, m_oMemOperate,m_pRedisNodeSession, RELATIVE_DATASET, &m_oTableFields, m_strKeyField);
         pStepWriteToRedis = new StepWriteToRedis(m_stMsgShell, m_oReqMsgHead, m_oMemOperate.redis_operate(), m_pRedisNodeSession, pStepSendToDbAgent);
-        g_pLabor->ExecStep(pStepWriteToRedis);
+        GetLabor()->ExecStep(pStepWriteToRedis);
 		return(net::STATUS_CMD_COMPLETED);
     }
 }
